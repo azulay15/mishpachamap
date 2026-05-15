@@ -1,23 +1,39 @@
 {
-  "name": "bootstrap-tmp",
+  "name": "mishpachamap",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "ingest:seed": "tsx scripts/ingest/seed_neighborhoods.ts",
+    "ingest:nadlan": "tsx scripts/ingest/nadlan.ts",
+    "ingest:osm": "tsx scripts/ingest/osm.ts",
+    "ingest:schools": "tsx scripts/ingest/schools.ts",
+    "metrics:recompute": "tsx scripts/ingest/compute_metrics.ts",
+    "polygons:refine": "tsx scripts/ingest/refine_polygons.ts",
+    "ingest:listings": "tsx scripts/ingest/seed_listings.ts",
+    "ingest:celiac": "tsx scripts/ingest/seed_celiac.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "@turf/turf": "^7.2.0",
+    "lucide-react": "^0.460.0",
+    "mapbox-gl": "^3.11.0",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/mapbox-gl": "^3.4.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^16.4.7",
     "tailwindcss": "^4",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }

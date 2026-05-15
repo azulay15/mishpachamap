@@ -1,0 +1,186 @@
+/* ============================================================================
+   Investing.com Design System — Colors & Type tokens
+   Source: DS2 "Website Design System — Redesign" (Figma), 2026 Pumpkin-Orange rebrand.
+   Ported from `Pick a neighborhood/design_handoff_concierge_map/shared/tokens.css`.
+   Fonts (Inter, Heebo) are loaded by next/font in app/layout.tsx and exposed as
+   --font-inter and --font-heb CSS variables there.
+   ============================================================================ */
+
+:root {
+  /* ---------- PRIMITIVES ---------- */
+
+  --grey-0:    #FFFFFF;
+  --grey-5:    #FAFAFA;
+  --grey-10:   #F7F7F8;
+  --grey-15:   #F2F3F4;
+  --grey-20:   #E6E9EB;
+  --grey-50:   #D9DCDF;
+  --grey-100:  #BDBFC2;
+  --grey-500:  #84888E;
+  --grey-700:  #5B616E;
+  --grey-800:  #3F444D;
+  --grey-900:  #181C21;
+  --grey-950:  #0F1216;
+
+  --pumpkin-orange:       #FF6B00;
+  --pumpkin-orange-hover: #E55F00;
+  --mandarin-orange:      #FF852B;
+  --orange-bright:        #FF7901;
+
+  --blue-link:        #1256A0;
+  --blue-interactive: #006BF6;
+  --blue-deep:        #07319C;
+  --blue-accent:      #0A17A7;
+
+  --green-positive: #007C32;
+  --green-bg:       #E6F2EC;
+  --red-negative:   #D91400;
+  --red-bright:     #DB1E36;
+  --red-bg:         #FBE7E6;
+
+  --yellow-warn:   #FFC63C;
+  --yellow-solid:  #F9E300;
+  --purple-legacy: #9747FF;
+  --purple-ai:     #6244FF;
+  --pink-accent:   #FF3363;
+
+  --stroke-hairline: #E4EAF1;
+  --stroke-weak:     #E6E9EB;
+  --stroke-medium:   #D9DCDF;
+
+  --dark-surface: #181C21;
+  --dark-elev:    #23252680;
+
+  /* ---------- SEMANTIC TOKENS ---------- */
+  --text-primary:    var(--grey-900);
+  --text-secondary:  var(--grey-700);
+  --text-tertiary:   var(--grey-500);
+  --text-link:       var(--blue-link);
+  --text-link-hover: var(--blue-interactive);
+  --text-green:      var(--green-positive);
+  --text-red:        var(--red-negative);
+  --text-white:      var(--grey-0);
+  --text-disabled:   var(--grey-100);
+
+  --surface-page: var(--grey-0);
+  --surface-well: var(--grey-10);
+  --surface-alt:  var(--grey-5);
+  --surface-header-utility: #222222;
+  --surface-header-menu:    #F2F2F2;
+  --surface-dark: var(--grey-900);
+
+  --border-default: var(--stroke-weak);
+  --border-strong:  var(--stroke-medium);
+  --border-focus:   var(--blue-interactive);
+
+  --icon-primary:   var(--grey-900);
+  --icon-secondary: var(--grey-700);
+  --icon-brand:     var(--pumpkin-orange);
+  --icon-positive:  var(--green-positive);
+  --icon-negative:  var(--red-negative);
+  --icon-disabled:  var(--grey-100);
+
+  --ai-gradient: linear-gradient(90deg, #6244FF 0%, #9747FF 50%, #FF3363 100%);
+
+  /* ---------- RADIUS ---------- */
+  --radius-normal: 4px;
+  --radius-medium: 6px;
+  --radius-big:    8px;
+  --radius-huge:   16px;
+  --radius-pill:   9999px;
+
+  /* ---------- SPACING (4px base) ---------- */
+  --space-0_5: 0.25rem;
+  --space-0_75:0.375rem;
+  --space-1:   0.5rem;
+  --space-1_25:0.625rem;
+  --space-1_5: 0.75rem;
+  --space-1_75:0.875rem;
+  --space-2:   1rem;
+  --space-2_5: 1.25rem;
+  --space-3_5: 1.75rem;
+  --space-4:   2rem;
+  --space-5:   2.5rem;
+  --space-6:   3rem;
+  --space-7:   3.5rem;
+  --space-8:   4rem;
+  --space-10:  5rem;
+  --space-12:  6rem;
+  --space-14:  7rem;
+  --space-16:  8rem;
+  --space-18:  9rem;
+  --space-20:  10rem;
+
+  /* ---------- ELEVATION ---------- */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 24px rgba(0,0,0,0.06);
+  --shadow-xl: 0 24px 48px rgba(0,0,0,0.08);
+  --shadow-inset-menu: inset 0 -1px 0 0 #C9CACA;
+
+  /* ---------- TYPOGRAPHY ---------- */
+  /* --font-inter and --font-heb are injected by next/font in app/layout.tsx */
+  --font-sans: var(--font-inter, "Inter"), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+
+  --font-size-42: 2.625rem;
+  --font-size-30: 1.875rem;
+  --font-size-24: 1.5rem;
+  --font-size-20: 1.25rem;
+  --font-size-18: 1.125rem;
+  --font-size-16: 1rem;
+  --font-size-14: 0.875rem;
+  --font-size-12: 0.75rem;
+  --font-size-10: 0.625rem;
+
+  --lh-60: 3.75rem;
+  --lh-36: 2.25rem;
+  --lh-32: 2rem;
+  --lh-28: 1.75rem;
+  --lh-24: 1.5rem;
+  --lh-22: 1.375rem;
+  --lh-20: 1.25rem;
+  --lh-16: 1rem;
+  --lh-14: 0.875rem;
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semi:    600;
+  --fw-bold:    700;
+}
+
+/* ============================================================================
+   Base reset + semantic element styles
+   ============================================================================ */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--lh-20);
+  color: var(--text-primary);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, .h1 { font-weight: var(--fw-bold); font-size: var(--font-size-42); line-height: var(--lh-60); margin: 0; letter-spacing: -0.02em; }
+h2, .h2 { font-weight: var(--fw-bold); font-size: var(--font-size-30); line-height: var(--lh-36); margin: 0; letter-spacing: -0.01em; }
+h3, .h3 { font-weight: var(--fw-bold); font-size: var(--font-size-24); line-height: var(--lh-32); margin: 0; }
+h4, .h4 { font-weight: var(--fw-bold); font-size: var(--font-size-20); line-height: var(--lh-28); margin: 0; }
+h5, .h5 { font-weight: var(--fw-bold); font-size: var(--font-size-18); line-height: var(--lh-28); margin: 0; }
+h6, .h6 { font-weight: var(--fw-semi); font-size: var(--font-size-16); line-height: var(--lh-24); margin: 0; }
+
+p, .body-lg { font-size: var(--font-size-16); line-height: var(--lh-24); margin: 0; }
+.body { font-size: var(--font-size-14); line-height: var(--lh-20); }
+.body-sm, small { font-size: var(--font-size-12); line-height: var(--lh-16); color: var(--text-secondary); }
+.caption { font-size: var(--font-size-10); line-height: var(--lh-14); color: var(--text-tertiary); }
+
+a { color: var(--text-link); text-decoration: none; font-weight: var(--fw-bold); }
+a:hover { color: var(--text-link-hover); text-decoration: underline; }
+
+.num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; letter-spacing: 0.2px; }
+.num-up   { color: var(--text-green); }
+.num-down { color: var(--text-red); }

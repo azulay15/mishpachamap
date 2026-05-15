@@ -1,65 +1,281 @@
-import Image from "next/image";
+import { cookies } from "next/headers";
+import { serverSupabase } from "@/lib/supabase";
+import { ConciergeScreen, type ConciergeData } from "@/components/ConciergeScreen";
+import { MOCK_DATA } from "@/lib/mockData";
+import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
+import { PERSONA_DEFAULT } from "@/lib/persona";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+export const revalidate = 60;
+
+type NeighborhoodRow = {
+  id: string;
+  name_he: string;
+  family_label: string | null;
+  summary_he: string | null;
+  polygon: GeoJSON.Polygon;
+  center: GeoJSON.Point;
+};
+
+type MetricsRow = {
+  neighborhood: string;
+  avg_price_per_m2: number | null;
+  avg_price_yoy_pct: number | null;
+  avg_listing_price: number | null;
+  green_score: number | null;
+  school_score: number | null;
+  quiet_score: number | null;
+};
+
+type ListingDB = {
+  id: string;
+  neighborhood: string | null;
+  address: string | null;
+  price_nis: number | null;
+  price_per_m2: number | null;
+  rooms: number | null;
+  sqm: number | null;
+  garden_sqm: number | null;
+  status_he: string | null;
+  days_on_market: number | null;
+};
+
+type SchoolDB = {
+  id: string;
+  name_he: string;
+  meitzav_score: number | null;
+  point: GeoJSON.Point;
+};
+
+type POIDB = {
+  id: string;
+  type: string;
+  name_he: string | null;
+  point: GeoJSON.Point;
+};
+
+function envConfigured(): boolean {
+  return Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
+      process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
   );
+}
+
+export default async function Page() {
+  // No env → preview mode against handoff mock data with the SVG stub map.
+  if (!envConfigured()) {
+    return <ConciergeScreen data={MOCK_DATA} renderer="stub" />;
+  }
+
+  const cookieStore = await cookies();
+  const sb = serverSupabase(cookieStore);
+
+  const [{ data: nb }, { data: metrics }, { data: pois }, { data: listings }, { data: schools }] =
+    await Promise.all([
+      sb.from("neighborhoods_geojson").select("id, name_he, family_label, summary_he, polygon, center"),
+      sb.from("neighborhood_metrics").select("*"),
+      sb.from("pois_geojson").select("id, type, name_he, point"),
+      sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market"),
+      sb.from("schools_geojson").select("id, name_he, meitzav_score, point"),
+    ]);
+
+  // Empty database → still preview mode (chrome only).
+  if (!nb || nb.length === 0) {
+    return <ConciergeScreen data={MOCK_DATA} renderer="stub" />;
+  }
+
+  const data = assemble({
+    nb: nb as NeighborhoodRow[],
+    metrics: (metrics ?? []) as MetricsRow[],
+    pois: (pois ?? []) as POIDB[],
+    listings: (listings ?? []) as ListingDB[],
+    schools: (schools ?? []) as SchoolDB[],
+  });
+
+  return <ConciergeScreen data={data} renderer="mapbox" />;
+}
+
+function assemble(input: {
+  nb: NeighborhoodRow[];
+  metrics: MetricsRow[];
+  pois: POIDB[];
+  listings: ListingDB[];
+  schools: SchoolDB[];
+}): ConciergeData {
+  const metricsByNb = new Map(input.metrics.map((m) => [m.neighborhood, m]));
+  const persona = PERSONA_DEFAULT;
+
+  // Step 1 — build base neighborhood records (no matchScore yet).
+  const base = input.nb
+    .filter((n) => n.polygon && n.center)
+    .map((n) => {
+      const m = metricsByNb.get(n.id);
+      const center = n.center.coordinates as [number, number];
+      return {
+        id: n.id,
+        he: n.name_he,
+        family: n.family_label,
+        summary: n.summary_he,
+        polygon: n.polygon,
+        center,
+        avgPrice: m?.avg_price_per_m2 ?? 0,
+        avgPriceDelta: Number(m?.avg_price_yoy_pct ?? 0),
+        avgListing: Number(m?.avg_listing_price ?? 0),
+        greenScore: m?.green_score ?? 0,
+        schoolScore: m?.school_score ?? 0,
+        quietScore: m?.quiet_score ?? 70,
+      };
+    });
+
+  // Step 2 — POIs as GeoJSON Features.
+  const pois = input.pois
+    .filter((p) => p.point)
+    .map(
+      (p): GeoJSON.Feature<GeoJSON.Point, { id: string; type: never; name_he: string | null }> => ({
+        type: "Feature",
+        geometry: p.point,
+        properties: { id: p.id, type: p.type as never, name_he: p.name_he },
+      }),
+    );
+
+  // Step 3 — group listings by neighborhood (matchScore filled in after we compute it).
+  const listingRowsByNb: Record<string, Omit<ConciergeData["listingsByNeighborhood"][string][number], "matchScore">[]> = {};
+  for (const l of input.listings) {
+    if (!l.neighborhood) continue;
+    (listingRowsByNb[l.neighborhood] ??= []).push({
+      id: l.id,
+      address: l.address ?? "",
+      price_nis: Number(l.price_nis ?? 0),
+      price_per_m2: l.price_per_m2 ?? 0,
+      rooms: Number(l.rooms ?? 0),
+      sqm: Number(l.sqm ?? 0),
+      garden_sqm: l.garden_sqm,
+      status_he: l.status_he,
+      days_on_market: l.days_on_market,
+    });
+  }
+
+  // Step 4 — assign schools to neighborhoods within 1km walking distance of each neighborhood center.
+  // A school may appear in multiple neighborhoods (overlapping rectangles in V1).
+  const WALK_M = 1000;
+  const schoolsByNeighborhood: Record<string, ConciergeData["schoolsByNeighborhood"][string]> = {};
+  for (const n of base) {
+    const nearby: ConciergeData["schoolsByNeighborhood"][string] = [];
+    for (const s of input.schools) {
+      if (!s.point) continue;
+      const d = haversineMeters(n.center, s.point.coordinates as [number, number]);
+      if (d > WALK_M) continue;
+      nearby.push({
+        id: s.id,
+        name_he: s.name_he,
+        meitzav_score: s.meitzav_score == null ? null : Number(s.meitzav_score),
+        walkMinutes: Math.max(1, Math.round(d / 80)),
+      });
+    }
+    nearby.sort((a, b) => (a.walkMinutes ?? 99) - (b.walkMinutes ?? 99));
+    if (nearby.length > 0) schoolsByNeighborhood[n.id] = nearby;
+  }
+
+  // Step 5 — compute facts per neighborhood, plus a server-side matchScore
+  // using the default persona. The client may recompute matchScore using the
+  // user's actual persona from localStorage.
+  const neighborhoods = base.map((n) => {
+    const facts: NeighborhoodFacts = {
+      id: n.id,
+      avgListing: n.avgListing > 0 ? n.avgListing : null,
+      gardenAvailability: gardenShare(listingRowsByNb[n.id] ?? []),
+      schoolWalkMeters: nearestSchoolMeters(n.center, input.schools),
+      parkMeters: nearestPOIMeters(n.center, input.pois, "park"),
+      shopMeters: nearestPOIMeters(n.center, input.pois, "shop"),
+      transitMeters: nearestPOIMeters(n.center, input.pois, "transit"),
+      quietScore: n.quietScore,
+      greenScore: n.greenScore,
+      celiacDistance: nearestPOIMeters(n.center, input.pois, "celiac"),
+      celiacDensity: poisWithinMeters(n.center, input.pois, "celiac", 1000),
+    };
+    const breakdown = breakdownFor(facts, persona);
+    const score = Math.min(99, totalScore(breakdown));
+    return { ...n, facts, matchScore: score };
+  });
+
+  // Step 6 — fill in placeholder matchScore on listings (client overrides per-persona).
+  const scoreByNb = new Map(neighborhoods.map((n) => [n.id, n.matchScore] as const));
+  const listingsByNeighborhood: Record<string, ConciergeData["listingsByNeighborhood"][string]> = {};
+  for (const [nbId, rows] of Object.entries(listingRowsByNb)) {
+    listingsByNeighborhood[nbId] = rows.map((r) => ({
+      ...r,
+      matchScore: scoreByNb.get(nbId) ?? 70,
+    }));
+  }
+
+  return { neighborhoods, pois, listingsByNeighborhood, schoolsByNeighborhood };
+}
+
+function haversineMeters(a: [number, number], b: [number, number]): number {
+  const R = 6_371_000;
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(b[1] - a[1]);
+  const dLng = toRad(b[0] - a[0]);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(a[1])) * Math.cos(toRad(b[1])) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+}
+
+function nearestPOIMeters(
+  from: [number, number],
+  pois: POIDB[],
+  type: string,
+): number | null {
+  let best: number | null = null;
+  for (const p of pois) {
+    if (p.type !== type || !p.point) continue;
+    const d = haversineMeters(from, p.point.coordinates as [number, number]);
+    if (best == null || d < best) best = d;
+  }
+  return best;
+}
+
+function poisWithinMeters(
+  from: [number, number],
+  pois: POIDB[],
+  type: string,
+  meters: number,
+): number {
+  let count = 0;
+  for (const p of pois) {
+    if (p.type !== type || !p.point) continue;
+    if (haversineMeters(from, p.point.coordinates as [number, number]) <= meters) count++;
+  }
+  return count;
+}
+
+function nearestSchoolMeters(from: [number, number], schools: SchoolDB[]): number | null {
+  let best: number | null = null;
+  for (const s of schools) {
+    if (!s.point) continue;
+    const d = haversineMeters(from, s.point.coordinates as [number, number]);
+    if (best == null || d < best) best = d;
+  }
+  return best;
+}
+
+function gardenShare(listings: { garden_sqm: number | null }[]): number {
+  if (listings.length === 0) return 0.3;
+  const withGarden = listings.filter((l) => l.garden_sqm != null && l.garden_sqm > 0).length;
+  return withGarden / listings.length;
+}
+
+function nearestNeighborhood(
+  pt: [number, number],
+  neighborhoods: { id: string; center: GeoJSON.Position }[],
+): { id: string } | null {
+  let best: { id: string; d: number } | null = null;
+  for (const n of neighborhoods) {
+    const dx = (n.center[0] as number) - pt[0];
+    const dy = (n.center[1] as number) - pt[1];
+    const d = dx * dx + dy * dy;
+    if (!best || d < best.d) best = { id: n.id, d };
+  }
+  return best;
 }
