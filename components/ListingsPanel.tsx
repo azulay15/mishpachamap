@@ -4,6 +4,7 @@ import { MMIcon } from "@/lib/icons";
 import { ScoreChip } from "./ScoreChip";
 import { MatchBadge } from "./MatchBadge";
 import { NIS, NISshort, pct } from "@/lib/format";
+import { useFavorites } from "@/lib/useFavorites";
 
 export type ListingRow = {
   id: string;
@@ -42,9 +43,10 @@ type Props = {
   selected: Selected | null;
   listings: ListingRow[];
   schools: SchoolRow[];
+  onExplainMatch?: () => void;
 };
 
-export function ListingsPanel({ selected, listings, schools }: Props) {
+export function ListingsPanel({ selected, listings, schools, onExplainMatch }: Props) {
   if (!selected) {
     return (
       <aside style={asideStyle}>
@@ -70,7 +72,7 @@ export function ListingsPanel({ selected, listings, schools }: Props) {
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800 }}>{selected.he}</h3>
-              <MatchBadge score={selected.matchScore} />
+              <MatchBadge score={selected.matchScore} onClick={onExplainMatch} />
             </div>
             {selected.family && (
               <div style={{ marginTop: 2, fontSize: 12, color: "var(--grey-500)" }}>
@@ -112,7 +114,9 @@ export function ListingsPanel({ selected, listings, schools }: Props) {
           {listings.length === 0 ? (
             <Empty>אין כרגע נכסים פעילים בשכונה זו.</Empty>
           ) : (
-            listings.slice(0, 3).map((l) => <ListingRowCard key={l.id} listing={l} />)
+            listings.slice(0, 3).map((l) => (
+            <ListingRowCard key={l.id} listing={l} onExplainMatch={onExplainMatch} />
+          ))
           )}
         </Section>
 
@@ -185,11 +189,39 @@ function Empty({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ListingRowCard({ listing }: { listing: ListingRow }) {
+function ListingRowCard({
+  listing,
+  onExplainMatch,
+}: {
+  listing: ListingRow;
+  onExplainMatch?: () => void;
+}) {
+  const { hasListing, toggleListing } = useFavorites();
+  const isFav = hasListing(listing.id);
   return (
     <div className="mm-card mm-card-hover" style={{ padding: 12, display: "grid", gridTemplateColumns: "1fr auto", gap: 8, cursor: "pointer" }}>
       <div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+          <button
+            type="button"
+            aria-label={isFav ? "הסר נכס משמורים" : "שמור נכס"}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleListing(listing.id);
+            }}
+            style={{
+              flex: "none",
+              border: 0,
+              background: "transparent",
+              padding: 2,
+              cursor: "pointer",
+              display: "grid",
+              placeItems: "center",
+              color: isFav ? "var(--pumpkin-orange)" : "var(--grey-500)",
+            }}
+          >
+            <MMIcon name={isFav ? "heart-fill" : "heart"} size={13} color="currentColor" />
+          </button>
           <div style={{ fontSize: 14, fontWeight: 800, fontFamily: "var(--font-inter, Inter)", fontVariantNumeric: "tabular-nums" }}>
             {NISshort(listing.price_nis)}
           </div>
@@ -206,7 +238,7 @@ function ListingRowCard({ listing }: { listing: ListingRow }) {
           {listing.garden_sqm != null && <Inline icon="garden" text={`${listing.garden_sqm} גינה`} />}
         </div>
       </div>
-      <MatchBadge score={listing.matchScore} />
+      <MatchBadge score={listing.matchScore} onClick={onExplainMatch} />
     </div>
   );
 }

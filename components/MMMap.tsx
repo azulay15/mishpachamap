@@ -48,6 +48,7 @@ const LAYER_COLORS: Record<LayerId, string> = {
   community: "#7D5BBE",
   greenscore: "#2F8F4F",
   celiac: "#D45A8A",
+  playground: "#F2A93B",
 };
 
 export function MMMap({
@@ -140,19 +141,39 @@ export function MMMap({
         paint: {
           "circle-radius": 6,
           "circle-color": [
-            "match",
-            ["get", "type"],
-            "school", LAYER_COLORS.school,
-            "preschool", LAYER_COLORS.preschool,
-            "park", LAYER_COLORS.park,
-            "shop", LAYER_COLORS.shop,
-            "transit", LAYER_COLORS.transit,
-            "community", LAYER_COLORS.community,
-            "celiac", LAYER_COLORS.celiac,
-            /* default */ "#84888E",
+            "case",
+            // Playground without shade: hollow (white core, orange ring).
+            ["all",
+              ["==", ["get", "type"], "playground"],
+              ["!=", ["get", "has_shade"], true],
+            ],
+            "#FFFFFF",
+            [
+              "match",
+              ["get", "type"],
+              "school", LAYER_COLORS.school,
+              "preschool", LAYER_COLORS.preschool,
+              "park", LAYER_COLORS.park,
+              "shop", LAYER_COLORS.shop,
+              "transit", LAYER_COLORS.transit,
+              "community", LAYER_COLORS.community,
+              "celiac", LAYER_COLORS.celiac,
+              "playground", LAYER_COLORS.playground,
+              /* default */ "#84888E",
+            ],
           ],
-          "circle-stroke-color": "#FFFFFF",
-          "circle-stroke-width": 1.5,
+          "circle-stroke-color": [
+            "case",
+            ["==", ["get", "type"], "playground"],
+            LAYER_COLORS.playground,
+            "#FFFFFF",
+          ],
+          "circle-stroke-width": [
+            "case",
+            ["==", ["get", "type"], "playground"],
+            2,
+            1.5,
+          ],
         },
       });
 
@@ -186,12 +207,26 @@ export function MMMap({
         if (!f) return;
         const props = f.properties ?? {};
         const coords = (f.geometry as GeoJSON.Point).coordinates as [number, number];
+        let extra = "";
+        if (props.type === "playground") {
+          const shade = props.has_shade === true;
+          const modern = props.modern_equipment === true;
+          extra = `<div style="margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap;">
+            <span style="background: ${shade ? "#FFF1D6" : "#F4F5F7"}; color: ${shade ? "#9C5A00" : "#84888E"}; padding: 2px 6px; border-radius: 999px; font-size: 10px; font-weight: 700;">
+              ${shade ? "✓ הצללה" : "✗ ללא הצללה"}
+            </span>
+            <span style="background: ${modern ? "#E6F2EC" : "#F4F5F7"}; color: ${modern ? "#0E7C5A" : "#84888E"}; padding: 2px 6px; border-radius: 999px; font-size: 10px; font-weight: 700;">
+              ${modern ? "✓ מתקנים מודרניים" : "מתקנים ישנים"}
+            </span>
+          </div>`;
+        }
         new mapboxgl.Popup({ closeButton: true, offset: 10 })
           .setLngLat(coords)
           .setHTML(
             `<div style="font-family: var(--font-heb); font-size: 12px; padding: 2px 4px;">
                <div style="font-weight: 700">${escapeHtml(props.name_he ?? "")}</div>
                <div style="color: #84888E; margin-top: 2px;">${escapeHtml(props.type ?? "")}</div>
+               ${extra}
              </div>`,
           )
           .addTo(map);

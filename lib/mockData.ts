@@ -108,8 +108,25 @@ function dummyPolygon(): GeoJSON.Polygon {
   return { type: "Polygon", coordinates: [[[35, 31.9], [35.01, 31.9], [35.01, 31.91], [35, 31.91], [35, 31.9]]] };
 }
 
+const ALIASES_BY_ID: Record<string, string[]> = {
+  hareut: ["רעות", "Re'ut", "Reut"],
+  hamakkabim: ["מכבים", "Maccabim"],
+  masuah: ["גבעת C", "Givat C"],
+  avneichen: ["קייזר", "Kaiser"],
+  haprachim: ["מירומי", "Miromi"],
+  hanechalim: ["ספדיה", "Safdie"],
+  hakramim: ["כרמים", "Kramim"],
+  hashvatim: ["בוכמן צפון", "בוכמן", "Buchman North", "Buchman"],
+  moriah: ["בוכמן דרום", "בוכמן", "Buchman South", "Buchman"],
+  hanevim: ["שמשוני צפון", "שמשוני", "Shimshoni North", "Shimshoni"],
+  hameginim: ["שמשוני דרום", "שמשוני", "Shimshoni South", "Shimshoni"],
+  hatsiporim: ["ציפורים", "Tsiporim"],
+  nofim: [],
+};
+
 const NEIGHBORHOODS: MockNeighborhood[] = N.map((n) => ({
   ...n,
+  aliases: ALIASES_BY_ID[n.id] ?? [],
   polygon: dummyPolygon(),
   center: [35.005, 31.905],
   facts: {

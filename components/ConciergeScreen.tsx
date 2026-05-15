@@ -1,15 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { LAYERS, type LayerId } from "@/lib/layers";
 import { LayerChip } from "./LayerChip";
 import { MMHeader } from "./MMHeader";
 import { MMMap, type NeighborhoodFeatureProps, type POIFeatureProps } from "./MMMap";
 import { MMMapStub } from "./MMMapStub";
 import { NeighborhoodCard, type NeighborhoodCardData } from "./NeighborhoodCard";
-import { ListingsPanel, type ListingRow, type SchoolRow, type Selected } from "./ListingsPanel";
+import { type ListingRow, type SchoolRow, type Selected } from "./ListingsPanel";
+import { RightRail, type RailMode } from "./RightRail";
 import { PersonaPill } from "./PersonaPill";
 import { ScoreChip } from "./ScoreChip";
+import { GreenScoreSheet } from "./GreenScoreSheet";
+import { MatchBreakdownSheet } from "./MatchBreakdownSheet";
+import { NeighborhoodSearch } from "./NeighborhoodSearch";
 import { MMIcon } from "@/lib/icons";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { usePersona } from "@/lib/usePersona";
@@ -22,6 +27,8 @@ type ServerNeighborhood = NeighborhoodCardData & {
   polygon: GeoJSON.Polygon;
   center: GeoJSON.Position;
   facts: NeighborhoodFacts;
+  /** Aliases for free-text search (Kaiser, Buchman, etc.). */
+  aliases?: string[];
   /** Optional SVG-space data used only by MMMapStub. */
   svgPath?: string;
   svgCenter?: [number, number];
@@ -51,7 +58,20 @@ export function ConciergeScreen({
     return data.neighborhoods[0]?.id ?? null;
   });
   const [hoverId, setHoverId] = useState<string | null>(null);
+  const [greenSheetOpen, setGreenSheetOpen] = useState(false);
+  const [matchSheetFor, setMatchSheetFor] = useState<string | null>(null);
+  const [railMode, setRailMode] = useState<RailMode>("listings");
   const persona = usePersona();
+  const searchParams = useSearchParams();
+
+  // Deep-link support: ?n=<id> selects that neighborhood on mount.
+  useEffect(() => {
+    const id = searchParams.get("n");
+    if (!id) return;
+    const ids = new Set(data.neighborhoods.map((nb) => nb.id));
+    if (ids.has(id)) setSelectedId(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // Recompute matchScore per current persona (vs. the server's default-persona score).
   const neighborhoodsWithScore = useMemo(
@@ -186,26 +206,16 @@ export function ConciergeScreen({
               padding: "0 16px",
             }}
           >
-            <div
-              className="mm-input"
-              style={{
-                width: 360,
-                height: 40,
-                boxShadow: "var(--shadow-md)",
-                borderRadius: 999,
-              }}
-            >
-              <MMIcon name="search" size={16} color="#84888E" />
-              <input placeholder="חפשו: רחוב, שכונה, או 'בית עם גינה ובית ספר'" />
-              <button
-                className="mm-btn mm-btn-accent mm-btn-sm"
-                style={{ height: 28, opacity: 0.55, cursor: "not-allowed" }}
-                title="קונסיירז' AI · Phase 3 — בקרוב"
-                disabled
-              >
-                <MMIcon name="sparkle" size={12} color="#fff" /> AI
-              </button>
-            </div>
+            <NeighborhoodSearch
+              neighborhoods={neighborhoodsWithScore.map((n) => ({
+                id: n.id,
+                he: n.he,
+                family: n.family,
+                aliases: n.aliases,
+              }))}
+              onPick={(id) => setSelectedId(id)}
+              onAIClick={() => setRailMode("ai")}
+            />
             <PersonaPill />
           </div>
 
@@ -229,9 +239,11 @@ export function ConciergeScreen({
             ))}
           </div>
 
-          {/* GreenScore corner badge */}
+          {/* GreenScore corner badge — clickable, opens breakdown sheet */}
           {selected && (
-            <div
+            <button
+              type="button"
+              onClick={() => setGreenSheetOpen(true)}
               style={{
                 position: "absolute",
                 top: 16,
@@ -244,15 +256,42 @@ export function ConciergeScreen({
                 display: "flex",
                 gap: 10,
                 alignItems: "center",
+                border: 0,
+                cursor: "pointer",
+                fontFamily: "inherit",
               }}
+              aria-label={`פתח פירוט GreenScore עבור ${selected.he}`}
             >
               <ScoreChip value={selected.greenScore} color="var(--green-positive)" size="md" />
-              <div>
+              <div style={{ textAlign: "start" }}>
                 <div style={{ fontSize: 12, fontWeight: 700 }}>{selected.he} · GreenScore</div>
-                <div style={{ fontSize: 11, color: "var(--grey-500)" }}>אזור ירוק מהממוצע</div>
+                <div style={{ fontSize: 11, color: "var(--grey-500)" }}>
+                  לחצו לפירוט 7 הרכיבים
+                </div>
               </div>
-            </div>
+            </button>
           )}
+
+          {greenSheetOpen && selected && (
+            <GreenScoreSheet
+              neighborhoodHe={selected.he}
+              score={selected.greenScore}
+              onClose={() => setGreenSheetOpen(false)}
+            />
+          )}
+
+          {matchSheetFor && (() => {
+            const n = neighborhoodsWithScore.find((x) => x.id === matchSheetFor);
+            if (!n) return null;
+            return (
+              <MatchBreakdownSheet
+                neighborhoodHe={n.he}
+                facts={n.facts}
+                persona={persona}
+                onClose={() => setMatchSheetFor(null)}
+              />
+            );
+          })()}
 
           {/* Bottom carousel */}
           <div
@@ -274,6 +313,7 @@ export function ConciergeScreen({
                   n={n}
                   selected={selectedId === n.id}
                   onClick={() => setSelectedId(n.id)}
+                  onExplainMatch={() => setMatchSheetFor(n.id)}
                 />
               </div>
             ))}
@@ -300,10 +340,13 @@ export function ConciergeScreen({
           </div>
         </main>
 
-        <ListingsPanel
+        <RightRail
           selected={selected}
           listings={selectedId ? listingsByNeighborhood[selectedId] ?? [] : []}
           schools={selectedId ? data.schoolsByNeighborhood[selectedId] ?? [] : []}
+          mode={railMode}
+          onModeChange={setRailMode}
+          onExplainMatch={selectedId ? () => setMatchSheetFor(selectedId) : undefined}
         />
       </div>
     </div>

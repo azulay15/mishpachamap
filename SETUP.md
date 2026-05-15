@@ -22,8 +22,13 @@ V1 = Phase 1 Foundation (per [the plan](../.claude/plans/crystalline-petting-coc
 2. After you push this repo to GitHub, import it in Vercel.
 3. Add the four env vars above in **Project → Settings → Environment Variables**.
 
-### Anthropic API key — skip for V1
-Phase 3 only.
+### Anthropic API key — Phase 3 (AI Neighborhood Expert)
+1. Sign up at https://console.anthropic.com
+2. **Settings → API Keys → Create Key**
+3. Copy → paste into `.env.local` as `ANTHROPIC_API_KEY=sk-ant-...`
+4. Server-side only — never expose to the client (the chat route at `/api/chat` is the only consumer).
+
+The AI rail will show a "Setup needed" message until this key is set. Once set, restart `npm run dev` to pick it up.
 
 ## 2. Local env file
 

@@ -14,6 +14,7 @@ type NeighborhoodRow = {
   summary_he: string | null;
   polygon: GeoJSON.Polygon;
   center: GeoJSON.Point;
+  aliases: string[] | null;
 };
 
 type MetricsRow = {
@@ -72,7 +73,7 @@ export default async function Page() {
 
   const [{ data: nb }, { data: metrics }, { data: pois }, { data: listings }, { data: schools }] =
     await Promise.all([
-      sb.from("neighborhoods_geojson").select("id, name_he, family_label, summary_he, polygon, center"),
+      sb.from("neighborhoods_geojson").select("id, name_he, family_label, summary_he, polygon, center, aliases"),
       sb.from("neighborhood_metrics").select("*"),
       sb.from("pois_geojson").select("id, type, name_he, point"),
       sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market"),
@@ -118,6 +119,7 @@ function assemble(input: {
         summary: n.summary_he,
         polygon: n.polygon,
         center,
+        aliases: n.aliases ?? [],
         avgPrice: m?.avg_price_per_m2 ?? 0,
         avgPriceDelta: Number(m?.avg_price_yoy_pct ?? 0),
         avgListing: Number(m?.avg_listing_price ?? 0),

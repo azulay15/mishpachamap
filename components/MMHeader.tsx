@@ -1,8 +1,12 @@
+"use client";
+
 import { MMIcon } from "@/lib/icons";
+import { useFavorites } from "@/lib/useFavorites";
 
 const NAV = ["בית", "מפה", "שכונות", "נכסים", "מחשבונים", "מומחה השכונה"];
 
 export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
+  const { count } = useFavorites();
   return (
     <header>
       <div className="mm-header-utility">
@@ -32,9 +36,35 @@ export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
         <button className="mm-btn mm-btn-ghost mm-btn-sm" aria-label="התראות">
           <MMIcon name="bell" size={16} />
         </button>
-        <button className="mm-btn mm-btn-secondary mm-btn-sm">
-          <MMIcon name="heart" size={14} /> שמורים
-        </button>
+        <a
+          href="/saved"
+          className="mm-btn mm-btn-secondary mm-btn-sm"
+          style={{ textDecoration: "none", color: "var(--grey-900)", fontWeight: 700, position: "relative" }}
+        >
+          <MMIcon
+            name={count > 0 ? "heart-fill" : "heart"}
+            size={14}
+            color={count > 0 ? "var(--pumpkin-orange)" : "currentColor"}
+          />
+          שמורים
+          {count > 0 && (
+            <span
+              style={{
+                background: "var(--pumpkin-orange)",
+                color: "#fff",
+                fontSize: 10,
+                fontWeight: 800,
+                borderRadius: 999,
+                padding: "1px 6px",
+                marginInlineStart: 2,
+                fontFamily: "var(--font-inter, Inter)",
+                fontVariantNumeric: "tabular-nums",
+              }}
+            >
+              {count}
+            </span>
+          )}
+        </a>
       </div>
     </header>
   );

@@ -1,14 +1,16 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { PERSONA_DEFAULT } from "@/lib/persona";
 import { NISshort } from "@/lib/format";
+import { usePersona } from "@/lib/usePersona";
+import { MMIcon } from "@/lib/icons";
 
 export function PersonaPill() {
   const router = useRouter();
-  const p = PERSONA_DEFAULT;
+  const p = usePersona();
   const initial = p.name.replace(/^משפחת\s*/, "").slice(0, 1) || "ל";
-  const summary = `· ${p.size} נפשות · ${NISshort(p.budget.min)}–${NISshort(p.budget.max)}`;
+  const kidsLabel = p.kids.length > 0 ? `${p.kids.length} ילדים · ` : "";
+  const summary = `· ${p.size} נפשות · ${kidsLabel}${NISshort(p.budget.min)}–${NISshort(p.budget.max)}`;
 
   return (
     <div
@@ -44,6 +46,25 @@ export function PersonaPill() {
       </span>
       <span style={{ fontSize: 13, fontWeight: 700, color: "var(--grey-900)" }}>{p.name}</span>
       <span style={{ fontSize: 12, color: "var(--grey-500)" }}>{summary}</span>
+      {p.celiacInFamily && (
+        <span
+          title="צליאק במשפחה"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 3,
+            padding: "2px 6px",
+            borderRadius: 999,
+            background: "rgba(212,90,138,0.10)",
+            color: "var(--layer-celiac)",
+            fontSize: 10,
+            fontWeight: 700,
+          }}
+        >
+          <MMIcon name="gluten" size={10} color="var(--layer-celiac)" />
+          ללא גלוטן
+        </span>
+      )}
       <button
         type="button"
         onClick={() => router.push("/onboarding?step=2")}
