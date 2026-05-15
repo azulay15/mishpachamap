@@ -108,7 +108,7 @@ export function LeadGenModal({ kind, context, onClose }: Props) {
           display: "flex",
           flexDirection: "column",
         }}
-        className="mm-scroll"
+        className="mm-scroll mm-modal-content"
       >
         <header
           style={{

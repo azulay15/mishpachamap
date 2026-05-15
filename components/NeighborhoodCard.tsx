@@ -1,9 +1,9 @@
 "use client";
 
 import { MMIcon } from "@/lib/icons";
-import { MatchBadge } from "./MatchBadge";
-import { NIS, NISshort, pct } from "@/lib/format";
+import { NISshort, pct } from "@/lib/format";
 import { useFavorites } from "@/lib/useFavorites";
+import { scoreColor } from "@/lib/match";
 
 export type NeighborhoodCardData = {
   id: string;
@@ -22,34 +22,32 @@ type Props = {
   n: NeighborhoodCardData;
   selected?: boolean;
   onClick?: () => void;
-  /** Optional handler for clicking the match-score badge. */
+  /** Click handler for the match score region — opens the breakdown sheet. */
   onExplainMatch?: () => void;
   variant?: "list" | "wide";
 };
 
 export function NeighborhoodCard({ n, selected, onClick, onExplainMatch, variant = "list" }: Props) {
-  const deltaUp = n.avgPriceDelta > 0;
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
   const isFav = hasNeighborhood(n.id);
+  const deltaUp = n.avgPriceDelta > 0;
+  const matchTint = scoreColor(n.matchScore);
+
   return (
-    <div
+    <article
       className="mm-card mm-card-hover"
       onClick={onClick}
       style={{
-        padding: 14,
-        cursor: "pointer",
-        boxShadow: selected ? "0 0 0 2px var(--pumpkin-orange)" : undefined,
-        borderColor: selected ? "var(--pumpkin-orange)" : undefined,
-        display: variant === "wide" ? "grid" : "flex",
-        flexDirection: variant === "wide" ? undefined : "column",
-        gridTemplateColumns: variant === "wide" ? "1fr auto" : undefined,
-        gap: 12,
-        height: "100%",
-        minHeight: 200,
+        ...cardStyle,
+        ...(selected ? selectedStyle : {}),
+        ...(variant === "wide"
+          ? { display: "grid", gridTemplateColumns: "1fr auto", gap: 16 }
+          : {}),
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column", minHeight: 0, flex: 1 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, minHeight: 0, flex: 1 }}>
+        {/* Header: heart + name + family + match-score ring */}
+        <header style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 10, alignItems: "start" }}>
           <button
             type="button"
             aria-label={isFav ? `הסר את ${n.he} מהשמורים` : `שמור את ${n.he}`}
@@ -58,48 +56,72 @@ export function NeighborhoodCard({ n, selected, onClick, onExplainMatch, variant
               toggleNeighborhood(n.id);
             }}
             style={{
-              flex: "none",
+              width: 28,
+              height: 28,
+              borderRadius: 999,
               border: 0,
-              background: "transparent",
-              padding: 2,
+              background: isFav ? "rgba(255,107,0,0.10)" : "var(--grey-15)",
+              color: isFav ? "var(--pumpkin-orange)" : "var(--grey-500)",
               cursor: "pointer",
               display: "grid",
               placeItems: "center",
-              color: isFav ? "var(--pumpkin-orange)" : "var(--grey-500)",
+              transition: "background 120ms, color 120ms",
+              flex: "none",
             }}
           >
-            <MMIcon name={isFav ? "heart-fill" : "heart"} size={14} color="currentColor" />
+            <MMIcon name={isFav ? "heart-fill" : "heart"} size={13} color="currentColor" />
           </button>
-          <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>{n.he}</h4>
-          {n.family && (
-            <span
+
+          <div style={{ minWidth: 0 }}>
+            <h4
               style={{
-                color: "var(--grey-500)",
-                fontSize: 12,
+                margin: 0,
+                fontSize: 17,
+                fontWeight: 800,
+                color: "var(--grey-900)",
+                letterSpacing: "-0.01em",
+                lineHeight: "22px",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
-                minWidth: 0,
               }}
             >
-              · {n.family}
-            </span>
-          )}
-          <div style={{ marginInlineStart: "auto", flex: "none" }}>
-            <MatchBadge score={n.matchScore} onClick={onExplainMatch} />
+              {n.he}
+            </h4>
+            {n.family && (
+              <div
+                style={{
+                  marginTop: 2,
+                  fontSize: 11,
+                  fontWeight: 500,
+                  color: "var(--grey-700)",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  lineHeight: "16px",
+                }}
+                title={n.family}
+              >
+                {n.family}
+              </div>
+            )}
           </div>
-        </div>
+
+          <MatchRing score={n.matchScore} color={matchTint} onClick={onExplainMatch} />
+        </header>
+
+        {/* Summary — clamped to 2 lines. Card has its own min-height so all cards line up. */}
         {n.summary && (
           <p
             style={{
-              margin: "0 0 10px",
-              fontSize: 13,
+              margin: 0,
+              fontSize: 12,
               color: "var(--grey-700)",
               lineHeight: "18px",
               flex: 1,
               minHeight: 0,
               display: "-webkit-box",
-              WebkitLineClamp: 3,
+              WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
             }}
@@ -107,128 +129,211 @@ export function NeighborhoodCard({ n, selected, onClick, onExplainMatch, variant
             {n.summary}
           </p>
         )}
+
+        {/* Stats row — 4 evenly-spaced columns. Numbers up top, labels below.
+             Dividers between columns add structure without visual noise. */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 6,
-            fontFamily: "var(--font-inter, Inter)",
-            fontVariantNumeric: "tabular-nums",
+            gridTemplateColumns: "1fr 1fr 1fr 1fr",
+            gap: 0,
+            paddingTop: 10,
+            borderTop: "1px solid var(--grey-15)",
             marginTop: "auto",
           }}
         >
-          <StatPill icon="home" label="חציון" value={NISshort(n.avgListing)} />
-          <StatPill
-            icon="tag"
-            label='מחיר/מ"ר'
-            value={NIS(n.avgPrice)}
-            badge={
-              <span className={deltaUp ? "mm-up" : "mm-down"} style={{ fontSize: 10, fontWeight: 700 }}>
-                {pct(n.avgPriceDelta)}
-              </span>
-            }
+          <Stat value={NISshort(n.avgListing)} label="חציון" />
+          <Stat
+            value={`₪${(n.avgPrice / 1000).toFixed(1)}K`}
+            label='למ"ר'
+            sub={pct(n.avgPriceDelta)}
+            subColor={deltaUp ? "var(--green-positive)" : "var(--red-negative)"}
+            border
           />
-          <StatPill
-            icon="leaf"
+          <Stat value={n.schoolScore} label="בתי ספר" border />
+          <Stat
+            value={n.greenScore}
             label="GreenScore"
-            value={String(n.greenScore)}
             valueColor="var(--green-positive)"
-            accent="var(--green-positive)"
-          />
-          <StatPill
-            icon="school"
-            label="בתי ספר"
-            value={String(n.schoolScore)}
-            accent="var(--layer-school)"
+            border
           />
         </div>
       </div>
+
       {variant === "wide" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "stretch" }}>
           <button className="mm-btn mm-btn-secondary mm-btn-sm">פרטים</button>
-          <button className="mm-btn mm-btn-ghost mm-btn-sm">
-            <MMIcon name="heart" size={12} /> שמירה
-          </button>
         </div>
       )}
-    </div>
+    </article>
   );
 }
 
-function StatPill({
-  icon,
-  label,
-  value,
-  badge,
-  valueColor = "var(--grey-900)",
-  accent = "var(--grey-500)",
+const cardStyle: React.CSSProperties = {
+  padding: 16,
+  cursor: "pointer",
+  height: "100%",
+  minHeight: 230,
+  display: "flex",
+  flexDirection: "column",
+  transition: "transform 160ms cubic-bezier(.4,0,.2,1), box-shadow 160ms",
+};
+
+const selectedStyle: React.CSSProperties = {
+  boxShadow: "0 0 0 2px var(--pumpkin-orange), var(--shadow-md)",
+  borderColor: "var(--pumpkin-orange)",
+};
+
+/**
+ * Compact circular score ring. Click → opens the match breakdown sheet.
+ * Larger than the inline number — it's the card's visual focal point.
+ */
+function MatchRing({
+  score,
+  color,
+  onClick,
 }: {
-  icon: string;
-  label: string;
+  score: number;
+  color: string;
+  onClick?: () => void;
+}) {
+  const size = 42;
+  const stroke = 4;
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const off = c - (score / 100) * c;
+  const Tag = onClick ? "button" : "div";
+
+  return (
+    <Tag
+      type={onClick ? "button" : undefined}
+      onClick={
+        onClick
+          ? (e: React.MouseEvent) => {
+              e.stopPropagation();
+              onClick();
+            }
+          : undefined
+      }
+      title={onClick ? "לחצו לפירוט ההתאמה" : undefined}
+      style={{
+        position: "relative",
+        width: size,
+        height: size,
+        border: 0,
+        background: "transparent",
+        cursor: onClick ? "pointer" : "default",
+        padding: 0,
+        flex: "none",
+      }}
+    >
+      <svg width={size} height={size} style={{ display: "block" }}>
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--grey-15)" strokeWidth={stroke} />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={stroke}
+          strokeDasharray={c}
+          strokeDashoffset={off}
+          strokeLinecap="round"
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        />
+      </svg>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "grid",
+          placeItems: "center",
+          fontSize: 13,
+          fontWeight: 800,
+          color: "var(--grey-900)",
+          fontFamily: "var(--font-inter, Inter)",
+          fontVariantNumeric: "tabular-nums",
+          letterSpacing: "-0.02em",
+        }}
+      >
+        {score}
+      </div>
+    </Tag>
+  );
+}
+
+function Stat({
+  value,
+  label,
+  sub,
+  subColor = "var(--grey-500)",
+  valueColor = "var(--grey-900)",
+  border,
+}: {
   value: React.ReactNode;
-  badge?: React.ReactNode;
+  label: string;
+  sub?: React.ReactNode;
+  subColor?: string;
   valueColor?: string;
-  accent?: string;
+  border?: boolean;
 }) {
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateColumns: "auto 1fr",
-        alignItems: "center",
-        gap: 6,
-        padding: "6px 8px",
-        borderRadius: 6,
-        background: "var(--grey-15)",
+        padding: "0 8px",
+        borderInlineStart: border ? "1px solid var(--grey-15)" : "0",
         minWidth: 0,
+        display: "flex",
+        flexDirection: "column",
+        gap: 1,
       }}
     >
       <div
         style={{
-          width: 20,
-          height: 20,
-          borderRadius: 999,
-          display: "grid",
-          placeItems: "center",
-          background: "#fff",
-          flex: "none",
+          fontSize: 13,
+          fontWeight: 800,
+          color: valueColor,
+          fontFamily: "var(--font-inter, Inter)",
+          fontVariantNumeric: "tabular-nums",
+          letterSpacing: "-0.01em",
+          lineHeight: "16px",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
         }}
       >
-        <MMIcon name={icon} size={11} color={accent} />
+        {value}
       </div>
-      <div style={{ minWidth: 0 }}>
+      <div
+        style={{
+          fontSize: 9,
+          fontWeight: 600,
+          color: "var(--grey-500)",
+          textTransform: "uppercase",
+          letterSpacing: "0.04em",
+          lineHeight: "12px",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+        }}
+      >
+        {label}
+      </div>
+      {sub && (
         <div
           style={{
             fontSize: 10,
-            color: "var(--grey-500)",
-            fontWeight: 600,
+            fontWeight: 700,
+            color: subColor,
+            fontFamily: "var(--font-inter, Inter)",
+            fontVariantNumeric: "tabular-nums",
+            marginTop: 1,
             lineHeight: "12px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
           }}
         >
-          {label}
+          {sub}
         </div>
-        <div
-          style={{
-            fontWeight: 800,
-            fontSize: 12,
-            color: valueColor,
-            lineHeight: "14px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            direction: "ltr",
-            textAlign: "start",
-          }}
-        >
-          {value}
-        </div>
-        {badge && (
-          <div style={{ lineHeight: "12px", marginTop: 1 }}>{badge}</div>
-        )}
-      </div>
+      )}
     </div>
   );
 }

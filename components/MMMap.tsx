@@ -69,7 +69,9 @@ export function MMMap({
     if (!containerRef.current || mapRef.current) return;
     const map = new mapboxgl.Map({
       container: containerRef.current,
-      style: "mapbox://styles/mapbox/light-v11",
+      // streets-v12 gives the warm cream-and-green palette closer to the
+      // handoff mockup (orange highways, green parks, white roads).
+      style: "mapbox://styles/mapbox/streets-v12",
       center: MODIIN_CENTER,
       zoom: 13,
       attributionControl: false,
@@ -80,20 +82,76 @@ export function MMMap({
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
 
     map.on("load", () => {
-      // Neighborhoods (fill + stroke)
+      // Recolor streets-v12 to match the handoff mockup:
+      //  - warm cream land
+      //  - bold pumpkin-orange highways
+      //  - subtle white local roads
+      //  - bright park green
+      // Each setPaintProperty is wrapped in a try since style layer ids can
+      // change between mapbox style versions.
+      const safeSet = (layerId: string, prop: string, value: unknown) => {
+        try {
+          (map.setPaintProperty as unknown as (
+            id: string,
+            p: string,
+            v: unknown,
+          ) => void)(layerId, prop, value);
+        } catch {
+          /* layer not present in this style version — ignore */
+        }
+      };
+
+      // Background / land
+      safeSet("land", "background-color", "#F4EFE3");
+      safeSet("landuse", "fill-color", "#EFE7D2");
+      safeSet("national-park", "fill-color", "#D4E5BA");
+      safeSet("park", "fill-color", "#D4E5BA");
+      safeSet("pitch", "fill-color", "#D4E5BA");
+
+      // Highways — pumpkin orange, bold
+      for (const layer of ["road-motorway", "road-motorway-link", "road-trunk", "road-trunk-link"]) {
+        safeSet(layer, "line-color", "#F2A93B");
+        safeSet(layer, "line-width", 6);
+      }
+      for (const layer of ["road-motorway-case", "road-trunk-case"]) {
+        safeSet(layer, "line-color", "#D9842B");
+      }
+
+      // Primary / secondary roads — white with subtle outline
+      for (const layer of ["road-primary", "road-secondary", "road-tertiary"]) {
+        safeSet(layer, "line-color", "#FFFFFF");
+      }
+      for (const layer of ["road-primary-case", "road-secondary-case", "road-tertiary-case"]) {
+        safeSet(layer, "line-color", "#D9CDB3");
+      }
+
+      // Buildings — fade them so neighborhood polygons dominate
+      safeSet("building", "fill-opacity", 0.25);
+      safeSet("building", "fill-color", "#E8E4DA");
+
+      // Neighborhoods — uniform bold green like the mockup. The match score
+      // is shown elsewhere (cards + ring + selected callout); the map fill
+      // just says "this is a neighborhood".
       map.addSource("neighborhoods", { type: "geojson", data: neighborhoods });
       map.addLayer({
         id: "neighborhoods-fill",
         type: "fill",
         source: "neighborhoods",
         paint: {
-          "fill-color": [
-            "case",
-            [">=", ["get", "match_score"], 90], "#007C32",
-            [">=", ["get", "match_score"], 80], "#FF6B00",
-            "#84888E",
+          "fill-color": "#9BC97E",
+          "fill-opacity": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            11,
+            0.55,
+            13,
+            0.50,
+            15,
+            0.40,
+            17,
+            0.25,
           ],
-          "fill-opacity": 0.18,
         },
       });
       map.addLayer({
@@ -101,15 +159,12 @@ export function MMMap({
         type: "line",
         source: "neighborhoods",
         paint: {
-          "line-color": [
-            "case",
-            ["==", ["get", "id"], ["literal", ""]], "#FF6B00", // selected (set per-tick below)
-            "#84888E",
-          ],
-          "line-width": 1,
-          "line-opacity": 0.5,
+          "line-color": "#5B9F40",
+          "line-width": 1.5,
+          "line-opacity": 0.8,
         },
       });
+      // Selected polygon — dashed pumpkin orange stroke matching the mockup.
       map.addLayer({
         id: "neighborhoods-stroke-selected",
         type: "line",
@@ -117,9 +172,11 @@ export function MMMap({
         filter: ["==", ["get", "id"], ""],
         paint: {
           "line-color": "#FF6B00",
-          "line-width": 4,
+          "line-width": 3.5,
+          "line-dasharray": [3, 1.5],
         },
       });
+      // Hover — solid dark stroke.
       map.addLayer({
         id: "neighborhoods-stroke-hover",
         type: "line",
@@ -127,8 +184,8 @@ export function MMMap({
         filter: ["==", ["get", "id"], ""],
         paint: {
           "line-color": "#181C21",
-          "line-width": 2,
-          "line-opacity": 0.6,
+          "line-width": 2.5,
+          "line-opacity": 0.8,
         },
       });
 
@@ -139,7 +196,7 @@ export function MMMap({
         type: "circle",
         source: "pois",
         paint: {
-          "circle-radius": 6,
+          "circle-radius": 7,
           "circle-color": [
             "case",
             // Playground without shade: hollow (white core, orange ring).
@@ -171,9 +228,10 @@ export function MMMap({
           "circle-stroke-width": [
             "case",
             ["==", ["get", "type"], "playground"],
+            2.5,
             2,
-            1.5,
           ],
+          "circle-opacity": 0.95,
         },
       });
 

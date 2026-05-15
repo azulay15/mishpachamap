@@ -43,7 +43,7 @@ export function MatchBreakdownSheet({ neighborhoodHe, facts, persona, onClose }:
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="mm-scroll"
+        className="mm-scroll mm-modal-content"
         style={{
           background: "#fff",
           borderRadius: 12,

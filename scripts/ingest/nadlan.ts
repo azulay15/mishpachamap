@@ -30,6 +30,7 @@ const PROFILES: Profile[] = [
   { id: "hanevim",    avgPpm: 28000, medianRooms: 4 },
   { id: "hameginim",  avgPpm: 27000, medianRooms: 4 },
   { id: "hatsiporim", avgPpm: 32500, medianRooms: 5 },
+  { id: "moreshet",   avgPpm: 30500, medianRooms: 5 },
 ];
 
 const TX_PER_NEIGHBORHOOD = 60;

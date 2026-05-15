@@ -53,7 +53,7 @@ export function GreenScoreSheet({ neighborhoodHe, score, onClose }: Props) {
           display: "flex",
           flexDirection: "column",
         }}
-        className="mm-scroll"
+        className="mm-scroll mm-modal-content"
       >
         {/* Header */}
         <header

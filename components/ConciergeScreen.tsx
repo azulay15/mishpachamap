@@ -16,6 +16,8 @@ import { GreenScoreSheet } from "./GreenScoreSheet";
 import { MatchBreakdownSheet } from "./MatchBreakdownSheet";
 import { NeighborhoodSearch } from "./NeighborhoodSearch";
 import { WelcomeCard } from "./WelcomeCard";
+import { MobileRailDrawer } from "./MobileRailDrawer";
+import { useIsMobile } from "@/lib/useMediaQuery";
 import { MMIcon } from "@/lib/icons";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { usePersona } from "@/lib/usePersona";
@@ -62,8 +64,10 @@ export function ConciergeScreen({
   const [greenSheetOpen, setGreenSheetOpen] = useState(false);
   const [matchSheetFor, setMatchSheetFor] = useState<string | null>(null);
   const [railMode, setRailMode] = useState<RailMode>("listings");
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const persona = usePersona();
   const searchParams = useSearchParams();
+  const isMobile = useIsMobile();
 
   // Deep-link support: ?n=<id> selects that neighborhood on mount.
   useEffect(() => {
@@ -163,7 +167,7 @@ export function ConciergeScreen({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) 380px",
+          gridTemplateColumns: isMobile ? "minmax(0, 1fr)" : "minmax(0, 1fr) 380px",
           gridTemplateRows: "100%",
           height: "100%",
           minHeight: 0,
@@ -214,8 +218,14 @@ export function ConciergeScreen({
                 family: n.family,
                 aliases: n.aliases,
               }))}
-              onPick={(id) => setSelectedId(id)}
-              onAIClick={() => setRailMode("ai")}
+              onPick={(id) => {
+                setSelectedId(id);
+                if (isMobile) setDrawerOpen(true);
+              }}
+              onAIClick={() => {
+                setRailMode("ai");
+                if (isMobile) setDrawerOpen(true);
+              }}
             />
             <PersonaPill />
           </div>
@@ -326,11 +336,14 @@ export function ConciergeScreen({
             }}
           >
             {sortedCards.map((n) => (
-              <div key={n.id} style={{ flex: "0 0 280px" }}>
+              <div key={n.id} style={{ flex: `0 0 ${isMobile ? 260 : 280}px` }}>
                 <NeighborhoodCard
                   n={n}
                   selected={selectedId === n.id}
-                  onClick={() => setSelectedId(n.id)}
+                  onClick={() => {
+                    setSelectedId(n.id);
+                    if (isMobile) setDrawerOpen(true);
+                  }}
                   onExplainMatch={() => setMatchSheetFor(n.id)}
                 />
               </div>
@@ -358,14 +371,28 @@ export function ConciergeScreen({
           </div>
         </main>
 
-        <RightRail
-          selected={selected}
-          listings={selectedId ? listingsByNeighborhood[selectedId] ?? [] : []}
-          schools={selectedId ? data.schoolsByNeighborhood[selectedId] ?? [] : []}
-          mode={railMode}
-          onModeChange={setRailMode}
-          onExplainMatch={selectedId ? () => setMatchSheetFor(selectedId) : undefined}
-        />
+        {!isMobile && (
+          <RightRail
+            selected={selected}
+            listings={selectedId ? listingsByNeighborhood[selectedId] ?? [] : []}
+            schools={selectedId ? data.schoolsByNeighborhood[selectedId] ?? [] : []}
+            mode={railMode}
+            onModeChange={setRailMode}
+            onExplainMatch={selectedId ? () => setMatchSheetFor(selectedId) : undefined}
+          />
+        )}
+        {isMobile && (
+          <MobileRailDrawer
+            open={drawerOpen}
+            onClose={() => setDrawerOpen(false)}
+            selected={selected}
+            listings={selectedId ? listingsByNeighborhood[selectedId] ?? [] : []}
+            schools={selectedId ? data.schoolsByNeighborhood[selectedId] ?? [] : []}
+            mode={railMode}
+            onModeChange={setRailMode}
+            onExplainMatch={selectedId ? () => setMatchSheetFor(selectedId) : undefined}
+          />
+        )}
       </div>
     </div>
   );

@@ -31,6 +31,7 @@ const PROFILES: Profile[] = [
   { id: "hanevim",    name_he: "הנביאים",   avgPpm: 28000, medianRooms: 4, streets: ["ישעיהו", "ירמיהו", "יחזקאל", "עמוס"] },
   { id: "hameginim",  name_he: "המגינים",   avgPpm: 27000, medianRooms: 4, streets: ["החרגול", "השלום", "בני ברית"] },
   { id: "hatsiporim", name_he: "הציפורים", avgPpm: 32500, medianRooms: 5, streets: ["דרור", "אדום החזה", "סנונית", "תור"] },
+  { id: "moreshet",   name_he: "מורשת",     avgPpm: 30500, medianRooms: 5, streets: ["המורשת", "ההגנה", "מסילת ישרים", "הציונות"] },
 ];
 
 const STATUS_POOL: (string | null)[] = [

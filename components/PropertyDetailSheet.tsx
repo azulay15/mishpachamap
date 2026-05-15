@@ -48,7 +48,7 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplai
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="mm-scroll"
+        className="mm-scroll mm-modal-content"
         style={{
           background: "#fff",
           borderRadius: 12,

@@ -132,6 +132,14 @@ const SEED_META: SeedMeta[] = [
     tags: ["כפרית", "יוקרה", "בתים פרטיים"],
     aliases: ["מכבים", "Maccabim"],
   },
+  {
+    id: "moreshet",
+    family_label: "חדשה, משפחתית, מערבית",
+    summary_he:
+      "השכונה החדשה במערב מודיעין; בנייה חדישה, מתחמי מגורים מתקדמים וקהילה צעירה הנמצאת בתהליך גיבוש.",
+    tags: ["חדש", "מערבי", "צעיר"],
+    aliases: ["Moreshet"],
+  },
 ];
 
 async function main() {

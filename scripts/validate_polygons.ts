@@ -30,6 +30,7 @@ const EXPECTED_IDS = [
   "hareut",
   "moriah",
   "hamakkabim",
+  "moreshet",
 ] as const;
 
 // Generous bbox covering Modi'in + Maccabim + Re'ut with margin.
