@@ -5,7 +5,15 @@ import { MMIcon } from "@/lib/icons";
 import { usePersona } from "@/lib/usePersona";
 
 type Role = "user" | "assistant";
-type Msg = { role: Role; text: string; sources?: string[]; toolCalls?: string[] };
+type ToolCall = { name: string; input: unknown };
+type Msg = { role: Role; text: string; sources?: string[]; toolCalls?: ToolCall[] };
+
+/** Short Hebrew label for each tool name so users see something readable. */
+const TOOL_LABELS: Record<string, string> = {
+  query_neighborhoods: "חיפוש שכונות לפי קריטריונים",
+  compare_neighborhoods: "השוואת שכונות",
+  get_match_breakdown: "ניתוח התאמה לשכונה",
+};
 
 const HISTORY_KEY = "mishpachamap.chat.v1";
 
@@ -78,7 +86,7 @@ export function AIRail() {
       const decoder = new TextDecoder();
       let buffer = "";
       let assistantText = "";
-      const toolCalls: string[] = [];
+      const toolCalls: ToolCall[] = [];
       let sources: string[] = [];
 
       // Add an empty assistant placeholder we'll update as text arrives.
@@ -101,13 +109,22 @@ export function AIRail() {
           }
           if (event.type === "tool_call") {
             const name = String(event.name);
-            toolCalls.push(name);
+            toolCalls.push({ name, input: event.input });
             setActiveTool(name);
             // The assistant text starts over after a tool call returns.
             assistantText = "";
+            // Surface tool calls on the in-progress assistant message so they
+            // appear under the bubble while the model is still streaming.
+            setMessages([
+              ...next,
+              { role: "assistant", text: assistantText, toolCalls: [...toolCalls] },
+            ]);
           } else if (event.type === "text_delta") {
             assistantText += String(event.delta);
-            setMessages([...next, { role: "assistant", text: assistantText }]);
+            setMessages([
+              ...next,
+              { role: "assistant", text: assistantText, toolCalls: [...toolCalls] },
+            ]);
             setActiveTool(null);
           } else if (event.type === "sources") {
             sources = (event.sources as string[]) ?? [];
@@ -313,8 +330,10 @@ function Bubble({ msg }: { msg: Msg }) {
     <div
       style={{
         display: "flex",
-        justifyContent: isUser ? "flex-end" : "flex-start",
+        flexDirection: "column",
+        alignItems: isUser ? "flex-end" : "flex-start",
         marginBottom: 10,
+        gap: 6,
       }}
     >
       <div
@@ -351,8 +370,113 @@ function Bubble({ msg }: { msg: Msg }) {
           </div>
         )}
       </div>
+      {!isUser && msg.toolCalls && msg.toolCalls.length > 0 && (
+        <ToolCallsPanel calls={msg.toolCalls} />
+      )}
     </div>
   );
+}
+
+function ToolCallsPanel({ calls }: { calls: ToolCall[] }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  return (
+    <details
+      style={{
+        maxWidth: "92%",
+        background: "#fff",
+        border: "1px solid var(--stroke-weak)",
+        borderRadius: 8,
+        padding: "6px 10px",
+        fontSize: 11,
+      }}
+    >
+      <summary
+        style={{
+          cursor: "pointer",
+          color: "var(--grey-700)",
+          listStyle: "none",
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          fontWeight: 600,
+        }}
+      >
+        <MMIcon name="layers" size={12} color="var(--grey-700)" />
+        {calls.length === 1
+          ? "כלי אחד הופעל"
+          : `${calls.length} כלים הופעלו`}
+        <span style={{ marginInlineStart: "auto", color: "var(--grey-500)", fontSize: 10 }}>הצג פרטים</span>
+      </summary>
+      <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+        {calls.map((c, i) => {
+          const expanded = openIndex === i;
+          const inputStr = formatInput(c.input);
+          return (
+            <div key={i} style={{ borderTop: "1px solid var(--grey-15)", paddingTop: 6 }}>
+              <button
+                type="button"
+                onClick={() => setOpenIndex(expanded ? null : i)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  width: "100%",
+                  textAlign: "start",
+                  background: "transparent",
+                  border: 0,
+                  padding: 0,
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                  fontSize: 11,
+                  color: "var(--grey-900)",
+                  fontWeight: 600,
+                }}
+                aria-expanded={expanded}
+              >
+                <MMIcon
+                  name={expanded ? "chevron-down" : "chevron-left"}
+                  size={10}
+                  color="var(--grey-500)"
+                />
+                <code style={{ fontFamily: "var(--font-inter, Inter)", fontSize: 10, color: "var(--grey-500)" }}>
+                  {c.name}
+                </code>
+                <span>· {TOOL_LABELS[c.name] ?? "כלי"}</span>
+              </button>
+              {expanded && inputStr && (
+                <pre
+                  style={{
+                    marginTop: 6,
+                    padding: 8,
+                    background: "var(--grey-15)",
+                    borderRadius: 4,
+                    fontSize: 10,
+                    color: "var(--grey-900)",
+                    overflow: "auto",
+                    maxHeight: 200,
+                    direction: "ltr",
+                    textAlign: "start",
+                    fontFamily: "var(--font-inter, Inter)",
+                  }}
+                >
+                  {inputStr}
+                </pre>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </details>
+  );
+}
+
+function formatInput(input: unknown): string {
+  if (input == null) return "";
+  try {
+    return JSON.stringify(input, null, 2);
+  } catch {
+    return String(input);
+  }
 }
 
 function SetupCard({ error }: { error: string }) {

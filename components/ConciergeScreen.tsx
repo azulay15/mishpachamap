@@ -219,24 +219,39 @@ export function ConciergeScreen({
             <PersonaPill />
           </div>
 
-          {/* Layer pills */}
+          {/* Layer pills — horizontal scroll instead of wrap. Center-aligned
+              when the row fits, free to scroll horizontally on narrow widths. */}
           <div
+            className="mm-scroll"
             style={{
               position: "absolute",
               top: 70,
               left: 0,
               right: 0,
               zIndex: 4,
-              display: "flex",
-              justifyContent: "center",
-              gap: 6,
-              flexWrap: "wrap",
-              padding: "0 16px",
+              overflowX: "auto",
+              overflowY: "hidden",
+              padding: "4px 16px 6px",
+              WebkitOverflowScrolling: "touch",
+              scrollbarWidth: "none",
+              maskImage:
+                "linear-gradient(to inline-start, transparent, #000 16px, #000 calc(100% - 16px), transparent)",
             }}
           >
-            {LAYERS.map((l) => (
-              <LayerChip key={l.id} layer={l} on={layers.has(l.id)} onClick={() => toggle(l.id)} />
-            ))}
+            <div
+              style={{
+                display: "inline-flex",
+                gap: 6,
+                whiteSpace: "nowrap",
+                margin: "0 auto",
+                paddingInlineStart: "max(0px, 50% - 380px)",
+                paddingInlineEnd: "max(0px, 50% - 380px)",
+              }}
+            >
+              {LAYERS.map((l) => (
+                <LayerChip key={l.id} layer={l} on={layers.has(l.id)} onClick={() => toggle(l.id)} />
+              ))}
+            </div>
           </div>
 
           {/* GreenScore corner badge — clickable, opens breakdown sheet */}
