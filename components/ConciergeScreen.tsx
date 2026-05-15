@@ -15,6 +15,7 @@ import { ScoreChip } from "./ScoreChip";
 import { GreenScoreSheet } from "./GreenScoreSheet";
 import { MatchBreakdownSheet } from "./MatchBreakdownSheet";
 import { NeighborhoodSearch } from "./NeighborhoodSearch";
+import { WelcomeCard } from "./WelcomeCard";
 import { MMIcon } from "@/lib/icons";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { usePersona } from "@/lib/usePersona";
@@ -307,6 +308,8 @@ export function ConciergeScreen({
               />
             );
           })()}
+
+          <WelcomeCard />
 
           {/* Bottom carousel */}
           <div
