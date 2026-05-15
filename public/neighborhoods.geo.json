@@ -1,0 +1,196 @@
+{
+  "type": "FeatureCollection",
+  "name": "modiin-neighborhoods-v1",
+  "$schema": "https://geojson.org/schema/FeatureCollection.json",
+  "meta": {
+    "version": "1.0",
+    "source": "OSM centroids (place=suburb/neighbourhood within Modi'in bbox, 2026-05-15) + hand-aligned ±300m boxes",
+    "license": "ODbL (centroids from OpenStreetMap contributors); MishpachaMap-V1 (box geometry)",
+    "polygon_quality": "approximate-rectangles-v1",
+    "note": "Each polygon is a hand-aligned box around the OSM-published centroid. Replace with CBS statistical-area polygons or GeoJSON.io hand-drawn shapes for production. The `id` field is the DB join key — keep stable across replacements."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakramim",
+        "name_he": "הכרמים",
+        "name_en": "HaKramim",
+        "osm_node": 1484926910,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[35.0040, 31.9116], [35.0150, 31.9116], [35.0150, 31.9196], [35.0040, 31.9196], [35.0040, 31.9116]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hanevim",
+        "name_he": "הנביאים",
+        "name_en": "HaNeviim",
+        "osm_node": 1484926913,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[35.0007, 31.9082], [35.0107, 31.9082], [35.0107, 31.9162], [35.0007, 31.9162], [35.0007, 31.9082]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hameginim",
+        "name_he": "המגינים",
+        "name_en": "HaMeginim",
+        "osm_node": 1484926916,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[34.9962, 31.9054], [35.0062, 31.9054], [35.0062, 31.9134], [34.9962, 31.9134], [34.9962, 31.9054]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "haprachim",
+        "name_he": "הפרחים",
+        "name_en": "HaPrachim",
+        "osm_node": 1484926889,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[35.0062, 31.9008], [35.0162, 31.9008], [35.0162, 31.9088], [35.0062, 31.9088], [35.0062, 31.9008]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "avneichen",
+        "name_he": "אבני חן",
+        "name_en": "Avnei Chen",
+        "osm_node": 1484926919,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[34.9916, 31.8992], [35.0016, 31.8992], [35.0016, 31.9072], [34.9916, 31.9072], [34.9916, 31.8992]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hanechalim",
+        "name_he": "הנחלים",
+        "name_en": "HaNechalim",
+        "osm_node": 1484926906,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[35.0115, 31.8941], [35.0215, 31.8941], [35.0215, 31.9021], [35.0115, 31.9021], [35.0115, 31.8941]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "masuah",
+        "name_he": "משואה",
+        "name_en": "Masuah",
+        "osm_node": 1484926894,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[35.0031, 31.8908], [35.0131, 31.8908], [35.0131, 31.8988], [35.0031, 31.8988], [35.0031, 31.8908]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hatsiporim",
+        "name_he": "הציפורים",
+        "name_en": "HaTsiporim",
+        "osm_node": 5339843759,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[34.9918, 31.8926], [35.0018, 31.8926], [35.0018, 31.9006], [34.9918, 31.9006], [34.9918, 31.8926]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "nofim",
+        "name_he": "נופים",
+        "name_en": "Nofim",
+        "osm_node": 5339843776,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[34.9800, 31.8928], [34.9900, 31.8928], [34.9900, 31.9008], [34.9800, 31.9008], [34.9800, 31.8928]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hashvatim",
+        "name_he": "השבטים",
+        "name_en": "HaShvatim",
+        "osm_node": 1484926895,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[34.9998, 31.8840], [35.0098, 31.8840], [35.0098, 31.8920], [34.9998, 31.8920], [34.9998, 31.8840]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hareut",
+        "name_he": "הרעות",
+        "name_en": "HaReut",
+        "osm_node": 1657275587,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[35.0131, 31.8829], [35.0231, 31.8829], [35.0231, 31.8909], [35.0131, 31.8909], [35.0131, 31.8829]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "moriah",
+        "name_he": "מוריה",
+        "name_en": "Moriah",
+        "osm_node": 1484926921,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[35.0017, 31.8783], [35.0117, 31.8783], [35.0117, 31.8863], [35.0017, 31.8863], [35.0017, 31.8783]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hamakkabim",
+        "name_he": "המכבים",
+        "name_en": "HaMakkabim",
+        "osm_node": 429882137,
+        "center_source": "osm"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[35.0289, 31.8880], [35.0389, 31.8880], [35.0389, 31.8960], [35.0289, 31.8960], [35.0289, 31.8880]]]
+      }
+    }
+  ]
+}

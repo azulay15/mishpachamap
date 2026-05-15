@@ -4,6 +4,7 @@ import { ConciergeScreen, type ConciergeData } from "@/components/ConciergeScree
 import { MOCK_DATA } from "@/lib/mockData";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { PERSONA_DEFAULT } from "@/lib/persona";
+import { loadNeighborhoodFeatures, centroidOf } from "@/lib/geoData";
 
 export const revalidate = 60;
 
@@ -12,8 +13,6 @@ type NeighborhoodRow = {
   name_he: string;
   family_label: string | null;
   summary_he: string | null;
-  polygon: GeoJSON.Polygon;
-  center: GeoJSON.Point;
   aliases: string[] | null;
 };
 
@@ -73,7 +72,7 @@ export default async function Page() {
 
   const [{ data: nb }, { data: metrics }, { data: pois }, { data: listings }, { data: schools }] =
     await Promise.all([
-      sb.from("neighborhoods_geojson").select("id, name_he, family_label, summary_he, polygon, center, aliases"),
+      sb.from("neighborhoods").select("id, name_he, family_label, summary_he, aliases"),
       sb.from("neighborhood_metrics").select("*"),
       sb.from("pois_geojson").select("id, type, name_he, point"),
       sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market"),
@@ -107,17 +106,21 @@ function assemble(input: {
   const persona = PERSONA_DEFAULT;
 
   // Step 1 — build base neighborhood records (no matchScore yet).
+  // Geometry is joined from the static `public/neighborhoods.geo.json` file.
+  const geoFeatures = loadNeighborhoodFeatures();
+  const featureById = new Map(geoFeatures.features.map((f) => [f.properties.id, f]));
   const base = input.nb
-    .filter((n) => n.polygon && n.center)
     .map((n) => {
+      const feature = featureById.get(n.id);
+      if (!feature) return null;
+      const center = centroidOf(feature);
       const m = metricsByNb.get(n.id);
-      const center = n.center.coordinates as [number, number];
       return {
         id: n.id,
         he: n.name_he,
         family: n.family_label,
         summary: n.summary_he,
-        polygon: n.polygon,
+        polygon: feature.geometry,
         center,
         aliases: n.aliases ?? [],
         avgPrice: m?.avg_price_per_m2 ?? 0,
@@ -127,7 +130,8 @@ function assemble(input: {
         schoolScore: m?.school_score ?? 0,
         quietScore: m?.quiet_score ?? 70,
       };
-    });
+    })
+    .filter((n): n is NonNullable<typeof n> => n !== null);
 
   // Step 2 — POIs as GeoJSON Features.
   const pois = input.pois

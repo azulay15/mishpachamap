@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { MMIcon } from "@/lib/icons";
 import { ScoreChip } from "./ScoreChip";
 import { MatchBadge } from "./MatchBadge";
+import { PropertyDetailSheet } from "./PropertyDetailSheet";
 import { NIS, NISshort, pct } from "@/lib/format";
 import { useFavorites } from "@/lib/useFavorites";
 
@@ -47,6 +49,8 @@ type Props = {
 };
 
 export function ListingsPanel({ selected, listings, schools, onExplainMatch }: Props) {
+  const [openListing, setOpenListing] = useState<ListingRow | null>(null);
+
   if (!selected) {
     return (
       <aside style={asideStyle}>
@@ -115,7 +119,12 @@ export function ListingsPanel({ selected, listings, schools, onExplainMatch }: P
             <Empty>אין כרגע נכסים פעילים בשכונה זו.</Empty>
           ) : (
             listings.slice(0, 3).map((l) => (
-            <ListingRowCard key={l.id} listing={l} onExplainMatch={onExplainMatch} />
+            <ListingRowCard
+              key={l.id}
+              listing={l}
+              onExplainMatch={onExplainMatch}
+              onOpen={() => setOpenListing(l)}
+            />
           ))
           )}
         </Section>
@@ -145,6 +154,15 @@ export function ListingsPanel({ selected, listings, schools, onExplainMatch }: P
           <MMIcon name="shield" size={14} /> הזמינו בדק בית
         </button>
       </footer>
+
+      {openListing && (
+        <PropertyDetailSheet
+          listing={openListing}
+          neighborhoodHe={selected.he}
+          onClose={() => setOpenListing(null)}
+          onExplainMatch={onExplainMatch}
+        />
+      )}
     </aside>
   );
 }
@@ -192,14 +210,20 @@ function Empty({ children }: { children: React.ReactNode }) {
 function ListingRowCard({
   listing,
   onExplainMatch,
+  onOpen,
 }: {
   listing: ListingRow;
   onExplainMatch?: () => void;
+  onOpen?: () => void;
 }) {
   const { hasListing, toggleListing } = useFavorites();
   const isFav = hasListing(listing.id);
   return (
-    <div className="mm-card mm-card-hover" style={{ padding: 12, display: "grid", gridTemplateColumns: "1fr auto", gap: 8, cursor: "pointer" }}>
+    <div
+      className="mm-card mm-card-hover"
+      onClick={onOpen}
+      style={{ padding: 12, display: "grid", gridTemplateColumns: "1fr auto", gap: 8, cursor: "pointer" }}
+    >
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
           <button
