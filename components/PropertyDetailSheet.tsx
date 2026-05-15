@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MMIcon } from "@/lib/icons";
 import { NIS, NISshort } from "@/lib/format";
 import { MatchBadge } from "./MatchBadge";
 import { useFavorites } from "@/lib/useFavorites";
 import type { ListingRow } from "./ListingsPanel";
+import { LeadGenModal, type LeadKind } from "./LeadGenModal";
 
 type Props = {
   listing: ListingRow;
@@ -19,6 +20,7 @@ type Props = {
 export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplainMatch }: Props) {
   const { hasListing, toggleListing } = useFavorites();
   const isFav = hasListing(listing.id);
+  const [leadOpen, setLeadOpen] = useState<LeadKind | null>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -188,10 +190,18 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplai
             gap: 8,
           }}
         >
-          <button className="mm-btn mm-btn-accent">
+          <button
+            type="button"
+            className="mm-btn mm-btn-accent"
+            onClick={() => setLeadOpen("mortgage")}
+          >
             <MMIcon name="zap" size={14} color="#fff" /> קבלו אישור עקרוני
           </button>
-          <button className="mm-btn mm-btn-secondary">
+          <button
+            type="button"
+            className="mm-btn mm-btn-secondary"
+            onClick={() => setLeadOpen("inspection")}
+          >
             <MMIcon name="shield" size={14} /> הזמינו בדק בית
           </button>
         </div>
@@ -209,6 +219,18 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplai
           נכס מסונתז ל-V1 (תג <code>synthetic-v1</code>). פרטים מלאים יוחלפו בנתונים חיים מ-Yad2 / Madlan בעדכון עתידי.
         </footer>
       </div>
+
+      {leadOpen && (
+        <LeadGenModal
+          kind={leadOpen}
+          context={{
+            listingId: listing.id,
+            neighborhoodId: neighborhoodHe,
+            address: listing.address,
+          }}
+          onClose={() => setLeadOpen(null)}
+        />
+      )}
     </div>
   );
 }

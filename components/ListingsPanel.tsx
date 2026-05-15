@@ -5,6 +5,7 @@ import { MMIcon } from "@/lib/icons";
 import { ScoreChip } from "./ScoreChip";
 import { MatchBadge } from "./MatchBadge";
 import { PropertyDetailSheet } from "./PropertyDetailSheet";
+import { LeadGenModal, type LeadKind } from "./LeadGenModal";
 import { NIS, NISshort, pct } from "@/lib/format";
 import { useFavorites } from "@/lib/useFavorites";
 
@@ -50,6 +51,7 @@ type Props = {
 
 export function ListingsPanel({ selected, listings, schools, onExplainMatch }: Props) {
   const [openListing, setOpenListing] = useState<ListingRow | null>(null);
+  const [leadOpen, setLeadOpen] = useState<LeadKind | null>(null);
 
   if (!selected) {
     return (
@@ -147,13 +149,29 @@ export function ListingsPanel({ selected, listings, schools, onExplainMatch }: P
           gap: 6,
         }}
       >
-        <button className="mm-btn mm-btn-accent">
+        <button
+          type="button"
+          className="mm-btn mm-btn-accent"
+          onClick={() => setLeadOpen("mortgage")}
+        >
           <MMIcon name="zap" size={14} color="#fff" /> קבלו אישור עקרוני למשכנתא
         </button>
-        <button className="mm-btn mm-btn-secondary mm-btn-sm">
+        <button
+          type="button"
+          className="mm-btn mm-btn-secondary mm-btn-sm"
+          onClick={() => setLeadOpen("inspection")}
+        >
           <MMIcon name="shield" size={14} /> הזמינו בדק בית
         </button>
       </footer>
+
+      {leadOpen && (
+        <LeadGenModal
+          kind={leadOpen}
+          context={{ neighborhoodId: selected.id, address: selected.he }}
+          onClose={() => setLeadOpen(null)}
+        />
+      )}
 
       {openListing && (
         <PropertyDetailSheet
