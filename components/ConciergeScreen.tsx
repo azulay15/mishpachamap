@@ -265,14 +265,15 @@ export function ConciergeScreen({
             </div>
           </div>
 
-          {/* GreenScore corner badge — clickable, opens breakdown sheet */}
+          {/* GreenScore corner badge — clickable, opens breakdown sheet.
+              Pushed lower on mobile so it doesn't crash into the layer pills row. */}
           {selected && (
             <button
               type="button"
               onClick={() => setGreenSheetOpen(true)}
               style={{
                 position: "absolute",
-                top: 16,
+                top: isMobile ? 116 : 16,
                 insetInlineEnd: 16,
                 zIndex: 4,
                 background: "#fff",

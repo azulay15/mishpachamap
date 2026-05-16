@@ -37,6 +37,17 @@ export function NeighborhoodCard({ n, selected, onClick, onExplainMatch, variant
     <article
       className="mm-card mm-card-hover"
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (!onClick) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      tabIndex={onClick ? 0 : undefined}
+      role={onClick ? "button" : undefined}
+      aria-pressed={onClick ? selected : undefined}
+      aria-label={onClick ? `שכונת ${n.he}, ציון התאמה ${n.matchScore} מתוך 100` : undefined}
       style={{
         ...cardStyle,
         ...(selected ? selectedStyle : {}),
@@ -130,13 +141,15 @@ export function NeighborhoodCard({ n, selected, onClick, onExplainMatch, variant
           </p>
         )}
 
-        {/* Stats row — 4 evenly-spaced columns. Numbers up top, labels below.
-             Dividers between columns add structure without visual noise. */}
+        {/* Stats grid — 2×2 by default (works at 260-340px card widths),
+             expands to 4-across on wide variants. */}
         <div
+          className="mm-card-stats"
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr 1fr",
-            gap: 0,
+            gridTemplateColumns: "1fr 1fr",
+            rowGap: 8,
+            columnGap: 0,
             paddingTop: 10,
             borderTop: "1px solid var(--grey-15)",
             marginTop: "auto",
@@ -150,7 +163,7 @@ export function NeighborhoodCard({ n, selected, onClick, onExplainMatch, variant
             subColor={deltaUp ? "var(--green-positive)" : "var(--red-negative)"}
             border
           />
-          <Stat value={n.schoolScore} label="בתי ספר" border />
+          <Stat value={n.schoolScore} label="בתי ספר" />
           <Stat
             value={n.greenScore}
             label="GreenScore"

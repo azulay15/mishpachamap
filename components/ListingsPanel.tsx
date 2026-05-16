@@ -8,6 +8,7 @@ import { PropertyDetailSheet } from "./PropertyDetailSheet";
 import { LeadGenModal, type LeadKind } from "./LeadGenModal";
 import { NIS, NISshort, pct } from "@/lib/format";
 import { useFavorites } from "@/lib/useFavorites";
+import { externalSearchUrls } from "@/lib/externalLinks";
 
 export type ListingRow = {
   id: string;
@@ -129,6 +130,8 @@ export function ListingsPanel({ selected, listings, schools, onExplainMatch }: P
             />
           ))
           )}
+          {/* Neighborhood-level external search — see every listing on the live sites. */}
+          <NeighborhoodExternalSearch neighborhoodHe={selected.he} />
         </Section>
 
         <Section title="בתי ספר במרחק הליכה">
@@ -194,6 +197,66 @@ const asideStyle: React.CSSProperties = {
   height: "100%",
   minHeight: 0,
 };
+
+function NeighborhoodExternalSearch({ neighborhoodHe }: { neighborhoodHe: string }) {
+  const urls = externalSearchUrls(neighborhoodHe);
+  const items = [
+    { href: urls.yad2, label: "Yad2", color: "#FFC63C" },
+    { href: urls.madlan, label: "Madlan", color: "#1256A0" },
+    { href: urls.nadlan, label: 'נדל"ן.gov', color: "#5B9F40" },
+  ];
+  return (
+    <div
+      style={{
+        marginTop: 4,
+        padding: "10px 12px",
+        background: "var(--grey-15)",
+        borderRadius: 6,
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
+      }}
+    >
+      <div style={{ fontSize: 11, color: "var(--grey-700)", fontWeight: 600 }}>
+        כל הנכסים הפעילים בשכונה — באתרי המקור:
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6 }}>
+        {items.map((i) => (
+          <a
+            key={i.label}
+            href={i.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mm-btn mm-btn-secondary mm-btn-sm"
+            style={{
+              textDecoration: "none",
+              justifyContent: "space-between",
+              gap: 4,
+              fontSize: 11,
+              height: 28,
+              padding: "0 8px",
+            }}
+          >
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+              <span
+                aria-hidden
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: 999,
+                  background: i.color,
+                  flex: "none",
+                }}
+              />
+              {i.label}
+            </span>
+            <MMIcon name="external" size={10} color="var(--grey-500)" />
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

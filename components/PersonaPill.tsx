@@ -4,14 +4,64 @@ import { useRouter } from "next/navigation";
 import { NISshort } from "@/lib/format";
 import { usePersona } from "@/lib/usePersona";
 import { MMIcon } from "@/lib/icons";
+import { useIsMobile } from "@/lib/useMediaQuery";
 
 export function PersonaPill() {
   const router = useRouter();
   const p = usePersona();
+  const isMobile = useIsMobile();
   const initial = p.name.replace(/^משפחת\s*/, "").slice(0, 1) || "ל";
-  const kidsLabel = p.kids.length > 0 ? `${p.kids.length} ילדים · ` : "";
-  const summary = `· ${p.size} נפשות · ${kidsLabel}${NISshort(p.budget.min)}–${NISshort(p.budget.max)}`;
 
+  // Mobile: collapse to a compact orange dot + edit. Tap anywhere on the pill
+  // to open the persona editor (no separate "ערוך" label needed).
+  if (isMobile) {
+    return (
+      <button
+        type="button"
+        onClick={() => router.push("/onboarding?step=2")}
+        aria-label={`ערוך פרופיל: ${p.name}`}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          background: "#fff",
+          borderRadius: 999,
+          padding: "4px 10px 4px 4px",
+          boxShadow: "var(--shadow-md)",
+          height: 40,
+          border: 0,
+          cursor: "pointer",
+          fontFamily: "inherit",
+          flex: "none",
+        }}
+      >
+        <span
+          aria-hidden
+          style={{
+            width: 26,
+            height: 26,
+            borderRadius: "50%",
+            background: "var(--pumpkin-orange)",
+            color: "#fff",
+            display: "grid",
+            placeItems: "center",
+            fontWeight: 800,
+            fontSize: 13,
+            fontFamily: "var(--font-inter, Inter)",
+            flex: "none",
+          }}
+        >
+          {initial}
+        </span>
+        {p.celiacInFamily && (
+          <MMIcon name="gluten" size={12} color="var(--layer-celiac)" />
+        )}
+        <MMIcon name="settings" size={13} color="var(--grey-500)" />
+      </button>
+    );
+  }
+
+  const summary = `· ${p.size} נפשות${p.kids.length > 0 ? ` · ${p.kids.length} ילדים` : ""} · ${NISshort(p.budget.min)}–${NISshort(p.budget.max)}`;
   return (
     <div
       style={{

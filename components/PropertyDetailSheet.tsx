@@ -7,6 +7,7 @@ import { MatchBadge } from "./MatchBadge";
 import { useFavorites } from "@/lib/useFavorites";
 import type { ListingRow } from "./ListingsPanel";
 import { LeadGenModal, type LeadKind } from "./LeadGenModal";
+import { externalSearchUrls } from "@/lib/externalLinks";
 
 type Props = {
   listing: ListingRow;
@@ -181,6 +182,25 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplai
           <Stat icon="tag" label='מחיר/מ"ר' value={NISshort(Math.round(listing.price_nis / listing.sqm))} />
         </div>
 
+        {/* External search link-outs — until we have real Yad2/Madlan/Nadlan ingest,
+            user can open a pre-filled search on each source site. */}
+        <div
+          style={{
+            padding: "0 20px 12px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+          }}
+        >
+          <div
+            className="mm-eyebrow"
+            style={{ marginBottom: 4 }}
+          >
+            ראו את הנכס במקורות חיים
+          </div>
+          <ExternalSearchRow address={listing.address} />
+        </div>
+
         {/* Lead-gen CTAs */}
         <div
           style={{
@@ -216,7 +236,7 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplai
             lineHeight: "16px",
           }}
         >
-          נכס מסונתז ל-V1 (תג <code>synthetic-v1</code>). פרטים מלאים יוחלפו בנתונים חיים מ-Yad2 / Madlan בעדכון עתידי.
+          נכס מסונתז ל-V1 (תג <code>synthetic-v1</code>). הנתונים החיים — מחירים, תמונות, סטטוס — נמצאים באתרים המקוריים שלמעלה.
         </footer>
       </div>
 
@@ -231,6 +251,49 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplai
           onClose={() => setLeadOpen(null)}
         />
       )}
+    </div>
+  );
+}
+
+function ExternalSearchRow({ address }: { address: string }) {
+  const urls = externalSearchUrls(address);
+  const items = [
+    { href: urls.yad2, label: "Yad2", color: "#FFC63C" },
+    { href: urls.madlan, label: "Madlan", color: "#1256A0" },
+    { href: urls.nadlan, label: "נדל\"ן.gov", color: "#5B9F40" },
+  ];
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6 }}>
+      {items.map((i) => (
+        <a
+          key={i.label}
+          href={i.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mm-btn mm-btn-secondary mm-btn-sm"
+          style={{
+            textDecoration: "none",
+            justifyContent: "space-between",
+            gap: 6,
+            fontSize: 12,
+          }}
+        >
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span
+              aria-hidden
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: 999,
+                background: i.color,
+                flex: "none",
+              }}
+            />
+            {i.label}
+          </span>
+          <MMIcon name="external" size={12} color="var(--grey-500)" />
+        </a>
+      ))}
     </div>
   );
 }
