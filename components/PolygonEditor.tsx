@@ -52,8 +52,10 @@ export function PolygonEditor({ initial }: Props) {
     map.addControl(draw, "top-left");
 
     map.on("load", () => {
-      // Restore from localStorage if available (auto-saved work), else seed
-      // with the static file passed from the server.
+      // Merge strategy: take the canonical 14 features from `initial`. For
+      // each, prefer the user's locally-edited version if one exists. So
+      // when the canonical list grows (e.g. Moreshet added), the editor
+      // immediately shows the new placeholder without discarding edits.
       let seed: NeighborhoodFeatureCollection["features"] = initial.features;
       try {
         const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -63,7 +65,12 @@ export function PolygonEditor({ initial }: Props) {
             savedAt: string;
           };
           if (parsed?.features?.length > 0) {
-            seed = parsed.features;
+            const storedById = new Map(
+              parsed.features
+                .filter((f) => f?.properties?.id)
+                .map((f) => [f.properties.id, f]),
+            );
+            seed = initial.features.map((f) => storedById.get(f.properties.id) ?? f);
             setLastSaved(parsed.savedAt);
           }
         }

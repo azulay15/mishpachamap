@@ -24,10 +24,22 @@ type Props = {
   onClick?: () => void;
   /** Click handler for the match score region — opens the breakdown sheet. */
   onExplainMatch?: () => void;
+  /** Whether this card is currently in the comparison set. */
+  inCompare?: boolean;
+  /** Toggle this card's membership in the comparison set. */
+  onToggleCompare?: () => void;
   variant?: "list" | "wide";
 };
 
-export function NeighborhoodCard({ n, selected, onClick, onExplainMatch, variant = "list" }: Props) {
+export function NeighborhoodCard({
+  n,
+  selected,
+  onClick,
+  onExplainMatch,
+  inCompare,
+  onToggleCompare,
+  variant = "list",
+}: Props) {
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
   const isFav = hasNeighborhood(n.id);
   const deltaUp = n.avgPriceDelta > 0;
@@ -57,31 +69,60 @@ export function NeighborhoodCard({ n, selected, onClick, onExplainMatch, variant
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 12, minHeight: 0, flex: 1 }}>
-        {/* Header: heart + name + family + match-score ring */}
+        {/* Header: heart + (optional compare toggle) + name + family + match-score ring */}
         <header style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 10, alignItems: "start" }}>
-          <button
-            type="button"
-            aria-label={isFav ? `הסר את ${n.he} מהשמורים` : `שמור את ${n.he}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleNeighborhood(n.id);
-            }}
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: 999,
-              border: 0,
-              background: isFav ? "rgba(255,107,0,0.10)" : "var(--grey-15)",
-              color: isFav ? "var(--pumpkin-orange)" : "var(--grey-500)",
-              cursor: "pointer",
-              display: "grid",
-              placeItems: "center",
-              transition: "background 120ms, color 120ms",
-              flex: "none",
-            }}
-          >
-            <MMIcon name={isFav ? "heart-fill" : "heart"} size={13} color="currentColor" />
-          </button>
+          <div style={{ display: "flex", gap: 4, flex: "none" }}>
+            <button
+              type="button"
+              aria-label={isFav ? `הסר את ${n.he} מהשמורים` : `שמור את ${n.he}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleNeighborhood(n.id);
+              }}
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: 999,
+                border: 0,
+                background: isFav ? "rgba(255,107,0,0.10)" : "var(--grey-15)",
+                color: isFav ? "var(--pumpkin-orange)" : "var(--grey-500)",
+                cursor: "pointer",
+                display: "grid",
+                placeItems: "center",
+                transition: "background 120ms, color 120ms",
+                flex: "none",
+              }}
+            >
+              <MMIcon name={isFav ? "heart-fill" : "heart"} size={13} color="currentColor" />
+            </button>
+            {onToggleCompare && (
+              <button
+                type="button"
+                aria-label={inCompare ? `הסר את ${n.he} מההשוואה` : `הוסף את ${n.he} להשוואה`}
+                aria-pressed={inCompare}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleCompare();
+                }}
+                title={inCompare ? "בהשוואה" : "הוסף להשוואה"}
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 999,
+                  border: 0,
+                  background: inCompare ? "var(--grey-900)" : "var(--grey-15)",
+                  color: inCompare ? "#fff" : "var(--grey-500)",
+                  cursor: "pointer",
+                  display: "grid",
+                  placeItems: "center",
+                  transition: "background 120ms, color 120ms",
+                  flex: "none",
+                }}
+              >
+                <MMIcon name="compare" size={13} color="currentColor" />
+              </button>
+            )}
+          </div>
 
           <div style={{ minWidth: 0 }}>
             <h4

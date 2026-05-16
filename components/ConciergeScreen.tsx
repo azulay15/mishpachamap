@@ -17,6 +17,7 @@ import { MatchBreakdownSheet } from "./MatchBreakdownSheet";
 import { NeighborhoodSearch } from "./NeighborhoodSearch";
 import { WelcomeCard } from "./WelcomeCard";
 import { MobileRailDrawer } from "./MobileRailDrawer";
+import { CompareSheet, type CompareItem } from "./CompareSheet";
 import { useIsMobile } from "@/lib/useMediaQuery";
 import { MMIcon } from "@/lib/icons";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
@@ -65,6 +66,8 @@ export function ConciergeScreen({
   const [matchSheetFor, setMatchSheetFor] = useState<string | null>(null);
   const [railMode, setRailMode] = useState<RailMode>("listings");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
+  const [compareOpen, setCompareOpen] = useState(false);
   const persona = usePersona();
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
@@ -322,6 +325,55 @@ export function ConciergeScreen({
 
           <WelcomeCard />
 
+          {/* Floating compare CTA — appears when 2+ neighborhoods are in the
+              compare set. Tap to open the side-by-side sheet. */}
+          {compareIds.size >= 2 && (
+            <button
+              type="button"
+              onClick={() => setCompareOpen(true)}
+              style={{
+                position: "absolute",
+                bottom: 230,
+                insetInlineEnd: 16,
+                zIndex: 5,
+                background: "var(--grey-900)",
+                color: "#fff",
+                border: 0,
+                borderRadius: 999,
+                padding: "10px 16px",
+                cursor: "pointer",
+                boxShadow: "var(--shadow-lg)",
+                fontFamily: "inherit",
+                fontSize: 13,
+                fontWeight: 700,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <MMIcon name="compare" size={14} color="#fff" />
+              השוו {compareIds.size} שכונות
+            </button>
+          )}
+
+          {compareOpen && compareIds.size >= 2 && (
+            <CompareSheet
+              items={
+                neighborhoodsWithScore.filter((n) => compareIds.has(n.id)) as unknown as CompareItem[]
+              }
+              persona={persona}
+              onClose={() => setCompareOpen(false)}
+              onRemove={(id) =>
+                setCompareIds((prev) => {
+                  const next = new Set(prev);
+                  next.delete(id);
+                  if (next.size < 2) setCompareOpen(false);
+                  return next;
+                })
+              }
+            />
+          )}
+
           {/* Bottom carousel */}
           <div
             className="mm-scroll"
@@ -341,6 +393,15 @@ export function ConciergeScreen({
                 <NeighborhoodCard
                   n={n}
                   selected={selectedId === n.id}
+                  inCompare={compareIds.has(n.id)}
+                  onToggleCompare={() => {
+                    setCompareIds((prev) => {
+                      const next = new Set(prev);
+                      if (next.has(n.id)) next.delete(n.id);
+                      else if (next.size < 4) next.add(n.id);
+                      return next;
+                    });
+                  }}
                   onClick={() => {
                     setSelectedId(n.id);
                     if (isMobile) setDrawerOpen(true);
