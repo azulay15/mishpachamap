@@ -63,6 +63,9 @@ export function MMMap({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapboxMap | null>(null);
   const initializedRef = useRef(false);
+  // Tracks the last `selected` we flew to so a persona-driven `neighborhoods`
+  // change doesn't snap the map back when the user has panned away.
+  const lastFlownToRef = useRef<string | null>(null);
 
   // ---- One-time map init ----
   useEffect(() => {
@@ -338,7 +341,23 @@ export function MMMap({
     const map = mapRef.current;
     if (!map || !initializedRef.current) return;
     map.setFilter("neighborhoods-stroke-selected", ["==", ["get", "id"], selected ?? ""]);
-  }, [selected]);
+
+    // Fly to the selected polygon — but only when `selected` actually changed,
+    // not on every `neighborhoods` recompute (e.g. persona change), so panning
+    // away isn't undone by an unrelated state update.
+    if (selected && selected !== lastFlownToRef.current) {
+      const feature = neighborhoods.features.find((f) => f.properties.id === selected);
+      const bbox = feature ? polygonBbox(feature.geometry) : null;
+      if (bbox) {
+        map.fitBounds(bbox, {
+          padding: { top: 140, bottom: 220, left: 60, right: 60 },
+          maxZoom: 15,
+          duration: 700,
+        });
+      }
+    }
+    lastFlownToRef.current = selected;
+  }, [selected, neighborhoods]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -347,6 +366,20 @@ export function MMMap({
   }, [hover]);
 
   return <div ref={containerRef} className="mm-map-canvas" style={{ position: "absolute", inset: 0 }} />;
+}
+
+function polygonBbox(geom: GeoJSON.Polygon): [[number, number], [number, number]] | null {
+  const ring = geom.coordinates?.[0];
+  if (!ring || ring.length === 0) return null;
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const [x, y] of ring) {
+    if (x < minX) minX = x;
+    if (y < minY) minY = y;
+    if (x > maxX) maxX = x;
+    if (y > maxY) maxY = y;
+  }
+  if (!isFinite(minX)) return null;
+  return [[minX, minY], [maxX, maxY]];
 }
 
 function escapeHtml(s: string): string {

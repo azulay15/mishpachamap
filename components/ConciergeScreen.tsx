@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { LAYERS, type LayerId } from "@/lib/layers";
 import { LayerChip } from "./LayerChip";
@@ -73,6 +73,21 @@ export function ConciergeScreen({
   const persona = usePersona();
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+
+  // When the selected neighborhood changes, scroll the carousel to bring the
+  // matching card into view. Uses RAF so the DOM has settled after re-render.
+  useEffect(() => {
+    if (!selectedId) return;
+    const id = requestAnimationFrame(() => {
+      const container = carouselRef.current;
+      if (!container) return;
+      const card = container.querySelector<HTMLElement>(`[data-nb-id="${selectedId}"]`);
+      if (!card) return;
+      card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [selectedId]);
 
   // Deep-link support: ?n=<id> selects that neighborhood on mount.
   useEffect(() => {
@@ -122,10 +137,17 @@ export function ConciergeScreen({
     });
   };
 
-  const sortedCards = useMemo(
-    () => [...neighborhoodsWithScore].sort((a, b) => b.matchScore - a.matchScore).slice(0, 5),
-    [neighborhoodsWithScore],
-  );
+  // Top 5 by match score, but always include the selected neighborhood so the
+  // carousel visibly reflects what the user picked from search/sheet/map.
+  const sortedCards = useMemo(() => {
+    const ranked = [...neighborhoodsWithScore].sort((a, b) => b.matchScore - a.matchScore);
+    const top = ranked.slice(0, 5);
+    if (selectedId && !top.some((n) => n.id === selectedId)) {
+      const sel = ranked.find((n) => n.id === selectedId);
+      if (sel) return [sel, ...top.slice(0, 4)];
+    }
+    return top;
+  }, [neighborhoodsWithScore, selectedId]);
 
   const selected = useMemo<Selected | null>(() => {
     const n = neighborhoodsWithScore.find((x) => x.id === selectedId);
@@ -405,6 +427,7 @@ export function ConciergeScreen({
 
           {/* Bottom carousel */}
           <div
+            ref={carouselRef}
             className="mm-scroll"
             style={{
               position: "absolute",
@@ -415,10 +438,11 @@ export function ConciergeScreen({
               display: "flex",
               gap: 10,
               overflowX: "auto",
+              scrollBehavior: "smooth",
             }}
           >
             {sortedCards.map((n) => (
-              <div key={n.id} style={{ flex: `0 0 ${isMobile ? 260 : 280}px` }}>
+              <div key={n.id} data-nb-id={n.id} style={{ flex: `0 0 ${isMobile ? 260 : 280}px` }}>
                 <NeighborhoodCard
                   n={n}
                   selected={selectedId === n.id}
