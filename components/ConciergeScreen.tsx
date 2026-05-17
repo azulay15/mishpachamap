@@ -23,6 +23,7 @@ import { useIsMobile } from "@/lib/useMediaQuery";
 import { MMIcon } from "@/lib/icons";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { usePersona } from "@/lib/usePersona";
+import { useLayerPrefs } from "@/lib/useLayerPrefs";
 
 /** A neighborhood as the page server-fetched it, with the data needed to
  * compute the persona-aware match score on the client. `matchScore` here is
@@ -56,7 +57,7 @@ export function ConciergeScreen({
   data: ConciergeData;
   renderer?: "mapbox" | "stub";
 }) {
-  const [layers, setLayers] = useState<Set<LayerId>>(() => new Set(INITIAL_LAYERS));
+  const { layers, toggle } = useLayerPrefs(INITIAL_LAYERS);
   const [selectedId, setSelectedId] = useState<string | null>(() => {
     const ids = new Set(data.neighborhoods.map((n) => n.id));
     if (ids.has(INITIAL_SELECTED)) return INITIAL_SELECTED;
@@ -128,14 +129,6 @@ export function ConciergeScreen({
     () => new Map(neighborhoodsWithScore.map((n) => [n.id, n.matchScore] as const)),
     [neighborhoodsWithScore],
   );
-
-  const toggle = (id: LayerId) => {
-    setLayers((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  };
 
   // Top 5 by match score, but always include the selected neighborhood so the
   // carousel visibly reflects what the user picked from search/sheet/map.
