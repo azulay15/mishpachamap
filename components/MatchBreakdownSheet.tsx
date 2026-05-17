@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { breakdownFor, scoreColor, type NeighborhoodFacts } from "@/lib/match";
 import type { Persona } from "@/lib/persona";
 import { MMIcon } from "@/lib/icons";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 type Props = {
   neighborhoodHe: string;
@@ -16,6 +17,7 @@ export function MatchBreakdownSheet({ neighborhoodHe, facts, persona, onClose }:
   const rows = breakdownFor(facts, persona);
   const total = Math.min(99, rows.reduce((s, r) => s + r.hit, 0));
   const headerColor = scoreColor(total);
+  const trapRef = useFocusTrap<HTMLDivElement>(true);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -42,6 +44,7 @@ export function MatchBreakdownSheet({ neighborhoodHe, facts, persona, onClose }:
       aria-label={`פירוט התאמה עבור ${neighborhoodHe}`}
     >
       <div
+        ref={trapRef}
         onClick={(e) => e.stopPropagation()}
         className="mm-scroll mm-modal-content"
         style={{

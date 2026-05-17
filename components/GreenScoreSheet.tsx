@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { breakdownForGreenScore, colorFor } from "@/lib/greenscore";
 import { ScoreChip } from "./ScoreChip";
 import { MMIcon } from "@/lib/icons";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 type Props = {
   /** Neighborhood Hebrew name to show in the header. */
@@ -15,6 +16,7 @@ type Props = {
 
 export function GreenScoreSheet({ neighborhoodHe, score, onClose }: Props) {
   const components = breakdownForGreenScore(score);
+  const trapRef = useFocusTrap<HTMLDivElement>(true);
 
   // Close on Escape.
   useEffect(() => {
@@ -42,6 +44,7 @@ export function GreenScoreSheet({ neighborhoodHe, score, onClose }: Props) {
       aria-label={`פירוט GreenScore עבור ${neighborhoodHe}`}
     >
       <div
+        ref={trapRef}
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "#fff",

@@ -8,6 +8,7 @@ import { useFavorites } from "@/lib/useFavorites";
 import type { ListingRow } from "./ListingsPanel";
 import { LeadGenModal, type LeadKind } from "./LeadGenModal";
 import { externalSearchUrls } from "@/lib/externalLinks";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 type Props = {
   listing: ListingRow;
@@ -22,6 +23,7 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplai
   const { hasListing, toggleListing } = useFavorites();
   const isFav = hasListing(listing.id);
   const [leadOpen, setLeadOpen] = useState<LeadKind | null>(null);
+  const trapRef = useFocusTrap<HTMLDivElement>(true);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -48,6 +50,7 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplai
       aria-label={`פרטי הנכס: ${listing.address}`}
     >
       <div
+        ref={trapRef}
         onClick={(e) => e.stopPropagation()}
         className="mm-scroll mm-modal-content"
         style={{

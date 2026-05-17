@@ -81,6 +81,21 @@ export function ConciergeScreen({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  // Two-way URL sync: selection changes → reflect in `?n=<id>` without a
+  // navigation, so the URL is shareable straight from the browser bar.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    const current = url.searchParams.get("n");
+    if (selectedId && current !== selectedId) {
+      url.searchParams.set("n", selectedId);
+      window.history.replaceState(null, "", url.toString());
+    } else if (!selectedId && current) {
+      url.searchParams.delete("n");
+      window.history.replaceState(null, "", url.toString());
+    }
+  }, [selectedId]);
+
   // Recompute matchScore per current persona (vs. the server's default-persona score).
   const neighborhoodsWithScore = useMemo(
     () =>

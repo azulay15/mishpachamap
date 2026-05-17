@@ -6,6 +6,7 @@ import { NIS, NISshort, pct } from "@/lib/format";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { scoreColor } from "@/lib/match";
 import type { Persona } from "@/lib/persona";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 export type CompareItem = {
   id: string;
@@ -27,6 +28,8 @@ type Props = {
 };
 
 export function CompareSheet({ items, persona, onClose, onRemove }: Props) {
+  const trapRef = useFocusTrap<HTMLDivElement>(true);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -132,6 +135,7 @@ export function CompareSheet({ items, persona, onClose, onRemove }: Props) {
       aria-label="השוואת שכונות"
     >
       <div
+        ref={trapRef}
         onClick={(e) => e.stopPropagation()}
         className="mm-scroll mm-modal-content"
         style={{

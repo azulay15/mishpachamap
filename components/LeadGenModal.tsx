@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MMIcon } from "@/lib/icons";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 export type LeadKind = "mortgage" | "inspection";
 
@@ -47,6 +48,7 @@ export function LeadGenModal({ kind, context, onClose }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const firstInputRef = useRef<HTMLInputElement>(null);
+  const trapRef = useFocusTrap<HTMLDivElement>(true);
   const c = COPY[kind];
 
   useEffect(() => {
@@ -97,6 +99,7 @@ export function LeadGenModal({ kind, context, onClose }: Props) {
       aria-label={c.title}
     >
       <div
+        ref={trapRef}
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "#fff",
