@@ -7,6 +7,7 @@ import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { scoreColor } from "@/lib/match";
 import type { Persona } from "@/lib/persona";
 import { useFocusTrap } from "@/lib/useFocusTrap";
+import type { NeighborhoodElection } from "./ElectionsPanel";
 
 export type CompareItem = {
   id: string;
@@ -23,11 +24,12 @@ export type CompareItem = {
 type Props = {
   items: CompareItem[];
   persona: Persona;
+  electionsByNeighborhood: Record<string, NeighborhoodElection>;
   onClose: () => void;
   onRemove: (id: string) => void;
 };
 
-export function CompareSheet({ items, persona, onClose, onRemove }: Props) {
+export function CompareSheet({ items, persona, electionsByNeighborhood, onClose, onRemove }: Props) {
   const trapRef = useFocusTrap<HTMLDivElement>(true);
 
   useEffect(() => {
@@ -292,6 +294,33 @@ export function CompareSheet({ items, persona, onClose, onRemove }: Props) {
           </table>
         </div>
 
+        {/* Election results — only show when at least one of the compared
+            neighborhoods has data, so the section doesn't sit empty. */}
+        {enriched.some((n) => electionsByNeighborhood[n.id]?.results?.length) && (
+          <div style={{ padding: "16px 20px", borderTop: "1px solid var(--stroke-weak)" }}>
+            <div style={{ fontSize: 12, color: "var(--grey-500)", fontWeight: 700, marginBottom: 8 }}>
+              תוצאות הצבעה (כנסת אחרונה)
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: `auto repeat(${enriched.length}, minmax(0, 1fr))`, gap: 8 }}>
+              <div />
+              {enriched.map((n) => (
+                <div key={n.id} style={{ fontSize: 12, fontWeight: 700, color: "var(--grey-900)" }}>
+                  {n.he}
+                </div>
+              ))}
+              {/* Top 3 leading parties per neighborhood, aligned by rank. */}
+              {[0, 1, 2].map((rank) => (
+                <FragmentRow
+                  key={rank}
+                  rank={rank}
+                  enriched={enriched}
+                  electionsByNeighborhood={electionsByNeighborhood}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
         <footer
           style={{
             padding: "12px 20px 16px",
@@ -305,6 +334,66 @@ export function CompareSheet({ items, persona, onClose, onRemove }: Props) {
         </footer>
       </div>
     </div>
+  );
+}
+
+function FragmentRow({
+  rank,
+  enriched,
+  electionsByNeighborhood,
+}: {
+  rank: number;
+  enriched: { id: string }[];
+  electionsByNeighborhood: Record<string, NeighborhoodElection>;
+}) {
+  return (
+    <>
+      <div style={{ fontSize: 11, color: "var(--grey-500)", alignSelf: "center", fontWeight: 700 }}>
+        #{rank + 1}
+      </div>
+      {enriched.map((n) => {
+        const top = electionsByNeighborhood[n.id]?.results?.[rank];
+        if (!top) {
+          return (
+            <div key={n.id} style={{ fontSize: 12, color: "var(--grey-500)" }}>
+              —
+            </div>
+          );
+        }
+        return (
+          <div
+            key={n.id}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              fontSize: 12,
+              color: "var(--grey-900)",
+              minWidth: 0,
+            }}
+          >
+            <span
+              aria-hidden
+              style={{ width: 8, height: 8, borderRadius: 2, background: top.color, flex: "none" }}
+            />
+            <span style={{ fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {top.partyHe}
+            </span>
+            <span
+              style={{
+                marginInlineStart: "auto",
+                fontFamily: "var(--font-inter, Inter)",
+                fontVariantNumeric: "tabular-nums",
+                color: "var(--grey-700)",
+                fontSize: 11,
+              }}
+            >
+              {top.pct.toFixed(1)}%
+            </span>
+          </div>
+        );
+      })}
+    </>
   );
 }
 

@@ -52,6 +52,67 @@ export type ConciergeData = {
 const INITIAL_LAYERS: LayerId[] = ["school", "park", "shop", "greenscore"];
 const INITIAL_SELECTED = "hashvatim";
 
+function ElectionsLegend({
+  electionsByNeighborhood,
+  isMobile,
+}: {
+  electionsByNeighborhood: Record<string, NeighborhoodElection>;
+  isMobile: boolean;
+}) {
+  const leading = useMemo(() => {
+    const map = new Map<string, { he: string; color: string; count: number }>();
+    for (const e of Object.values(electionsByNeighborhood)) {
+      const top = e.results[0];
+      if (!top) continue;
+      const prev = map.get(top.partyId);
+      if (prev) prev.count += 1;
+      else map.set(top.partyId, { he: top.partyHe, color: top.color, count: 1 });
+    }
+    return Array.from(map.entries())
+      .map(([id, v]) => ({ id, ...v }))
+      .sort((a, b) => b.count - a.count);
+  }, [electionsByNeighborhood]);
+
+  if (leading.length === 0) return null;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        insetInlineStart: 16,
+        top: isMobile ? 116 : 70,
+        zIndex: 4,
+        background: "#fff",
+        borderRadius: 8,
+        padding: "8px 10px",
+        boxShadow: "var(--shadow-md)",
+        display: "flex",
+        flexDirection: "column",
+        gap: 4,
+        maxWidth: 180,
+      }}
+      role="region"
+      aria-label="מקרא: מפלגה מובילה לפי שכונה"
+    >
+      <div style={{ fontSize: 10, color: "var(--grey-500)", fontWeight: 700 }}>
+        מפלגה מובילה
+      </div>
+      {leading.map((l) => (
+        <div key={l.id} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11 }}>
+          <span
+            aria-hidden
+            style={{ width: 10, height: 10, borderRadius: 2, background: l.color, flex: "none" }}
+          />
+          <span style={{ flex: 1, fontWeight: 600, color: "var(--grey-900)" }}>{l.he}</span>
+          <span style={{ color: "var(--grey-500)", fontFamily: "var(--font-inter, Inter)", fontVariantNumeric: "tabular-nums" }}>
+            {l.count}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function ConciergeScreen({
   data,
   renderer = "mapbox",
@@ -166,13 +227,23 @@ export function ConciergeScreen({
   >(
     () => ({
       type: "FeatureCollection",
-      features: neighborhoodsWithScore.map((n) => ({
-        type: "Feature",
-        geometry: n.polygon,
-        properties: { id: n.id, name_he: n.he, match_score: n.matchScore },
-      })),
+      features: neighborhoodsWithScore.map((n) => {
+        const electionRow = data.electionsByNeighborhood[n.id];
+        const top = electionRow?.results?.[0];
+        return {
+          type: "Feature",
+          geometry: n.polygon,
+          properties: {
+            id: n.id,
+            name_he: n.he,
+            match_score: n.matchScore,
+            leading_party_color: top?.color ?? null,
+            leading_party_he: top?.partyHe ?? null,
+          },
+        };
+      }),
     }),
-    [neighborhoodsWithScore],
+    [neighborhoodsWithScore, data.electionsByNeighborhood],
   );
 
   // Listings need their containing-neighborhood's persona-aware score too.
@@ -336,6 +407,12 @@ export function ConciergeScreen({
             </button>
           )}
 
+          {/* Legend for the elections layer — lists the unique leading parties
+              across visible neighborhoods, with their brand color. */}
+          {layers.has("elections") && (
+            <ElectionsLegend electionsByNeighborhood={data.electionsByNeighborhood} isMobile={isMobile} />
+          )}
+
           {greenSheetOpen && selected && (
             <GreenScoreSheet
               neighborhoodHe={selected.he}
@@ -396,6 +473,7 @@ export function ConciergeScreen({
                 neighborhoodsWithScore.filter((n) => compareIds.has(n.id)) as unknown as CompareItem[]
               }
               persona={persona}
+              electionsByNeighborhood={data.electionsByNeighborhood}
               onClose={() => setCompareOpen(false)}
               onRemove={(id) =>
                 setCompareIds((prev) => {

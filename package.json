@@ -19,6 +19,7 @@
     "ingest:playgrounds": "tsx scripts/ingest/seed_playgrounds.ts",
     "ingest:poi:photos": "tsx scripts/ingest/poi_photos.ts",
     "ingest:elections": "tsx scripts/ingest/elections.ts",
+    "ingest:elections:stations": "tsx scripts/ingest/elections_stations.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

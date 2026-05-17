@@ -10,7 +10,7 @@ import {
   School, Baby, Trees, Leaf, ShoppingCart, Bus, UsersRound, Tag, Home,
   GitCompare, Send, Sparkles, Zap, Info, List, Grid, Calendar, TrendingUp,
   Ruler, Bed, Sprout, Car, ArrowLeft, ExternalLink, Globe, Menu, MoreHorizontal,
-  Bell, Shield, WheatOff, GripVertical, Navigation,
+  Bell, Shield, WheatOff, GripVertical, Navigation, ScrollText,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -67,6 +67,7 @@ const MAP: Record<string, LucideIcon> = {
   gluten: WheatOff,
   drag: GripVertical,
   directions: Navigation,
+  scroll: ScrollText,
 };
 
 type Props = {

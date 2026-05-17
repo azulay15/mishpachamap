@@ -17,6 +17,10 @@ export type NeighborhoodFeatureProps = {
   id: string;
   name_he: string;
   match_score: number;
+  /** Hex color of the leading party in the most recent election (for the
+   *  `elections` map layer). Null when the neighborhood has no results yet. */
+  leading_party_color?: string | null;
+  leading_party_he?: string | null;
 };
 
 export type POIFeatureProps = {
@@ -58,6 +62,7 @@ const LAYER_COLORS: Record<LayerId, string> = {
   greenscore: "#2F8F4F",
   celiac: "#D45A8A",
   playground: "#F2A93B",
+  elections: "#84888E", // not a POI type — fills are data-driven per polygon
 };
 
 export function MMMap({
@@ -350,9 +355,41 @@ export function MMMap({
     if (!map || !initializedRef.current) return;
     // Filter POI circles by active layer types.
     const types = Array.from(activeLayers).filter(
-      (l) => l !== "price" && l !== "greenscore", // these are not POI types
+      (l) => l !== "price" && l !== "greenscore" && l !== "elections", // these are not POI types
     );
     map.setFilter("pois-circles", ["in", ["get", "type"], ["literal", types]]);
+
+    // Elections layer recolors polygons by leading party. Fall back to the
+    // baseline green for neighborhoods that have no results yet.
+    const setFill = (map.setPaintProperty as unknown as (
+      id: string,
+      p: string,
+      v: unknown,
+    ) => void).bind(map);
+    if (activeLayers.has("elections")) {
+      setFill("neighborhoods-fill", "fill-color", [
+        "case",
+        ["has", "leading_party_color"],
+        ["coalesce", ["get", "leading_party_color"], "#9BC97E"],
+        "#9BC97E",
+      ]);
+      setFill("neighborhoods-fill", "fill-opacity", 0.55);
+    } else {
+      setFill("neighborhoods-fill", "fill-color", "#9BC97E");
+      setFill("neighborhoods-fill", "fill-opacity", [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        11,
+        0.55,
+        13,
+        0.50,
+        15,
+        0.40,
+        17,
+        0.25,
+      ]);
+    }
   }, [activeLayers]);
 
   // ---- React to selection / hover ----

@@ -12,7 +12,8 @@ export type LayerId =
   | "community"
   | "greenscore"
   | "celiac"
-  | "playground";
+  | "playground"
+  | "elections";
 
 export type LayerKind = "heatmap" | "poi" | "score";
 
@@ -37,4 +38,5 @@ export const LAYERS: Layer[] = [
   { id: "greenscore", he: "GreenScore",       en: "GreenScore", color: "var(--layer-greenscore)", kind: "score",   icon: "leaf" },
   { id: "celiac",     he: "ללא גלוטן",         en: "Celiac",     color: "var(--layer-celiac)",     kind: "poi",     icon: "gluten" },
   { id: "playground", he: "מתקני משחק",         en: "Playgrounds", color: "var(--layer-playground)", kind: "poi",     icon: "kid" },
+  { id: "elections",  he: "הצבעה (כנסת)",       en: "Vote",        color: "var(--grey-700)",         kind: "score",   icon: "scroll" },
 ];
