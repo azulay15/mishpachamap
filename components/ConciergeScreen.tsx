@@ -210,6 +210,7 @@ export function ConciergeScreen({
   const selected = useMemo<Selected | null>(() => {
     const n = neighborhoodsWithScore.find((x) => x.id === selectedId);
     if (!n) return null;
+    const [lng, lat] = n.center as [number, number];
     return {
       id: n.id,
       he: n.he,
@@ -221,6 +222,7 @@ export function ConciergeScreen({
       avgListing: n.avgListing,
       greenScore: n.greenScore,
       schoolScore: n.schoolScore,
+      center: { lat, lng },
     };
   }, [neighborhoodsWithScore, selectedId]);
 

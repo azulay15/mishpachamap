@@ -7,6 +7,7 @@ import { MatchBadge } from "./MatchBadge";
 import { useFavorites } from "@/lib/useFavorites";
 import type { ListingRow } from "./ListingsPanel";
 import { LeadGenModal, type LeadKind } from "./LeadGenModal";
+import { StreetViewModal } from "./StreetViewModal";
 import { externalSearchUrls } from "@/lib/externalLinks";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 
@@ -14,15 +15,19 @@ type Props = {
   listing: ListingRow;
   /** Hebrew name of the neighborhood the listing belongs to. */
   neighborhoodHe: string;
+  /** WGS84 coordinates used to drop the Street View pegman. Listings without
+   *  their own geocoded point fall back to the neighborhood center. */
+  location: { lat: number; lng: number } | null;
   onClose: () => void;
   /** Optional — open the match breakdown for this listing's neighborhood. */
   onExplainMatch?: () => void;
 };
 
-export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplainMatch }: Props) {
+export function PropertyDetailSheet({ listing, neighborhoodHe, location, onClose, onExplainMatch }: Props) {
   const { hasListing, toggleListing } = useFavorites();
   const isFav = hasListing(listing.id);
   const [leadOpen, setLeadOpen] = useState<LeadKind | null>(null);
+  const [streetViewOpen, setStreetViewOpen] = useState(false);
   const trapRef = useFocusTrap<HTMLDivElement>(true);
 
   useEffect(() => {
@@ -204,6 +209,21 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplai
           <ExternalSearchRow address={listing.address} />
         </div>
 
+        {/* Virtual walk — Google Street View embed of the listing's
+            neighborhood. Hidden if we couldn't resolve coordinates. */}
+        {location && (
+          <div style={{ padding: "0 20px 12px" }}>
+            <button
+              type="button"
+              onClick={() => setStreetViewOpen(true)}
+              className="mm-btn mm-btn-secondary"
+              style={{ width: "100%" }}
+            >
+              <MMIcon name="directions" size={14} /> טיול וירטואלי ברחוב (Street View)
+            </button>
+          </div>
+        )}
+
         {/* Lead-gen CTAs */}
         <div
           style={{
@@ -252,6 +272,15 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, onClose, onExplai
             address: listing.address,
           }}
           onClose={() => setLeadOpen(null)}
+        />
+      )}
+
+      {streetViewOpen && location && (
+        <StreetViewModal
+          title={listing.address || neighborhoodHe}
+          subtitle={listing.address ? neighborhoodHe : undefined}
+          location={location}
+          onClose={() => setStreetViewOpen(false)}
         />
       )}
     </div>

@@ -47,6 +47,9 @@ export type Selected = {
   avgListing: number;
   greenScore: number;
   schoolScore: number;
+  /** Centroid of the neighborhood polygon — used as the fallback Street View
+   *  pegman location when a listing doesn't have its own geocoded point. */
+  center: { lat: number; lng: number };
 };
 
 type Props = {
@@ -193,6 +196,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
         <PropertyDetailSheet
           listing={openListing}
           neighborhoodHe={selected.he}
+          location={selected.center}
           onClose={() => setOpenListing(null)}
           onExplainMatch={onExplainMatch}
         />
