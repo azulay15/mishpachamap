@@ -56,18 +56,89 @@ type Args = {
   file: string | null;
   election: string;
   replace: boolean;
+  seedMock: boolean;
 };
 
 function parseArgs(argv: string[]): Args {
   let file: string | null = null;
   let election = "knesset-25";
   let replace = false;
+  let seedMock = false;
   for (const a of argv) {
     if (a.startsWith("--election=")) election = a.slice("--election=".length);
     else if (a === "--replace") replace = true;
+    else if (a === "--seed-mock") seedMock = true;
     else if (!a.startsWith("--")) file = a;
   }
-  return { file, election, replace };
+  return { file, election, replace, seedMock };
+}
+
+/**
+ * Plausible Knesset 25 distributions per neighborhood — estimates based on
+ * each neighborhood's known character, NOT official bechirot.gov.il data.
+ * Replace with real numbers via the CSV / stations ingest paths.
+ */
+const MOCK_RESULTS: Record<string, Record<string, number>> = {
+  // Religious — lean Religious Zionism + Shas/UTJ
+  hashvatim: { religious_zionism: 720, yeshatid: 410, likud: 380, shas: 220, utj: 180, national_unity: 140, israel_beytenu: 60, labor: 40 },
+  moriah:    { religious_zionism: 680, likud: 410, yeshatid: 360, shas: 200, utj: 160, national_unity: 130, israel_beytenu: 50, labor: 30 },
+  // Central / secular — Yesh Atid + Likud dominant
+  hakramim:  { yeshatid: 780, likud: 540, national_unity: 320, labor: 180, meretz: 120, israel_beytenu: 110, religious_zionism: 90, shas: 40 },
+  haprachim: { yeshatid: 720, likud: 580, national_unity: 290, labor: 150, israel_beytenu: 130, meretz: 90, religious_zionism: 80, shas: 30 },
+  hanechalim:{ yeshatid: 700, likud: 560, national_unity: 280, labor: 140, israel_beytenu: 120, meretz: 100, religious_zionism: 70, shas: 30 },
+  hatsiporim:{ yeshatid: 740, likud: 520, national_unity: 300, labor: 160, israel_beytenu: 110, meretz: 110, religious_zionism: 70 },
+  // Family / community — Yesh Atid lead, mixed
+  nofim:     { yeshatid: 690, likud: 510, national_unity: 280, labor: 140, israel_beytenu: 120, religious_zionism: 90, meretz: 70 },
+  hanevim:   { yeshatid: 660, likud: 480, national_unity: 270, labor: 130, israel_beytenu: 130, religious_zionism: 80, meretz: 70 },
+  hameginim: { yeshatid: 640, likud: 470, national_unity: 260, labor: 120, israel_beytenu: 120, religious_zionism: 100, meretz: 70 },
+  avneichen: { yeshatid: 620, likud: 500, national_unity: 240, israel_beytenu: 140, labor: 110, religious_zionism: 100, meretz: 60 },
+  // Security families / quieter — Likud + National Unity + Beytenu lean
+  hareut:    { likud: 540, yeshatid: 420, national_unity: 310, israel_beytenu: 180, religious_zionism: 140, labor: 100, meretz: 40 },
+  hamakkabim:{ likud: 520, yeshatid: 410, national_unity: 320, israel_beytenu: 200, religious_zionism: 130, labor: 90 },
+  // West / newer
+  masuah:    { yeshatid: 580, likud: 490, national_unity: 270, religious_zionism: 180, israel_beytenu: 120, labor: 100, shas: 60 },
+  moreshet:  { likud: 520, yeshatid: 470, national_unity: 280, religious_zionism: 220, israel_beytenu: 140, labor: 90 },
+};
+
+async function seedMockResults(electionId: string, replace: boolean) {
+  console.log(`→ seeding mock Knesset 25 distributions for ${Object.keys(MOCK_RESULTS).length} neighborhoods…`);
+  console.warn("  ⚠ ESTIMATES, not official. Replace with real CSV from bechirot.gov.il when available.");
+
+  // Filter to neighborhoods that actually exist in this DB (so a stale
+  // MOCK_RESULTS entry doesn't break the upsert with a FK violation).
+  const { data: knownNbs, error: nbErr } = await sb.from("neighborhoods").select("id");
+  if (nbErr) throw new Error(`load neighborhoods: ${nbErr.message}`);
+  const knownIds = new Set((knownNbs ?? []).map((n) => n.id as string));
+
+  type Row = { neighborhood: string; election: string; party: string; votes: number; pct: number };
+  const rows: Row[] = [];
+  for (const [nbId, weights] of Object.entries(MOCK_RESULTS)) {
+    if (!knownIds.has(nbId)) {
+      console.warn(`  · skipping ${nbId}: not in neighborhoods table`);
+      continue;
+    }
+    const total = Object.values(weights).reduce((s, v) => s + v, 0);
+    if (total === 0) continue;
+    for (const [partyId, votes] of Object.entries(weights)) {
+      rows.push({
+        neighborhood: nbId,
+        election: electionId,
+        party: partyId,
+        votes,
+        pct: Number(((votes / total) * 100).toFixed(2)),
+      });
+    }
+  }
+
+  if (replace) {
+    const { error } = await sb.from("neighborhood_election_results").delete().eq("election", electionId);
+    if (error) throw new Error(`delete: ${error.message}`);
+    console.log(`✓ cleared previous results for election=${electionId}`);
+  }
+
+  const { error } = await sb.from("neighborhood_election_results").upsert(rows);
+  if (error) throw new Error(`upsert: ${error.message}`);
+  console.log(`✓ inserted ${rows.length} mock (neighborhood × party) rows`);
 }
 
 async function seedCatalog() {
@@ -176,8 +247,12 @@ async function ingestCsv(args: Args) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   await seedCatalog();
+  if (args.seedMock) {
+    await seedMockResults(args.election, args.replace);
+    return;
+  }
   if (args.file) await ingestCsv(args);
-  else console.log("Pass a CSV path to ingest results, e.g. pnpm ingest:elections -- data/elections/knesset-25.csv");
+  else console.log("Pass --seed-mock for estimates, or a CSV path for real data: pnpm ingest:elections -- data/elections/knesset-25.csv");
 }
 
 main().catch((e) => {
