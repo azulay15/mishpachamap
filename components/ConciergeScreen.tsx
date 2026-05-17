@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { LAYERS, type LayerId } from "@/lib/layers";
-import { LayerChip } from "./LayerChip";
+import { type LayerId } from "@/lib/layers";
+import { LayersButton } from "./LayersButton";
 import { MMHeader } from "./MMHeader";
 import { MMMap, type NeighborhoodFeatureProps, type POIFeatureProps } from "./MMMap";
 import { MMMapStub } from "./MMMapStub";
@@ -80,6 +80,8 @@ function ElectionsLegend({
       style={{
         position: "absolute",
         insetInlineStart: 16,
+        // Below the top overlay row (which now wraps on narrow widths) on
+        // mobile; otherwise just under it on desktop.
         top: isMobile ? 116 : 70,
         zIndex: 4,
         background: "#fff",
@@ -305,7 +307,9 @@ export function ConciergeScreen({
             />
           )}
 
-          {/* Search + persona pill (top-center) */}
+          {/* Single overlay row: layers · search+AI · persona. Replaces the
+              previous two-row layout (search + persona on top, full layer-chip
+              row below) — fewer floating controls, all the same affordances. */}
           <div
             style={{
               position: "absolute",
@@ -314,11 +318,14 @@ export function ConciergeScreen({
               right: 0,
               zIndex: 4,
               display: "flex",
+              alignItems: "center",
               justifyContent: "center",
               gap: 8,
               padding: "0 16px",
+              flexWrap: "wrap",
             }}
           >
+            <LayersButton active={layers} onToggle={toggle} />
             <NeighborhoodSearch
               neighborhoods={neighborhoodsWithScore.map((n) => ({
                 id: n.id,
@@ -338,55 +345,21 @@ export function ConciergeScreen({
             <PersonaPill />
           </div>
 
-          {/* Layer pills — horizontal scroll instead of wrap. Center-aligned
-              when the row fits, free to scroll horizontally on narrow widths. */}
-          <div
-            className="mm-scroll"
-            style={{
-              position: "absolute",
-              top: 70,
-              left: 0,
-              right: 0,
-              zIndex: 4,
-              overflowX: "auto",
-              overflowY: "hidden",
-              padding: "4px 16px 6px",
-              WebkitOverflowScrolling: "touch",
-              scrollbarWidth: "none",
-              maskImage:
-                "linear-gradient(to inline-start, transparent, #000 16px, #000 calc(100% - 16px), transparent)",
-            }}
-          >
-            <div
-              style={{
-                display: "inline-flex",
-                gap: 6,
-                whiteSpace: "nowrap",
-                margin: "0 auto",
-                paddingInlineStart: "max(0px, 50% - 380px)",
-                paddingInlineEnd: "max(0px, 50% - 380px)",
-              }}
-            >
-              {LAYERS.map((l) => (
-                <LayerChip key={l.id} layer={l} on={layers.has(l.id)} onClick={() => toggle(l.id)} />
-              ))}
-            </div>
-          </div>
-
           {/* GreenScore corner badge — clickable, opens breakdown sheet.
-              Pushed lower on mobile so it doesn't crash into the layer pills row. */}
+              Lives in the bottom-start corner above the carousel so it
+              doesn't compete with the top overlay row. */}
           {selected && (
             <button
               type="button"
               onClick={() => setGreenSheetOpen(true)}
               style={{
                 position: "absolute",
-                top: isMobile ? 116 : 16,
-                insetInlineEnd: 16,
+                bottom: 200,
+                insetInlineStart: 16,
                 zIndex: 4,
                 background: "#fff",
                 borderRadius: 8,
-                padding: "10px 14px",
+                padding: "8px 12px",
                 boxShadow: "var(--shadow-md)",
                 display: "flex",
                 gap: 10,
@@ -397,11 +370,11 @@ export function ConciergeScreen({
               }}
               aria-label={`פתח פירוט GreenScore עבור ${selected.he}`}
             >
-              <ScoreChip value={selected.greenScore} color="var(--green-positive)" size="md" />
+              <ScoreChip value={selected.greenScore} color="var(--green-positive)" size="sm" />
               <div style={{ textAlign: "start" }}>
-                <div style={{ fontSize: 12, fontWeight: 700 }}>{selected.he} · GreenScore</div>
-                <div style={{ fontSize: 11, color: "var(--grey-500)" }}>
-                  לחצו לפירוט 7 הרכיבים
+                <div style={{ fontSize: 12, fontWeight: 700 }}>{selected.he}</div>
+                <div style={{ fontSize: 10, color: "var(--grey-500)" }}>
+                  GreenScore · לחצו לפירוט
                 </div>
               </div>
             </button>
