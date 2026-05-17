@@ -51,6 +51,7 @@ type POIDB = {
   type: string;
   name_he: string | null;
   point: GeoJSON.Point;
+  meta: Record<string, unknown> | null;
 };
 
 function envConfigured(): boolean {
@@ -74,7 +75,7 @@ export default async function Page() {
     await Promise.all([
       sb.from("neighborhoods").select("id, name_he, family_label, summary_he, aliases"),
       sb.from("neighborhood_metrics").select("*"),
-      sb.from("pois_geojson").select("id, type, name_he, point"),
+      sb.from("pois_geojson").select("id, type, name_he, point, meta"),
       sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market"),
       sb.from("schools_geojson").select("id, name_he, meitzav_score, point"),
     ]);
@@ -136,13 +137,34 @@ function assemble(input: {
   // Step 2 — POIs as GeoJSON Features.
   const pois = input.pois
     .filter((p) => p.point)
-    .map(
-      (p): GeoJSON.Feature<GeoJSON.Point, { id: string; type: never; name_he: string | null }> => ({
-        type: "Feature",
+    .map((p) => {
+      const meta = p.meta ?? {};
+      // Mapbox vector properties must be primitives, not nested objects —
+      // so we flatten the photo metadata into top-level optional fields.
+      const photo_url = typeof meta.photo_url === "string" ? (meta.photo_url as string) : null;
+      const photo_title = typeof meta.photo_title === "string" ? (meta.photo_title as string) : null;
+      const photo_page_url = typeof meta.photo_page_url === "string" ? (meta.photo_page_url as string) : null;
+      const photo_license = typeof meta.photo_license === "string" ? (meta.photo_license as string) : null;
+      const photo_artist = typeof meta.photo_artist === "string" ? (meta.photo_artist as string) : null;
+      const has_shade = meta.has_shade === true ? true : null;
+      const modern_equipment = meta.modern_equipment === true ? true : null;
+      return {
+        type: "Feature" as const,
         geometry: p.point,
-        properties: { id: p.id, type: p.type as never, name_he: p.name_he },
-      }),
-    );
+        properties: {
+          id: p.id,
+          type: p.type as never,
+          name_he: p.name_he,
+          photo_url,
+          photo_title,
+          photo_page_url,
+          photo_license,
+          photo_artist,
+          has_shade,
+          modern_equipment,
+        },
+      };
+    });
 
   // Step 3 — group listings by neighborhood (matchScore filled in after we compute it).
   const listingRowsByNb: Record<string, Omit<ConciergeData["listingsByNeighborhood"][string][number], "matchScore">[]> = {};

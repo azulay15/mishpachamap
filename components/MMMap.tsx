@@ -25,6 +25,15 @@ export type POIFeatureProps = {
   name_he: string | null;
   /** Optional SVG-space position (1600x1000) used only by the stub renderer. */
   svgPos?: [number, number];
+  /** Photo enrichment (from scripts/ingest/poi_photos.ts). */
+  photo_url?: string | null;
+  photo_title?: string | null;
+  photo_page_url?: string | null;
+  photo_license?: string | null;
+  photo_artist?: string | null;
+  /** Playground attributes (from scripts/ingest/seed_playgrounds.ts). */
+  has_shade?: boolean | null;
+  modern_equipment?: boolean | null;
 };
 
 type Props = {
@@ -281,10 +290,20 @@ export function MMMap({
             </span>
           </div>`;
         }
-        new mapboxgl.Popup({ closeButton: true, offset: 10 })
+        const photoBlock = props.photo_url
+          ? renderPhotoBlock({
+              url: props.photo_url as string,
+              title: (props.photo_title as string | null) ?? null,
+              pageUrl: (props.photo_page_url as string | null) ?? null,
+              license: (props.photo_license as string | null) ?? null,
+              artist: (props.photo_artist as string | null) ?? null,
+            })
+          : "";
+        new mapboxgl.Popup({ closeButton: true, offset: 10, maxWidth: "260px" })
           .setLngLat(coords)
           .setHTML(
             `<div style="font-family: var(--font-heb); font-size: 12px; padding: 2px 4px;">
+               ${photoBlock}
                <div style="font-weight: 700">${escapeHtml(props.name_he ?? "")}</div>
                <div style="color: #84888E; margin-top: 2px;">${escapeHtml(props.type ?? "")}</div>
                ${extra}
@@ -366,6 +385,34 @@ export function MMMap({
   }, [hover]);
 
   return <div ref={containerRef} className="mm-map-canvas" style={{ position: "absolute", inset: 0 }} />;
+}
+
+function renderPhotoBlock(p: {
+  url: string;
+  title: string | null;
+  pageUrl: string | null;
+  license: string | null;
+  artist: string | null;
+}): string {
+  // Wikimedia attribution lines must include source + license + author (where
+  // known). We render a compact strip with the photo on top and a small
+  // "Photo: Wikipedia · CC BY-SA · J. Doe" line beneath it.
+  const credits: string[] = [];
+  if (p.title) {
+    credits.push(
+      p.pageUrl
+        ? `<a href="${escapeHtml(p.pageUrl)}" target="_blank" rel="noopener noreferrer" style="color: #1256A0; text-decoration: none;">${escapeHtml(p.title)}</a>`
+        : escapeHtml(p.title),
+    );
+  } else {
+    credits.push("Wikipedia");
+  }
+  if (p.artist) credits.push(escapeHtml(p.artist));
+  if (p.license) credits.push(escapeHtml(p.license));
+  return `<div style="margin: 0 0 8px; border-radius: 6px; overflow: hidden; background: #F4F5F7;">
+    <img src="${escapeHtml(p.url)}" alt="${escapeHtml(p.title ?? "")}" loading="lazy" style="width: 100%; height: 130px; object-fit: cover; display: block;" />
+    <div style="padding: 4px 6px; font-size: 10px; color: #5B616E; line-height: 14px;">${credits.join(" · ")}</div>
+  </div>`;
 }
 
 function polygonBbox(geom: GeoJSON.Polygon): [[number, number], [number, number]] | null {
