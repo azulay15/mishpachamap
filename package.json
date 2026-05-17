@@ -8,6 +8,7 @@
     "start": "next start",
     "ingest:seed": "tsx scripts/ingest/seed_neighborhoods.ts",
     "ingest:nadlan": "tsx scripts/ingest/nadlan.ts",
+    "ingest:nadlan:csv": "tsx scripts/ingest/nadlan_csv.ts",
     "ingest:osm": "tsx scripts/ingest/osm.ts",
     "ingest:schools": "tsx scripts/ingest/schools.ts",
     "metrics:recompute": "tsx scripts/ingest/compute_metrics.ts",
