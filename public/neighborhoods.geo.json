@@ -4,13 +4,13 @@
   "$schema": "https://geojson.org/schema/FeatureCollection.json",
   "meta": {
     "version": "3.0",
-    "source": "Hand-drawn in GeoJSON.io 2026-05-15 by Mor — all 13 original polygons edited; 14th (Moreshet) is a placeholder rectangle pending draw",
+    "source": "Hand-drawn in GeoJSON.io by Mor — all 14 polygons real (Moreshet completed 2026-05-17)",
     "license": "MishpachaMap-V3; centroids from OpenStreetMap contributors (ODbL)",
-    "polygon_quality": "hand-drawn-v3 (13 real, 1 placeholder: moreshet)",
-    "note": "The Moreshet polygon is a placeholder rectangle — open /admin/draw or geojson.io and replace it."
+    "polygon_quality": "hand-drawn-v3 (14/14 real)"
   },
   "features": [
     {
+      "id": "NAzTGFboErjS95X9GigHQG00FYYBEkkz",
       "type": "Feature",
       "properties": {
         "id": "hanechalim",
@@ -212,6 +212,7 @@
       }
     },
     {
+      "id": "qgty2A8d9PoSRbguf67S1T0IRRR2kXpm",
       "type": "Feature",
       "properties": {
         "id": "hashvatim",
@@ -305,6 +306,7 @@
       }
     },
     {
+      "id": "om5QiHak6IoiBI3ozNnXmwZmSN3T9tbA",
       "type": "Feature",
       "properties": {
         "id": "hareut",
@@ -466,6 +468,7 @@
       }
     },
     {
+      "id": "XCUcVwd07YQgeivMGztgGKdphB9r9eeI",
       "type": "Feature",
       "properties": {
         "id": "nofim",
@@ -691,6 +694,7 @@
       }
     },
     {
+      "id": "RhWs5OmQXPXrX8YdUWGjJAqiJ0PBXiH1",
       "type": "Feature",
       "properties": {
         "id": "avneichen",
@@ -812,6 +816,7 @@
       }
     },
     {
+      "id": "HyQva5c9K9zbqDAiG73jYOp8RwdPMxzX",
       "type": "Feature",
       "properties": {
         "id": "hameginim",
@@ -969,6 +974,7 @@
       }
     },
     {
+      "id": "pxTJOPFBgB4AA3PO8dgoVXZuO20WXN9s",
       "type": "Feature",
       "properties": {
         "id": "haprachim",
@@ -1094,6 +1100,7 @@
       }
     },
     {
+      "id": "ZldUjssRS9Cw5SOILaczRofTr0ttgI2a",
       "type": "Feature",
       "properties": {
         "id": "hanevim",
@@ -1227,6 +1234,7 @@
       }
     },
     {
+      "id": "Yr8bDui9WuWhoXogdqOF8Q4zZzkAyRHq",
       "type": "Feature",
       "properties": {
         "id": "moriah",
@@ -1300,6 +1308,7 @@
       }
     },
     {
+      "id": "4JyQnqRXfQoDOhx7UbosTWfcr3pxhuyV",
       "type": "Feature",
       "properties": {
         "id": "hamakkabim",
@@ -1365,6 +1374,7 @@
       }
     },
     {
+      "id": "qpxGDUiNVAg3f1AbZS3oVdgpcLIWegU6",
       "type": "Feature",
       "properties": {
         "id": "hakramim",
@@ -1470,6 +1480,7 @@
       }
     },
     {
+      "id": "d9WP2HOLfQgf4q4a52MDLHv8cgMDQF0E",
       "type": "Feature",
       "properties": {
         "id": "masuah",
@@ -1676,6 +1687,7 @@
       }
     },
     {
+      "id": "rozVDPDeskI3T3QBwD3pU2HXfo7MocGu",
       "type": "Feature",
       "properties": {
         "id": "hatsiporim",
@@ -1758,6 +1770,7 @@
       }
     },
     {
+      "id": "lx5uhOVxHAPJb3mBfqQmhGbMy7BaMPGJ",
       "type": "Feature",
       "properties": {
         "id": "moreshet",
@@ -1766,31 +1779,115 @@
         "polygon_quality": "placeholder"
       },
       "geometry": {
-        "type": "Polygon",
         "coordinates": [
           [
             [
-              34.946,
-              31.898
+              34.97440111334211,
+              31.899837563381286
             ],
             [
-              34.966,
-              31.898
+              34.97495793699418,
+              31.89929376195384
             ],
             [
-              34.966,
-              31.918
+              34.97580217,
+              31.8987055850695
             ],
             [
-              34.946,
-              31.918
+              34.9772032178973,
+              31.899237263908905
             ],
             [
-              34.946,
-              31.898
+              34.97806864760084,
+              31.89989093360986
+            ],
+            [
+              34.980553999766755,
+              31.900455877440386
+            ],
+            [
+              34.98166764436175,
+              31.90122044906763
+            ],
+            [
+              34.98288580691604,
+              31.901718843280197
+            ],
+            [
+              34.98376430090309,
+              31.90202868258888
+            ],
+            [
+              34.984904076451876,
+              31.902249803989022
+            ],
+            [
+              34.98586095391022,
+              31.90209106844146
+            ],
+            [
+              34.986791707290614,
+              31.901643976316855
+            ],
+            [
+              34.987895500078146,
+              31.900527967460476
+            ],
+            [
+              34.98863682481328,
+              31.899969958554095
+            ],
+            [
+              34.98961329654265,
+              31.899700307318955
+            ],
+            [
+              34.99148786148401,
+              31.89942719874883
+            ],
+            [
+              34.991923873005845,
+              31.899898884359242
+            ],
+            [
+              34.99207247119958,
+              31.901013842380955
+            ],
+            [
+              34.99184711277377,
+              31.902822279406887
+            ],
+            [
+              34.990116147587045,
+              31.90546309410196
+            ],
+            [
+              34.986889365279175,
+              31.90797205957353
+            ],
+            [
+              34.97715759828429,
+              31.903691243340553
+            ],
+            [
+              34.97519474797423,
+              31.90326018024788
+            ],
+            [
+              34.97461666722618,
+              31.902252414501355
+            ],
+            [
+              34.97405165316095,
+              31.901067181532543
+            ],
+            [
+              34.97440111334211,
+              31.899837563381286
             ]
           ]
-        ]
+        ],
+        "type": "Polygon"
       }
     }
   ]
