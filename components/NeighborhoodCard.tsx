@@ -1,7 +1,7 @@
 "use client";
 
 import { MMIcon } from "@/lib/icons";
-import { NISshort, pct } from "@/lib/format";
+import { NISshort } from "@/lib/format";
 import { useFavorites } from "@/lib/useFavorites";
 import { scoreColor } from "@/lib/match";
 
@@ -42,7 +42,6 @@ export function NeighborhoodCard({
 }: Props) {
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
   const isFav = hasNeighborhood(n.id);
-  const deltaUp = n.avgPriceDelta > 0;
   const matchTint = scoreColor(n.matchScore);
 
   return (
@@ -197,13 +196,7 @@ export function NeighborhoodCard({
           }}
         >
           <Stat value={NISshort(n.avgListing)} label="חציון" />
-          <Stat
-            value={`₪${(n.avgPrice / 1000).toFixed(1)}K`}
-            label='למ"ר'
-            sub={pct(n.avgPriceDelta)}
-            subColor={deltaUp ? "var(--green-positive)" : "var(--red-negative)"}
-            border
-          />
+          <Stat value={`₪${(n.avgPrice / 1000).toFixed(1)}K`} label='למ"ר' border />
           <Stat value={n.schoolScore} label="בתי ספר" />
           <Stat
             value={n.greenScore}
