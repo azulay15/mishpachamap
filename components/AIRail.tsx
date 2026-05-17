@@ -17,15 +17,35 @@ const TOOL_LABELS: Record<string, string> = {
 
 const HISTORY_KEY = "mishpachamap.chat.v1";
 
-const SUGGESTIONS = [
+/** Default suggestions for the empty state when nothing is selected. */
+const SUGGESTIONS_GENERIC = [
   "מה ההבדל בין השבטים למוריה לעניין משפחות צעירות?",
   "איפה תוכלו ללכת ברגל לבית הכנסת?",
   "תראו לי שכונות עם פארק מתחת ל-5 דק׳ הליכה",
   "אילו שכונות מתאימות למשפחה עם ילד צליאק?",
 ];
 
-export function AIRail() {
+/** When a neighborhood is selected, suggestions interpolate its name to
+ *  give the user useful jumping-off questions about THAT neighborhood. */
+function suggestionsFor(neighborhoodHe: string): string[] {
+  return [
+    `למה ${neighborhoodHe} מתאימה לי? פרק את הציון`,
+    `איזה בתי ספר יש בקרבת ${neighborhoodHe}?`,
+    `השווה את ${neighborhoodHe} לשכונות הסמוכות`,
+    `מה היתרונות והחסרונות של ${neighborhoodHe} למשפחה כמו שלי?`,
+  ];
+}
+
+type Props = {
+  /** Currently-selected neighborhood (drives contextual suggestions). */
+  selectedNeighborhoodHe?: string | null;
+};
+
+export function AIRail({ selectedNeighborhoodHe }: Props = {}) {
   const persona = usePersona();
+  const suggestions = selectedNeighborhoodHe
+    ? suggestionsFor(selectedNeighborhoodHe)
+    : SUGGESTIONS_GENERIC;
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
@@ -265,18 +285,28 @@ export function AIRail() {
         }}
       >
         {messages.length === 0 && !setupError && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {SUGGESTIONS.map((s) => (
-              <button
-                key={s}
-                type="button"
-                className="mm-chip"
-                onClick={() => send(s)}
-                style={{ height: 28, fontSize: 11, padding: "0 10px", textAlign: "start" }}
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {selectedNeighborhoodHe && (
+              <div
+                className="mm-eyebrow"
+                style={{ marginBottom: 4 }}
               >
-                {s}
-              </button>
-            ))}
+                שאלות מוצעות עבור {selectedNeighborhoodHe}
+              </div>
+            )}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {suggestions.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  className="mm-chip"
+                  onClick={() => send(s)}
+                  style={{ height: 28, fontSize: 11, padding: "0 10px", textAlign: "start" }}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
           </div>
         )}
 

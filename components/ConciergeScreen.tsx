@@ -18,6 +18,7 @@ import { NeighborhoodSearch } from "./NeighborhoodSearch";
 import { WelcomeCard } from "./WelcomeCard";
 import { MobileRailDrawer } from "./MobileRailDrawer";
 import { CompareSheet, type CompareItem } from "./CompareSheet";
+import { AllNeighborhoodsSheet, type AllNeighborhoodsItem } from "./AllNeighborhoodsSheet";
 import { useIsMobile } from "@/lib/useMediaQuery";
 import { MMIcon } from "@/lib/icons";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
@@ -68,6 +69,7 @@ export function ConciergeScreen({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
   const [compareOpen, setCompareOpen] = useState(false);
+  const [allOpen, setAllOpen] = useState(false);
   const persona = usePersona();
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
@@ -389,6 +391,18 @@ export function ConciergeScreen({
             />
           )}
 
+          {allOpen && (
+            <AllNeighborhoodsSheet
+              items={neighborhoodsWithScore as unknown as AllNeighborhoodsItem[]}
+              selectedId={selectedId}
+              onSelect={(id) => {
+                setSelectedId(id);
+                if (isMobile) setDrawerOpen(true);
+              }}
+              onClose={() => setAllOpen(false)}
+            />
+          )}
+
           {/* Bottom carousel */}
           <div
             className="mm-scroll"
@@ -425,7 +439,9 @@ export function ConciergeScreen({
                 />
               </div>
             ))}
-            <div
+            <button
+              type="button"
+              onClick={() => setAllOpen(true)}
               className="mm-card"
               style={{
                 flex: "0 0 200px",
@@ -434,17 +450,19 @@ export function ConciergeScreen({
                 padding: 14,
                 color: "var(--grey-700)",
                 fontSize: 13,
-                fontWeight: 600,
+                fontWeight: 700,
                 cursor: "pointer",
                 borderStyle: "dashed",
+                background: "transparent",
+                fontFamily: "inherit",
               }}
             >
               <div style={{ textAlign: "center" }}>
-                <MMIcon name="plus" size={20} color="#5B616E" />
+                <MMIcon name="grid" size={20} color="#5B616E" />
                 <br />
-                הציגו את כל השכונות
+                כל {neighborhoodsWithScore.length} השכונות
               </div>
-            </div>
+            </button>
           </div>
         </main>
 

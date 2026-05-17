@@ -60,7 +60,7 @@ export function RightRail({ selected, listings, schools, mode, onModeChange, onE
             onExplainMatch={onExplainMatch}
           />
         ) : (
-          <AIRail />
+          <AIRail selectedNeighborhoodHe={selected?.he ?? null} />
         )}
       </div>
     </aside>
