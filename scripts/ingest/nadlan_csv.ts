@@ -27,6 +27,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { sb } from "./_env";
+import { parseCsv } from "../../lib/csv";
 
 type Row = {
   neighborhood: string;
@@ -61,69 +62,6 @@ function parseArgs(argv: string[]): Args {
     throw new Error("Usage: pnpm ingest:nadlan:csv -- <path-to-csv> [--neighborhood=<id>] [--source=<tag>] [--replace]");
   }
   return { file: positional[0], neighborhoodOverride, source, replace };
-}
-
-/**
- * Minimal CSV parser. Handles quoted fields ("a,b","c"), escaped quotes
- * (""), and CRLF/LF line endings. Not RFC 4180 complete (no streaming, no
- * BOM stripping beyond a single leading 0xFEFF) — sufficient for the
- * known-good government exports we're targeting.
- */
-function parseCsv(input: string): string[][] {
-  let i = 0;
-  const len = input.length;
-  if (len > 0 && input.charCodeAt(0) === 0xfeff) i = 1; // BOM
-  const out: string[][] = [];
-  let row: string[] = [];
-  let field = "";
-  let inQuotes = false;
-  while (i < len) {
-    const ch = input[i];
-    if (inQuotes) {
-      if (ch === '"') {
-        if (input[i + 1] === '"') {
-          field += '"';
-          i += 2;
-          continue;
-        }
-        inQuotes = false;
-        i += 1;
-        continue;
-      }
-      field += ch;
-      i += 1;
-      continue;
-    }
-    if (ch === '"') {
-      inQuotes = true;
-      i += 1;
-      continue;
-    }
-    if (ch === ",") {
-      row.push(field);
-      field = "";
-      i += 1;
-      continue;
-    }
-    if (ch === "\n" || ch === "\r") {
-      row.push(field);
-      field = "";
-      out.push(row);
-      row = [];
-      // Swallow a paired LF after CR.
-      if (ch === "\r" && input[i + 1] === "\n") i += 2;
-      else i += 1;
-      continue;
-    }
-    field += ch;
-    i += 1;
-  }
-  // Trailing field / row (no terminator).
-  if (field !== "" || row.length > 0) {
-    row.push(field);
-    out.push(row);
-  }
-  return out.filter((r) => r.some((c) => c.trim() !== ""));
 }
 
 const HEADER_ALIASES: Record<keyof Omit<Row, "source" | "price_per_m2">, string[]> = {

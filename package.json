@@ -16,7 +16,9 @@
     "polygons:validate": "tsx scripts/validate_polygons.ts",
     "ingest:listings": "tsx scripts/ingest/seed_listings.ts",
     "ingest:celiac": "tsx scripts/ingest/seed_celiac.ts",
-    "ingest:playgrounds": "tsx scripts/ingest/seed_playgrounds.ts"
+    "ingest:playgrounds": "tsx scripts/ingest/seed_playgrounds.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.96.0",
@@ -40,6 +42,7 @@
     "dotenv": "^16.4.7",
     "tailwindcss": "^4",
     "tsx": "^4.19.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.6"
   }
 }
