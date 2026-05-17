@@ -3,6 +3,7 @@
 import { ListingsPanel, type ListingRow, type SchoolRow, type Selected } from "./ListingsPanel";
 import { AIRail } from "./AIRail";
 import { MMIcon } from "@/lib/icons";
+import { type NeighborhoodElection } from "./ElectionsPanel";
 
 export type RailMode = "listings" | "ai";
 
@@ -10,12 +11,13 @@ type Props = {
   selected: Selected | null;
   listings: ListingRow[];
   schools: SchoolRow[];
+  election: NeighborhoodElection | null;
   mode: RailMode;
   onModeChange: (m: RailMode) => void;
   onExplainMatch?: () => void;
 };
 
-export function RightRail({ selected, listings, schools, mode, onModeChange, onExplainMatch }: Props) {
+export function RightRail({ selected, listings, schools, election, mode, onModeChange, onExplainMatch }: Props) {
 
   return (
     <aside
@@ -57,6 +59,7 @@ export function RightRail({ selected, listings, schools, mode, onModeChange, onE
             selected={selected}
             listings={listings}
             schools={schools}
+            election={election}
             onExplainMatch={onExplainMatch}
           />
         ) : (

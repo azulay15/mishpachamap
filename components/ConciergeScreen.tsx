@@ -9,6 +9,7 @@ import { MMMap, type NeighborhoodFeatureProps, type POIFeatureProps } from "./MM
 import { MMMapStub } from "./MMMapStub";
 import { NeighborhoodCard, type NeighborhoodCardData } from "./NeighborhoodCard";
 import { type ListingRow, type SchoolRow, type Selected } from "./ListingsPanel";
+import { type NeighborhoodElection } from "./ElectionsPanel";
 import { RightRail, type RailMode } from "./RightRail";
 import { PersonaPill } from "./PersonaPill";
 import { ScoreChip } from "./ScoreChip";
@@ -45,6 +46,7 @@ export type ConciergeData = {
   pois: GeoJSON.Feature<GeoJSON.Point, POIFeatureProps>[];
   listingsByNeighborhood: Record<string, ListingRow[]>;
   schoolsByNeighborhood: Record<string, SchoolRow[]>;
+  electionsByNeighborhood: Record<string, NeighborhoodElection>;
 };
 
 const INITIAL_LAYERS: LayerId[] = ["school", "park", "shop", "greenscore"];
@@ -488,6 +490,7 @@ export function ConciergeScreen({
             selected={selected}
             listings={selectedId ? listingsByNeighborhood[selectedId] ?? [] : []}
             schools={selectedId ? data.schoolsByNeighborhood[selectedId] ?? [] : []}
+            election={selectedId ? data.electionsByNeighborhood[selectedId] ?? null : null}
             mode={railMode}
             onModeChange={setRailMode}
             onExplainMatch={selectedId ? () => setMatchSheetFor(selectedId) : undefined}
@@ -500,6 +503,7 @@ export function ConciergeScreen({
             selected={selected}
             listings={selectedId ? listingsByNeighborhood[selectedId] ?? [] : []}
             schools={selectedId ? data.schoolsByNeighborhood[selectedId] ?? [] : []}
+            election={selectedId ? data.electionsByNeighborhood[selectedId] ?? null : null}
             mode={railMode}
             onModeChange={setRailMode}
             onExplainMatch={selectedId ? () => setMatchSheetFor(selectedId) : undefined}

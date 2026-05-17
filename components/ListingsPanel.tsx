@@ -6,6 +6,7 @@ import { ScoreChip } from "./ScoreChip";
 import { MatchBadge } from "./MatchBadge";
 import { PropertyDetailSheet } from "./PropertyDetailSheet";
 import { LeadGenModal, type LeadKind } from "./LeadGenModal";
+import { ElectionsPanel, type NeighborhoodElection } from "./ElectionsPanel";
 import { NIS, NISshort, pct } from "@/lib/format";
 import { useFavorites } from "@/lib/useFavorites";
 import { externalSearchUrls } from "@/lib/externalLinks";
@@ -52,10 +53,11 @@ type Props = {
   selected: Selected | null;
   listings: ListingRow[];
   schools: SchoolRow[];
+  election: NeighborhoodElection | null;
   onExplainMatch?: () => void;
 };
 
-export function ListingsPanel({ selected, listings, schools, onExplainMatch }: Props) {
+export function ListingsPanel({ selected, listings, schools, election, onExplainMatch }: Props) {
   const [openListing, setOpenListing] = useState<ListingRow | null>(null);
   const [leadOpen, setLeadOpen] = useState<LeadKind | null>(null);
 
@@ -146,6 +148,12 @@ export function ListingsPanel({ selected, listings, schools, onExplainMatch }: P
             <SchoolsList schools={schools} />
           )}
         </Section>
+
+        {election && election.results.length > 0 && (
+          <Section title="תוצאות הצבעה (כנסת אחרונה)">
+            <ElectionsPanel election={election} />
+          </Section>
+        )}
       </div>
 
       <footer

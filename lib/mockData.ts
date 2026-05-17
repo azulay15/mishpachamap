@@ -265,9 +265,50 @@ const SCHOOLS_BY_NB: Record<string, MockSchool[]> = {
   hareut: [], hamakkabim: [], haprachim: [], hanechalim: [], hameginim: [],
 };
 
+// Mock election results for preview mode — drawn from a plausible Knesset 25
+// distribution skewed per neighborhood character (religious neighborhoods
+// lean Religious Zionism + UTJ; central / secular lean Yesh Atid + Likud).
+type MockElection = ConciergeData["electionsByNeighborhood"][string];
+
+function mockResults(weights: Record<string, number>): MockElection["results"] {
+  const palette: Record<string, { he: string; color: string }> = {
+    likud: { he: "הליכוד", color: "#2D4373" },
+    yeshatid: { he: "יש עתיד", color: "#1E88E5" },
+    religious_zionism: { he: "הציונות הדתית", color: "#E2A700" },
+    national_unity: { he: "המחנה הממלכתי", color: "#00B0AC" },
+    shas: { he: 'ש"ס', color: "#1A1A1A" },
+    utj: { he: "יהדות התורה", color: "#4A4A4A" },
+    israel_beytenu: { he: "ישראל ביתנו", color: "#E54B4B" },
+    labor: { he: "העבודה", color: "#B22222" },
+    meretz: { he: "מרצ", color: "#4DAF4A" },
+  };
+  const total = Object.values(weights).reduce((s, v) => s + v, 0) || 1;
+  return Object.entries(weights)
+    .map(([id, votes]) => ({
+      partyId: id,
+      partyHe: palette[id]?.he ?? id,
+      color: palette[id]?.color ?? "#84888E",
+      votes,
+      pct: (votes / total) * 100,
+    }))
+    .sort((a, b) => b.votes - a.votes);
+}
+
+const ELECTIONS_BY_NB: Record<string, MockElection> = {
+  hashvatim: { electionId: "knesset-25", electionHe: "כנסת ה-25", date: "2022-11-01", results: mockResults({ religious_zionism: 720, yeshatid: 410, likud: 380, shas: 220, utj: 180, national_unity: 140 }) },
+  moriah:    { electionId: "knesset-25", electionHe: "כנסת ה-25", date: "2022-11-01", results: mockResults({ religious_zionism: 680, likud: 410, yeshatid: 360, shas: 200, utj: 160, national_unity: 130 }) },
+  hakramim:  { electionId: "knesset-25", electionHe: "כנסת ה-25", date: "2022-11-01", results: mockResults({ yeshatid: 780, likud: 540, national_unity: 320, labor: 180, meretz: 120, israel_beytenu: 110 }) },
+  haprachim: { electionId: "knesset-25", electionHe: "כנסת ה-25", date: "2022-11-01", results: mockResults({ yeshatid: 720, likud: 580, national_unity: 290, labor: 150, israel_beytenu: 130, meretz: 90 }) },
+  nofim:     { electionId: "knesset-25", electionHe: "כנסת ה-25", date: "2022-11-01", results: mockResults({ yeshatid: 690, likud: 510, national_unity: 280, labor: 140, israel_beytenu: 120 }) },
+  hanevim:   { electionId: "knesset-25", electionHe: "כנסת ה-25", date: "2022-11-01", results: mockResults({ yeshatid: 660, likud: 480, national_unity: 270, labor: 130, israel_beytenu: 130 }) },
+  hameginim: { electionId: "knesset-25", electionHe: "כנסת ה-25", date: "2022-11-01", results: mockResults({ yeshatid: 640, likud: 470, national_unity: 260, labor: 120, israel_beytenu: 120 }) },
+  hareut:    { electionId: "knesset-25", electionHe: "כנסת ה-25", date: "2022-11-01", results: mockResults({ likud: 540, yeshatid: 420, national_unity: 310, israel_beytenu: 180, religious_zionism: 140 }) },
+};
+
 export const MOCK_DATA: ConciergeData = {
   neighborhoods: NEIGHBORHOODS,
   pois: POIS,
   listingsByNeighborhood: LISTINGS_BY_NB,
   schoolsByNeighborhood: SCHOOLS_BY_NB,
+  electionsByNeighborhood: ELECTIONS_BY_NB,
 };

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { RightRail, type RailMode } from "./RightRail";
 import type { ListingRow, SchoolRow, Selected } from "./ListingsPanel";
+import type { NeighborhoodElection } from "./ElectionsPanel";
 
 type Props = {
   open: boolean;
@@ -10,6 +11,7 @@ type Props = {
   selected: Selected | null;
   listings: ListingRow[];
   schools: SchoolRow[];
+  election: NeighborhoodElection | null;
   mode: RailMode;
   onModeChange: (m: RailMode) => void;
   onExplainMatch?: () => void;
@@ -24,6 +26,7 @@ export function MobileRailDrawer({
   selected,
   listings,
   schools,
+  election,
   mode,
   onModeChange,
   onExplainMatch,
@@ -117,6 +120,7 @@ export function MobileRailDrawer({
             selected={selected}
             listings={listings}
             schools={schools}
+            election={election}
             mode={mode}
             onModeChange={onModeChange}
             onExplainMatch={onExplainMatch}

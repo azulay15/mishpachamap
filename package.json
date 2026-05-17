@@ -18,6 +18,7 @@
     "ingest:celiac": "tsx scripts/ingest/seed_celiac.ts",
     "ingest:playgrounds": "tsx scripts/ingest/seed_playgrounds.ts",
     "ingest:poi:photos": "tsx scripts/ingest/poi_photos.ts",
+    "ingest:elections": "tsx scripts/ingest/elections.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -51,6 +51,16 @@ type SchoolDB = {
   point: GeoJSON.Point;
 };
 
+type ElectionRow = { id: string; name_he: string; date: string };
+type PartyRow = { id: string; name_he: string; color: string | null };
+type ResultRow = {
+  neighborhood: string;
+  election: string;
+  party: string;
+  votes: number;
+  pct: number | null;
+};
+
 type POIDB = {
   id: string;
   type: string;
@@ -76,14 +86,25 @@ export default async function Page() {
   const cookieStore = await cookies();
   const sb = serverSupabase(cookieStore);
 
-  const [{ data: nb }, { data: metrics }, { data: pois }, { data: listings }, { data: schools }] =
-    await Promise.all([
-      sb.from("neighborhoods").select("id, name_he, family_label, summary_he, aliases"),
-      sb.from("neighborhood_metrics").select("*"),
-      sb.from("pois_geojson").select("id, type, name_he, point, meta"),
-      sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market"),
-      sb.from("schools_geojson").select("id, name_he, meitzav_score, level, orientation, bagrut_pass_rate, student_count, website_url, point"),
-    ]);
+  const [
+    { data: nb },
+    { data: metrics },
+    { data: pois },
+    { data: listings },
+    { data: schools },
+    { data: elections },
+    { data: parties },
+    { data: electionResults },
+  ] = await Promise.all([
+    sb.from("neighborhoods").select("id, name_he, family_label, summary_he, aliases"),
+    sb.from("neighborhood_metrics").select("*"),
+    sb.from("pois_geojson").select("id, type, name_he, point, meta"),
+    sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market"),
+    sb.from("schools_geojson").select("id, name_he, meitzav_score, level, orientation, bagrut_pass_rate, student_count, website_url, point"),
+    sb.from("elections").select("id, name_he, date").order("date", { ascending: false }),
+    sb.from("parties").select("id, name_he, color"),
+    sb.from("neighborhood_election_results").select("neighborhood, election, party, votes, pct"),
+  ]);
 
   // Empty database → still preview mode (chrome only).
   if (!nb || nb.length === 0) {
@@ -96,6 +117,9 @@ export default async function Page() {
     pois: (pois ?? []) as POIDB[],
     listings: (listings ?? []) as ListingDB[],
     schools: (schools ?? []) as SchoolDB[],
+    elections: (elections ?? []) as ElectionRow[],
+    parties: (parties ?? []) as PartyRow[],
+    electionResults: (electionResults ?? []) as ResultRow[],
   });
 
   return <ConciergeScreen data={data} renderer="mapbox" />;
@@ -107,6 +131,9 @@ function assemble(input: {
   pois: POIDB[];
   listings: ListingDB[];
   schools: SchoolDB[];
+  elections: ElectionRow[];
+  parties: PartyRow[];
+  electionResults: ResultRow[];
 }): ConciergeData {
   const metricsByNb = new Map(input.metrics.map((m) => [m.neighborhood, m]));
   const persona = PERSONA_DEFAULT;
@@ -246,7 +273,40 @@ function assemble(input: {
     }));
   }
 
-  return { neighborhoods, pois, listingsByNeighborhood, schoolsByNeighborhood };
+  // Step 7 — build per-neighborhood election summary (most recent election
+  // only, results sorted desc by votes, party metadata joined). UI shows top
+  // 5 + "אחרים" so we keep all rows here and let the component decide.
+  const electionsById = new Map(input.elections.map((e) => [e.id, e]));
+  const partiesById = new Map(input.parties.map((p) => [p.id, p]));
+  const latestElectionId = input.elections[0]?.id ?? null;
+  const electionsByNeighborhood: ConciergeData["electionsByNeighborhood"] = {};
+  if (latestElectionId) {
+    const meta = electionsById.get(latestElectionId)!;
+    const grouped: Record<string, ConciergeData["electionsByNeighborhood"][string]["results"]> = {};
+    for (const r of input.electionResults) {
+      if (r.election !== latestElectionId) continue;
+      const p = partiesById.get(r.party);
+      if (!p) continue; // unknown party id — skip rather than show a blank
+      (grouped[r.neighborhood] ??= []).push({
+        partyId: p.id,
+        partyHe: p.name_he,
+        color: p.color ?? "#84888E",
+        votes: r.votes,
+        pct: Number(r.pct ?? 0),
+      });
+    }
+    for (const [nbId, results] of Object.entries(grouped)) {
+      results.sort((a, b) => b.votes - a.votes);
+      electionsByNeighborhood[nbId] = {
+        electionId: meta.id,
+        electionHe: meta.name_he,
+        date: meta.date,
+        results,
+      };
+    }
+  }
+
+  return { neighborhoods, pois, listingsByNeighborhood, schoolsByNeighborhood, electionsByNeighborhood };
 }
 
 function haversineMeters(a: [number, number], b: [number, number]): number {
