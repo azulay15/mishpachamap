@@ -43,6 +43,11 @@ type SchoolDB = {
   id: string;
   name_he: string;
   meitzav_score: number | null;
+  level: string | null;
+  orientation: string | null;
+  bagrut_pass_rate: number | null;
+  student_count: number | null;
+  website_url: string | null;
   point: GeoJSON.Point;
 };
 
@@ -77,7 +82,7 @@ export default async function Page() {
       sb.from("neighborhood_metrics").select("*"),
       sb.from("pois_geojson").select("id, type, name_he, point, meta"),
       sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market"),
-      sb.from("schools_geojson").select("id, name_he, meitzav_score, point"),
+      sb.from("schools_geojson").select("id, name_he, meitzav_score, level, orientation, bagrut_pass_rate, student_count, website_url, point"),
     ]);
 
   // Empty database → still preview mode (chrome only).
@@ -198,6 +203,11 @@ function assemble(input: {
         name_he: s.name_he,
         meitzav_score: s.meitzav_score == null ? null : Number(s.meitzav_score),
         walkMinutes: Math.max(1, Math.round(d / 80)),
+        level: s.level,
+        orientation: s.orientation,
+        bagrutPassRate: s.bagrut_pass_rate == null ? null : Number(s.bagrut_pass_rate),
+        studentCount: s.student_count,
+        websiteUrl: s.website_url,
       });
     }
     nearby.sort((a, b) => (a.walkMinutes ?? 99) - (b.walkMinutes ?? 99));

@@ -224,15 +224,44 @@ const LISTINGS_BY_NB: Record<string, MockListing[]> = {
   hareut: [], hamakkabim: [], haprachim: [], hanechalim: [], hanevim: [], hameginim: [], hatsiporim: [],
 };
 
+function mockSchool(
+  id: string,
+  name: string,
+  meitzav: number,
+  walk: number,
+  level: string,
+  orientation: string | null = null,
+  bagrut: number | null = null,
+  students: number | null = null,
+): MockSchool {
+  return {
+    id,
+    name_he: name,
+    meitzav_score: meitzav,
+    walkMinutes: walk,
+    level,
+    orientation,
+    bagrutPassRate: bagrut,
+    studentCount: students,
+    websiteUrl: null,
+  };
+}
+
 const SCHOOLS_BY_NB: Record<string, MockSchool[]> = {
-  hashvatim: [{ id: "s1", name_he: "ממ\"ד יחד מודיעין", meitzav_score: 9.2, walkMinutes: 6 }],
-  hakramim: [{ id: "s2", name_he: "בית ספר נופי הפרחים", meitzav_score: 8.8, walkMinutes: 8 }],
-  nofim: [{ id: "s3", name_he: "בית ספר נופים", meitzav_score: 8.4, walkMinutes: 7 }],
-  avneichen: [{ id: "s4", name_he: "בית ספר רימון", meitzav_score: 8.0, walkMinutes: 11 }],
-  hanevim: [{ id: "s5", name_he: "בית ספר שמשוני", meitzav_score: 8.6, walkMinutes: 5 }],
-  moriah: [{ id: "s6", name_he: "אמית מוריה", meitzav_score: 9.4, walkMinutes: 6 }],
-  masuah: [{ id: "s7", name_he: "בית ספר משואה", meitzav_score: 9.1, walkMinutes: 7 }],
-  hatsiporim: [{ id: "s8", name_he: "בית ספר הציפורים", meitzav_score: 8.5, walkMinutes: 4 }],
+  hashvatim: [
+    mockSchool("s1", 'ממ"ד יחד מודיעין', 9.2, 6, "elementary", 'ממ"ד', null, 420),
+    mockSchool("s1b", "תיכון רבין", 8.7, 11, "high", "ממלכתי", 94, 880),
+  ],
+  hakramim: [
+    mockSchool("s2", "בית ספר נופי הפרחים", 8.8, 8, "elementary", "ממלכתי", null, 510),
+    mockSchool("s2b", "חטיבת ביניים גוונים", 8.5, 10, "middle", "ממלכתי", null, 360),
+  ],
+  nofim: [mockSchool("s3", "בית ספר נופים", 8.4, 7, "elementary", "ממלכתי", null, 480)],
+  avneichen: [mockSchool("s4", "בית ספר רימון", 8.0, 11, "elementary", "ממלכתי", null, 410)],
+  hanevim: [mockSchool("s5", "בית ספר שמשוני", 8.6, 5, "elementary", "ממלכתי", null, 530)],
+  moriah: [mockSchool("s6", "אמית מוריה", 9.4, 6, "elementary", 'ממ"ד', null, 450)],
+  masuah: [mockSchool("s7", "בית ספר משואה", 9.1, 7, "elementary", 'ממ"ד', null, 470)],
+  hatsiporim: [mockSchool("s8", "בית ספר הציפורים", 8.5, 4, "elementary", "ממלכתי", null, 440)],
   hareut: [], hamakkabim: [], haprachim: [], hanechalim: [], hameginim: [],
 };
 

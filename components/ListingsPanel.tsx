@@ -28,6 +28,11 @@ export type SchoolRow = {
   name_he: string;
   meitzav_score: number | null;
   walkMinutes: number | null;
+  level: string | null;
+  orientation: string | null;
+  bagrutPassRate: number | null;
+  studentCount: number | null;
+  websiteUrl: string | null;
 };
 
 export type Selected = {
@@ -138,7 +143,7 @@ export function ListingsPanel({ selected, listings, schools, onExplainMatch }: P
           {schools.length === 0 ? (
             <Empty>אין נתוני בתי ספר עדיין.</Empty>
           ) : (
-            schools.slice(0, 3).map((s) => <SchoolRowCard key={s.id} school={s} />)
+            <SchoolsList schools={schools} />
           )}
         </Section>
       </div>
@@ -348,23 +353,126 @@ function ListingRowCard({
   );
 }
 
-function SchoolRowCard({ school }: { school: SchoolRow }) {
+function SchoolsList({ schools }: { schools: SchoolRow[] }) {
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? schools : schools.slice(0, 3);
+  const hidden = schools.length - visible.length;
   return (
-    <div className="mm-card" style={{ padding: 10, display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 10, alignItems: "center" }}>
+    <>
+      {visible.map((s) => (
+        <SchoolRowCard key={s.id} school={s} />
+      ))}
+      {schools.length > 3 && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="mm-btn mm-btn-ghost mm-btn-sm"
+          style={{ alignSelf: "stretch", justifyContent: "center" }}
+        >
+          {expanded ? "הצג פחות" : `הצג עוד ${hidden} בתי ספר`}
+        </button>
+      )}
+    </>
+  );
+}
+
+const LEVEL_LABEL: Record<string, string> = {
+  elementary: "יסודי",
+  middle: "חטיבת ביניים",
+  high: "תיכון",
+};
+
+function SchoolRowCard({ school }: { school: SchoolRow }) {
+  const tags: { label: string; tone: "neutral" | "religious" | "secular" }[] = [];
+  if (school.level && LEVEL_LABEL[school.level]) {
+    tags.push({ label: LEVEL_LABEL[school.level], tone: "neutral" });
+  }
+  if (school.orientation) {
+    tags.push({
+      label: school.orientation,
+      tone: school.orientation === 'ממ"ד' || school.orientation === "חרדי" ? "religious" : "secular",
+    });
+  }
+  return (
+    <div
+      className="mm-card"
+      style={{
+        padding: 10,
+        display: "grid",
+        gridTemplateColumns: "auto 1fr auto",
+        gap: 10,
+        alignItems: "center",
+      }}
+    >
       <ScoreChip
         value={school.meitzav_score ? Math.round(school.meitzav_score * 10) : 0}
         color="var(--layer-school)"
         size="sm"
       />
-      <div>
-        <div style={{ fontSize: 13, fontWeight: 700 }}>{school.name_he}</div>
-        {school.walkMinutes != null && (
-          <div style={{ fontSize: 11, color: "var(--grey-500)" }}>{school.walkMinutes} דק׳ הליכה</div>
-        )}
+      <div style={{ minWidth: 0 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {school.name_he}
+        </div>
+        <div
+          style={{
+            marginTop: 2,
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 4,
+            fontSize: 10,
+            color: "var(--grey-500)",
+            alignItems: "center",
+          }}
+        >
+          {school.walkMinutes != null && <span>{school.walkMinutes} דק׳ הליכה</span>}
+          {tags.map((t) => (
+            <span
+              key={t.label}
+              style={{
+                padding: "1px 6px",
+                borderRadius: 999,
+                background:
+                  t.tone === "religious"
+                    ? "rgba(124, 79, 173, 0.10)"
+                    : t.tone === "secular"
+                    ? "rgba(18, 86, 160, 0.08)"
+                    : "var(--grey-15)",
+                color:
+                  t.tone === "religious"
+                    ? "#5B3A8C"
+                    : t.tone === "secular"
+                    ? "var(--layer-school)"
+                    : "var(--grey-700)",
+                fontWeight: 700,
+              }}
+            >
+              {t.label}
+            </span>
+          ))}
+          {school.bagrutPassRate != null && (
+            <span style={{ color: "var(--green-positive)", fontWeight: 700 }}>
+              {Math.round(school.bagrutPassRate)}% בגרות
+            </span>
+          )}
+          {school.studentCount != null && <span>· {school.studentCount} תלמידים</span>}
+        </div>
       </div>
-      <button className="mm-btn mm-btn-ghost mm-btn-sm" aria-label="פתח במפה">
-        <MMIcon name="pin" size={14} />
-      </button>
+      {school.websiteUrl ? (
+        <a
+          href={school.websiteUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mm-btn mm-btn-ghost mm-btn-sm"
+          aria-label={`פתח את אתר ${school.name_he}`}
+          style={{ padding: 6 }}
+        >
+          <MMIcon name="external" size={14} />
+        </a>
+      ) : (
+        <button className="mm-btn mm-btn-ghost mm-btn-sm" aria-label="פתח במפה" style={{ padding: 6 }}>
+          <MMIcon name="pin" size={14} />
+        </button>
+      )}
     </div>
   );
 }
