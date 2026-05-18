@@ -88,26 +88,6 @@ export function NeighborhoodSearch({ neighborhoods, onPick, onAIClick }: Props) 
     return () => window.removeEventListener("mousedown", onClick);
   }, []);
 
-  // `/` keyboard shortcut focuses the search input (skipped when the user is
-  // already typing in another field, so it doesn't hijack legitimate slashes).
-  useEffect(() => {
-    const onKeydown = (e: KeyboardEvent) => {
-      if (e.key !== "/") return;
-      const target = e.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)
-      ) {
-        return;
-      }
-      e.preventDefault();
-      inputRef.current?.focus();
-      setOpen(true);
-    };
-    window.addEventListener("keydown", onKeydown);
-    return () => window.removeEventListener("keydown", onKeydown);
-  }, []);
-
   // Reset highlight when matches change.
   useEffect(() => {
     setHighlight(0);
@@ -159,25 +139,6 @@ export function NeighborhoodSearch({ neighborhoods, onPick, onAIClick }: Props) 
           onKeyDown={onKey}
           placeholder="חפשו: רחוב, שכונה, או 'בית עם גינה ובית ספר'"
         />
-        {/* Discoverability hint for the `/` shortcut. Hidden while typing so
-            it doesn't crowd the visible query. */}
-        {!query && (
-          <kbd
-            aria-hidden
-            style={{
-              padding: "1px 6px",
-              border: "1px solid var(--stroke-weak)",
-              borderRadius: 4,
-              fontSize: 10,
-              color: "var(--grey-500)",
-              fontFamily: "var(--font-inter, Inter)",
-              background: "var(--grey-15)",
-              flex: "none",
-            }}
-          >
-            /
-          </kbd>
-        )}
         <button
           type="button"
           onClick={onAIClick}
