@@ -3,6 +3,7 @@ import type { MessageParam, Tool, ToolUseBlock } from "@anthropic-ai/sdk/resourc
 import { anthropic, CLAUDE_MODEL } from "@/lib/anthropic";
 import { TOOLS, runTool } from "@/lib/chatTools";
 import { PERSONA_DEFAULT, type Persona } from "@/lib/persona";
+import { rateLimit, rateLimitResponse } from "@/lib/rateLimit";
 import type { RawMessageStreamEvent } from "@anthropic-ai/sdk/resources/messages";
 
 export const runtime = "nodejs";
@@ -40,6 +41,11 @@ function send(controller: ReadableStreamDefaultController, event: object) {
 }
 
 export async function POST(req: NextRequest) {
+  // Chat is expensive (Anthropic tokens). 20 messages / minute / IP is plenty
+  // for real conversations; protects the key from abuse if the app goes public.
+  const gate = rateLimit(req, "chat", { max: 20, windowMs: 60_000 });
+  if (!gate.ok) return rateLimitResponse(gate);
+
   const client = anthropic();
   if (!client) {
     return NextResponse.json(

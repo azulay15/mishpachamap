@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, rateLimitResponse } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 
@@ -25,6 +26,11 @@ type LeadPayload = {
  * If we add bot abuse later, swap for a Turnstile / hCaptcha gate.
  */
 export async function POST(req: NextRequest) {
+  // Lead submission abuse cap: 5 leads / minute / IP. Genuine users finishing
+  // a form never hit this; spam scripts do.
+  const gate = rateLimit(req, "leads", { max: 5, windowMs: 60_000 });
+  if (!gate.ok) return rateLimitResponse(gate);
+
   let body: LeadPayload;
   try {
     body = (await req.json()) as LeadPayload;

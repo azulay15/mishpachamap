@@ -354,6 +354,12 @@ a:focus-visible,
   to { transform: translateY(0); }
 }
 
+/* Shimmering placeholder used by the loading.tsx skeletons. */
+@keyframes mm-skel {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .mm-drawer-handle {
   width: 40px;
   height: 4px;
