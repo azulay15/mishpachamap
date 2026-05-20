@@ -354,6 +354,12 @@ const asideStyle: React.CSSProperties = {
   overflow: "hidden",
 };
 
+function renderInlineBold(text: string): React.ReactNode[] {
+  return text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 === 1 ? <strong key={i}>{part}</strong> : part,
+  );
+}
+
 function Bubble({ msg }: { msg: Msg }) {
   const isUser = msg.role === "user";
   return (
@@ -378,7 +384,7 @@ function Bubble({ msg }: { msg: Msg }) {
           whiteSpace: "pre-wrap",
         }}
       >
-        {msg.text || (
+        {msg.text ? renderInlineBold(msg.text) : (
           <span style={{ opacity: 0.5 }}>…</span>
         )}
         {!isUser && msg.sources && msg.sources.length > 0 && (
