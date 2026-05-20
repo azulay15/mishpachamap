@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$source": "https://www.modiin.muni.il/arnona",
+  "$year": 2026,
+  "$disclaimer": "Estimates for V1 — verify against published municipality rates before using as authoritative. The schema is stable; only the numbers need refreshing.",
+  "rates": {
+    "hareut":     { "nis_per_sqm_year": 45.0, "zone": "B", "verified": false },
+    "hamakkabim": { "nis_per_sqm_year": 45.0, "zone": "B", "verified": false },
+    "masuah":     { "nis_per_sqm_year": 47.0, "zone": "A", "verified": false },
+    "avneichen":  { "nis_per_sqm_year": 45.0, "zone": "B", "verified": false },
+    "nofim":      { "nis_per_sqm_year": 45.0, "zone": "B", "verified": false },
+    "haprachim":  { "nis_per_sqm_year": 45.0, "zone": "B", "verified": false },
+    "hanechalim": { "nis_per_sqm_year": 44.0, "zone": "C", "verified": false },
+    "hakramim":   { "nis_per_sqm_year": 45.0, "zone": "B", "verified": false },
+    "hashvatim":  { "nis_per_sqm_year": 47.0, "zone": "A", "verified": false },
+    "moriah":     { "nis_per_sqm_year": 47.0, "zone": "A", "verified": false },
+    "hanevim":    { "nis_per_sqm_year": 47.0, "zone": "A", "verified": false },
+    "hameginim":  { "nis_per_sqm_year": 47.0, "zone": "A", "verified": false },
+    "hatsiporim": { "nis_per_sqm_year": 48.0, "zone": "A", "verified": false },
+    "moreshet":   { "nis_per_sqm_year": 45.0, "zone": "B", "verified": false }
+  }
+}

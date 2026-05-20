@@ -10,6 +10,7 @@ import { ElectionsPanel, type NeighborhoodElection } from "./ElectionsPanel";
 import { NIS, NISshort, pct } from "@/lib/format";
 import { useFavorites } from "@/lib/useFavorites";
 import { externalSearchUrls } from "@/lib/externalLinks";
+import { arnonaRateFor } from "@/lib/arnona";
 
 export type ListingRow = {
   id: string;
@@ -124,6 +125,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
             value={<span style={{ color: "var(--green-positive)" }}>{selected.greenScore}</span>}
           />
         </div>
+        <NeighborhoodArnonaLine neighborhoodId={selected.id} />
       </header>
 
       <div className="mm-scroll" style={{ overflow: "auto", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 18 }}>
@@ -196,6 +198,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
         <PropertyDetailSheet
           listing={openListing}
           neighborhoodHe={selected.he}
+          neighborhoodId={selected.id}
           location={selected.center}
           onClose={() => setOpenListing(null)}
           onExplainMatch={onExplainMatch}
@@ -293,6 +296,26 @@ function Stat({ label, value }: { label: string; value: React.ReactNode }) {
       <div style={{ fontSize: 13, fontWeight: 700, fontFamily: "var(--font-inter, Inter)", fontVariantNumeric: "tabular-nums" }}>
         {value}
       </div>
+    </div>
+  );
+}
+
+/** Neighborhood-level arnona rate as a small line under the stats grid. The
+ *  per-listing monthly bill lives in PropertyDetailSheet. Hidden if we have
+ *  no rate data for this neighborhood. */
+function NeighborhoodArnonaLine({ neighborhoodId }: { neighborhoodId: string }) {
+  const rate = arnonaRateFor(neighborhoodId);
+  if (!rate) return null;
+  return (
+    <div
+      style={{
+        marginTop: 4,
+        fontSize: 11,
+        color: "var(--grey-500)",
+        fontWeight: 600,
+      }}
+    >
+      ארנונה ~₪{rate.nis_per_sqm_year.toFixed(0)}/מ&quot;ר/שנה (אזור {rate.zone})
     </div>
   );
 }

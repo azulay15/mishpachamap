@@ -7,7 +7,43 @@
  *
  * TODO(post-V1): replace with a real Yad2 / Madlan scraper.
  */
-import { sb } from "./_env";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { bbox, booleanPointInPolygon, centroid } from "@turf/turf";
+import type { Feature, Polygon, MultiPolygon } from "geojson";
+import { sb, wktPoint } from "./_env";
+
+/** Polygon lookup by neighborhood id, sourced from the same static file the
+ *  frontend uses (`public/neighborhoods.geo.json`). Ensures the seeded points
+ *  fall inside the polygons actually rendered on the map. */
+function loadPolygons(): Map<string, Feature<Polygon | MultiPolygon>> {
+  const path = resolve(process.cwd(), "public", "neighborhoods.geo.json");
+  const raw = readFileSync(path, "utf8");
+  const fc = JSON.parse(raw) as { features: Feature<Polygon | MultiPolygon>[] };
+  const map = new Map<string, Feature<Polygon | MultiPolygon>>();
+  for (const f of fc.features) {
+    const id = (f.properties as { id?: string } | null)?.id;
+    if (id) map.set(id, f);
+  }
+  return map;
+}
+
+/** Rejection-sample a random point inside a polygon. Falls back to the
+ *  centroid after 50 misses (rare for our reasonably convex shapes). */
+function randomPointInPolygon(
+  feature: Feature<Polygon | MultiPolygon>,
+): [number, number] {
+  const [minX, minY, maxX, maxY] = bbox(feature);
+  for (let i = 0; i < 50; i++) {
+    const lng = minX + Math.random() * (maxX - minX);
+    const lat = minY + Math.random() * (maxY - minY);
+    if (booleanPointInPolygon([lng, lat], feature)) return [lng, lat];
+  }
+  const c = centroid(feature).geometry.coordinates as [number, number];
+  return c;
+}
+
+const POLYGONS = loadPolygons();
 
 type Profile = {
   id: string;
@@ -64,11 +100,13 @@ function generateRow(p: Profile, i: number) {
   const hasGarden = Math.random() < (rooms >= 5 ? 0.5 : 0.2);
   const garden = hasGarden ? randInt(20, 90) : null;
   const floor = randInt(0, 6);
+  const polygon = POLYGONS.get(p.id);
+  const point = polygon ? wktPoint(randomPointInPolygon(polygon)) : null;
   return {
     id: `mock-${p.id}-${i}`,
     neighborhood: p.id,
     address: `${pick(p.streets)} ${randInt(1, 80)}, ${p.name_he}`,
-    point: null,
+    point,
     price_nis: price,
     price_per_m2: ppm,
     rooms,

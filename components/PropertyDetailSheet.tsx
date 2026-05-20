@@ -10,11 +10,15 @@ import { LeadGenModal, type LeadKind } from "./LeadGenModal";
 import { StreetViewModal } from "./StreetViewModal";
 import { externalSearchUrls } from "@/lib/externalLinks";
 import { useFocusTrap } from "@/lib/useFocusTrap";
+import { ListingWalkingSection } from "./ListingWalkingSection";
+import { arnonaRateFor, monthlyArnona } from "@/lib/arnona";
 
 type Props = {
   listing: ListingRow;
   /** Hebrew name of the neighborhood the listing belongs to. */
   neighborhoodHe: string;
+  /** Stable neighborhood id (e.g. "hashvatim") — used for arnona lookup. */
+  neighborhoodId: string;
   /** WGS84 coordinates used to drop the Street View pegman. Listings without
    *  their own geocoded point fall back to the neighborhood center. */
   location: { lat: number; lng: number } | null;
@@ -23,12 +27,15 @@ type Props = {
   onExplainMatch?: () => void;
 };
 
-export function PropertyDetailSheet({ listing, neighborhoodHe, location, onClose, onExplainMatch }: Props) {
+export function PropertyDetailSheet({ listing, neighborhoodHe, neighborhoodId, location, onClose, onExplainMatch }: Props) {
   const { hasListing, toggleListing } = useFavorites();
   const isFav = hasListing(listing.id);
   const [leadOpen, setLeadOpen] = useState<LeadKind | null>(null);
   const [streetViewOpen, setStreetViewOpen] = useState(false);
   const trapRef = useFocusTrap<HTMLDivElement>(true);
+
+  const arnonaRate = arnonaRateFor(neighborhoodId);
+  const arnonaMonthly = arnonaRate ? monthlyArnona(arnonaRate, listing.sqm) : null;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -165,6 +172,11 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, location, onClose
             >
               {NIS(listing.price_nis)}
             </div>
+            {arnonaMonthly != null && (
+              <div style={{ fontSize: 11, color: "var(--grey-500)", marginTop: 2 }}>
+                + ארנונה משוערת ~{NISshort(arnonaMonthly)}/חודש
+              </div>
+            )}
             <div style={{ fontSize: 14, fontWeight: 700, marginTop: 4 }}>{listing.address}</div>
             <div style={{ fontSize: 12, color: "var(--grey-500)" }}>{neighborhoodHe}</div>
           </div>
@@ -189,6 +201,11 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, location, onClose
           />
           <Stat icon="tag" label='מחיר/מ"ר' value={NISshort(Math.round(listing.price_nis / listing.sqm))} />
         </div>
+
+        {/* Asset-level walking accessibility — lazy-fetches from the per-listing
+            isochrone API and shows nearest gan / shop / park / transit / GF.
+            Distances are from this exact address, not the neighborhood center. */}
+        <ListingWalkingSection listingId={listing.id} />
 
         {/* External search link-outs — until we have real Yad2/Madlan/Nadlan ingest,
             user can open a pre-filled search on each source site. */}
