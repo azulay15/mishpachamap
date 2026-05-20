@@ -5,7 +5,12 @@ import { rateLimit, rateLimitResponse } from "@/lib/rateLimit";
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
+// Server-side token has no URL restrictions so Mapbox accepts the call (the
+// URL-restricted NEXT_PUBLIC_ token rejects server-to-server requests because
+// there's no matching Referer header). Falls back to the public token for
+// local dev convenience.
+const MAPBOX_TOKEN =
+  process.env.MAPBOX_SERVER_TOKEN ?? process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
 const CONTOUR_MINUTES = [5, 10, 15] as const;
 
 type IsochroneResponse = {
