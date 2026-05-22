@@ -43,3 +43,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ingest-derived files (the source XLSX/CSV are tracked, the per-city
+# extracts + geocoded outputs are reproducible from them)
+/data/elections/stations_*.csv

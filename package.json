@@ -20,6 +20,8 @@
     "ingest:poi:photos": "tsx scripts/ingest/poi_photos.ts",
     "ingest:elections": "tsx scripts/ingest/elections.ts",
     "ingest:elections:stations": "tsx scripts/ingest/elections_stations.ts",
+    "ingest:elections:extract": "tsx scripts/ingest/elections_extract_stations.ts",
+    "ingest:elections:geocode": "tsx scripts/ingest/elections_geocode_stations.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -46,6 +48,7 @@
     "tailwindcss": "^4",
     "tsx": "^4.19.2",
     "typescript": "^5",
+    "xlsx": "^0.18.5",
     "vitest": "^4.1.6"
   }
 }
