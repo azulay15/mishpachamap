@@ -42,7 +42,11 @@ type Args = {
 function parseArgs(argv: string[]): Args {
   let inPath = "data/elections/stations_1200_k25.csv";
   let outPath = "";
-  let minRelevance = 0.8;
+  // 0.5 is the floor where Mapbox's street resolutions are still reliably
+  // the right city; lower than that we see "מודיעין" treated as a street
+  // name in Jerusalem / Tel Aviv etc. The post-filter on resolved city
+  // does the heavy lifting; this threshold is a backstop.
+  let minRelevance = 0.5;
   for (const a of argv) {
     if (a.startsWith("--in=")) inPath = a.slice("--in=".length);
     else if (a.startsWith("--out=")) outPath = a.slice("--out=".length);
@@ -91,26 +95,47 @@ type GeocodeHit = {
 };
 
 /**
- * Build candidate address queries in order of specificity. Returns the
- * first hit that clears `minRelevance`, or the best-relevance hit if none
- * clear (caller decides whether to keep or drop).
+ * The CEC street field comes formatted as "<name>,<number> " (with a trailing
+ * space). Parse into clean "<number> <name>" suitable for Mapbox.
+ */
+function normalizeStreet(raw: string): string | null {
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+  const m = trimmed.match(/^(.+?),\s*(\d+)\s*$/);
+  if (m) return `${m[2]} ${m[1].trim()}`;
+  return trimmed;
+}
+
+/**
+ * Build candidate address queries in order of geocoder-friendliness. We
+ * skip the school name (place_name) in the primary query — Mapbox's
+ * string-match relevance treats unmatched school prefixes harshly even when
+ * the resolved street is correct. Falls back to place_name only when the
+ * street is empty.
  */
 async function geocodeStation(
   row: Row,
   minRelevance: number,
+  expectedCityFragments: string[],
 ): Promise<GeocodeHit | null> {
   const queries: string[] = [];
-  if (row.street && row.city_name) queries.push(`${row.street}, ${row.city_name}`);
+  const street = normalizeStreet(row.street);
+  if (street && row.city_name) queries.push(`${street}, ${row.city_name}`);
+  if (street) queries.push(street);
   if (row.place_name && row.city_name)
     queries.push(`${row.place_name}, ${row.city_name}`);
-  if (row.place_name && row.street && row.city_name)
-    queries.push(`${row.place_name}, ${row.street}, ${row.city_name}`);
-  if (queries.length === 0 && row.city_name) queries.push(row.city_name);
 
   let best: GeocodeHit | null = null;
   for (const q of queries) {
     const hit = await callMapbox(q);
     if (!hit) continue;
+    // Post-filter: the resolved address must mention the expected city.
+    // Protects against "מודיעין 15" being matched as a street in some other
+    // city (Jerusalem / Tel Aviv / Rosh HaAyin all have these).
+    const resolvedOk = expectedCityFragments.some((c) =>
+      hit.resolved_text.includes(c),
+    );
+    if (!resolvedOk) continue;
     if (!best || hit.relevance > best.relevance) best = hit;
     if (best.relevance >= minRelevance) return best;
   }
@@ -174,9 +199,18 @@ async function main() {
   let kept = 0;
   let dropped = 0;
 
+  // City-name fragments accepted in the resolved address. Mapbox returns
+  // both Hebrew ("מודיעין-מכבים-רעות") and English ("Modiin-Maccabim-Reut").
+  const expectedCityFragments = Array.from(
+    new Set(rows.map((r) => r.city_name).filter(Boolean)),
+  );
+  // Add the most common English transliteration the API uses.
+  const englishHints = ["Modiin", "Modi'in"];
+  for (const h of englishHints) expectedCityFragments.push(h);
+
   for (let i = 0; i < rows.length; i++) {
     const r = rows[i];
-    const hit = await geocodeStation(r, args.minRelevance);
+    const hit = await geocodeStation(r, args.minRelevance, expectedCityFragments);
     if (!hit) {
       console.warn(`  ${r.kalpi}: no geocode hit (${r.place_name} ${r.street})`);
       dropped++;

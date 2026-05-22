@@ -86,8 +86,16 @@ async function main() {
   }
   console.log(`  using sheet '${best.name}' (${best.rows.length} rows)`);
 
-  const cityIdx = findCol(best.headers, ["סמל ישוב", "קוד עיר"]);
-  const stationIdx = findCol(best.headers, ["מספר קלפי", "סמל קלפי", "קלפי"]);
+  const cityIdx = findCol(best.headers, [
+    "סמל ישוב בחירות",
+    "סמל ישוב",
+    "קוד עיר",
+  ]);
+  const stationIdx = findCol(best.headers, [
+    "סמל קלפי",
+    "מספר קלפי",
+    "קלפי",
+  ]);
   // Headers vary between releases — try several aliases for each.
   const placeIdx = findCol(best.headers, [
     "מקום קלפי",
@@ -97,15 +105,19 @@ async function main() {
     "סוג מקום",
   ]);
   const streetIdx = findCol(best.headers, [
+    "כתובת קלפי",
     "כתובת",
     "רחוב",
     "רחוב ומספר",
-    "כתובת קלפי",
   ]);
-  const cityNameIdx = findCol(best.headers, ["שם ישוב", "ישוב"]);
+  const cityNameIdx = findCol(best.headers, [
+    "שם ישוב בחירות",
+    "שם ישוב",
+    "ישוב",
+  ]);
   if (cityIdx < 0 || stationIdx < 0) {
     throw new Error(
-      `need columns 'סמל ישוב' and 'מספר קלפי' (got: ${best.headers.join(", ")})`,
+      `need locality + kalpi columns (got: ${best.headers.join(", ")})`,
     );
   }
 
