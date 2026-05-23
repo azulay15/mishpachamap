@@ -39,15 +39,9 @@ type Props = {
   items: NeighborhoodListItem[];
   selectedId: string | null;
   onSelect: (id: string) => void;
-  onOpenDetails: (id: string) => void;
 };
 
-export function NeighborhoodListRail({
-  items,
-  selectedId,
-  onSelect,
-  onOpenDetails,
-}: Props) {
+export function NeighborhoodListRail({ items, selectedId, onSelect }: Props) {
   const [sort, setSort] = useState<Sort>("match");
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -238,24 +232,6 @@ export function NeighborhoodListRail({
                 <span>חציון {NISshort(n.avgListing)}</span>
                 <span>·</span>
                 <span style={{ color: "var(--green-positive)" }}>GS {n.greenScore}</span>
-                {isSelected && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onOpenDetails(n.id);
-                    }}
-                    className="mm-btn mm-btn-accent mm-btn-sm"
-                    style={{
-                      marginInlineStart: "auto",
-                      height: 24,
-                      padding: "0 10px",
-                      fontSize: 11,
-                    }}
-                  >
-                    פתח פרטים <MMIcon name="chevron-left" size={11} color="#fff" />
-                  </button>
-                )}
               </div>
             </div>
           );

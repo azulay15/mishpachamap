@@ -12,7 +12,6 @@ import { type ListingRow, type SchoolRow, type Selected } from "./ListingsPanel"
 import { type NeighborhoodElection } from "./ElectionsPanel";
 import { RightRail, type RailMode } from "./RightRail";
 import { NeighborhoodListRail, type NeighborhoodListItem } from "./NeighborhoodListRail";
-import { NeighborhoodDetailsSheet } from "./NeighborhoodDetailsSheet";
 import { PersonaPill } from "./PersonaPill";
 import { ScoreChip } from "./ScoreChip";
 import { GreenScoreSheet } from "./GreenScoreSheet";
@@ -138,7 +137,6 @@ export function ConciergeScreen({
   const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
   const [compareOpen, setCompareOpen] = useState(false);
   const [allOpen, setAllOpen] = useState(false);
-  const [detailsOpen, setDetailsOpen] = useState(false);
   const persona = usePersona();
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
@@ -282,13 +280,24 @@ export function ConciergeScreen({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: isMobile ? "minmax(0, 1fr)" : "minmax(0, 1fr) 380px",
+          // RTL: column 1 = visual right (NeighborhoodListRail / all neighborhoods),
+          // column 2 = center map, column 3 = visual left (RightRail / Listings+AI).
+          // Mobile collapses to single column; the rails surface via the bottom
+          // carousel + drawer.
+          gridTemplateColumns: isMobile ? "minmax(0, 1fr)" : "340px minmax(0, 1fr) 360px",
           gridTemplateRows: "100%",
           height: "100%",
           minHeight: 0,
           overflow: "hidden",
         }}
       >
+        {!isMobile && (
+          <NeighborhoodListRail
+            items={neighborhoodsWithScore as unknown as NeighborhoodListItem[]}
+            selectedId={selectedId}
+            onSelect={(id) => setSelectedId(id)}
+          />
+        )}
         <main style={{ position: "relative", overflow: "hidden", background: "var(--map-bg)" }}>
           {renderer === "mapbox" ? (
             <MMMap
@@ -551,19 +560,7 @@ export function ConciergeScreen({
         </main>
 
         {!isMobile && (
-          <NeighborhoodListRail
-            items={neighborhoodsWithScore as unknown as NeighborhoodListItem[]}
-            selectedId={selectedId}
-            onSelect={(id) => setSelectedId(id)}
-            onOpenDetails={(id) => {
-              setSelectedId(id);
-              setDetailsOpen(true);
-            }}
-          />
-        )}
-
-        {!isMobile && detailsOpen && (
-          <NeighborhoodDetailsSheet
+          <RightRail
             selected={selected}
             listings={selectedId ? listingsByNeighborhood[selectedId] ?? [] : []}
             schools={selectedId ? data.schoolsByNeighborhood[selectedId] ?? [] : []}
@@ -571,7 +568,6 @@ export function ConciergeScreen({
             mode={railMode}
             onModeChange={setRailMode}
             onExplainMatch={selectedId ? () => setMatchSheetFor(selectedId) : undefined}
-            onClose={() => setDetailsOpen(false)}
           />
         )}
         {isMobile && (
