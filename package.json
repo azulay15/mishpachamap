@@ -10,6 +10,7 @@
     "ingest:nadlan": "tsx scripts/ingest/nadlan.ts",
     "ingest:meitzav": "tsx scripts/ingest/meitzav.ts",
     "ingest:nadlan:csv": "tsx scripts/ingest/nadlan_csv.ts",
+    "ingest:nadlan:govmap": "tsx scripts/ingest/nadlan_govmap.ts",
     "ingest:osm": "tsx scripts/ingest/osm.ts",
     "ingest:schools": "tsx scripts/ingest/schools.ts",
     "metrics:recompute": "tsx scripts/ingest/compute_metrics.ts",
