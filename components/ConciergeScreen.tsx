@@ -11,6 +11,8 @@ import { NeighborhoodCard, type NeighborhoodCardData } from "./NeighborhoodCard"
 import { type ListingRow, type SchoolRow, type Selected } from "./ListingsPanel";
 import { type NeighborhoodElection } from "./ElectionsPanel";
 import { RightRail, type RailMode } from "./RightRail";
+import { NeighborhoodListRail, type NeighborhoodListItem } from "./NeighborhoodListRail";
+import { NeighborhoodDetailsSheet } from "./NeighborhoodDetailsSheet";
 import { PersonaPill } from "./PersonaPill";
 import { ScoreChip } from "./ScoreChip";
 import { GreenScoreSheet } from "./GreenScoreSheet";
@@ -136,6 +138,7 @@ export function ConciergeScreen({
   const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
   const [compareOpen, setCompareOpen] = useState(false);
   const [allOpen, setAllOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const persona = usePersona();
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
@@ -356,7 +359,10 @@ export function ConciergeScreen({
               onClick={() => setGreenSheetOpen(true)}
               style={{
                 position: "absolute",
-                bottom: 200,
+                // Desktop has no bottom carousel, so the GreenScore badge sits
+                // just above the map's bottom edge; mobile keeps the carousel
+                // and the badge rides above it.
+                bottom: isMobile ? 200 : 16,
                 insetInlineStart: 16,
                 zIndex: 4,
                 background: "#fff",
@@ -419,7 +425,9 @@ export function ConciergeScreen({
               onClick={() => setCompareOpen(true)}
               style={{
                 position: "absolute",
-                bottom: 230,
+                // Same logic as the GreenScore badge — sits low on desktop
+                // (no carousel), rides higher on mobile.
+                bottom: isMobile ? 230 : 16,
                 insetInlineEnd: 16,
                 zIndex: 5,
                 background: "var(--grey-900)",
@@ -473,73 +481,89 @@ export function ConciergeScreen({
             />
           )}
 
-          {/* Bottom carousel */}
-          <div
-            ref={carouselRef}
-            className="mm-scroll"
-            style={{
-              position: "absolute",
-              bottom: 14,
-              left: 14,
-              right: 14,
-              zIndex: 4,
-              display: "flex",
-              gap: 10,
-              overflowX: "auto",
-              scrollBehavior: "smooth",
-            }}
-          >
-            {sortedCards.map((n) => (
-              <div key={n.id} data-nb-id={n.id} style={{ flex: `0 0 ${isMobile ? 260 : 280}px` }}>
-                <NeighborhoodCard
-                  n={n}
-                  selected={selectedId === n.id}
-                  inCompare={compareIds.has(n.id)}
-                  onToggleCompare={() => {
-                    setCompareIds((prev) => {
-                      const next = new Set(prev);
-                      if (next.has(n.id)) next.delete(n.id);
-                      else if (next.size < 4) next.add(n.id);
-                      return next;
-                    });
-                  }}
-                  onClick={() => {
-                    setSelectedId(n.id);
-                    if (isMobile) setDrawerOpen(true);
-                  }}
-                  onExplainMatch={() => setMatchSheetFor(n.id)}
-                />
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => setAllOpen(true)}
-              className="mm-card"
+          {/* Bottom carousel — mobile only. Desktop shows all neighborhoods in
+              the right rail instead, with a click-to-open details sheet for
+              listings + AI. */}
+          {isMobile && (
+            <div
+              ref={carouselRef}
+              className="mm-scroll"
               style={{
-                flex: "0 0 200px",
-                display: "grid",
-                placeItems: "center",
-                padding: 14,
-                color: "var(--grey-700)",
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: "pointer",
-                borderStyle: "dashed",
-                background: "transparent",
-                fontFamily: "inherit",
+                position: "absolute",
+                bottom: 14,
+                left: 14,
+                right: 14,
+                zIndex: 4,
+                display: "flex",
+                gap: 10,
+                overflowX: "auto",
+                scrollBehavior: "smooth",
               }}
             >
-              <div style={{ textAlign: "center" }}>
-                <MMIcon name="grid" size={20} color="#5B616E" />
-                <br />
-                כל {neighborhoodsWithScore.length} השכונות
-              </div>
-            </button>
-          </div>
+              {sortedCards.map((n) => (
+                <div key={n.id} data-nb-id={n.id} style={{ flex: `0 0 260px` }}>
+                  <NeighborhoodCard
+                    n={n}
+                    selected={selectedId === n.id}
+                    inCompare={compareIds.has(n.id)}
+                    onToggleCompare={() => {
+                      setCompareIds((prev) => {
+                        const next = new Set(prev);
+                        if (next.has(n.id)) next.delete(n.id);
+                        else if (next.size < 4) next.add(n.id);
+                        return next;
+                      });
+                    }}
+                    onClick={() => {
+                      setSelectedId(n.id);
+                      setDrawerOpen(true);
+                    }}
+                    onExplainMatch={() => setMatchSheetFor(n.id)}
+                  />
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => setAllOpen(true)}
+                className="mm-card"
+                style={{
+                  flex: "0 0 200px",
+                  display: "grid",
+                  placeItems: "center",
+                  padding: 14,
+                  color: "var(--grey-700)",
+                  fontSize: 13,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  borderStyle: "dashed",
+                  background: "transparent",
+                  fontFamily: "inherit",
+                }}
+              >
+                <div style={{ textAlign: "center" }}>
+                  <MMIcon name="grid" size={20} color="#5B616E" />
+                  <br />
+                  כל {neighborhoodsWithScore.length} השכונות
+                </div>
+              </button>
+            </div>
+          )}
         </main>
 
         {!isMobile && (
-          <RightRail
+          <NeighborhoodListRail
+            items={neighborhoodsWithScore as unknown as NeighborhoodListItem[]}
+            selectedId={selectedId}
+            onSelect={(id) => setSelectedId(id)}
+            onOpenDetails={(id) => {
+              setSelectedId(id);
+              setDetailsOpen(true);
+            }}
+          />
+        )}
+
+        {!isMobile && detailsOpen && (
+          <NeighborhoodDetailsSheet
             selected={selected}
             listings={selectedId ? listingsByNeighborhood[selectedId] ?? [] : []}
             schools={selectedId ? data.schoolsByNeighborhood[selectedId] ?? [] : []}
@@ -547,6 +571,7 @@ export function ConciergeScreen({
             mode={railMode}
             onModeChange={setRailMode}
             onExplainMatch={selectedId ? () => setMatchSheetFor(selectedId) : undefined}
+            onClose={() => setDetailsOpen(false)}
           />
         )}
         {isMobile && (
