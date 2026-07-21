@@ -25,6 +25,9 @@ export function PolygonEditor({ initial }: Props) {
   const [features, setFeatures] = useState(initial.features);
   const [unsaved, setUnsaved] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [savedToFile, setSavedToFile] = useState(false);
+  const [saveIssues, setSaveIssues] = useState<string[] | null>(null);
 
   // Init map + draw once.
   useEffect(() => {
@@ -88,6 +91,8 @@ export function PolygonEditor({ initial }: Props) {
       const fc = draw.getAll();
       setFeatures(fc.features as NeighborhoodFeatureCollection["features"]);
       setUnsaved(true);
+      setSavedToFile(false);
+      setSaveIssues(null);
     };
     map.on("draw.create", onChange);
     map.on("draw.update", onChange);
@@ -124,6 +129,19 @@ export function PolygonEditor({ initial }: Props) {
     return () => clearTimeout(handle);
   }, [features, unsaved]);
 
+  // Belt-and-braces: warn before leaving the tab with edits that were only
+  // auto-saved to localStorage (not yet written to the file). This is the
+  // second line of defence behind the "Save to file" button.
+  useEffect(() => {
+    if (!unsaved) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [unsaved]);
+
   const selectFeature = (id: string) => {
     const draw = drawRef.current;
     if (!draw) return;
@@ -143,13 +161,70 @@ export function PolygonEditor({ initial }: Props) {
     }
   };
 
-  const downloadFile = () => {
-    const fc: NeighborhoodFeatureCollection = {
-      type: "FeatureCollection",
-      ...(initial as { name?: string; meta?: unknown }),
-      features,
+  /**
+   * Assemble a clean FeatureCollection from the draw state. Geometry comes from
+   * the editor; each feature's properties (id / name_he / name_en) are taken
+   * from the canonical `initial` set by id, so mapbox-gl-draw's internal props
+   * never leak into the file and the Hebrew names can't drift.
+   */
+  const buildFeatureCollection = () => {
+    const initialById = new Map(initial.features.map((f) => [f.properties.id, f]));
+    const cleaned = features.map((f) => {
+      const id = (f.properties as { id?: string } | undefined)?.id;
+      const canon = id ? initialById.get(id) : undefined;
+      return {
+        type: "Feature" as const,
+        properties: canon
+          ? { id: canon.properties.id, name_he: canon.properties.name_he, name_en: canon.properties.name_en }
+          : (f.properties ?? {}),
+        geometry: f.geometry,
+      };
+    });
+    return {
+      type: "FeatureCollection" as const,
+      name: "neighborhoods_modiin",
+      meta: { source: "hand-edited via /admin/draw", edited_at: new Date().toISOString() },
+      features: cleaned,
     };
-    const blob = new Blob([JSON.stringify(fc, null, 2)], {
+  };
+
+  /**
+   * Primary save path: write straight to public/neighborhoods.geo.json via the
+   * dev-only API route. Eliminates the localStorage-only trap that lost hours of
+   * work once before. The route re-validates, so a broken shape is rejected
+   * (issues surfaced below) rather than silently written.
+   */
+  const saveToFile = async () => {
+    setSaving(true);
+    setSaveIssues(null);
+    try {
+      const res = await fetch("/api/admin/save-polygons", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildFeatureCollection()),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        issues?: string[];
+        savedAt?: string;
+      };
+      if (!res.ok) {
+        setSaveIssues(data.issues ?? [data.error ?? `save failed (${res.status})`]);
+        setSavedToFile(false);
+      } else {
+        setUnsaved(false);
+        setSavedToFile(true);
+        setLastSaved(data.savedAt ?? new Date().toISOString());
+      }
+    } catch (e) {
+      setSaveIssues([`network error: ${(e as Error).message}`]);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const downloadFile = () => {
+    const blob = new Blob([JSON.stringify(buildFeatureCollection(), null, 2)], {
       type: "application/geo+json",
     });
     const url = URL.createObjectURL(blob);
@@ -160,7 +235,6 @@ export function PolygonEditor({ initial }: Props) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    setUnsaved(false);
   };
 
   const resetToInitial = () => {
@@ -205,9 +279,13 @@ export function PolygonEditor({ initial }: Props) {
             <div style={{ fontSize: 11, color: "var(--grey-500)", marginTop: 4, lineHeight: "16px" }}>
               לחצו על שכונה ברשימה כדי לעבור לעריכת הקודקודים שלה. גררו את הנקודות במפה לעיצוב המתאר.
             </div>
-            {lastSaved && (
-              <div style={{ fontSize: 10, color: "var(--grey-500)", marginTop: 6 }}>
-                {unsaved ? "🟠 שינויים לא שמורים" : "✅"} נשמר אוטומטית: {new Date(lastSaved).toLocaleTimeString("he-IL")}
+            {(lastSaved || unsaved) && (
+              <div style={{ fontSize: 10, color: unsaved ? "#B9770E" : "var(--grey-500)", marginTop: 6 }}>
+                {unsaved
+                  ? "🟠 שינויים לא שמורים — גיבוי אוטומטי בדפדפן בלבד. לחצו \"שמירה לקובץ\"."
+                  : savedToFile
+                    ? `✅ נשמר לקובץ${lastSaved ? " · " + new Date(lastSaved).toLocaleTimeString("he-IL") : ""}`
+                    : `נשמר בדפדפן · ${lastSaved ? new Date(lastSaved).toLocaleTimeString("he-IL") : ""}`}
               </div>
             )}
           </header>
@@ -262,16 +340,47 @@ export function PolygonEditor({ initial }: Props) {
               gap: 8,
             }}
           >
-            <button type="button" onClick={downloadFile} className="mm-btn mm-btn-accent">
-              <MMIcon name="external" size={14} color="#fff" />
-              הורידו GeoJSON
+            <button
+              type="button"
+              onClick={saveToFile}
+              disabled={saving}
+              className="mm-btn mm-btn-accent"
+            >
+              <MMIcon name="check" size={14} color="#fff" />
+              {saving ? "שומר…" : "שמירה לקובץ"}
+            </button>
+
+            {saveIssues && saveIssues.length > 0 && (
+              <div
+                style={{
+                  fontSize: 11,
+                  color: "#C0392B",
+                  background: "rgba(192,57,43,0.06)",
+                  border: "1px solid rgba(192,57,43,0.25)",
+                  borderRadius: 6,
+                  padding: "6px 8px",
+                  lineHeight: "16px",
+                }}
+              >
+                <strong>השמירה נכשלה — הקובץ לא שונה:</strong>
+                <ul style={{ margin: "4px 0 0", paddingInlineStart: 16 }}>
+                  {saveIssues.map((it, i) => (
+                    <li key={i}>{it}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <button type="button" onClick={downloadFile} className="mm-btn mm-btn-ghost mm-btn-sm">
+              <MMIcon name="external" size={13} />
+              הורדה כגיבוי (GeoJSON)
             </button>
             <button type="button" onClick={resetToInitial} className="mm-btn mm-btn-ghost mm-btn-sm">
               איפוס לערכי ברירת מחדל
             </button>
             <p style={{ margin: 0, fontSize: 10, color: "var(--grey-500)", lineHeight: "14px" }}>
-              אחרי ההורדה: החליפו את <code>public/neighborhoods.geo.json</code> בקובץ שירד, הריצו{" "}
-              <code>npm run polygons:validate</code> ואז <code>npm run ingest:seed</code>.
+              <strong>שמירה לקובץ</strong> כותבת ישירות ל־<code>public/neighborhoods.geo.json</code>{" "}
+              (זמין רק בהרצה מקומית). לאחר השמירה הריצו <code>npm run ingest:seed</code> לעדכון מסד הנתונים.
             </p>
           </footer>
         </aside>
