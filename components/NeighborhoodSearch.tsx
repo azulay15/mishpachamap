@@ -117,11 +117,11 @@ export function NeighborhoodSearch({ neighborhoods, onPick, onAIClick }: Props) 
   };
 
   return (
-    <div ref={containerRef} style={{ position: "relative" }}>
+    <div ref={containerRef} style={{ position: "relative", width: "min(360px, 100%)" }}>
       <div
         className="mm-input"
         style={{
-          width: 360,
+          width: "100%",
           height: 40,
           boxShadow: "var(--shadow-md)",
           borderRadius: 999,

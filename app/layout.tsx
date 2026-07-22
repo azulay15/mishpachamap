@@ -64,6 +64,9 @@ export const viewport = {
   themeColor: "#FF6B00",
   width: "device-width",
   initialScale: 1,
+  // Lets safe-area-inset-* env vars resolve inside the notch on iOS so the
+  // bottom drawer / carousel can pad themselves above the home indicator.
+  viewportFit: "cover" as const,
 };
 
 export default function RootLayout({
