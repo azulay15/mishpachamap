@@ -321,6 +321,25 @@ a:focus-visible,
 
   /* Hide the header search — there's a primary search on the map. */
   .mm-header-main .mm-input { display: none; }
+
+  /* iOS Safari zooms the viewport when a focused input has font-size < 16px.
+     Bump just inputs (not the whole UI) to silence the zoom. */
+  .mm-input input,
+  input[type="text"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="email"],
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Bottom carousel — tighter scroll snap so cards align cleanly on swipe. */
+  .mm-shell .mm-scroll {
+    scroll-snap-type: x proximity;
+  }
+  .mm-shell .mm-scroll > [data-nb-id] {
+    scroll-snap-align: start;
+  }
 }
 
 /* Bottom drawer used to surface the listings/AI panel on mobile. */
@@ -347,6 +366,8 @@ a:focus-visible,
   grid-template-rows: auto 1fr;
   overflow: hidden;
   animation: mm-drawer-up 240ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* Respect the iPhone home indicator. */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 @keyframes mm-drawer-up {
