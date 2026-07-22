@@ -65,6 +65,44 @@ const LAYER_COLORS: Record<LayerId, string> = {
   elections: "#84888E", // not a POI type — fills are data-driven per polygon
 };
 
+// Per-POI-type presentation for the map popups. Since the popup is a raw HTML
+// string (not React), we can't use <MMIcon> — so we inline the matching lucide
+// SVG paths here. Singular Hebrew labels read better for a single place than the
+// plural layer names ("פארק / גינה" vs the "פארקים וגינות" layer toggle).
+const POI_TYPE_META: Record<string, { he: string; icon: string }> = {
+  school: { he: "בית ספר", icon: `<path d="M14 22v-4a2 2 0 1 0-4 0v4"/><path d="m18 10 3.447 1.724a1 1 0 0 1 .553.894V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7.382a1 1 0 0 1 .553-.894L6 10"/><path d="M18 5v17"/><path d="m4 6 7.106-3.553a2 2 0 0 1 1.788 0L20 6"/><path d="M6 5v17"/><circle cx="12" cy="9" r="2"/>` },
+  preschool: { he: "גן ילדים", icon: `<path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/>` },
+  park: { he: "פארק / גינה", icon: `<path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z"/><path d="M7 16v6"/><path d="M13 19v3"/><path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5"/>` },
+  shop: { he: "מרכול / קניות", icon: `<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>` },
+  transit: { he: "תחבורה", icon: `<path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/>` },
+  community: { he: "בית כנסת / קהילה", icon: `<path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/>` },
+  celiac: { he: "ללא גלוטן", icon: `<path d="m2 22 10-10"/><path d="m16 8-1.17 1.17"/><path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="m8 8-.53.53a3.5 3.5 0 0 0 0 4.94L9 15l1.53-1.53c.55-.55.88-1.25.98-1.97"/><path d="M10.91 5.26c.15-.26.34-.51.56-.73L13 3l1.53 1.53a3.5 3.5 0 0 1 .28 4.62"/><path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z"/><path d="M11.47 17.47 13 19l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L5 19l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"/><path d="m16 16-.53.53a3.5 3.5 0 0 1-4.94 0L9 15l1.53-1.53a3.49 3.49 0 0 1 1.97-.98"/><path d="M18.74 13.09c.26-.15.51-.34.73-.56L21 11l-1.53-1.53a3.5 3.5 0 0 0-4.62-.28"/><line x1="2" x2="22" y1="2" y2="22"/>` },
+  playground: { he: "מתקן משחק", icon: `<path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/>` },
+};
+const POI_DEFAULT_ICON = `<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>`;
+
+/**
+ * Popup header for a POI: a colored icon badge + name + Hebrew type label. This
+ * carries the visual weight now that most POIs have no photo — the tinted badge
+ * keeps each type recognizable at a glance and colour-matched to its map dot.
+ */
+function poiPopupHeader(type: string, nameHe: string): string {
+  const meta = POI_TYPE_META[type];
+  const color = LAYER_COLORS[type as LayerId] ?? "#84888E";
+  const icon = meta?.icon ?? POI_DEFAULT_ICON;
+  const label = meta?.he ?? "";
+  const title = nameHe.trim() || label || "נקודת עניין";
+  return `<div style="display:flex;align-items:center;gap:10px;padding:2px 2px 0;">
+    <span style="flex:none;width:36px;height:36px;border-radius:10px;background:${color}1A;color:${color};display:grid;place-items:center;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon}</svg>
+    </span>
+    <div style="min-width:0;">
+      <div style="font-weight:700;font-size:13px;color:var(--grey-900);line-height:1.25;">${escapeHtml(title)}</div>
+      ${label ? `<div style="font-size:11px;color:${color};font-weight:600;margin-top:1px;">${escapeHtml(label)}</div>` : ""}
+    </div>
+  </div>`;
+}
+
 export function MMMap({
   neighborhoods,
   pois,
@@ -307,10 +345,9 @@ export function MMMap({
         new mapboxgl.Popup({ closeButton: true, offset: 10, maxWidth: "260px" })
           .setLngLat(coords)
           .setHTML(
-            `<div style="font-family: var(--font-heb); font-size: 12px; padding: 2px 4px;">
+            `<div style="font-family: var(--font-heb); min-width: 190px; max-width: 240px; padding: 2px;">
                ${photoBlock}
-               <div style="font-weight: 700">${escapeHtml(props.name_he ?? "")}</div>
-               <div style="color: #84888E; margin-top: 2px;">${escapeHtml(props.type ?? "")}</div>
+               ${poiPopupHeader((props.type as string) ?? "", (props.name_he as string) ?? "")}
                ${extra}
              </div>`,
           )
