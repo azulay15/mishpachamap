@@ -12,9 +12,13 @@ type Props = {
 /** Single button replacing the horizontal chip row. Shows the active count
  *  and a stack of color dots for the active layers; opens a popover with
  *  every layer as a toggle. */
+/** Vertical gap between the button and the panel (matches the panel's `top`). */
+const PANEL_OFFSET = 48;
+
 export function LayersButton({ active, onToggle }: Props) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement | null>(null);
+  const [maxPanelHeight, setMaxPanelHeight] = useState<number | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -30,6 +34,25 @@ export function LayersButton({ active, onToggle }: Props) {
       document.removeEventListener("mousedown", onDocClick);
       document.removeEventListener("keydown", onKey);
     };
+  }, [open]);
+
+  // Size the panel to the space actually available below the button.
+  //
+  // A percentage max-height is useless here: the panel's containing block is
+  // this ~40px wrapper, not the map. And a fixed `70vh` can overrun the map
+  // <main> (which is overflow:hidden), clipping the bottom rows. The map fills
+  // down to the viewport bottom, so measuring to there gives the real limit.
+  useEffect(() => {
+    if (!open) return;
+    const measure = () => {
+      const el = wrapRef.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + PANEL_OFFSET;
+      setMaxPanelHeight(Math.max(200, Math.round(window.innerHeight - top - 16)));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, [open]);
 
   const activeLayers = LAYERS.filter((l) => active.has(l.id));
@@ -114,11 +137,10 @@ export function LayersButton({ active, onToggle }: Props) {
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            // The map <main> is overflow:hidden, so a viewport-relative height
-            // (70vh) could run past it and get clipped — hiding the bottom rows
-            // behind the map overlays. Size against the container instead, so
-            // the panel always ends inside the map and scrolls internally.
-            maxHeight: "calc(100% - 64px)",
+            // Measured above — never a percentage (the containing block is the
+            // small button wrapper) and never a bare vh (it would overrun the
+            // overflow:hidden map and clip the bottom rows).
+            maxHeight: maxPanelHeight ? `${maxPanelHeight}px` : "60vh",
             overflowY: "auto",
             overscrollBehavior: "contain",
           }}
