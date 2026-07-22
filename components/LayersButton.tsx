@@ -114,8 +114,13 @@ export function LayersButton({ active, onToggle }: Props) {
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            maxHeight: "70vh",
+            // The map <main> is overflow:hidden, so a viewport-relative height
+            // (70vh) could run past it and get clipped — hiding the bottom rows
+            // behind the map overlays. Size against the container instead, so
+            // the panel always ends inside the map and scrolls internally.
+            maxHeight: "calc(100% - 64px)",
             overflowY: "auto",
+            overscrollBehavior: "contain",
           }}
         >
           {LAYERS.map((l) => (
