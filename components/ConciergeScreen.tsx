@@ -50,7 +50,7 @@ export type ConciergeData = {
   electionsByNeighborhood: Record<string, NeighborhoodElection>;
 };
 
-const INITIAL_LAYERS: LayerId[] = ["school", "park", "shop", "greenscore"];
+const INITIAL_LAYERS: LayerId[] = ["school", "park", "shop"];
 const INITIAL_SELECTED = "hashvatim";
 
 function ElectionsLegend({
