@@ -66,7 +66,7 @@ export function SavedView({ neighborhoods, listings }: Props) {
             <p style={{ margin: 0, fontSize: 13, color: "var(--grey-500)" }}>
               לחצו על הלב על כרטיסי שכונות או נכסים כדי לשמור אותם כאן.
             </p>
-            <a href="/" className="mm-btn mm-btn-accent" style={{ marginTop: 16, textDecoration: "none" }}>
+            <a href="/map" className="mm-btn mm-btn-accent" style={{ marginTop: 16, textDecoration: "none" }}>
               חזרה למפה
             </a>
           </div>
@@ -101,7 +101,7 @@ export function SavedView({ neighborhoods, listings }: Props) {
                     </p>
                   )}
                   <a
-                    href={`/?n=${n.id}`}
+                    href={`/map?n=${n.id}`}
                     className="mm-btn mm-btn-secondary mm-btn-sm"
                     style={{ marginTop: 10, textDecoration: "none" }}
                   >

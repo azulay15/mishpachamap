@@ -3,7 +3,16 @@
 import { MMIcon } from "@/lib/icons";
 import { useFavorites } from "@/lib/useFavorites";
 
-const NAV = ["בית", "מפה", "שכונות", "נכסים", "מחשבונים", "מומחה השכונה"];
+// Label → destination. בית and מפה are real routes; the rest still point at
+// the map (their features live there) until they get dedicated pages.
+const NAV: Array<{ label: string; href: string }> = [
+  { label: "בית", href: "/" },
+  { label: "מפה", href: "/map" },
+  { label: "שכונות", href: "/map" },
+  { label: "נכסים", href: "/map" },
+  { label: "מחשבונים", href: "#" },
+  { label: "מומחה השכונה", href: "/map" },
+];
 
 export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
   const { count } = useFavorites();
@@ -24,8 +33,8 @@ export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
         </a>
         <nav>
           {NAV.map((n) => (
-            <a key={n} href="#" className={n === activeNav ? "on" : ""}>
-              {n}
+            <a key={n.label} href={n.href} className={n.label === activeNav ? "on" : ""}>
+              {n.label}
             </a>
           ))}
         </nav>
