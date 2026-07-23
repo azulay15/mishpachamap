@@ -48,7 +48,7 @@ export function OnboardingForm() {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     writePersona(persona);
-    router.push("/");
+    router.push("/map");
   };
 
   const onReset = () => {

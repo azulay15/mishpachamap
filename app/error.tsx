@@ -89,7 +89,7 @@ export default function ErrorBoundary({
           <button type="button" onClick={reset} className="mm-btn mm-btn-accent">
             נסו שוב
           </button>
-          <a href="/" className="mm-btn mm-btn-secondary" style={{ textDecoration: "none" }}>
+          <a href="/map" className="mm-btn mm-btn-secondary" style={{ textDecoration: "none" }}>
             חזרה למפה
           </a>
         </div>
