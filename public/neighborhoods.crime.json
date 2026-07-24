@@ -1,0 +1,201 @@
+{
+  "meta": {
+    "source": "Israel Police 2024",
+    "resource": "5fc13c50-b6f3-4712-b831-a75e0f91a17e",
+    "locality": 1200
+  },
+  "neighborhoods": {
+    "hanechalim": {
+      "name_he": "הנחלים",
+      "cases_2024_total": 280,
+      "cases_2024_person": 39,
+      "cases_2024_property": 154,
+      "per_1000_residents": 32.7,
+      "safety_score": 48,
+      "safety_rank": 10,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024 (Q1–Q4)",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "police_areas": [
+          12000011,
+          12000012,
+          12000015
+        ]
+      }
+    },
+    "hashvatim": {
+      "name_he": "השבטים",
+      "cases_2024_total": 138,
+      "cases_2024_person": 23,
+      "cases_2024_property": 62,
+      "per_1000_residents": 25.9,
+      "safety_score": 59,
+      "safety_rank": 8,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024 (Q1–Q4)",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "police_areas": [
+          12000013,
+          12000033
+        ]
+      }
+    },
+    "hareut": {
+      "name_he": "הרעות",
+      "cases_2024_total": 83,
+      "cases_2024_person": 13,
+      "cases_2024_property": 40,
+      "per_1000_residents": 16.2,
+      "safety_score": 74,
+      "safety_rank": 5,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024 (Q1–Q4)",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "police_areas": [
+          12000041,
+          12000042
+        ]
+      }
+    },
+    "nofim": null,
+    "avneichen": {
+      "name_he": "אבני חן",
+      "cases_2024_total": 203,
+      "cases_2024_person": 32,
+      "cases_2024_property": 69,
+      "per_1000_residents": 19.6,
+      "safety_score": 69,
+      "safety_rank": 6,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024 (Q1–Q4)",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "police_areas": [
+          12000024,
+          12000025,
+          12000031
+        ]
+      }
+    },
+    "hameginim": {
+      "name_he": "המגינים",
+      "cases_2024_total": 103,
+      "cases_2024_person": 19,
+      "cases_2024_property": 46,
+      "per_1000_residents": 12,
+      "safety_score": 81,
+      "safety_rank": 2,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024 (Q1–Q4)",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "police_areas": [
+          12000023,
+          12000026
+        ]
+      }
+    },
+    "haprachim": {
+      "name_he": "הפרחים",
+      "cases_2024_total": 205,
+      "cases_2024_person": 28,
+      "cases_2024_property": 99,
+      "per_1000_residents": 24.5,
+      "safety_score": 61,
+      "safety_rank": 7,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024 (Q1–Q4)",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "police_areas": [
+          12000016,
+          12000017
+        ]
+      }
+    },
+    "hanevim": {
+      "name_he": "הנביאים",
+      "cases_2024_total": 114,
+      "cases_2024_person": 14,
+      "cases_2024_property": 58,
+      "per_1000_residents": 15.1,
+      "safety_score": 76,
+      "safety_rank": 4,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024 (Q1–Q4)",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "police_areas": [
+          12000022
+        ]
+      }
+    },
+    "moriah": {
+      "name_he": "מוריה",
+      "cases_2024_total": 111,
+      "cases_2024_person": 9,
+      "cases_2024_property": 55,
+      "per_1000_residents": 13.2,
+      "safety_score": 79,
+      "safety_rank": 3,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024 (Q1–Q4)",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "police_areas": [
+          12000034
+        ]
+      }
+    },
+    "hamakkabim": {
+      "name_he": "המכבים",
+      "cases_2024_total": 9,
+      "cases_2024_person": 0,
+      "cases_2024_property": 7,
+      "per_1000_residents": 3.7,
+      "safety_score": 94,
+      "safety_rank": 1,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024 (Q1–Q4)",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "police_areas": [
+          12000043
+        ]
+      }
+    },
+    "hakramim": null,
+    "masuah": null,
+    "hatsiporim": {
+      "name_he": "הציפורים",
+      "cases_2024_total": 91,
+      "cases_2024_person": 20,
+      "cases_2024_property": 32,
+      "per_1000_residents": 28.9,
+      "safety_score": 54,
+      "safety_rank": 9,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024 (Q1–Q4)",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "police_areas": [
+          12000021
+        ]
+      }
+    },
+    "moreshet": null
+  }
+}
