@@ -73,7 +73,7 @@ export function CompareSheet({ items, persona, electionsByNeighborhood, onClose,
     {
       label: "מגמת מחירים (YoY)",
       get: (n) => n.avgPriceDelta,
-      format: (v) => pct(v),
+      format: (v) => (v !== 0 ? pct(v) : "—"),
       higherIsBetter: null,
     },
     {

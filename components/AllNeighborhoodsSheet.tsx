@@ -246,7 +246,7 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose }: 
                     color: "var(--grey-700)",
                   }}
                 >
-                  <span>חציון {NISshort(n.avgListing)}</span>
+                  <span>{n.avgListing > 0 ? `חציון ${NISshort(n.avgListing)}` : "אין נתוני מחיר"}</span>
                   <span>·</span>
                   <span style={{ color: "var(--green-positive)" }}>GS {n.greenScore}</span>
                 </div>
