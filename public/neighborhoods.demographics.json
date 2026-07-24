@@ -1,0 +1,341 @@
+{
+  "meta": {
+    "source": "CBS Census 2022 by statistical area",
+    "resource": "9a9e085f-3bc8-41df-b15f-be0daaf99e30",
+    "locality": 1200,
+    "generated_from": "public/neighborhoods.geo.json stat_areas"
+  },
+  "neighborhoods": {
+    "hanechalim": {
+      "name_he": "הנחלים",
+      "population": 8550,
+      "households": 2780,
+      "household_size": 3.06,
+      "median_age": 37,
+      "pct_age_0_19": 29.9,
+      "pct_age_65_plus": 11.8,
+      "pct_households_with_kids_0_5": 10.9,
+      "avg_children_born": 1.84,
+      "pct_academic": 40.9,
+      "median_wage_annual": 156300,
+      "pct_own": 72.7,
+      "pct_rent": 23.9,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          111,
+          114,
+          115
+        ],
+        "stat_areas_missing": []
+      }
+    },
+    "hashvatim": {
+      "name_he": "השבטים",
+      "population": 5330,
+      "households": 1350,
+      "household_size": 3.9,
+      "median_age": 24,
+      "pct_age_0_19": 39.6,
+      "pct_age_65_plus": 4.4,
+      "pct_households_with_kids_0_5": 10.8,
+      "avg_children_born": 2,
+      "pct_academic": 48.7,
+      "median_wage_annual": 214800,
+      "pct_own": 87.1,
+      "pct_rent": 10.3,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          311
+        ],
+        "stat_areas_missing": []
+      }
+    },
+    "hareut": {
+      "name_he": "הרעות",
+      "population": 5120,
+      "households": 1770,
+      "household_size": 2.9,
+      "median_age": 49,
+      "pct_age_0_19": 22.1,
+      "pct_age_65_plus": 18.3,
+      "pct_households_with_kids_0_5": 4.7,
+      "avg_children_born": 2.25,
+      "pct_academic": 57.3,
+      "median_wage_annual": 237800,
+      "pct_own": 85.6,
+      "pct_rent": 7.7,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          321,
+          322
+        ],
+        "stat_areas_missing": []
+      }
+    },
+    "nofim": {
+      "name_he": "נופים",
+      "population": 4980,
+      "households": 1330,
+      "household_size": 3.7,
+      "median_age": 26,
+      "pct_age_0_19": 44.9,
+      "pct_age_65_plus": 3.3,
+      "pct_households_with_kids_0_5": 43.8,
+      "avg_children_born": 2.1,
+      "pct_academic": 49.1,
+      "median_wage_annual": 190000,
+      "pct_own": 65.1,
+      "pct_rent": 33.6,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          332
+        ],
+        "stat_areas_missing": []
+      }
+    },
+    "avneichen": {
+      "name_he": "אבני חן",
+      "population": 10370,
+      "households": 2830,
+      "household_size": 3.69,
+      "median_age": 25,
+      "pct_age_0_19": 44.3,
+      "pct_age_65_plus": 8,
+      "pct_households_with_kids_0_5": 23.3,
+      "avg_children_born": 2.02,
+      "pct_academic": 44.7,
+      "median_wage_annual": 186600,
+      "pct_own": 77.8,
+      "pct_rent": 18,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          223,
+          224,
+          225
+        ],
+        "stat_areas_missing": []
+      }
+    },
+    "hameginim": {
+      "name_he": "המגינים",
+      "population": 8570,
+      "households": 2710,
+      "household_size": 3.2,
+      "median_age": 31,
+      "pct_age_0_19": 36,
+      "pct_age_65_plus": 9.8,
+      "pct_households_with_kids_0_5": 16.8,
+      "avg_children_born": 1.95,
+      "pct_academic": 40.1,
+      "median_wage_annual": 153000,
+      "pct_own": 70,
+      "pct_rent": 25.5,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          221,
+          222
+        ],
+        "stat_areas_missing": []
+      }
+    },
+    "haprachim": {
+      "name_he": "הפרחים",
+      "population": 8370,
+      "households": 2920,
+      "household_size": 2.78,
+      "median_age": 40,
+      "pct_age_0_19": 27.5,
+      "pct_age_65_plus": 17.3,
+      "pct_households_with_kids_0_5": 12.6,
+      "avg_children_born": 1.88,
+      "pct_academic": 39.2,
+      "median_wage_annual": 143600,
+      "pct_own": 65.4,
+      "pct_rent": 31.3,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          121,
+          122,
+          123
+        ],
+        "stat_areas_missing": []
+      }
+    },
+    "hanevim": {
+      "name_he": "הנביאים",
+      "population": 7530,
+      "households": 2420,
+      "household_size": 3.1,
+      "median_age": 32,
+      "pct_age_0_19": 36.2,
+      "pct_age_65_plus": 10,
+      "pct_households_with_kids_0_5": 20.6,
+      "avg_children_born": 1.8,
+      "pct_academic": 40.4,
+      "median_wage_annual": 150100,
+      "pct_own": 64.5,
+      "pct_rent": 31.8,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          214
+        ],
+        "stat_areas_missing": [
+          334
+        ]
+      }
+    },
+    "moriah": {
+      "name_he": "מוריה",
+      "population": 8390,
+      "households": 2130,
+      "household_size": 3.94,
+      "median_age": 23,
+      "pct_age_0_19": 44,
+      "pct_age_65_plus": 7.3,
+      "pct_households_with_kids_0_5": 16.7,
+      "avg_children_born": 2.12,
+      "pct_academic": 47.2,
+      "median_wage_annual": 236600,
+      "pct_own": 83.7,
+      "pct_rent": 14.6,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          312,
+          313
+        ],
+        "stat_areas_missing": []
+      }
+    },
+    "hamakkabim": {
+      "name_he": "המכבים",
+      "population": 2430,
+      "households": 870,
+      "household_size": 2.8,
+      "median_age": 50,
+      "pct_age_0_19": 21,
+      "pct_age_65_plus": 25.3,
+      "pct_households_with_kids_0_5": 10,
+      "avg_children_born": 2.4,
+      "pct_academic": 62,
+      "median_wage_annual": 217700,
+      "pct_own": 80.4,
+      "pct_rent": 11.2,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          323
+        ],
+        "stat_areas_missing": []
+      }
+    },
+    "hakramim": {
+      "name_he": "הכרמים",
+      "population": 11460,
+      "households": 3460,
+      "household_size": 3.3,
+      "median_age": 31,
+      "pct_age_0_19": 41.3,
+      "pct_age_65_plus": 8.1,
+      "pct_households_with_kids_0_5": 27.3,
+      "avg_children_born": 1.9,
+      "pct_academic": 37.7,
+      "median_wage_annual": 166400,
+      "pct_own": 72.7,
+      "pct_rent": 24.7,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          211,
+          212,
+          213
+        ],
+        "stat_areas_missing": [
+          215
+        ]
+      }
+    },
+    "masuah": {
+      "name_he": "משואה",
+      "population": 8080,
+      "households": 2360,
+      "household_size": 3.41,
+      "median_age": 29,
+      "pct_age_0_19": 35.8,
+      "pct_age_65_plus": 8,
+      "pct_households_with_kids_0_5": 14.7,
+      "avg_children_born": 1.95,
+      "pct_academic": 43.2,
+      "median_wage_annual": 161500,
+      "pct_own": 66.1,
+      "pct_rent": 29.7,
+      "religiosity": "דתי/ דתי מאוד",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          112,
+          113
+        ],
+        "stat_areas_missing": []
+      }
+    },
+    "hatsiporim": {
+      "name_he": "הציפורים",
+      "population": 3150,
+      "households": 880,
+      "household_size": 3.6,
+      "median_age": 25,
+      "pct_age_0_19": 44,
+      "pct_age_65_plus": 5.2,
+      "pct_households_with_kids_0_5": 33.3,
+      "avg_children_born": 2.2,
+      "pct_academic": 46.1,
+      "median_wage_annual": 180000,
+      "pct_own": 70.9,
+      "pct_rent": 23.2,
+      "religiosity": "חילוני",
+      "source": {
+        "provider": "CBS Census 2022 (data.gov.il 9a9e085f)",
+        "as_of": "2022",
+        "stat_areas_used": [
+          331
+        ],
+        "stat_areas_missing": [
+          333
+        ]
+      }
+    },
+    "moreshet": null
+  }
+}

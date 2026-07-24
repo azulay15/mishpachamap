@@ -14,6 +14,7 @@
     "ingest:osm": "tsx scripts/ingest/osm.ts",
     "ingest:schools": "tsx scripts/ingest/schools.ts",
     "metrics:recompute": "tsx scripts/ingest/compute_metrics.ts",
+    "ingest:demographics": "tsx scripts/ingest/demographics.ts",
     "polygons:refine": "tsx scripts/ingest/refine_polygons.ts",
     "polygons:build": "tsx scripts/ingest/build_neighborhoods.ts",
     "polygons:validate": "tsx scripts/validate_polygons.ts",
