@@ -195,9 +195,9 @@ export function NeighborhoodCard({
             marginTop: "auto",
           }}
         >
-          <Stat value={NISshort(n.avgListing)} label="חציון" />
-          <Stat value={`₪${(n.avgPrice / 1000).toFixed(1)}K`} label='למ"ר' border />
-          <Stat value={n.schoolScore} label="בתי ספר" />
+          <Stat value={n.avgListing > 0 ? NISshort(n.avgListing) : "—"} label="חציון" />
+          <Stat value={n.avgPrice > 0 ? `₪${(n.avgPrice / 1000).toFixed(1)}K` : "—"} label='למ"ר' border />
+          <Stat value={n.schoolScore > 0 ? n.schoolScore : "—"} label="בתי ספר" />
           <Stat
             value={n.greenScore}
             label="GreenScore"

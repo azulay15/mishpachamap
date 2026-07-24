@@ -108,16 +108,22 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           </p>
         )}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: 4 }}>
-          <Stat label="חציון" value={NISshort(selected.avgListing)} />
+          <Stat label="חציון" value={selected.avgListing > 0 ? NISshort(selected.avgListing) : "—"} />
           <Stat
             label='מחיר/מ"ר'
             value={
-              <>
-                {NIS(selected.avgPrice)}{" "}
-                <span className={selected.avgPriceDelta > 0 ? "mm-up" : "mm-down"} style={{ fontSize: 11 }}>
-                  {pct(selected.avgPriceDelta)}
-                </span>
-              </>
+              selected.avgPrice > 0 ? (
+                <>
+                  {NIS(selected.avgPrice)}{" "}
+                  {selected.avgPriceDelta !== 0 && (
+                    <span className={selected.avgPriceDelta > 0 ? "mm-up" : "mm-down"} style={{ fontSize: 11 }}>
+                      {pct(selected.avgPriceDelta)}
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span style={{ color: "var(--grey-500)", fontSize: 12, fontWeight: 600 }}>אין נתונים עדכניים</span>
+              )
             }
           />
           <Stat

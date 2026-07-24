@@ -246,7 +246,7 @@ async function queryNeighborhoods(
 
   const lines = ranked.map((r) => {
     const price = r.metrics?.avg_listing_price ?? 0;
-    const pricePart = price ? `, חציון ₪${(price / 1_000_000).toFixed(2)}M` : "";
+    const pricePart = price > 0 ? `, חציון ₪${(price / 1_000_000).toFixed(2)}M` : ", אין נתוני מחיר עדכניים";
     const greenPart = r.facts.greenScore ? ` · GS ${r.facts.greenScore}` : "";
     const celiacPart = r.facts.celiacDistance != null ? ` · GF ${Math.round(r.facts.celiacDistance)}m` : "";
     return `- ${r.nb.id} (${r.nb.name_he}): התאמה ${Math.round(r.score)}/100${pricePart}${greenPart}${celiacPart}. ${r.nb.family_label ?? ""}`;
@@ -281,8 +281,11 @@ async function compareNeighborhoods(
     const breakdown = breakdownFor(facts, persona);
     const score = Math.round(breakdown.reduce((s, r) => s + r.hit, 0));
     const price = metrics?.avg_listing_price ?? 0;
-    const yoy = metrics?.avg_price_yoy_pct ?? 0;
-    return `- ${nb.name_he}: התאמה ${score}/100 · חציון ₪${(price / 1_000_000).toFixed(2)}M (${yoy > 0 ? "+" : ""}${Number(yoy).toFixed(1)}%) · GS ${facts.greenScore} · בית ספר ${facts.schoolWalkMeters ? Math.round(facts.schoolWalkMeters) + "m" : "?"} · פארק ${facts.parkMeters ? Math.round(facts.parkMeters) + "m" : "?"} · GF ${facts.celiacDistance ? Math.round(facts.celiacDistance) + "m" : "אין"}`;
+    const yoy = metrics?.avg_price_yoy_pct ?? null;
+    const pricePart = price > 0
+      ? `חציון ₪${(price / 1_000_000).toFixed(2)}M${yoy != null ? ` (${yoy > 0 ? "+" : ""}${Number(yoy).toFixed(1)}%)` : ""}`
+      : "אין נתוני מחיר עדכניים";
+    return `- ${nb.name_he}: התאמה ${score}/100 · ${pricePart} · בית ספר ${facts.schoolWalkMeters ? Math.round(facts.schoolWalkMeters) + "m" : "?"} · פארק ${facts.parkMeters ? Math.round(facts.parkMeters) + "m" : "?"} · GF ${facts.celiacDistance ? Math.round(facts.celiacDistance) + "m" : "אין"}`;
   });
 
   return {
