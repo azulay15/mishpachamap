@@ -289,7 +289,34 @@ function assemble(input: {
     }
   }
 
-  return { neighborhoods, pois, listingsByNeighborhood, schoolsByNeighborhood, electionsByNeighborhood };
+  // Schools as map POIs (type "school") so the "בתי ספר" map layer shows real
+  // dots — using the authoritative MoE locations, colour + icon already defined.
+  const schoolPois = schools
+    .filter((s) => s.lon != null && s.lat != null)
+    .map((s) => ({
+      type: "Feature" as const,
+      geometry: { type: "Point" as const, coordinates: [s.lon as number, s.lat as number] },
+      properties: {
+        id: `school-${s.semel}`,
+        type: "school" as never,
+        name_he: s.name_he,
+        photo_url: null,
+        photo_title: null,
+        photo_page_url: null,
+        photo_license: null,
+        photo_artist: null,
+        has_shade: null,
+        modern_equipment: null,
+      },
+    }));
+
+  return {
+    neighborhoods,
+    pois: [...pois, ...schoolPois],
+    listingsByNeighborhood,
+    schoolsByNeighborhood,
+    electionsByNeighborhood,
+  };
 }
 
 function haversineMeters(a: [number, number], b: [number, number]): number {
