@@ -418,7 +418,7 @@ function WhoLivesHere({ demographics: d, safety: s }: { demographics: Demographi
             {d.household_size != null && chip("גודל משק בית", d.household_size)}
             {d.median_age != null && chip("גיל חציוני", d.median_age)}
             {d.religiosity && chip("אופי", <span style={{ fontSize: 12.5 }}>{d.religiosity}</span>)}
-            {d.median_wage_annual != null && chip("שכר חציוני", `₪${Math.round(d.median_wage_annual / 1000)}K`)}
+            {d.median_wage_monthly != null && chip("שכר חודשי חציוני", `₪${d.median_wage_monthly.toLocaleString("he-IL")}`)}
             {d.pct_own != null && chip("בעלות על הדירה", `${d.pct_own}%`)}
           </div>
           <div style={{ fontSize: 10, color: "var(--grey-500)", marginTop: 6 }}>מקור: למ״ס · מפקד 2022</div>
