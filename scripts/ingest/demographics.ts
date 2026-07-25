@@ -116,9 +116,11 @@ async function main() {
       pct_households_with_kids_0_5: rnd(wmean(rows, "hh0_5_pcnt")),
       avg_children_born: rnd(wmean(rows, "ChldBorn_avg"), 2),
       pct_academic: rnd(wmean(rows, "AcadmCert_pcnt")),
-      median_wage_annual: (() => {
-        const w = wmean(rows, "employeesAnnual_medWage");
-        return w == null ? null : Math.round(w / 100) * 100;
+      // CBS reports ANNUAL gross wage; Israelis think in MONTHLY, so ÷12 and
+      // round to the nearest ₪100.
+      median_wage_monthly: (() => {
+        const annual = wmean(rows, "employeesAnnual_medWage");
+        return annual == null ? null : Math.round(annual / 12 / 100) * 100;
       })(),
       pct_own: rnd(wmean(rows, "own_pcnt")),
       pct_rent: rnd(wmean(rows, "rent_pcnt")),
@@ -132,7 +134,7 @@ async function main() {
     };
     const cov = missing.length ? ` (missing ${missing.join(",")})` : "";
     console.log(
-      `  ✓ ${id.padEnd(12)} pop ${Math.round(pop)} · size ${rnd(wmean(rows, "size_avg"), 1)} · kids0-5 ${rnd(wmean(rows, "hh0_5_pcnt"))}% · ${religiosity} · wage ₪${Math.round((wmean(rows, "employeesAnnual_medWage") ?? 0) / 1000)}k${cov}`,
+      `  ✓ ${id.padEnd(12)} pop ${Math.round(pop)} · size ${rnd(wmean(rows, "size_avg"), 1)} · kids0-5 ${rnd(wmean(rows, "hh0_5_pcnt"))}% · ${religiosity} · ₪${Math.round((wmean(rows, "employeesAnnual_medWage") ?? 0) / 12).toLocaleString()}/mo${cov}`,
     );
   }
 

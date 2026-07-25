@@ -26,7 +26,7 @@ export type Demographics = {
   pct_households_with_kids_0_5: number | null;
   avg_children_born: number | null;
   pct_academic: number | null;
-  median_wage_annual: number | null;
+  median_wage_monthly: number | null;
   pct_own: number | null;
   religiosity: string | null;
 };
