@@ -121,9 +121,9 @@ async function main() {
       avg_listing_price: medSale,
       median_rooms: medRooms,
       walk_score: 70, // still placeholder — tracked separately
-      green_score: 75, // still placeholder — tracked separately
       school_score: schoolScore,
-      quiet_score: 70, // still placeholder — tracked separately
+      // green_score + quiet_score are owned by `npm run ingest:environment`
+      // (real OSM-derived values); omitted here so a recompute won't clobber them.
       computed_at: new Date().toISOString(),
     };
 

@@ -29,7 +29,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "ingest:crime": "tsx scripts/ingest/crime.ts",
-    "ingest:schools:moe": "tsx scripts/ingest/schools_moe.ts"
+    "ingest:schools:moe": "tsx scripts/ingest/schools_moe.ts",
+    "ingest:environment": "tsx scripts/ingest/environment.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.96.0",
