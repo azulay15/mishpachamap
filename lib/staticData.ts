@@ -67,3 +67,9 @@ export function loadSafety(): Record<string, Safety | null> {
 export function loadModiinSchools(): StaticSchool[] {
   return readJson<{ schools: StaticSchool[] }>("schools.modiin.json").schools.filter((s) => s.lon != null && s.lat != null);
 }
+
+export type BusStop = { code: number; name: string; lat: number; lon: number };
+
+export function loadTransitStops(): BusStop[] {
+  return readJson<{ stops: BusStop[] }>("transit.modiin.json").stops;
+}

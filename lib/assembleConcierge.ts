@@ -9,7 +9,7 @@ import type { ConciergeData } from "@/components/ConciergeScreen";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { PERSONA_DEFAULT } from "@/lib/persona";
 import { loadNeighborhoodFeatures, centroidOf } from "@/lib/geoData";
-import { loadDemographics, loadSafety, loadModiinSchools, type StaticSchool } from "@/lib/staticData";
+import { loadDemographics, loadSafety, loadModiinSchools, loadTransitStops, type StaticSchool } from "@/lib/staticData";
 
 type NeighborhoodRow = {
   id: string;
@@ -310,9 +310,28 @@ function assemble(input: {
       },
     }));
 
+  // Real bus stops (Open Bus Stride) as type="transit" POIs, so the "תחבורה"
+  // layer shows real dots instead of just the 2 train stations.
+  const transitPois = loadTransitStops().map((s) => ({
+    type: "Feature" as const,
+    geometry: { type: "Point" as const, coordinates: [s.lon, s.lat] },
+    properties: {
+      id: `busstop-${s.code}`,
+      type: "transit" as never,
+      name_he: s.name,
+      photo_url: null,
+      photo_title: null,
+      photo_page_url: null,
+      photo_license: null,
+      photo_artist: null,
+      has_shade: null,
+      modern_equipment: null,
+    },
+  }));
+
   return {
     neighborhoods,
-    pois: [...pois, ...schoolPois],
+    pois: [...pois, ...schoolPois, ...transitPois],
     listingsByNeighborhood,
     schoolsByNeighborhood,
     electionsByNeighborhood,
