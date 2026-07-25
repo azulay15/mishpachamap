@@ -9,6 +9,10 @@ import { MMHeader } from "./MMHeader";
 import { MMIcon } from "@/lib/icons";
 import { NIS, NISshort } from "@/lib/format";
 
+/** Largest household the stepper allows — generous, effectively no cap for real
+ *  families (the old range slider wrongly maxed at 5). */
+const MAX_KIDS = 15;
+
 export function OnboardingForm() {
   const router = useRouter();
   const [persona, setPersona] = useState<Persona>(PERSONA_DEFAULT);
@@ -38,8 +42,9 @@ export function OnboardingForm() {
     });
 
   const setKids = (count: number) => {
-    const kids = Array.from({ length: count }, (_, i) => ({
-      age: 6 + i * 3,
+    const n = Math.max(0, Math.min(MAX_KIDS, count));
+    const kids = Array.from({ length: n }, (_, i) => ({
+      age: Math.min(18, 3 + i * 2),
       label: i === 0 ? "כיתה א׳" : `ילד ${i + 1}`,
     }));
     setPersona((p) => ({ ...p, kids }));
@@ -82,15 +87,38 @@ export function OnboardingForm() {
             </div>
           </Field>
 
-          <Field label={`מספר ילדים: ${persona.kids.length}`}>
-            <input
-              type="range"
-              min={0}
-              max={5}
-              value={persona.kids.length}
-              onChange={(e) => setKids(Number(e.target.value))}
-              style={{ width: "100%" }}
-            />
+          <Field label="מספר ילדים">
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <button
+                type="button"
+                onClick={() => setKids(persona.kids.length - 1)}
+                disabled={persona.kids.length <= 0}
+                aria-label="הפחת ילד"
+                className="mm-btn mm-btn-secondary"
+                style={{ width: 44, height: 44, fontSize: 22, padding: 0, borderRadius: 10, opacity: persona.kids.length <= 0 ? 0.4 : 1 }}
+              >
+                −
+              </button>
+              <span
+                aria-live="polite"
+                style={{ minWidth: 48, textAlign: "center", fontSize: 22, fontWeight: 800, fontVariantNumeric: "tabular-nums", color: "var(--grey-900)" }}
+              >
+                {persona.kids.length}
+              </span>
+              <button
+                type="button"
+                onClick={() => setKids(persona.kids.length + 1)}
+                disabled={persona.kids.length >= MAX_KIDS}
+                aria-label="הוסף ילד"
+                className="mm-btn mm-btn-secondary"
+                style={{ width: 44, height: 44, fontSize: 22, padding: 0, borderRadius: 10, opacity: persona.kids.length >= MAX_KIDS ? 0.4 : 1 }}
+              >
+                +
+              </button>
+              <span style={{ fontSize: 12, color: "var(--grey-500)", marginInlineStart: 4 }}>
+                {persona.kids.length === 0 ? "ללא ילדים" : `${persona.kids.length} ${persona.kids.length === 1 ? "ילד" : "ילדים"}`}
+              </span>
+            </div>
           </Field>
 
           <Field label="צורך תזונתי">
