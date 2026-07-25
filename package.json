@@ -28,7 +28,8 @@
     "ingest:elections:geocode": "tsx scripts/ingest/elections_geocode_stations.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "ingest:crime": "tsx scripts/ingest/crime.ts"
+    "ingest:crime": "tsx scripts/ingest/crime.ts",
+    "ingest:schools:moe": "tsx scripts/ingest/schools_moe.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.96.0",
