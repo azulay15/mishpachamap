@@ -24,6 +24,7 @@ import { AllNeighborhoodsSheet, type AllNeighborhoodsItem } from "./AllNeighborh
 import { useIsMobile } from "@/lib/useMediaQuery";
 import { MMIcon } from "@/lib/icons";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
+import { type Demographics, type Safety } from "@/lib/staticData";
 import { usePersona } from "@/lib/usePersona";
 import { useLayerPrefs } from "@/lib/useLayerPrefs";
 
@@ -37,6 +38,9 @@ type ServerNeighborhood = NeighborhoodCardData & {
   facts: NeighborhoodFacts;
   /** Aliases for free-text search (Kaiser, Buchman, etc.). */
   aliases?: string[];
+  /** Real per-neighborhood enrichment (CBS census / Police). Null = no coverage. */
+  demographics?: Demographics | null;
+  safety?: Safety | null;
   /** Optional SVG-space data used only by MMMapStub. */
   svgPath?: string;
   svgCenter?: [number, number];
@@ -223,6 +227,8 @@ export function ConciergeScreen({
       avgListing: n.avgListing,
       greenScore: n.greenScore,
       schoolScore: n.schoolScore,
+      demographics: n.demographics ?? null,
+      safety: n.safety ?? null,
       center: { lat, lng },
     };
   }, [neighborhoodsWithScore, selectedId]);

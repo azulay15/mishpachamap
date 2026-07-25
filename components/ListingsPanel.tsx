@@ -11,6 +11,7 @@ import { NIS, NISshort, pct } from "@/lib/format";
 import { useFavorites } from "@/lib/useFavorites";
 import { externalSearchUrls } from "@/lib/externalLinks";
 import { arnonaRateFor } from "@/lib/arnona";
+import { type Demographics, type Safety } from "@/lib/staticData";
 
 export type ListingRow = {
   id: string;
@@ -48,6 +49,8 @@ export type Selected = {
   avgListing: number;
   greenScore: number;
   schoolScore: number;
+  demographics?: Demographics | null;
+  safety?: Safety | null;
   /** Centroid of the neighborhood polygon — used as the fallback Street View
    *  pegman location when a listing doesn't have its own geocoded point. */
   center: { lat: number; lng: number };
@@ -135,6 +138,8 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
       </header>
 
       <div className="mm-scroll" style={{ overflow: "auto", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 18 }}>
+        <WhoLivesHere demographics={selected.demographics ?? null} safety={selected.safety ?? null} />
+
         <Section title="נכסים פעילים">
           {listings.length === 0 ? (
             <Empty>אין כרגע נכסים פעילים בשכונה זו.</Empty>
@@ -391,6 +396,46 @@ function ListingRowCard({
       </div>
       <MatchBadge score={listing.matchScore} onClick={onExplainMatch} />
     </div>
+  );
+}
+
+/** Real per-neighborhood character (CBS census) + safety (Police), each tagged
+ *  with its source so the numbers read as facts, not guesses. */
+function WhoLivesHere({ demographics: d, safety: s }: { demographics: Demographics | null; safety: Safety | null }) {
+  if (!d && !s) return null;
+  const chip = (label: string, value: React.ReactNode) => (
+    <div style={{ background: "var(--grey-15, #F4F5F7)", borderRadius: 8, padding: "8px 10px" }}>
+      <div style={{ fontSize: 10.5, color: "var(--grey-500)", lineHeight: "13px" }}>{label}</div>
+      <div style={{ fontSize: 14, fontWeight: 800, color: "var(--grey-900)", marginTop: 3 }}>{value}</div>
+    </div>
+  );
+  return (
+    <Section title="מי גר כאן">
+      {d ? (
+        <>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+            {d.pct_households_with_kids_0_5 != null && chip("משפחות עם ילדים 0–5", `${d.pct_households_with_kids_0_5}%`)}
+            {d.household_size != null && chip("גודל משק בית", d.household_size)}
+            {d.median_age != null && chip("גיל חציוני", d.median_age)}
+            {d.religiosity && chip("אופי", <span style={{ fontSize: 12.5 }}>{d.religiosity}</span>)}
+            {d.median_wage_annual != null && chip("שכר חציוני", `₪${Math.round(d.median_wage_annual / 1000)}K`)}
+            {d.pct_own != null && chip("בעלות על הדירה", `${d.pct_own}%`)}
+          </div>
+          <div style={{ fontSize: 10, color: "var(--grey-500)", marginTop: 6 }}>מקור: למ״ס · מפקד 2022</div>
+        </>
+      ) : (
+        <Empty>אין עדיין נתוני אוכלוסייה לשכונה זו.</Empty>
+      )}
+      {s && s.safety_score != null && (
+        <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <ScoreChip value={s.safety_score} color="var(--green-positive)" size="sm" />
+          <span style={{ fontSize: 12, color: "var(--grey-700)" }}>
+            תחושת ביטחון · מדורגת {s.safety_rank}/{s.safety_rank_of} במודיעין
+          </span>
+          <span style={{ fontSize: 10, color: "var(--grey-500)" }}>· משטרה 2024</span>
+        </div>
+      )}
+    </Section>
   );
 }
 
