@@ -9,6 +9,7 @@ import type { ConciergeData } from "@/components/ConciergeScreen";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { PERSONA_DEFAULT } from "@/lib/persona";
 import { loadNeighborhoodFeatures, centroidOf } from "@/lib/geoData";
+import { loadDemographics, loadSafety, loadModiinSchools, type StaticSchool } from "@/lib/staticData";
 
 type NeighborhoodRow = {
   id: string;
@@ -41,18 +42,6 @@ type ListingDB = {
   days_on_market: number | null;
 };
 
-type SchoolDB = {
-  id: string;
-  name_he: string;
-  meitzav_score: number | null;
-  level: string | null;
-  orientation: string | null;
-  bagrut_pass_rate: number | null;
-  student_count: number | null;
-  website_url: string | null;
-  point: GeoJSON.Point;
-};
-
 type ElectionRow = { id: string; name_he: string; date: string };
 type PartyRow = { id: string; name_he: string; color: string | null };
 type ResultRow = {
@@ -79,12 +68,14 @@ type POIDB = {
 export async function fetchConciergeData(
   sb: SupabaseClient,
 ): Promise<ConciergeData | null> {
+  // Schools no longer come from the DB (`schools_geojson` was OSM-derived, 70%
+  // wrong, and its 0003-migration columns don't exist). They're loaded from the
+  // authoritative MoE static file in assemble() instead.
   const [
     { data: nb },
     { data: metrics },
     { data: pois },
     { data: listings },
-    { data: schools },
     { data: elections },
     { data: parties },
     { data: electionResults },
@@ -93,7 +84,6 @@ export async function fetchConciergeData(
     sb.from("neighborhood_metrics").select("*"),
     sb.from("pois_geojson").select("id, type, name_he, point, meta"),
     sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market"),
-    sb.from("schools_geojson").select("id, name_he, meitzav_score, level, orientation, bagrut_pass_rate, student_count, website_url, point"),
     sb.from("elections").select("id, name_he, date").order("date", { ascending: false }),
     sb.from("parties").select("id, name_he, color"),
     sb.from("neighborhood_election_results").select("neighborhood, election, party, votes, pct"),
@@ -106,7 +96,6 @@ export async function fetchConciergeData(
     metrics: (metrics ?? []) as MetricsRow[],
     pois: (pois ?? []) as POIDB[],
     listings: (listings ?? []) as ListingDB[],
-    schools: (schools ?? []) as SchoolDB[],
     elections: (elections ?? []) as ElectionRow[],
     parties: (parties ?? []) as PartyRow[],
     electionResults: (electionResults ?? []) as ResultRow[],
@@ -118,13 +107,17 @@ function assemble(input: {
   metrics: MetricsRow[];
   pois: POIDB[];
   listings: ListingDB[];
-  schools: SchoolDB[];
   elections: ElectionRow[];
   parties: PartyRow[];
   electionResults: ResultRow[];
 }): ConciergeData {
   const metricsByNb = new Map(input.metrics.map((m) => [m.neighborhood, m]));
   const persona = PERSONA_DEFAULT;
+
+  // Real enrichment from static files (CBS census, Police, MoE schools).
+  const demographics = loadDemographics();
+  const safety = loadSafety();
+  const schools = loadModiinSchools();
 
   // Step 1 — build base neighborhood records (no matchScore yet).
   // Geometry is joined from the static `public/neighborhoods.geo.json` file.
@@ -150,6 +143,8 @@ function assemble(input: {
         greenScore: m?.green_score ?? 0,
         schoolScore: m?.school_score ?? 0,
         quietScore: m?.quiet_score ?? 70,
+        demographics: demographics[n.id] ?? null,
+        safety: safety[n.id] ?? null,
       };
     })
     .filter((n): n is NonNullable<typeof n> => n !== null);
@@ -205,24 +200,24 @@ function assemble(input: {
 
   // Step 4 — assign schools to neighborhoods within 1km walking distance of each neighborhood center.
   // A school may appear in multiple neighborhoods (overlapping rectangles in V1).
-  const WALK_M = 1000;
+  const WALK_M = 1200;
   const schoolsByNeighborhood: Record<string, ConciergeData["schoolsByNeighborhood"][string]> = {};
   for (const n of base) {
     const nearby: ConciergeData["schoolsByNeighborhood"][string] = [];
-    for (const s of input.schools) {
-      if (!s.point) continue;
-      const d = haversineMeters(n.center, s.point.coordinates as [number, number]);
+    for (const s of schools) {
+      if (s.lon == null || s.lat == null) continue;
+      const d = haversineMeters(n.center, [s.lon, s.lat]);
       if (d > WALK_M) continue;
       nearby.push({
-        id: s.id,
+        id: `moe-${s.semel}`,
         name_he: s.name_he,
-        meitzav_score: s.meitzav_score == null ? null : Number(s.meitzav_score),
+        meitzav_score: s.meitzav_score,
         walkMinutes: Math.max(1, Math.round(d / 80)),
         level: s.level,
-        orientation: s.orientation,
-        bagrutPassRate: s.bagrut_pass_rate == null ? null : Number(s.bagrut_pass_rate),
-        studentCount: s.student_count,
-        websiteUrl: s.website_url,
+        orientation: s.supervision, // ממלכתי / ממ"ד / חרדי — the religious orientation
+        bagrutPassRate: null, // MoE data has offers-bagrut (bool), not a pass rate
+        studentCount: s.students,
+        websiteUrl: null,
       });
     }
     nearby.sort((a, b) => (a.walkMinutes ?? 99) - (b.walkMinutes ?? 99));
@@ -237,7 +232,7 @@ function assemble(input: {
       id: n.id,
       avgListing: n.avgListing > 0 ? n.avgListing : null,
       gardenAvailability: gardenShare(listingRowsByNb[n.id] ?? []),
-      schoolWalkMeters: nearestSchoolMeters(n.center, input.schools),
+      schoolWalkMeters: nearestSchoolMeters(n.center, schools),
       parkMeters: nearestPOIMeters(n.center, input.pois, "park"),
       shopMeters: nearestPOIMeters(n.center, input.pois, "shop"),
       transitMeters: nearestPOIMeters(n.center, input.pois, "transit"),
@@ -336,11 +331,11 @@ function poisWithinMeters(
   return count;
 }
 
-function nearestSchoolMeters(from: [number, number], schools: SchoolDB[]): number | null {
+function nearestSchoolMeters(from: [number, number], schools: StaticSchool[]): number | null {
   let best: number | null = null;
   for (const s of schools) {
-    if (!s.point) continue;
-    const d = haversineMeters(from, s.point.coordinates as [number, number]);
+    if (s.lon == null || s.lat == null) continue;
+    const d = haversineMeters(from, [s.lon, s.lat]);
     if (best == null || d < best) best = d;
   }
   return best;
