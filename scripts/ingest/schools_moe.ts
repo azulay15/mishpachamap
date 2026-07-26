@@ -49,6 +49,11 @@ const num = (v: unknown): number | null => {
   return Number.isFinite(n) ? n : null;
 };
 
+/** Undo the CSV double-quote escaping that mangles some Hebrew fields
+ *  (e.g. `"מ""מ"` → `מ"מ`, `"ת""ת מכתב מאליהו"` → `ת"ת מכתב מאליהו`). */
+const cleanHe = (v: unknown): string =>
+  String(v ?? "").replace(/^"+|"+$/g, "").replace(/""/g, '"').trim();
+
 /** Hebrew/English level from the grade span (משכבה..עד שכבה). */
 function levelFromGrades(from: number | null, to: number | null): string {
   if (to != null && to <= 6) return "elementary";
@@ -115,7 +120,7 @@ async function main() {
   let withMeitzav = 0;
   for (const s of schools) {
     const semel = num(s["סמל מוסד"])!;
-    const name = String(s["שם מוסד"] ?? "").trim();
+    const name = cleanHe(s["שם מוסד"]);
     const from = num(s["משכבה"]);
     const to = num(s["עד שכבה"]);
     const level = levelFromGrades(from, to);
@@ -139,8 +144,8 @@ async function main() {
       level,
       grade_from: from,
       grade_to: to,
-      sector: s["מגזר"] ?? null,
-      supervision: s["פיקוח"] ?? null,
+      sector: cleanHe(s["מגזר"]) || null,
+      supervision: cleanHe(s["פיקוח"]) || null,
       students: num(s["סהכ תלמידים במוסד"]),
       offers_bagrut: String(s["מגיש לבגרות"] ?? "").includes("כן") || s["מגיש לבגרות"] === 1,
       lon: coord?.lon ?? null,

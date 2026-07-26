@@ -262,9 +262,13 @@ function assemble(input: {
         id: `moe-${s.semel}`,
         name_he: s.name_he,
         meitzav_score: s.meitzav_score,
+        meitzav_year: s.meitzav_year,
         walkMinutes: Math.max(1, Math.round(d / 80)),
         level: s.level,
-        orientation: s.supervision, // ממלכתי / ממ"ד / חרדי — the religious orientation
+        gradeFrom: s.grade_from,
+        gradeTo: s.grade_to,
+        orientation: s.supervision, // מ"מ / חמ"ד / חרדי — the supervision type
+        offersBagrut: s.offers_bagrut,
         bagrutPassRate: null, // MoE data has offers-bagrut (bool), not a pass rate
         studentCount: s.students,
         websiteUrl: null,
