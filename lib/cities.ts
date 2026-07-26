@@ -62,6 +62,12 @@ export type City = {
    *  name_he. e.g. Modi'in's full name is "מודיעין-מכבים-רעות" but searches use
    *  "מודיעין". */
   searchName?: string;
+  /** BCP-47 language of this city's UI + data. Defaults to Hebrew. */
+  lang?: "he" | "en";
+  /** Text direction. Defaults to RTL (Israeli cities); NYC etc. are LTR. */
+  dir?: "rtl" | "ltr";
+  /** Country — gates country-specific UI (e.g. the Israeli listing-site links). */
+  country?: "IL" | "US";
 };
 
 const modiin: City = {
@@ -164,8 +170,40 @@ const kefarsava: City = {
   },
 };
 
+/**
+ * New York City (Manhattan) — the international POC. Proves the app isn't
+ * Israel-specific: same geo-first engine, US open-data adapters (NYC 2020 NTAs,
+ * NYPD complaints, DOE schools + NY State proficiency, MTA subway, OSM), and
+ * English/LTR instead of Hebrew/RTL. `semel` is unused here (an Israeli CBS
+ * concept) — `country: "US"` gates the Israeli-only UI.
+ * Prices are deferred (DOF sales have no coordinates; see docs).
+ */
+const nyc: City = {
+  id: "nyc",
+  slug: "nyc",
+  name_he: "New York City",
+  name_en: "New York City",
+  semel: 0,
+  center: [-73.9712, 40.7831],
+  zoom: 11.5,
+  status: "live",
+  tagline_he: "32 Manhattan neighborhoods · real data",
+  lang: "en",
+  dir: "ltr",
+  country: "US",
+  files: {
+    geo: "neighborhoods.nyc.geo.json",
+    demographics: "nyc.demographics.json", // pending a Census API key
+    crime: "nyc.crime.json",
+    schools: "nyc.schools.json",
+    transit: "nyc.transit.json",
+    environment: "nyc.environment.json",
+    prices: "nyc.prices.json", // deferred (DOF sales lack coordinates)
+  },
+};
+
 /** All cities, in display order. */
-export const CITIES: City[] = [modiin, oryehuda, rishon, kefarsava];
+export const CITIES: City[] = [modiin, oryehuda, rishon, kefarsava, nyc];
 
 /** The city shown when no city is specified (legacy `/map` deep links). */
 export const DEFAULT_CITY_ID = "modiin";

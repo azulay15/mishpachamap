@@ -160,7 +160,8 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           ))
           )}
           {/* Neighborhood-level external search — see every listing on the live sites. */}
-          <NeighborhoodExternalSearch neighborhoodHe={selected.he} city={city} />
+          {/* Israeli listing sites — meaningless outside IL, so gate by country. */}
+          {(city.country ?? "IL") === "IL" && <NeighborhoodExternalSearch neighborhoodHe={selected.he} city={city} />}
         </Section>
 
         <Section title="בתי ספר במרחק הליכה">

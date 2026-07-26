@@ -285,6 +285,11 @@ export function ConciergeScreen({
   return (
     <div
       className="mm-shell"
+      // Per-city language/direction: Israeli cities are he/RTL (the app default);
+      // international cities (NYC) render en/LTR. The CSS uses logical
+      // properties (insetInlineStart etc.), so the layout re-flows for free.
+      dir={city.dir ?? "rtl"}
+      lang={city.lang ?? "he"}
       style={{
         height: "100vh",
         display: "grid",
