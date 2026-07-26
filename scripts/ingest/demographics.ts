@@ -23,11 +23,16 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { CITIES } from "./cities";
 
-const CKAN =
-  "https://data.gov.il/api/3/action/datastore_search" +
-  "?resource_id=9a9e085f-3bc8-41df-b15f-be0daaf99e30&limit=100" +
-  '&filters={"LocalityCode":"1200"}';
+/** CKAN census-2022 query for one locality (LocalityCode = CBS semel). */
+function ckanUrl(semel: number): string {
+  return (
+    "https://data.gov.il/api/3/action/datastore_search" +
+    "?resource_id=9a9e085f-3bc8-41df-b15f-be0daaf99e30&limit=100" +
+    `&filters={"LocalityCode":"${semel}"}`
+  );
+}
 
 /** Census values arrive as a mix of numbers and numeric strings ("10.7"). */
 function num(v: unknown): number | null {
@@ -60,8 +65,20 @@ function rnd(v: number | null, d = 1): number | null {
 }
 
 async function main() {
-  console.log("→ fetching CBS 2022 census (LocalityCode=1200)…");
-  const res = await fetch(CKAN, { headers: { "User-Agent": "MishpachaMap/0.1", Accept: "application/json" } });
+  const cityArg = (() => {
+    const i = process.argv.indexOf("--city");
+    return i >= 0 ? process.argv[i + 1] : "modiin";
+  })();
+  const city = CITIES[cityArg];
+  if (!city) {
+    console.error(`Unknown city "${cityArg}". Known: ${Object.keys(CITIES).join(", ")}`);
+    process.exit(1);
+  }
+  const geoFile = city.outFile; // "public/…geo.json"
+  const outName = city.demographicsOut ?? `${city.id}.demographics.json`;
+
+  console.log(`→ fetching CBS 2022 census for ${city.id} (LocalityCode=${city.semelYishuv})…`);
+  const res = await fetch(ckanUrl(city.semelYishuv), { headers: { "User-Agent": "MishpachaMap/0.1", Accept: "application/json" } });
   if (!res.ok) throw new Error(`CKAN: ${res.status} ${res.statusText}`);
   const json = (await res.json()) as { success: boolean; result?: { records: CensusRow[] } };
   if (!json.success || !json.result) throw new Error("CKAN returned success=false");
@@ -75,7 +92,7 @@ async function main() {
   console.log(`  ${byArea.size} statistical-area rows`);
 
   const geo = JSON.parse(
-    readFileSync(resolve(process.cwd(), "public", "neighborhoods.geo.json"), "utf8"),
+    readFileSync(resolve(process.cwd(), geoFile), "utf8"),
   ) as { features: Array<{ properties: { id: string; name_he: string; stat_areas?: number[] } }> };
 
   const out: Record<string, unknown> = {};
@@ -138,18 +155,18 @@ async function main() {
     );
   }
 
-  const path = resolve(process.cwd(), "public", "neighborhoods.demographics.json");
+  const path = resolve(process.cwd(), "public", outName);
   writeFileSync(
     path,
     JSON.stringify(
-      { meta: { source: "CBS Census 2022 by statistical area", resource: "9a9e085f-3bc8-41df-b15f-be0daaf99e30", locality: 1200, generated_from: "public/neighborhoods.geo.json stat_areas" }, neighborhoods: out },
+      { meta: { source: "CBS Census 2022 by statistical area", resource: "9a9e085f-3bc8-41df-b15f-be0daaf99e30", locality: city.semelYishuv, generated_from: `${geoFile} stat_areas` }, neighborhoods: out },
       null,
       2,
     ) + "\n",
     "utf8",
   );
   const covered = Object.values(out).filter(Boolean).length;
-  console.log(`\n→ wrote public/neighborhoods.demographics.json — ${covered}/${geo.features.length} neighborhoods with real census data`);
+  console.log(`\n→ wrote public/${outName} — ${covered}/${geo.features.length} neighborhoods with real census data`);
 }
 
 main().catch((e) => {

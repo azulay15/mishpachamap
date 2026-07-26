@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "oryehuda",
+    "generated_from": "public/neighborhoods.oryehuda.geo.json"
+  },
+  "neighborhoods": {
+    "neve-rabin": {
+      "green_score": 80,
+      "quiet_score": 44
+    },
+    "beit-bapark": {
+      "green_score": 73,
+      "quiet_score": 44
+    },
+    "neve-savyon": {
+      "green_score": 50,
+      "quiet_score": 39
+    },
+    "shchunot-dromiyot": {
+      "green_score": 27,
+      "quiet_score": 44
+    },
+    "shchunat-haacademaim": {
+      "green_score": 12,
+      "quiet_score": 54
+    },
+    "kiryat-giora": {
+      "green_score": 6,
+      "quiet_score": 52
+    },
+    "sakia": {
+      "green_score": 5,
+      "quiet_score": 37
+    },
+    "ramat-pinkas": {
+      "green_score": 0,
+      "quiet_score": 47
+    }
+  }
+}

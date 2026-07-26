@@ -9,8 +9,9 @@
  *   - scripts/ingest/seed_neighborhoods.ts (keeps DB polygons in sync for
  *     PostGIS distance queries)
  */
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { defaultCity, type City } from "@/lib/cities";
 
 export type NeighborhoodFeatureProperties = {
   id: string;
@@ -30,11 +31,19 @@ export type NeighborhoodFeatureCollection = GeoJSON.FeatureCollection<
   NeighborhoodFeatureProperties
 >;
 
-/** Read the static GeoJSON file. Server-only — uses Node fs. */
-export function loadNeighborhoodFeatures(): NeighborhoodFeatureCollection {
-  const path = join(process.cwd(), "public", "neighborhoods.geo.json");
-  const raw = readFileSync(path, "utf8");
-  return JSON.parse(raw) as NeighborhoodFeatureCollection;
+const EMPTY_FC: NeighborhoodFeatureCollection = { type: "FeatureCollection", features: [] };
+
+/**
+ * Read a city's static GeoJSON polygons. Server-only — uses Node fs.
+ * Defaults to the default city so existing no-arg callers (seed scripts) keep
+ * working. A missing file (a not-yet-built "coming-soon" city) returns an empty
+ * collection rather than throwing; a present-but-corrupt file still throws, so
+ * a real data bug on a live city isn't silently swallowed.
+ */
+export function loadNeighborhoodFeatures(city: City = defaultCity()): NeighborhoodFeatureCollection {
+  const path = join(process.cwd(), "public", city.files.geo);
+  if (!existsSync(path)) return EMPTY_FC;
+  return JSON.parse(readFileSync(path, "utf8")) as NeighborhoodFeatureCollection;
 }
 
 /** Compute the centroid of a polygon (mean of outer-ring vertices). */

@@ -15,10 +15,11 @@
  *
  * Usage:  npm run ingest:environment
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import * as turf from "@turf/turf";
 import type { Feature, Polygon, LineString } from "geojson";
+import { CITIES } from "./cities";
 import { sb } from "./_env";
 
 const UA = "MishpachaMap/0.1 (environment ingest)";
@@ -75,7 +76,19 @@ function toLines(elements: OsmEl[]): Feature<LineString>[] {
 }
 
 async function main() {
-  const geo = JSON.parse(readFileSync(resolve(process.cwd(), "public", "neighborhoods.geo.json"), "utf8")) as {
+  const cityArg = (() => {
+    const i = process.argv.indexOf("--city");
+    return i >= 0 ? process.argv[i + 1] : "modiin";
+  })();
+  const city = CITIES[cityArg];
+  if (!city) {
+    console.error(`Unknown city "${cityArg}". Known: ${Object.keys(CITIES).join(", ")}`);
+    process.exit(1);
+  }
+  const outName = city.environmentOut ?? `${city.id}.environment.json`;
+  const writeDb = process.argv.includes("--db");
+
+  const geo = JSON.parse(readFileSync(resolve(process.cwd(), city.outFile), "utf8")) as {
     features: Array<Feature<Polygon, { id: string; name_he: string }>>;
   };
   const [w, s, e, n] = turf.bbox(turf.featureCollection(geo.features as never));
@@ -133,18 +146,36 @@ async function main() {
     );
   }
 
-  console.log("\n→ updating neighborhood_metrics (green_score + quiet_score)…");
-  for (const r of rows) {
-    const { error } = await sb
-      .from("neighborhood_metrics")
-      .update({ green_score: r.green_score, quiet_score: r.quiet_score })
-      .eq("neighborhood", r.id);
-    if (error) {
-      console.error(`✗ ${r.id}: ${error.message}`);
-      process.exitCode = 1;
+  // Static file — the app's source of truth for green/quiet (a city with no DB
+  // rows still gets real values). Pass --db to ALSO mirror into the DB (legacy
+  // path for Modi'in; harmless no-op for a city not in the DB).
+  const out: Record<string, { green_score: number; quiet_score: number | null }> = {};
+  for (const r of rows) out[r.id] = { green_score: r.green_score, quiet_score: r.quiet_score };
+  writeFileSync(
+    resolve(process.cwd(), "public", outName),
+    JSON.stringify(
+      { meta: { source: "OpenStreetMap green land-use + noise sources (Overpass)", city: city.id, generated_from: city.outFile }, neighborhoods: out },
+      null,
+      2,
+    ) + "\n",
+    "utf8",
+  );
+  console.log(`\n✓ wrote public/${outName} — green + quiet for ${rows.length} neighborhoods`);
+
+  if (writeDb) {
+    console.log("→ also updating neighborhood_metrics (green_score + quiet_score)…");
+    for (const r of rows) {
+      const { error } = await sb
+        .from("neighborhood_metrics")
+        .update({ green_score: r.green_score, quiet_score: r.quiet_score })
+        .eq("neighborhood", r.id);
+      if (error) {
+        console.error(`✗ ${r.id}: ${error.message}`);
+        process.exitCode = 1;
+      }
     }
+    console.log(`✓ updated ${rows.length} neighborhoods in the DB too`);
   }
-  console.log(`✓ updated ${rows.length} neighborhoods with real green + quiet scores`);
 }
 
 main().catch((e) => {

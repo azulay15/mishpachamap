@@ -4,6 +4,7 @@ import { ListingsPanel, type ListingRow, type SchoolRow, type Selected } from ".
 import { AIRail } from "./AIRail";
 import { MMIcon } from "@/lib/icons";
 import { type NeighborhoodElection } from "./ElectionsPanel";
+import { defaultCity, type City } from "@/lib/cities";
 
 export type RailMode = "listings" | "ai";
 
@@ -15,9 +16,10 @@ type Props = {
   mode: RailMode;
   onModeChange: (m: RailMode) => void;
   onExplainMatch?: () => void;
+  city?: City;
 };
 
-export function RightRail({ selected, listings, schools, election, mode, onModeChange, onExplainMatch }: Props) {
+export function RightRail({ selected, listings, schools, election, mode, onModeChange, onExplainMatch, city = defaultCity() }: Props) {
 
   return (
     <aside
@@ -63,9 +65,10 @@ export function RightRail({ selected, listings, schools, election, mode, onModeC
             schools={schools}
             election={election}
             onExplainMatch={onExplainMatch}
+            city={city}
           />
         ) : (
-          <AIRail selectedNeighborhoodHe={selected?.he ?? null} />
+          <AIRail selectedNeighborhoodHe={selected?.he ?? null} cityName={city.name_he} />
         )}
       </div>
     </aside>

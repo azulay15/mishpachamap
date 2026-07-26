@@ -181,6 +181,10 @@ async function build(city: CityConfig) {
 
   // Dissolve + clip per neighborhood, preserving anchor order.
   const features: Feature<Polygon>[] = [];
+  // Unclipped stat-area unions — the TRUE neighborhood extents (incl. street
+  // gaps). Used for point-in-polygon assignment (e.g. prices.ts) where the
+  // display-clipped shapes are too tight and drop legit parcels.
+  const rawFeatures: Feature<Polygon>[] = [];
   for (const anchor of city.anchors) {
     const areas = groups.get(anchor.id) ?? [];
     if (areas.length === 0) {
@@ -209,6 +213,11 @@ async function build(city: CityConfig) {
       center_source: "cbs_2022_clipped",
     };
     features.push(poly);
+
+    // Unclipped union (true extent) — same properties, no built-up clip.
+    const rawPoly = tidyPolygon(largestPolygon(union));
+    rawPoly.properties = { id: anchor.id, name_he: anchor.name_he, name_en: anchor.name_en };
+    rawFeatures.push(rawPoly);
     const nStat = areas.length;
     const nVerts = poly.geometry.coordinates[0].length;
     console.log(`  ✓ ${anchor.id.padEnd(12)} ${nStat} area(s) → ${nVerts} verts`);
@@ -230,6 +239,15 @@ async function build(city: CityConfig) {
   const out = resolve(process.cwd(), city.outFile);
   writeFileSync(out, JSON.stringify(fc, null, 2) + "\n", "utf8");
   console.log(`\n→ wrote ${features.length} neighborhoods to ${city.outFile}`);
+
+  // Sidecar: unclipped unions for point assignment (prices, future POIs).
+  const rawOutFile = city.outFile.replace(/\.geo\.json$/, ".raw.geo.json");
+  writeFileSync(
+    resolve(process.cwd(), rawOutFile),
+    JSON.stringify({ type: "FeatureCollection", features: rawFeatures }, null, 2) + "\n",
+    "utf8",
+  );
+  console.log(`→ wrote ${rawFeatures.length} unclipped unions to ${rawOutFile}`);
 
   // Override audit, so the maintainer can sanity-check the manual fixes.
   const ov = assigned.filter((a) => a.overridden);

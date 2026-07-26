@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "rishon",
+    "generated_from": "public/neighborhoods.rishon.geo.json"
+  },
+  "neighborhoods": {
+    "kiryat-ganim": {
+      "green_score": 60,
+      "quiet_score": 49
+    },
+    "neve-dekalim": {
+      "green_score": 54,
+      "quiet_score": 45
+    },
+    "narkisim": {
+      "green_score": 52,
+      "quiet_score": 98
+    },
+    "neot-ashalim": {
+      "green_score": 48,
+      "quiet_score": 54
+    },
+    "hairisim": {
+      "green_score": 47,
+      "quiet_score": 38
+    },
+    "revivim": {
+      "green_score": 47,
+      "quiet_score": 98
+    },
+    "harakafot": {
+      "green_score": 46,
+      "quiet_score": 98
+    },
+    "kiryat-rishon": {
+      "green_score": 40,
+      "quiet_score": 46
+    },
+    "neot-shikma": {
+      "green_score": 40,
+      "quiet_score": 61
+    },
+    "kalaniyot": {
+      "green_score": 37,
+      "quiet_score": 55
+    },
+    "kiryat-hatanei-pras-nobel": {
+      "green_score": 33,
+      "quiet_score": 58
+    },
+    "neve-hillel": {
+      "green_score": 30,
+      "quiet_score": 40
+    },
+    "neve-hof": {
+      "green_score": 30,
+      "quiet_score": 49
+    },
+    "neve-hadarim": {
+      "green_score": 29,
+      "quiet_score": 92
+    },
+    "shaar-hayam": {
+      "green_score": 29,
+      "quiet_score": 45
+    },
+    "tzamarot": {
+      "green_score": 26,
+      "quiet_score": 98
+    },
+    "bnot-hayil": {
+      "green_score": 25,
+      "quiet_score": 31
+    },
+    "gordon": {
+      "green_score": 24,
+      "quiet_score": 71
+    },
+    "rishonim": {
+      "green_score": 22,
+      "quiet_score": 37
+    },
+    "neve-yam": {
+      "green_score": 22,
+      "quiet_score": 57
+    },
+    "rambam": {
+      "green_score": 19,
+      "quiet_score": 48
+    },
+    "remez": {
+      "green_score": 16,
+      "quiet_score": 43
+    },
+    "mishor-hanof": {
+      "green_score": 14,
+      "quiet_score": 55
+    },
+    "neurim": {
+      "green_score": 13,
+      "quiet_score": 43
+    },
+    "shikunei-hamizrah": {
+      "green_score": 13,
+      "quiet_score": 92
+    },
+    "ramat-eliyahu": {
+      "green_score": 13,
+      "quiet_score": 39
+    },
+    "katznelson": {
+      "green_score": 12,
+      "quiet_score": 52
+    },
+    "kidmat-rishon": {
+      "green_score": 12,
+      "quiet_score": 49
+    },
+    "hashomer": {
+      "green_score": 11,
+      "quiet_score": 61
+    },
+    "nuriyot": {
+      "green_score": 10,
+      "quiet_score": 98
+    },
+    "abramovich": {
+      "green_score": 8,
+      "quiet_score": 50
+    },
+    "nahalat-yehuda": {
+      "green_score": 5,
+      "quiet_score": 46
+    },
+    "kiryat-kramim": {
+      "green_score": 5,
+      "quiet_score": 54
+    },
+    "marom-rishon": {
+      "green_score": 1,
+      "quiet_score": 52
+    }
+  }
+}

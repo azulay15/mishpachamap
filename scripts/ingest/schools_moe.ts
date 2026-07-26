@@ -24,11 +24,11 @@
  * Usage:  npm run ingest:schools:moe
  */
 import { sb, wktPoint } from "./_env";
+import { CITIES } from "./cities";
 
 const MOSDOT = "5548fd63-5868-4053-ad81-98caddc5e232";
 const COORDS = "5c5d6bb0-755d-470d-84b6-d7dd3135ba9c";
 const MEITZAV = "b81f0760-2562-4a27-9db7-699542d071a0";
-const CITY = "מודיעין-מכבים-"; // truncated locality value in the dataset
 
 type Rec = Record<string, unknown>;
 
@@ -78,7 +78,20 @@ async function meitzavOf(semel: number): Promise<{ score: number; year: number }
 }
 
 async function main() {
-  console.log("→ fetching MoE roster (mosdot) for Modi'in…");
+  const cityArg = (() => {
+    const i = process.argv.indexOf("--city");
+    return i >= 0 ? process.argv[i + 1] : "modiin";
+  })();
+  const city = CITIES[cityArg];
+  if (!city) {
+    console.error(`Unknown city "${cityArg}". Known: ${Object.keys(CITIES).join(", ")}`);
+    process.exit(1);
+  }
+  const CITY = city.moeCityName ?? city.id; // MoE "שם ישוב" filter value
+  const outName = city.schoolsOut ?? `${city.id}.schools.json`;
+  const writeDb = process.argv.includes("--db");
+
+  console.log(`→ fetching MoE roster (mosdot) for ${city.id} ("${CITY}")…`);
   const all = await ckan(MOSDOT, { limit: "1000", filters: JSON.stringify({ "שם ישוב": CITY }) });
   // Latest year per semel; keep schools (grade-bearing), drop kindergartens.
   const latestBySemel = new Map<number, Rec>();
@@ -94,7 +107,7 @@ async function main() {
     const from = num(r["משכבה"]);
     return !t.includes("גן") && from != null; // has grades → a school, not a gan
   });
-  console.log(`  ${schools.length} Modi'in schools (from ${latestBySemel.size} institutions)`);
+  console.log(`  ${schools.length} ${city.id} schools (from ${latestBySemel.size} institutions)`);
 
   const rows: Array<{ id: string; name_he: string; point: string; level: string; meitzav_score: number | null; rating_year: number | null }> = [];
   const full: Rec[] = [];
@@ -143,21 +156,26 @@ async function main() {
   const { writeFileSync } = await import("node:fs");
   const { resolve } = await import("node:path");
   writeFileSync(
-    resolve(process.cwd(), "public", "schools.modiin.json"),
-    JSON.stringify({ meta: { source: "MoE mosdot + coordinates + RAMA meitzav (data.gov.il)", locality: "מודיעין-מכבים-רעות", generated: "static; DB has id/name/point/level/meitzav" }, schools: full }, null, 2) + "\n",
+    resolve(process.cwd(), "public", outName),
+    JSON.stringify({ meta: { source: "MoE mosdot + coordinates + RAMA meitzav (data.gov.il)", locality: CITY, generated: "static; DB has id/name/point/level/meitzav" }, schools: full }, null, 2) + "\n",
     "utf8",
   );
 
-  // Rebuild the DB schools table (DML only — no migration).
-  console.log(`\n→ replacing DB schools table with ${rows.length} correctly-located schools…`);
-  const { error: delErr } = await sb.from("schools").delete().neq("id", "__none__");
-  if (delErr) throw new Error(`delete: ${delErr.message}`);
-  const { error: insErr } = await sb.from("schools").insert(rows);
-  if (insErr) throw new Error(`insert: ${insErr.message}`);
+  // Rebuild the DB schools table (DML only — no migration). GATED behind --db
+  // because it wipes the WHOLE table: running it for a second city without the
+  // flag would delete the first city's schools. The app reads the static file,
+  // so the DB write is only needed for the compute_metrics school_score RPC.
+  if (writeDb) {
+    console.log(`\n→ replacing DB schools table with ${rows.length} correctly-located schools…`);
+    const { error: delErr } = await sb.from("schools").delete().neq("id", "__none__");
+    if (delErr) throw new Error(`delete: ${delErr.message}`);
+    const { error: insErr } = await sb.from("schools").insert(rows);
+    if (insErr) throw new Error(`insert: ${insErr.message}`);
+    console.log(`✓ wrote ${rows.length} schools to DB`);
+  }
 
-  console.log(`✓ wrote ${rows.length} schools to DB (${geocoded}/${schools.length} geocoded, ${withMeitzav} with meitzav)`);
-  console.log(`✓ wrote public/schools.modiin.json (${full.length} schools, full metadata)`);
-  console.log(`\nNext: npm run metrics:recompute   (updates school_score from the corrected schools)`);
+  console.log(`✓ wrote public/${outName} (${full.length} schools, ${geocoded}/${schools.length} geocoded, ${withMeitzav} with meitzav)`);
+  if (writeDb) console.log(`\nNext: npm run metrics:recompute   (updates school_score from the corrected schools)`);
 }
 
 main().catch((e) => {

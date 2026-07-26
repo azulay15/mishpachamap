@@ -48,6 +48,10 @@ type Props = {
   hover: string | null;
   onSelect: (id: string | null) => void;
   onHover: (id: string | null) => void;
+  /** Initial map framing before fitBounds settles. Defaults to Modi'in so
+   *  existing callers are unchanged; per-city routes pass their own. */
+  center?: [number, number];
+  zoom?: number;
 };
 
 const MODIIN_CENTER: [number, number] = [35.0078, 31.8969];
@@ -111,6 +115,8 @@ export function MMMap({
   hover,
   onSelect,
   onHover,
+  center = MODIIN_CENTER,
+  zoom = 13,
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapboxMap | null>(null);
@@ -127,8 +133,8 @@ export function MMMap({
       // streets-v12 gives the warm cream-and-green palette closer to the
       // handoff mockup (orange highways, green parks, white roads).
       style: "mapbox://styles/mapbox/streets-v12",
-      center: MODIIN_CENTER,
-      zoom: 13,
+      center,
+      zoom,
       attributionControl: false,
     });
     mapRef.current = map;

@@ -1,0 +1,117 @@
+{
+  "meta": {
+    "source": "Govmap real-estate deals (govmap.gov.il)",
+    "city": "rishon",
+    "window_months": 48,
+    "min_sales": 4,
+    "as_of": "2026-07-26"
+  },
+  "neighborhoods": {
+    "rishonim": null,
+    "hairisim": null,
+    "abramovich": null,
+    "katznelson": null,
+    "remez": {
+      "avg_price_per_m2": 39778,
+      "avg_listing_price": 3400000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 4,
+      "sales_in_window": 5
+    },
+    "neve-hillel": {
+      "avg_price_per_m2": 33898,
+      "avg_listing_price": 4245000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 6
+    },
+    "bnot-hayil": null,
+    "nahalat-yehuda": {
+      "avg_price_per_m2": 33572,
+      "avg_listing_price": 3910000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 9
+    },
+    "rambam": null,
+    "hashomer": null,
+    "neve-hadarim": null,
+    "kidmat-rishon": null,
+    "neurim": {
+      "avg_price_per_m2": 27844,
+      "avg_listing_price": 2187500,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 3.5,
+      "sales_in_window": 6
+    },
+    "revivim": {
+      "avg_price_per_m2": 22203,
+      "avg_listing_price": 2350000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 3.5,
+      "sales_in_window": 4
+    },
+    "marom-rishon": {
+      "avg_price_per_m2": 33172,
+      "avg_listing_price": 4295000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 6,
+      "sales_in_window": 14
+    },
+    "nuriyot": {
+      "avg_price_per_m2": 24869,
+      "avg_listing_price": 3404000,
+      "avg_price_yoy_pct": -7,
+      "median_rooms": 5,
+      "sales_in_window": 133
+    },
+    "narkisim": {
+      "avg_price_per_m2": 24931,
+      "avg_listing_price": 3302430,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 28
+    },
+    "tzamarot": null,
+    "mishor-hanof": null,
+    "gordon": null,
+    "kalaniyot": null,
+    "shikunei-hamizrah": null,
+    "harakafot": {
+      "avg_price_per_m2": 15262,
+      "avg_listing_price": 1083581,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 2.5,
+      "sales_in_window": 4
+    },
+    "ramat-eliyahu": null,
+    "neve-yam": null,
+    "kiryat-rishon": {
+      "avg_price_per_m2": 28971,
+      "avg_listing_price": 3040000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 4,
+      "sales_in_window": 7
+    },
+    "kiryat-kramim": null,
+    "kiryat-ganim": {
+      "avg_price_per_m2": 24884,
+      "avg_listing_price": 3625000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 6
+    },
+    "neot-ashalim": null,
+    "neot-shikma": null,
+    "neve-dekalim": {
+      "avg_price_per_m2": 34420,
+      "avg_listing_price": 4509080,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 8
+    },
+    "kiryat-hatanei-pras-nobel": null,
+    "neve-hof": null,
+    "shaar-hayam": null
+  }
+}
