@@ -31,7 +31,11 @@
     "ingest:crime": "tsx scripts/ingest/crime.ts",
     "ingest:schools:moe": "tsx scripts/ingest/schools_moe.ts",
     "ingest:environment": "tsx scripts/ingest/environment.ts",
-    "ingest:transit": "tsx scripts/ingest/transit.ts"
+    "ingest:transit": "tsx scripts/ingest/transit.ts",
+    "ingest:prices": "tsx scripts/ingest/prices.ts",
+    "city:scaffold": "tsx scripts/ingest/city_scaffold.ts",
+    "city:build": "tsx scripts/ingest/city_build.ts",
+    "city:qa": "tsx scripts/ingest/city_qa.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.96.0",
