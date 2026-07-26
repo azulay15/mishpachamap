@@ -126,14 +126,20 @@ export function ConciergeScreen({
   data,
   renderer = "mapbox",
   city = defaultCity(),
+  initialSelected,
 }: {
   data: ConciergeData;
   renderer?: "mapbox" | "stub";
   city?: City;
+  /** Neighborhood id to pre-select (from the server-read `?n=` deep link).
+   *  Seeding the initial state here avoids the mount-time race where the URL
+   *  sync would overwrite `?n` before the client deep-link effect applied it. */
+  initialSelected?: string;
 }) {
   const { layers, toggle } = useLayerPrefs(INITIAL_LAYERS);
   const [selectedId, setSelectedId] = useState<string | null>(() => {
     const ids = new Set(data.neighborhoods.map((n) => n.id));
+    if (initialSelected && ids.has(initialSelected)) return initialSelected;
     if (ids.has(INITIAL_SELECTED)) return INITIAL_SELECTED;
     return data.neighborhoods[0]?.id ?? null;
   });

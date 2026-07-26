@@ -30,8 +30,10 @@ function envConfigured(): boolean {
  */
 export default async function CityMapPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ city: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { city: slug } = await params;
   const city = getCity(slug);
@@ -41,9 +43,13 @@ export default async function CityMapPage({
     return <CityComingSoon city={city} />;
   }
 
+  // Server-read `?n=<id>` deep link → pre-select that neighborhood (no client race).
+  const sp = await searchParams;
+  const initialSelected = typeof sp.n === "string" ? sp.n : undefined;
+
   // No env → preview mode against handoff mock data with the SVG stub map.
   if (!envConfigured()) {
-    return <ConciergeScreen data={MOCK_DATA} renderer="stub" city={city} />;
+    return <ConciergeScreen data={MOCK_DATA} renderer="stub" city={city} initialSelected={initialSelected} />;
   }
 
   const cookieStore = await cookies();
@@ -55,5 +61,5 @@ export default async function CityMapPage({
     return <CityComingSoon city={city} />;
   }
 
-  return <ConciergeScreen data={data} renderer="mapbox" city={city} />;
+  return <ConciergeScreen data={data} renderer="mapbox" city={city} initialSelected={initialSelected} />;
 }
