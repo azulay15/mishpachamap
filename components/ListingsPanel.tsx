@@ -31,9 +31,13 @@ export type SchoolRow = {
   id: string;
   name_he: string;
   meitzav_score: number | null;
+  meitzav_year?: number | null;
   walkMinutes: number | null;
   level: string | null;
+  gradeFrom?: number | null;
+  gradeTo?: number | null;
   orientation: string | null;
+  offersBagrut?: boolean;
   bagrutPassRate: number | null;
   studentCount: number | null;
   websiteUrl: string | null;
@@ -469,99 +473,102 @@ const LEVEL_LABEL: Record<string, string> = {
   elementary: "יסודי",
   middle: "חטיבת ביניים",
   high: "תיכון",
+  "elementary-middle": "יסודי + חט״ב",
+  other: "רב-גילי",
 };
 
+/** Expand the MoE supervision abbreviation to a full word + secular/religious tone. */
+const SUPERVISION_LABEL: Record<string, string> = {
+  'מ"מ': "ממלכתי",
+  'ממ"ד': "ממלכתי-דתי",
+  'מ"ד': "ממלכתי-דתי",
+  'חמ"ד': "ממלכתי-דתי",
+  חרדי: "חרדי",
+  עצמאי: "חרדי (עצמאי)",
+};
+function supervisionInfo(o: string | null): { label: string; religious: boolean } | null {
+  if (!o) return null;
+  const label = SUPERVISION_LABEL[o] ?? o;
+  return { label, religious: /דתי|חרדי|עצמאי/.test(label) };
+}
+
+/** Hebrew grade letters (index = grade number). */
+const GRADE_HE = ["", "א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ז׳", "ח׳", "ט׳", "י׳", 'י"א', 'י"ב', 'י"ג'];
+function gradeRange(from?: number | null, to?: number | null): string | null {
+  if (from == null || to == null) return null;
+  const f = GRADE_HE[from] ?? String(from);
+  const t = GRADE_HE[to] ?? String(to);
+  return from === to ? `כיתה ${f}` : `כיתות ${f}–${t}`;
+}
+
 function SchoolRowCard({ school }: { school: SchoolRow }) {
-  const tags: { label: string; tone: "neutral" | "religious" | "secular" }[] = [];
-  if (school.level && LEVEL_LABEL[school.level]) {
-    tags.push({ label: LEVEL_LABEL[school.level], tone: "neutral" });
-  }
-  if (school.orientation) {
-    tags.push({
-      label: school.orientation,
-      tone: school.orientation === 'ממ"ד' || school.orientation === "חרדי" ? "religious" : "secular",
-    });
-  }
+  const sup = supervisionInfo(school.orientation);
+  const grades = gradeRange(school.gradeFrom, school.gradeTo);
+  const level = school.level ? LEVEL_LABEL[school.level] : null;
+  const typeLine = [sup?.label, level, grades].filter(Boolean).join(" · ");
+  const mz = school.meitzav_score;
+  // מיצ״ב is a national ~500-mean standardized score; color by band so it reads
+  // at a glance (above / around / below the national average).
+  const mzColor = mz == null ? undefined : mz >= 560 ? "var(--green-positive)" : mz >= 490 ? "var(--layer-school)" : "var(--pumpkin-orange)";
+  const badgeBg = sup?.religious ? "rgba(124, 79, 173, 0.12)" : "rgba(18, 86, 160, 0.10)";
+  const badgeColor = sup?.religious ? "#5B3A8C" : "var(--layer-school)";
+
   return (
     <div
       className="mm-card"
-      style={{
-        padding: 10,
-        display: "grid",
-        gridTemplateColumns: "auto 1fr auto",
-        gap: 10,
-        alignItems: "center",
-      }}
+      style={{ padding: 12, display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 12, alignItems: "start" }}
     >
-      <ScoreChip
-        value={school.meitzav_score ? Math.round(school.meitzav_score * 10) : 0}
-        color="var(--layer-school)"
-        size="sm"
-      />
+      {/* School-type icon badge — blue for state/secular, purple for religious. */}
+      <span
+        aria-hidden
+        style={{ flex: "none", width: 40, height: 40, borderRadius: 11, background: badgeBg, display: "grid", placeItems: "center" }}
+      >
+        <MMIcon name="school" size={20} color={badgeColor} />
+      </span>
+
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <div style={{ fontSize: 13.5, fontWeight: 800, color: "var(--grey-900)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {school.name_he}
         </div>
-        <div
-          style={{
-            marginTop: 2,
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 4,
-            fontSize: 10,
-            color: "var(--grey-500)",
-            alignItems: "center",
-          }}
-        >
-          {school.walkMinutes != null && <span>{school.walkMinutes} דק׳ הליכה</span>}
-          {tags.map((t) => (
-            <span
-              key={t.label}
-              style={{
-                padding: "1px 6px",
-                borderRadius: 999,
-                background:
-                  t.tone === "religious"
-                    ? "rgba(124, 79, 173, 0.10)"
-                    : t.tone === "secular"
-                    ? "rgba(18, 86, 160, 0.08)"
-                    : "var(--grey-15)",
-                color:
-                  t.tone === "religious"
-                    ? "#5B3A8C"
-                    : t.tone === "secular"
-                    ? "var(--layer-school)"
-                    : "var(--grey-700)",
-                fontWeight: 700,
-              }}
-            >
-              {t.label}
-            </span>
-          ))}
-          {school.bagrutPassRate != null && (
-            <span style={{ color: "var(--green-positive)", fontWeight: 700 }}>
-              {Math.round(school.bagrutPassRate)}% בגרות
+        {typeLine && (
+          <div style={{ marginTop: 3, fontSize: 11.5, color: "var(--grey-700)", fontWeight: 600 }}>{typeLine}</div>
+        )}
+        <div style={{ marginTop: 5, display: "flex", flexWrap: "wrap", gap: 8, fontSize: 11, color: "var(--grey-500)", alignItems: "center" }}>
+          {school.studentCount != null && <span>{school.studentCount.toLocaleString("he-IL")} תלמידים</span>}
+          {school.offersBagrut && <span style={{ color: "var(--green-positive)", fontWeight: 700 }}>מסלול בגרות</span>}
+          {mz != null && (
+            <span style={{ fontWeight: 700, color: mzColor }}>
+              מיצ״ב {mz}
+              {school.meitzav_year ? <span style={{ color: "var(--grey-500)", fontWeight: 500 }}> · {school.meitzav_year}</span> : null}
             </span>
           )}
-          {school.studentCount != null && <span>· {school.studentCount} תלמידים</span>}
         </div>
       </div>
-      {school.websiteUrl ? (
-        <a
-          href={school.websiteUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mm-btn mm-btn-ghost mm-btn-sm"
-          aria-label={`פתח את אתר ${school.name_he}`}
-          style={{ padding: 6 }}
-        >
-          <MMIcon name="external" size={14} />
-        </a>
-      ) : (
-        <button className="mm-btn mm-btn-ghost mm-btn-sm" aria-label="פתח במפה" style={{ padding: 6 }}>
-          <MMIcon name="pin" size={14} />
-        </button>
-      )}
+
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+        {school.walkMinutes != null && (
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11.5, fontWeight: 800, color: "var(--grey-700)", whiteSpace: "nowrap" }}>
+            <MMIcon name="directions" size={13} color="#84888E" />
+            {school.walkMinutes} דק׳
+          </span>
+        )}
+        {school.websiteUrl ? (
+          <a
+            href={school.websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mm-btn mm-btn-ghost mm-btn-sm"
+            aria-label={`פתח את אתר ${school.name_he}`}
+            style={{ padding: 6 }}
+          >
+            <MMIcon name="external" size={13} />
+          </a>
+        ) : (
+          <button className="mm-btn mm-btn-ghost mm-btn-sm" aria-label="פתח במפה" style={{ padding: 6 }}>
+            <MMIcon name="pin" size={13} />
+          </button>
+        )}
+      </div>
     </div>
   );
 }
