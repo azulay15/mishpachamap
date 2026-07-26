@@ -16,8 +16,8 @@
       "safety_rank_of": 10,
       "source": {
         "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
-        "period": "2024 (Q1–Q4)",
-        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
         "police_areas": [
           12000011,
           12000012,
@@ -36,8 +36,8 @@
       "safety_rank_of": 10,
       "source": {
         "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
-        "period": "2024 (Q1–Q4)",
-        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
         "police_areas": [
           12000013,
           12000033
@@ -55,8 +55,8 @@
       "safety_rank_of": 10,
       "source": {
         "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
-        "period": "2024 (Q1–Q4)",
-        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
         "police_areas": [
           12000041,
           12000042
@@ -75,8 +75,8 @@
       "safety_rank_of": 10,
       "source": {
         "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
-        "period": "2024 (Q1–Q4)",
-        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
         "police_areas": [
           12000024,
           12000025,
@@ -95,8 +95,8 @@
       "safety_rank_of": 10,
       "source": {
         "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
-        "period": "2024 (Q1–Q4)",
-        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
         "police_areas": [
           12000023,
           12000026
@@ -114,8 +114,8 @@
       "safety_rank_of": 10,
       "source": {
         "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
-        "period": "2024 (Q1–Q4)",
-        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
         "police_areas": [
           12000016,
           12000017
@@ -133,8 +133,8 @@
       "safety_rank_of": 10,
       "source": {
         "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
-        "period": "2024 (Q1–Q4)",
-        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
         "police_areas": [
           12000022
         ]
@@ -151,8 +151,8 @@
       "safety_rank_of": 10,
       "source": {
         "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
-        "period": "2024 (Q1–Q4)",
-        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
         "police_areas": [
           12000034
         ]
@@ -169,8 +169,8 @@
       "safety_rank_of": 10,
       "source": {
         "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
-        "period": "2024 (Q1–Q4)",
-        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
         "police_areas": [
           12000043
         ]
@@ -189,8 +189,8 @@
       "safety_rank_of": 10,
       "source": {
         "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
-        "period": "2024 (Q1–Q4)",
-        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to older police area scheme",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
         "police_areas": [
           12000021
         ]
