@@ -4,6 +4,7 @@ import { serverSupabase } from "@/lib/supabase";
 import { HomeScreen } from "@/components/HomeScreen";
 import { MOCK_DATA } from "@/lib/mockData";
 import { fetchConciergeData } from "@/lib/assembleConcierge";
+import { defaultCity } from "@/lib/cities";
 
 export const revalidate = 60;
 
@@ -34,7 +35,7 @@ export default async function HomePage({
       if (typeof v === "string") qs.set(k, v);
       else if (Array.isArray(v) && v.length > 0) qs.set(k, v[0]);
     }
-    redirect(`/map?${qs.toString()}`);
+    redirect(`/map/${defaultCity().slug}?${qs.toString()}`);
   }
 
   if (!envConfigured()) {

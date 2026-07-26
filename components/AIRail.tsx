@@ -19,7 +19,7 @@ const HISTORY_KEY = "mishpachamap.chat.v1";
 
 /** Default suggestions for the empty state when nothing is selected. */
 const SUGGESTIONS_GENERIC = [
-  "מה ההבדל בין השבטים למוריה לעניין משפחות צעירות?",
+  "אילו שכונות מתאימות למשפחה צעירה?",
   "איפה תוכלו ללכת ברגל לבית הכנסת?",
   "תראו לי שכונות עם פארק מתחת ל-5 דק׳ הליכה",
   "אילו שכונות מתאימות למשפחה עם ילד צליאק?",
@@ -39,6 +39,9 @@ function suggestionsFor(neighborhoodHe: string): string[] {
 type Props = {
   /** Currently-selected neighborhood (drives contextual suggestions). */
   selectedNeighborhoodHe?: string | null;
+  /** City name — reserved for when the assistant's backend becomes city-aware
+   *  (it currently answers from Modi'in data only). */
+  cityName?: string;
 };
 
 export function AIRail({ selectedNeighborhoodHe }: Props = {}) {
@@ -190,7 +193,7 @@ export function AIRail({ selectedNeighborhoodHe }: Props = {}) {
             <span className="glyph" /> מומחה השכונה
           </div>
           <div style={{ fontSize: 11, color: "var(--grey-500)" }}>
-            תשובות מבוססות נתונים על מודיעין בלבד
+            תשובות מבוססות על נתוני האתר
           </div>
         </div>
         <button
@@ -243,7 +246,7 @@ export function AIRail({ selectedNeighborhoodHe }: Props = {}) {
               lineHeight: "18px",
             }}
           >
-            שלום! אני מומחה השכונה של מודיעין. שאלו אותי על שכונות, מחירים, בתי ספר, פארקים — או נסו אחת מההצעות למטה.
+            שלום! אני מומחה השכונה. שאלו אותי על שכונות, מחירים, בתי ספר, פארקים — או נסו אחת מההצעות למטה.
           </div>
         )}
 

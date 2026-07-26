@@ -39,9 +39,10 @@ type Props = {
   items: NeighborhoodListItem[];
   selectedId: string | null;
   onSelect: (id: string) => void;
+  cityName?: string;
 };
 
-export function NeighborhoodListRail({ items, selectedId, onSelect }: Props) {
+export function NeighborhoodListRail({ items, selectedId, onSelect, cityName = "מודיעין-מכבים-רעות" }: Props) {
   const [sort, setSort] = useState<Sort>("match");
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -91,7 +92,7 @@ export function NeighborhoodListRail({ items, selectedId, onSelect }: Props) {
         <div>
           <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800 }}>כל השכונות</h3>
           <div style={{ fontSize: 11, color: "var(--grey-500)", marginTop: 2 }}>
-            {items.length} שכונות במודיעין-מכבים-רעות
+            {items.length} שכונות ב{cityName}
           </div>
         </div>
         <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>

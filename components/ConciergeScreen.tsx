@@ -7,6 +7,8 @@ import { LayersButton } from "./LayersButton";
 import { MMHeader } from "./MMHeader";
 import { MMMap, type NeighborhoodFeatureProps, type POIFeatureProps } from "./MMMap";
 import { MMMapStub } from "./MMMapStub";
+import { CitySwitcher } from "./CitySwitcher";
+import { defaultCity, type City } from "@/lib/cities";
 import { NeighborhoodCard, type NeighborhoodCardData } from "./NeighborhoodCard";
 import { type ListingRow, type SchoolRow, type Selected } from "./ListingsPanel";
 import { type NeighborhoodElection } from "./ElectionsPanel";
@@ -123,9 +125,11 @@ function ElectionsLegend({
 export function ConciergeScreen({
   data,
   renderer = "mapbox",
+  city = defaultCity(),
 }: {
   data: ConciergeData;
   renderer?: "mapbox" | "stub";
+  city?: City;
 }) {
   const { layers, toggle } = useLayerPrefs(INITIAL_LAYERS);
   const [selectedId, setSelectedId] = useState<string | null>(() => {
@@ -302,6 +306,7 @@ export function ConciergeScreen({
             items={neighborhoodsWithScore as unknown as NeighborhoodListItem[]}
             selectedId={selectedId}
             onSelect={(id) => setSelectedId(id)}
+            cityName={city.name_he}
           />
         )}
         <main style={{ position: "relative", overflow: "hidden", background: "var(--map-bg)" }}>
@@ -314,6 +319,8 @@ export function ConciergeScreen({
               hover={hoverId}
               onSelect={setSelectedId}
               onHover={setHoverId}
+              center={city.center}
+              zoom={city.zoom}
             />
           ) : (
             <MMMapStub
@@ -345,6 +352,7 @@ export function ConciergeScreen({
               flexWrap: "wrap",
             }}
           >
+            <CitySwitcher city={city} />
             <LayersButton active={layers} onToggle={toggle} />
             <NeighborhoodSearch
               neighborhoods={neighborhoodsWithScore.map((n) => ({
@@ -493,6 +501,7 @@ export function ConciergeScreen({
                 if (isMobile) setDrawerOpen(true);
               }}
               onClose={() => setAllOpen(false)}
+              cityName={city.name_he}
             />
           )}
 
@@ -574,6 +583,7 @@ export function ConciergeScreen({
             mode={railMode}
             onModeChange={setRailMode}
             onExplainMatch={selectedId ? () => setMatchSheetFor(selectedId) : undefined}
+            city={city}
           />
         )}
         {isMobile && (
@@ -587,6 +597,7 @@ export function ConciergeScreen({
             mode={railMode}
             onModeChange={setRailMode}
             onExplainMatch={selectedId ? () => setMatchSheetFor(selectedId) : undefined}
+            city={city}
           />
         )}
       </div>

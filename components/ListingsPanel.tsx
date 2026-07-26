@@ -10,6 +10,7 @@ import { ElectionsPanel, type NeighborhoodElection } from "./ElectionsPanel";
 import { NIS, NISshort, pct } from "@/lib/format";
 import { useFavorites } from "@/lib/useFavorites";
 import { externalSearchUrls } from "@/lib/externalLinks";
+import { defaultCity, cityExternal, type City } from "@/lib/cities";
 import { arnonaRateFor } from "@/lib/arnona";
 import { type Demographics, type Safety } from "@/lib/staticData";
 
@@ -62,9 +63,10 @@ type Props = {
   schools: SchoolRow[];
   election: NeighborhoodElection | null;
   onExplainMatch?: () => void;
+  city?: City;
 };
 
-export function ListingsPanel({ selected, listings, schools, election, onExplainMatch }: Props) {
+export function ListingsPanel({ selected, listings, schools, election, onExplainMatch, city = defaultCity() }: Props) {
   const [openListing, setOpenListing] = useState<ListingRow | null>(null);
   const [leadOpen, setLeadOpen] = useState<LeadKind | null>(null);
 
@@ -138,7 +140,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
       </header>
 
       <div className="mm-scroll" style={{ overflow: "auto", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 18 }}>
-        <WhoLivesHere demographics={selected.demographics ?? null} safety={selected.safety ?? null} />
+        <WhoLivesHere demographics={selected.demographics ?? null} safety={selected.safety ?? null} cityName={city.searchName ?? city.name_he} />
 
         <Section title="נכסים פעילים">
           {listings.length === 0 ? (
@@ -154,7 +156,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           ))
           )}
           {/* Neighborhood-level external search — see every listing on the live sites. */}
-          <NeighborhoodExternalSearch neighborhoodHe={selected.he} />
+          <NeighborhoodExternalSearch neighborhoodHe={selected.he} city={city} />
         </Section>
 
         <Section title="בתי ספר במרחק הליכה">
@@ -213,6 +215,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           location={selected.center}
           onClose={() => setOpenListing(null)}
           onExplainMatch={onExplainMatch}
+          city={city}
         />
       )}
     </aside>
@@ -229,8 +232,8 @@ const asideStyle: React.CSSProperties = {
   minHeight: 0,
 };
 
-function NeighborhoodExternalSearch({ neighborhoodHe }: { neighborhoodHe: string }) {
-  const urls = externalSearchUrls(neighborhoodHe);
+function NeighborhoodExternalSearch({ neighborhoodHe, city }: { neighborhoodHe: string; city: City }) {
+  const urls = externalSearchUrls(neighborhoodHe, cityExternal(city));
   const items = [
     { href: urls.yad2, label: "Yad2", color: "#FFC63C" },
     { href: urls.madlan, label: "Madlan", color: "#1256A0" },
@@ -401,7 +404,7 @@ function ListingRowCard({
 
 /** Real per-neighborhood character (CBS census) + safety (Police), each tagged
  *  with its source so the numbers read as facts, not guesses. */
-function WhoLivesHere({ demographics: d, safety: s }: { demographics: Demographics | null; safety: Safety | null }) {
+function WhoLivesHere({ demographics: d, safety: s, cityName }: { demographics: Demographics | null; safety: Safety | null; cityName: string }) {
   if (!d && !s) return null;
   const chip = (label: string, value: React.ReactNode) => (
     <div style={{ background: "var(--grey-15, #F4F5F7)", borderRadius: 8, padding: "8px 10px" }}>
@@ -430,7 +433,7 @@ function WhoLivesHere({ demographics: d, safety: s }: { demographics: Demographi
         <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <ScoreChip value={s.safety_score} color="var(--green-positive)" size="sm" />
           <span style={{ fontSize: 12, color: "var(--grey-700)" }}>
-            תחושת ביטחון · מדורגת {s.safety_rank}/{s.safety_rank_of} במודיעין
+            תחושת ביטחון · מדורגת {s.safety_rank}/{s.safety_rank_of} ב{cityName}
           </span>
           <span style={{ fontSize: 10, color: "var(--grey-500)" }}>· משטרה 2024</span>
         </div>

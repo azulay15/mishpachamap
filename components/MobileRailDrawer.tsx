@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { RightRail, type RailMode } from "./RightRail";
 import type { ListingRow, SchoolRow, Selected } from "./ListingsPanel";
 import type { NeighborhoodElection } from "./ElectionsPanel";
+import { defaultCity, type City } from "@/lib/cities";
 
 type Props = {
   open: boolean;
@@ -15,6 +16,7 @@ type Props = {
   mode: RailMode;
   onModeChange: (m: RailMode) => void;
   onExplainMatch?: () => void;
+  city?: City;
 };
 
 /** Bottom drawer that wraps RightRail for narrow viewports. Slides up from
@@ -30,6 +32,7 @@ export function MobileRailDrawer({
   mode,
   onModeChange,
   onExplainMatch,
+  city = defaultCity(),
 }: Props) {
   const [dragY, setDragY] = useState<number | null>(null);
   const dragStartRef = useRef<{ y: number; t: number } | null>(null);
@@ -124,6 +127,7 @@ export function MobileRailDrawer({
             mode={mode}
             onModeChange={onModeChange}
             onExplainMatch={onExplainMatch}
+            city={city}
           />
         </div>
       </div>

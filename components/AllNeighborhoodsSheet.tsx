@@ -22,6 +22,7 @@ type Props = {
   selectedId: string | null;
   onSelect: (id: string) => void;
   onClose: () => void;
+  cityName?: string;
 };
 
 type Sort = "match" | "price-asc" | "price-desc" | "green";
@@ -33,7 +34,7 @@ const SORT_LABELS: Record<Sort, string> = {
   green: "GreenScore",
 };
 
-export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose }: Props) {
+export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, cityName = "מודיעין-מכבים-רעות" }: Props) {
   const trapRef = useFocusTrap<HTMLDivElement>(true);
   const [sort, setSort] = useState<Sort>("match");
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
@@ -102,7 +103,7 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose }: 
           <div style={{ flex: 1 }}>
             <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>כל השכונות</h3>
             <div style={{ fontSize: 12, color: "var(--grey-500)", marginTop: 2 }}>
-              {items.length} שכונות במודיעין-מכבים-רעות
+              {items.length} שכונות ב{cityName}
             </div>
           </div>
           <div style={{ display: "flex", gap: 6 }}>

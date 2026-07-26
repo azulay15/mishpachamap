@@ -8,8 +8,9 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ConciergeData } from "@/components/ConciergeScreen";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { PERSONA_DEFAULT } from "@/lib/persona";
-import { loadNeighborhoodFeatures, centroidOf } from "@/lib/geoData";
-import { loadDemographics, loadSafety, loadModiinSchools, loadTransitStops, type StaticSchool } from "@/lib/staticData";
+import { loadNeighborhoodFeatures, centroidOf, type NeighborhoodFeatureCollection } from "@/lib/geoData";
+import { loadDemographics, loadSafety, loadSchools, loadTransitStops, loadEnvironment, loadPrices, type StaticSchool } from "@/lib/staticData";
+import { defaultCity, type City } from "@/lib/cities";
 
 type NeighborhoodRow = {
   id: string;
@@ -61,13 +62,29 @@ type POIDB = {
 };
 
 /**
- * Run the standard Concierge queries and assemble the client payload.
- * Returns null when the `neighborhoods` table is empty (callers fall back to
- * preview/mock mode, same as before the extraction).
+ * Run the standard Concierge queries for one city and assemble the client
+ * payload.
+ *
+ * Geo-first: the neighborhood list is driven by the city's static polygon file,
+ * NOT the DB — so a city with real polygons + static enrichment renders fully
+ * even when it has zero rows in Supabase (e.g. a newly-added city whose prices/
+ * POIs/elections haven't been seeded). The DB only *enriches* neighborhoods
+ * whose ids match. Returns null only when the city has no polygons at all
+ * (unbuilt "coming-soon" city) — callers then show a teaser/mock, as before.
+ *
+ * All DB queries are scoped to this city: per-neighborhood tables by id, and
+ * POIs (which carry no city key) by the city's bounding box, so a multi-city
+ * database never leaks one city's points onto another's map.
  */
 export async function fetchConciergeData(
   sb: SupabaseClient,
+  city: City = defaultCity(),
 ): Promise<ConciergeData | null> {
+  const geoFeatures = loadNeighborhoodFeatures(city);
+  if (geoFeatures.features.length === 0) return null;
+  const ids = geoFeatures.features.map((f) => f.properties.id);
+  const bbox = bboxOf(geoFeatures);
+
   // Schools no longer come from the DB (`schools_geojson` was OSM-derived, 70%
   // wrong, and its 0003-migration columns don't exist). They're loaded from the
   // authoritative MoE static file in assemble() instead.
@@ -80,21 +97,25 @@ export async function fetchConciergeData(
     { data: parties },
     { data: electionResults },
   ] = await Promise.all([
-    sb.from("neighborhoods").select("id, name_he, family_label, summary_he, aliases"),
-    sb.from("neighborhood_metrics").select("*"),
+    sb.from("neighborhoods").select("id, name_he, family_label, summary_he, aliases").in("id", ids),
+    sb.from("neighborhood_metrics").select("*").in("neighborhood", ids),
+    // POIs have no city column — scope by the city's bbox (filtered in JS below).
     sb.from("pois_geojson").select("id, type, name_he, point, meta"),
-    sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market"),
+    sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market").in("neighborhood", ids),
+    // elections + parties are global reference tables (not per-neighborhood).
     sb.from("elections").select("id, name_he, date").order("date", { ascending: false }),
     sb.from("parties").select("id, name_he, color"),
-    sb.from("neighborhood_election_results").select("neighborhood, election, party, votes, pct"),
+    sb.from("neighborhood_election_results").select("neighborhood, election, party, votes, pct").in("neighborhood", ids),
   ]);
 
-  if (!nb || nb.length === 0) return null;
+  const poisInCity = ((pois ?? []) as POIDB[]).filter((p) => p.point && inBbox(p.point.coordinates as [number, number], bbox));
 
   return assemble({
-    nb: nb as NeighborhoodRow[],
+    city,
+    geoFeatures,
+    nb: (nb ?? []) as NeighborhoodRow[],
     metrics: (metrics ?? []) as MetricsRow[],
-    pois: (pois ?? []) as POIDB[],
+    pois: poisInCity,
     listings: (listings ?? []) as ListingDB[],
     elections: (elections ?? []) as ElectionRow[],
     parties: (parties ?? []) as PartyRow[],
@@ -102,7 +123,30 @@ export async function fetchConciergeData(
   });
 }
 
+/** [minLng, minLat, maxLng, maxLat] over all polygon vertices, +~1km margin. */
+function bboxOf(fc: NeighborhoodFeatureCollection): [number, number, number, number] {
+  let minLng = Infinity, minLat = Infinity, maxLng = -Infinity, maxLat = -Infinity;
+  for (const f of fc.features) {
+    for (const ring of f.geometry.coordinates) {
+      for (const [lng, lat] of ring) {
+        if (lng < minLng) minLng = lng;
+        if (lat < minLat) minLat = lat;
+        if (lng > maxLng) maxLng = lng;
+        if (lat > maxLat) maxLat = lat;
+      }
+    }
+  }
+  const M = 0.01; // ~1km
+  return [minLng - M, minLat - M, maxLng + M, maxLat + M];
+}
+
+function inBbox([lng, lat]: [number, number], [minLng, minLat, maxLng, maxLat]: [number, number, number, number]): boolean {
+  return lng >= minLng && lng <= maxLng && lat >= minLat && lat <= maxLat;
+}
+
 function assemble(input: {
+  city: City;
+  geoFeatures: NeighborhoodFeatureCollection;
   nb: NeighborhoodRow[];
   metrics: MetricsRow[];
   pois: POIDB[];
@@ -114,40 +158,46 @@ function assemble(input: {
   const metricsByNb = new Map(input.metrics.map((m) => [m.neighborhood, m]));
   const persona = PERSONA_DEFAULT;
 
-  // Real enrichment from static files (CBS census, Police, MoE schools).
-  const demographics = loadDemographics();
-  const safety = loadSafety();
-  const schools = loadModiinSchools();
+  // Real enrichment from THIS city's static files (CBS census, Police, MoE).
+  const demographics = loadDemographics(input.city);
+  const safety = loadSafety(input.city);
+  const schools = loadSchools(input.city);
+  // Green/quiet: prefer the city's static environment file; fall back to the DB
+  // metrics below (Modi'in's legacy path, until it too has a static file).
+  const environment = loadEnvironment(input.city);
+  // Sale prices: prefer the city's static prices file; fall back to DB metrics.
+  const prices = loadPrices(input.city);
 
-  // Step 1 — build base neighborhood records (no matchScore yet).
-  // Geometry is joined from the static `public/neighborhoods.geo.json` file.
-  const geoFeatures = loadNeighborhoodFeatures();
-  const featureById = new Map(geoFeatures.features.map((f) => [f.properties.id, f]));
-  const base = input.nb
-    .map((n) => {
-      const feature = featureById.get(n.id);
-      if (!feature) return null;
-      const center = centroidOf(feature);
-      const m = metricsByNb.get(n.id);
-      return {
-        id: n.id,
-        he: n.name_he,
-        family: n.family_label,
-        summary: n.summary_he,
-        polygon: feature.geometry,
-        center,
-        aliases: n.aliases ?? [],
-        avgPrice: m?.avg_price_per_m2 ?? 0,
-        avgPriceDelta: Number(m?.avg_price_yoy_pct ?? 0),
-        avgListing: Number(m?.avg_listing_price ?? 0),
-        greenScore: m?.green_score ?? 0,
-        schoolScore: m?.school_score ?? 0,
-        quietScore: m?.quiet_score ?? 70,
-        demographics: demographics[n.id] ?? null,
-        safety: safety[n.id] ?? null,
-      };
-    })
-    .filter((n): n is NonNullable<typeof n> => n !== null);
+  // Step 1 — build base neighborhood records (no matchScore yet), GEO-FIRST:
+  // every polygon in the city's static file is a neighborhood; DB rows only
+  // enrich (editorial copy + metrics) where the id matches. Names fall back to
+  // the geo file, so a city with no DB rows still renders with real names.
+  const nbById = new Map(input.nb.map((n) => [n.id, n]));
+  const base = input.geoFeatures.features.map((feature) => {
+    const id = feature.properties.id;
+    const n = nbById.get(id);
+    const center = centroidOf(feature);
+    const m = metricsByNb.get(id);
+    const env = environment[id];
+    const pr = prices[id];
+    return {
+      id,
+      he: n?.name_he ?? feature.properties.name_he,
+      family: n?.family_label ?? null,
+      summary: n?.summary_he ?? null,
+      polygon: feature.geometry,
+      center,
+      aliases: n?.aliases ?? [],
+      avgPrice: pr?.avg_price_per_m2 ?? m?.avg_price_per_m2 ?? 0,
+      avgPriceDelta: Number(pr?.avg_price_yoy_pct ?? m?.avg_price_yoy_pct ?? 0),
+      avgListing: Number(pr?.avg_listing_price ?? m?.avg_listing_price ?? 0),
+      greenScore: env?.green_score ?? m?.green_score ?? 0,
+      schoolScore: m?.school_score ?? 0,
+      quietScore: env?.quiet_score ?? m?.quiet_score ?? 70,
+      demographics: demographics[id] ?? null,
+      safety: safety[id] ?? null,
+    };
+  });
 
   // Step 2 — POIs as GeoJSON Features.
   const pois = input.pois
@@ -312,7 +362,7 @@ function assemble(input: {
 
   // Real bus stops (Open Bus Stride) as type="transit" POIs, so the "תחבורה"
   // layer shows real dots instead of just the 2 train stations.
-  const transitPois = loadTransitStops().map((s) => ({
+  const transitPois = loadTransitStops(input.city).map((s) => ({
     type: "Feature" as const,
     geometry: { type: "Point" as const, coordinates: [s.lon, s.lat] },
     properties: {

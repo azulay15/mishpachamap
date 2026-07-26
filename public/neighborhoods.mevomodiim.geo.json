@@ -1,0 +1,104 @@
+{
+  "type": "FeatureCollection",
+  "name": "neighborhoods_mevomodiim",
+  "meta": {
+    "generated_by": "scripts/ingest/build_neighborhoods.ts",
+    "source": "CBS statistical areas 2022 (ArcGIS/IsraelData), clipped to OSM building footprint",
+    "city": "mevomodiim",
+    "semel_yishuv": 1141,
+    "generated_at": "2026-07-21T20:19:11.283Z"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "mevomodiim",
+        "name_he": "מבוא מודיעים",
+        "name_en": "Mevo Modi'im",
+        "stat_areas": [
+          1
+        ],
+        "center_source": "cbs_2022_clipped"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              34.984271,
+              31.933224
+            ],
+            [
+              34.984429,
+              31.932897
+            ],
+            [
+              34.986465,
+              31.932593
+            ],
+            [
+              34.989137,
+              31.932657
+            ],
+            [
+              34.989325,
+              31.932766
+            ],
+            [
+              34.98958,
+              31.933259
+            ],
+            [
+              34.989328,
+              31.934346
+            ],
+            [
+              34.988411,
+              31.936021
+            ],
+            [
+              34.988116,
+              31.936199
+            ],
+            [
+              34.987835,
+              31.936125
+            ],
+            [
+              34.987577,
+              31.935849
+            ],
+            [
+              34.98731,
+              31.935222
+            ],
+            [
+              34.986684,
+              31.934932
+            ],
+            [
+              34.986926,
+              31.93487
+            ],
+            [
+              34.986797,
+              31.934377
+            ],
+            [
+              34.985237,
+              31.934232
+            ],
+            [
+              34.984595,
+              31.933876
+            ],
+            [
+              34.984271,
+              31.933224
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

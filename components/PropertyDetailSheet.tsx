@@ -9,6 +9,7 @@ import type { ListingRow } from "./ListingsPanel";
 import { LeadGenModal, type LeadKind } from "./LeadGenModal";
 import { StreetViewModal } from "./StreetViewModal";
 import { externalSearchUrls } from "@/lib/externalLinks";
+import { defaultCity, cityExternal, type City } from "@/lib/cities";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { ListingWalkingSection } from "./ListingWalkingSection";
 import { arnonaRateFor, monthlyArnona } from "@/lib/arnona";
@@ -25,9 +26,10 @@ type Props = {
   onClose: () => void;
   /** Optional — open the match breakdown for this listing's neighborhood. */
   onExplainMatch?: () => void;
+  city?: City;
 };
 
-export function PropertyDetailSheet({ listing, neighborhoodHe, neighborhoodId, location, onClose, onExplainMatch }: Props) {
+export function PropertyDetailSheet({ listing, neighborhoodHe, neighborhoodId, location, onClose, onExplainMatch, city = defaultCity() }: Props) {
   const { hasListing, toggleListing } = useFavorites();
   const isFav = hasListing(listing.id);
   const [leadOpen, setLeadOpen] = useState<LeadKind | null>(null);
@@ -223,7 +225,7 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, neighborhoodId, l
           >
             ראו את הנכס במקורות חיים
           </div>
-          <ExternalSearchRow address={listing.address} />
+          <ExternalSearchRow address={listing.address} city={city} />
         </div>
 
         {/* Virtual walk — Google Street View embed of the listing's
@@ -304,8 +306,8 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, neighborhoodId, l
   );
 }
 
-function ExternalSearchRow({ address }: { address: string }) {
-  const urls = externalSearchUrls(address);
+function ExternalSearchRow({ address, city }: { address: string; city: City }) {
+  const urls = externalSearchUrls(address, cityExternal(city));
   const items = [
     { href: urls.yad2, label: "Yad2", color: "#FFC63C" },
     { href: urls.madlan, label: "Madlan", color: "#1256A0" },

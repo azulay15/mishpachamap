@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { MMHeader } from "./MMHeader";
 import { MatchBadge } from "./MatchBadge";
+import { CityPicker } from "./CityPicker";
 import { MMIcon } from "@/lib/icons";
 import { usePersona } from "@/lib/usePersona";
 import { useFavorites } from "@/lib/useFavorites";
@@ -271,7 +272,7 @@ function Hero({
     <>
       <section className="mm-home-hero">
         <div className="mm-home-rise">
-          <div className="mm-home-kicker">מודיעין־מכבים־רעות</div>
+          <div className="mm-home-kicker">מפת השכונות של ישראל</div>
           <h1 className="mm-home-h1">
             מוצאים את השכונה שמתאימה <span className="hl">בדיוק</span> למשפחה שלכם
           </h1>
@@ -289,7 +290,7 @@ function Hero({
               בנו את פרופיל המשפחה
             </a>
             <a
-              href="/map"
+              href="/map/modiin"
               className="mm-btn mm-btn-secondary"
               style={{ textDecoration: "none", color: "var(--grey-900)", padding: "12px 20px", fontSize: 15, borderRadius: 12 }}
             >
@@ -305,6 +306,10 @@ function Hero({
           </div>
         </div>
       </section>
+
+      <div className="mm-home-rise mm-home-rise-2">
+        <CityPicker variant="hero" />
+      </div>
 
       {stats.length > 0 && (
         <section aria-label="נתונים במערכת" className="mm-home-statstrip mm-home-rise mm-home-rise-3">
@@ -406,7 +411,7 @@ function Dashboard({
           </div>
         </div>
 
-        <a href="/map" className="mm-home-card mm-home-cardlink">
+        <a href="/map/modiin" className="mm-home-card mm-home-cardlink">
           <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 800, color: "var(--grey-900)" }}>
             <MMIcon name="sparkle" size={16} color="var(--pumpkin-orange)" />
             מומחה השכונה
@@ -417,8 +422,14 @@ function Dashboard({
         </a>
       </section>
 
+      <section className="mm-home-rise mm-home-rise-4" style={{ marginTop: 28 }}>
+        <p className="mm-home-eyebrow">ערים</p>
+        <h2 className="mm-home-h2" style={{ marginBottom: 4 }}>לחקור עיר אחרת</h2>
+        <CityPicker variant="compact" />
+      </section>
+
       <a
-        href="/map"
+        href="/map/modiin"
         className="mm-btn mm-btn-accent mm-home-rise mm-home-rise-4"
         style={{ textDecoration: "none", marginTop: 24, display: "inline-flex", padding: "12px 22px", fontSize: 15, borderRadius: 12 }}
       >
@@ -435,7 +446,7 @@ function TopMatchGrid({ top }: { top: RankedNeighborhood[] }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
       {top.map((n, i) => (
-        <a key={n.id} href={`/map?n=${n.id}`} className="mm-home-card mm-home-cardlink" style={{ padding: 18 }}>
+        <a key={n.id} href={`/map/modiin?n=${n.id}`} className="mm-home-card mm-home-cardlink" style={{ padding: 18 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, minWidth: 0 }}>
               <span
