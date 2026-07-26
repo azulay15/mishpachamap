@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "source": "Govmap real-estate deals (govmap.gov.il)",
+    "city": "kefarsava",
+    "window_months": 48,
+    "min_sales": 4,
+    "as_of": "2026-07-26"
+  },
+  "neighborhoods": {
+    "kaplan": null,
+    "yoseftal": {
+      "avg_price_per_m2": 18872,
+      "avg_listing_price": 4029759,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 1,
+      "sales_in_window": 12
+    },
+    "ks-tzeira": null,
+    "tzafon": null,
+    "hadarim": null,
+    "hapark": null,
+    "merkaz": {
+      "avg_price_per_m2": 31190,
+      "avg_listing_price": 3680000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 5
+    },
+    "eliezer": null,
+    "shikunei-mizrahi": null,
+    "sirkin": null,
+    "maoz": null,
+    "shikun-aliya": null,
+    "ks-yeruka": null,
+    "haprachim": null,
+    "rishonim": null,
+    "hapoalim": {
+      "avg_price_per_m2": 34757,
+      "avg_listing_price": 3200000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 4,
+      "sales_in_window": 9
+    },
+    "nordau": {
+      "avg_price_per_m2": 46963,
+      "avg_listing_price": 1906980,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 3,
+      "sales_in_window": 5
+    },
+    "geulim": null
+  }
+}

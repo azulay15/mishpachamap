@@ -246,9 +246,57 @@ const rishonLezion: CityConfig = {
   gtfsCityName: "ראשון לציון",
 };
 
+/**
+ * Kfar Saba (semel 6900) — 4th city, built via the self-serve flow (scaffold →
+ * research agent → build → qa). 32 CBS stat areas → 18 residential neighborhoods;
+ * 3 eastern industrial/business-park areas (111/115/116) discarded. Anchors +
+ * crosswalk from the municipal neighborhoods map + CBS ArcGIS + OSM. Nearest-
+ * anchor Voronoi resolves every residential area cleanly (no boundary overrides).
+ * Review flags: SA112 label yoseftal↔givat-eshkol; SA114 ks-tzeira↔gani-sharon.
+ */
+const kefarsava: CityConfig = {
+  id: "kefarsava",
+  semelYishuv: 6900,
+  outFile: "public/neighborhoods.kefarsava.geo.json",
+  anchors: [
+    { id: "kaplan", name_he: "קפלן", name_en: "Kaplan", lng: 34.937, lat: 32.18878 },
+    { id: "yoseftal", name_he: "יוספטל", name_en: "Yoseftal", lng: 34.94335, lat: 32.18486 },
+    { id: "ks-tzeira", name_he: "כפר סבא הצעירה", name_en: "Kfar Saba HaTze'ira", lng: 34.91825, lat: 32.18821 },
+    { id: "tzafon", name_he: "צפון", name_en: "Tzafon", lng: 34.914, lat: 32.184 },
+    { id: "hadarim", name_he: "הדרים", name_en: "Hadarim", lng: 34.92, lat: 32.179 },
+    { id: "hapark", name_he: "הפארק", name_en: "HaPark", lng: 34.916, lat: 32.1765 },
+    { id: "merkaz", name_he: "מרכז העיר", name_en: "City Center", lng: 34.9095, lat: 32.179 },
+    { id: "eliezer", name_he: "אליעזר", name_en: "Eliezer", lng: 34.905, lat: 32.184 },
+    { id: "shikunei-mizrahi", name_he: "שיכוני מזרחי", name_en: "Shikunei Mizrahi", lng: 34.901, lat: 32.178 },
+    { id: "sirkin", name_he: "סירקין", name_en: "Sirkin", lng: 34.899, lat: 32.185 },
+    { id: "maoz", name_he: "מעוז", name_en: "Maoz", lng: 34.89235, lat: 32.1805 },
+    { id: "shikun-aliya", name_he: "שיכון עלייה", name_en: "Shikun Aliya", lng: 34.9, lat: 32.19071 },
+    { id: "ks-yeruka", name_he: "כפר סבא הירוקה", name_en: "Green Kfar Saba", lng: 34.893, lat: 32.192 },
+    { id: "haprachim", name_he: "הפרחים", name_en: "HaPrachim", lng: 34.896, lat: 32.175 },
+    { id: "rishonim", name_he: "ראשונים", name_en: "Rishonim", lng: 34.9025, lat: 32.174 },
+    { id: "hapoalim", name_he: "הפועלים", name_en: "HaPoalim", lng: 34.909, lat: 32.172 },
+    { id: "nordau", name_he: "נורדאו", name_en: "Nordau", lng: 34.91666, lat: 32.17109 },
+    { id: "geulim", name_he: "גאולים", name_en: "Geulim", lng: 34.92364, lat: 32.16856 },
+  ],
+  statOverrides: {
+    111: "__nonresidential_discard__", // Business Park 50 + Abu Snina + industrial (far-NE)
+    115: "__nonresidential_discard__", // אזור התעשייה הישן (Old Industrial Zone, Teva)
+    116: "__nonresidential_discard__", // Old Industrial Zone + open land to road 55
+  },
+  demographicsOut: "kefarsava.demographics.json",
+  crimeOut: "kefarsava.crime.json",
+  schoolsOut: "kefarsava.schools.json",
+  transitOut: "kefarsava.transit.json",
+  environmentOut: "kefarsava.environment.json",
+  pricesOut: "kefarsava.prices.json",
+  moeCityName: "כפר סבא",
+  gtfsCityName: "כפר סבא",
+};
+
 export const CITIES: Record<string, CityConfig> = {
   modiin,
   mevomodiim: mevoModiim,
   oryehuda: orYehuda,
   rishon: rishonLezion,
+  kefarsava,
 };

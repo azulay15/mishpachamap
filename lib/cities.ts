@@ -141,8 +141,31 @@ const rishon: City = {
   },
 };
 
+/** Kfar Saba (semel 6900) — the fourth city (Sharon, ~101k). Provisional
+ *  center; starts "coming-soon" until its research + build land. */
+const kefarsava: City = {
+  id: "kefarsava",
+  slug: "kfar-saba",
+  name_he: "כפר סבא",
+  name_en: "Kfar Saba",
+  semel: 6900,
+  center: [34.9046, 32.1743],
+  zoom: 13,
+  status: "live",
+  tagline_he: "18 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.kefarsava.geo.json",
+    demographics: "kefarsava.demographics.json",
+    crime: "kefarsava.crime.json",
+    schools: "kefarsava.schools.json",
+    transit: "kefarsava.transit.json",
+    environment: "kefarsava.environment.json",
+    prices: "kefarsava.prices.json",
+  },
+};
+
 /** All cities, in display order. */
-export const CITIES: City[] = [modiin, oryehuda, rishon];
+export const CITIES: City[] = [modiin, oryehuda, rishon, kefarsava];
 
 /** The city shown when no city is specified (legacy `/map` deep links). */
 export const DEFAULT_CITY_ID = "modiin";

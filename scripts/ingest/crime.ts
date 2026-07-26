@@ -66,6 +66,21 @@ const CROSSWALKS: Record<string, Record<number, string | null>> = {
     83000524: "kiryat-kramim", // קרית כרמים (מערב)
     83000123: "rambam", // רובע רמב''ם (צפון) — double-quote variant
   },
+  // Kfar Saba: police scheme is street-level, so many areas don't auto-match.
+  // Confident placements + institutional/commercial discards below.
+  // ⚠ REVIEW — street-level areas left unplaced (their crimes aren't attributed
+  //   until a local expert assigns them): 69000034 דגניה, 69000044 תקומה,
+  //   69000054 מוצקין/דובדבן, 69000043 קרן אברהם, 69000042 משה שרת/ביאליק,
+  //   69000053 משכנות, 69000016 אז"ר/כצנלסון.
+  kefarsava: {
+    69000015: "ks-tzeira", // גני השרון (Ganei Sharon — SA114 area)
+    69000033: "ks-yeruka", // קרית ספיר (Kiryat Sapir, NW green)
+    69000036: "rishonim", // רחובות התחיה / אנה פרנק (SA323 area)
+    69000052: "haprachim", // קרת ספר מזרח (alt name for HaPrachim)
+    69000055: "hapark", // חצרות הדר (מערב) — pairs with 69000056 (east)
+    69000035: null, // בי"ח גריאטרי — geriatric hospital, ~0 residents
+    69000051: null, // תחנה מרכזית — central bus station, commercial
+  },
 };
 
 const num = (v: unknown): number | null => {

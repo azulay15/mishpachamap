@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "kefarsava",
+    "generated_from": "public/neighborhoods.kefarsava.geo.json"
+  },
+  "neighborhoods": {
+    "hadarim": {
+      "green_score": 44,
+      "quiet_score": 52
+    },
+    "maoz": {
+      "green_score": 32,
+      "quiet_score": 43
+    },
+    "kaplan": {
+      "green_score": 30,
+      "quiet_score": 64
+    },
+    "shikunei-mizrahi": {
+      "green_score": 29,
+      "quiet_score": 51
+    },
+    "nordau": {
+      "green_score": 29,
+      "quiet_score": 43
+    },
+    "hapark": {
+      "green_score": 28,
+      "quiet_score": 76
+    },
+    "ks-yeruka": {
+      "green_score": 28,
+      "quiet_score": 32
+    },
+    "yoseftal": {
+      "green_score": 25,
+      "quiet_score": 51
+    },
+    "merkaz": {
+      "green_score": 23,
+      "quiet_score": 75
+    },
+    "shikun-aliya": {
+      "green_score": 19,
+      "quiet_score": 65
+    },
+    "eliezer": {
+      "green_score": 18,
+      "quiet_score": 46
+    },
+    "sirkin": {
+      "green_score": 18,
+      "quiet_score": 32
+    },
+    "hapoalim": {
+      "green_score": 18,
+      "quiet_score": 41
+    },
+    "rishonim": {
+      "green_score": 17,
+      "quiet_score": 42
+    },
+    "geulim": {
+      "green_score": 16,
+      "quiet_score": 43
+    },
+    "ks-tzeira": {
+      "green_score": 8,
+      "quiet_score": 52
+    },
+    "haprachim": {
+      "green_score": 6,
+      "quiet_score": 31
+    },
+    "tzafon": {
+      "green_score": 0,
+      "quiet_score": 76
+    }
+  }
+}
