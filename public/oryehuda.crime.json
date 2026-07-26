@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "source": "Israel Police 2024",
+    "resource": "5fc13c50-b6f3-4712-b831-a75e0f91a17e",
+    "locality": 2400
+  },
+  "neighborhoods": {
+    "ramat-pinkas": null,
+    "neve-savyon": null,
+    "shchunat-haacademaim": null,
+    "beit-bapark": null,
+    "neve-rabin": {
+      "name_he": "נווה רבין",
+      "cases_2024_total": 159,
+      "cases_2024_person": 23,
+      "cases_2024_property": 49,
+      "per_1000_residents": 34,
+      "safety_score": 46,
+      "safety_rank": 2,
+      "safety_rank_of": 3,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          24000001
+        ]
+      }
+    },
+    "kiryat-giora": {
+      "name_he": "קריית גיורא",
+      "cases_2024_total": 472,
+      "cases_2024_person": 80,
+      "cases_2024_property": 148,
+      "per_1000_residents": 36.4,
+      "safety_score": 42,
+      "safety_rank": 3,
+      "safety_rank_of": 3,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          24000002,
+          24000003,
+          24000008,
+          24000012
+        ]
+      }
+    },
+    "sakia": null,
+    "shchunot-dromiyot": {
+      "name_he": "השכונות הדרומיות",
+      "cases_2024_total": 204,
+      "cases_2024_person": 55,
+      "cases_2024_property": 54,
+      "per_1000_residents": 33.4,
+      "safety_score": 47,
+      "safety_rank": 1,
+      "safety_rank_of": 3,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          24000004,
+          24000005
+        ]
+      }
+    }
+  }
+}
