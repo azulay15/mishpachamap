@@ -1,0 +1,425 @@
+{
+  "meta": {
+    "source": "NYPD Complaint Data Historic",
+    "dataset": "qgea-i56i",
+    "period": "2023-2024"
+  },
+  "neighborhoods": {
+    "mn0101": {
+      "name": "Financial District-Battery Park City",
+      "cases_total": 1315,
+      "cases_violent": 241,
+      "cases_property": 915,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0102": {
+      "name": "Tribeca-Civic Center",
+      "cases_total": 1257,
+      "cases_violent": 213,
+      "cases_property": 614,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0201": {
+      "name": "SoHo-Little Italy-Hudson Square",
+      "cases_total": 1831,
+      "cases_violent": 204,
+      "cases_property": 1366,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0202": {
+      "name": "Greenwich Village",
+      "cases_total": 1515,
+      "cases_violent": 235,
+      "cases_property": 1059,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0203": {
+      "name": "West Village",
+      "cases_total": 1582,
+      "cases_violent": 244,
+      "cases_property": 1168,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0301": {
+      "name": "Chinatown-Two Bridges",
+      "cases_total": 1236,
+      "cases_violent": 388,
+      "cases_property": 634,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0302": {
+      "name": "Lower East Side",
+      "cases_total": 1948,
+      "cases_violent": 404,
+      "cases_property": 1059,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0303": {
+      "name": "East Village",
+      "cases_total": 1878,
+      "cases_violent": 406,
+      "cases_property": 1256,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0401": {
+      "name": "Chelsea-Hudson Yards",
+      "cases_total": 2705,
+      "cases_violent": 554,
+      "cases_property": 1731,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0402": {
+      "name": "Hell's Kitchen",
+      "cases_total": 3032,
+      "cases_violent": 643,
+      "cases_property": 1560,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0501": {
+      "name": "Midtown South-Flatiron-Union Square",
+      "cases_total": 3585,
+      "cases_violent": 581,
+      "cases_property": 2551,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0502": {
+      "name": "Midtown-Times Square",
+      "cases_total": 5580,
+      "cases_violent": 740,
+      "cases_property": 3591,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0601": {
+      "name": "Stuyvesant Town-Peter Cooper Village",
+      "cases_total": 263,
+      "cases_violent": 45,
+      "cases_property": 198,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0602": {
+      "name": "Gramercy",
+      "cases_total": 696,
+      "cases_violent": 176,
+      "cases_property": 433,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0603": {
+      "name": "Murray Hill-Kips Bay",
+      "cases_total": 1085,
+      "cases_violent": 238,
+      "cases_property": 720,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0604": {
+      "name": "East Midtown-Turtle Bay",
+      "cases_total": 1207,
+      "cases_violent": 223,
+      "cases_property": 859,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0701": {
+      "name": "Upper West Side-Lincoln Square",
+      "cases_total": 1292,
+      "cases_violent": 228,
+      "cases_property": 930,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0702": {
+      "name": "Upper West Side (Central)",
+      "cases_total": 1626,
+      "cases_violent": 293,
+      "cases_property": 1155,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0703": {
+      "name": "Upper West Side-Manhattan Valley",
+      "cases_total": 1145,
+      "cases_violent": 293,
+      "cases_property": 618,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0801": {
+      "name": "Upper East Side-Lenox Hill-Roosevelt Island",
+      "cases_total": 1487,
+      "cases_violent": 204,
+      "cases_property": 1185,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0802": {
+      "name": "Upper East Side-Carnegie Hill",
+      "cases_total": 2754,
+      "cases_violent": 385,
+      "cases_property": 2252,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0803": {
+      "name": "Upper East Side-Yorkville",
+      "cases_total": 1649,
+      "cases_violent": 263,
+      "cases_property": 1243,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0901": {
+      "name": "Morningside Heights",
+      "cases_total": 1405,
+      "cases_violent": 333,
+      "cases_property": 804,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0902": {
+      "name": "Manhattanville-West Harlem",
+      "cases_total": 1403,
+      "cases_violent": 457,
+      "cases_property": 630,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn0903": {
+      "name": "Hamilton Heights-Sugar Hill",
+      "cases_total": 2493,
+      "cases_violent": 697,
+      "cases_property": 1229,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn1001": {
+      "name": "Harlem (South)",
+      "cases_total": 3625,
+      "cases_violent": 964,
+      "cases_property": 1558,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn1002": {
+      "name": "Harlem (North)",
+      "cases_total": 5031,
+      "cases_violent": 1732,
+      "cases_property": 2174,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn1101": {
+      "name": "East Harlem (South)",
+      "cases_total": 3381,
+      "cases_violent": 1249,
+      "cases_property": 1387,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn1102": {
+      "name": "East Harlem (North)",
+      "cases_total": 6442,
+      "cases_violent": 1866,
+      "cases_property": 2497,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn1201": {
+      "name": "Washington Heights (South)",
+      "cases_total": 3784,
+      "cases_violent": 960,
+      "cases_property": 1804,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn1202": {
+      "name": "Washington Heights (North)",
+      "cases_total": 2970,
+      "cases_violent": 743,
+      "cases_property": 1631,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    },
+    "mn1203": {
+      "name": "Inwood",
+      "cases_total": 2013,
+      "cases_violent": 552,
+      "cases_property": 843,
+      "per_1000_residents": null,
+      "safety_score": null,
+      "source": {
+        "provider": "NYPD Complaint Data Historic (NYC Open Data qgea-i56i)",
+        "period": "2023–2024",
+        "note": "reported FELONY complaints, point-in-NTA"
+      }
+    }
+  }
+}

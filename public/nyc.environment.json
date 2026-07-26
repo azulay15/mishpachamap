@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "nyc"
+  },
+  "neighborhoods": {
+    "mn0101": {
+      "green_score": 67,
+      "quiet_score": 41
+    },
+    "mn0102": {
+      "green_score": 41,
+      "quiet_score": 48
+    },
+    "mn0201": {
+      "green_score": 8,
+      "quiet_score": 30
+    },
+    "mn0202": {
+      "green_score": 36,
+      "quiet_score": 32
+    },
+    "mn0203": {
+      "green_score": 30,
+      "quiet_score": 31
+    },
+    "mn0301": {
+      "green_score": 56,
+      "quiet_score": 32
+    },
+    "mn0302": {
+      "green_score": 61,
+      "quiet_score": 33
+    },
+    "mn0303": {
+      "green_score": 51,
+      "quiet_score": 49
+    },
+    "mn0401": {
+      "green_score": 22,
+      "quiet_score": 31
+    },
+    "mn0402": {
+      "green_score": 17,
+      "quiet_score": 36
+    },
+    "mn0501": {
+      "green_score": 17,
+      "quiet_score": 53
+    },
+    "mn0502": {
+      "green_score": 9,
+      "quiet_score": 47
+    },
+    "mn0601": {
+      "green_score": 100,
+      "quiet_score": 32
+    },
+    "mn0602": {
+      "green_score": 11,
+      "quiet_score": 34
+    },
+    "mn0603": {
+      "green_score": 22,
+      "quiet_score": 31
+    },
+    "mn0604": {
+      "green_score": 6,
+      "quiet_score": 34
+    },
+    "mn0701": {
+      "green_score": 14,
+      "quiet_score": 31
+    },
+    "mn0702": {
+      "green_score": 32,
+      "quiet_score": 30
+    },
+    "mn0703": {
+      "green_score": 78,
+      "quiet_score": 31
+    },
+    "mn0801": {
+      "green_score": 6,
+      "quiet_score": 39
+    },
+    "mn0802": {
+      "green_score": 1,
+      "quiet_score": 30
+    },
+    "mn0803": {
+      "green_score": 29,
+      "quiet_score": 34
+    },
+    "mn0901": {
+      "green_score": 100,
+      "quiet_score": 38
+    },
+    "mn0902": {
+      "green_score": 77,
+      "quiet_score": 37
+    },
+    "mn0903": {
+      "green_score": 100,
+      "quiet_score": 33
+    },
+    "mn1001": {
+      "green_score": 11,
+      "quiet_score": 33
+    },
+    "mn1002": {
+      "green_score": 20,
+      "quiet_score": 34
+    },
+    "mn1101": {
+      "green_score": 41,
+      "quiet_score": 31
+    },
+    "mn1102": {
+      "green_score": 49,
+      "quiet_score": 31
+    },
+    "mn1201": {
+      "green_score": 78,
+      "quiet_score": 33
+    },
+    "mn1202": {
+      "green_score": 88,
+      "quiet_score": 36
+    },
+    "mn1203": {
+      "green_score": 17,
+      "quiet_score": 32
+    }
+  }
+}
