@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "source": "Govmap real-estate deals (govmap.gov.il)",
+    "city": "petahtikva",
+    "window_months": 48,
+    "min_sales": 4,
+    "as_of": "2026-08-15"
+  },
+  "neighborhoods": {
+    "em-hamoshavot-hadasha": {
+      "avg_price_per_m2": 31662,
+      "avg_listing_price": 4020000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 15
+    },
+    "em-hamoshavot-vatika": null,
+    "neve-gan": {
+      "avg_price_per_m2": 30385,
+      "avg_listing_price": 3050000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 4.5,
+      "sales_in_window": 20
+    },
+    "shifer-neve-dekalim": {
+      "avg_price_per_m2": 25193,
+      "avg_listing_price": 2880000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 17
+    },
+    "neve-maoz": null,
+    "krol": null,
+    "chen-hatzafon": {
+      "avg_price_per_m2": 26660,
+      "avg_listing_price": 2650000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 5
+    },
+    "kfar-avraham": null,
+    "lev-hamoshava": {
+      "avg_price_per_m2": 25133,
+      "avg_listing_price": 2350000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 4,
+      "sales_in_window": 13
+    },
+    "merkaz-hashaket": {
+      "avg_price_per_m2": 24694,
+      "avg_listing_price": 2980000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 5
+    },
+    "ein-ganim": {
+      "avg_price_per_m2": 20118,
+      "avg_listing_price": 2900000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 5
+    },
+    "mahane-yehuda": {
+      "avg_price_per_m2": 26359,
+      "avg_listing_price": 2377500,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 4,
+      "sales_in_window": 18
+    },
+    "shaariya": {
+      "avg_price_per_m2": 29278,
+      "avg_listing_price": 2220000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 3,
+      "sales_in_window": 12
+    },
+    "ahdut": {
+      "avg_price_per_m2": 23906,
+      "avg_listing_price": 2550000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 4,
+      "sales_in_window": 11
+    },
+    "kiryat-elazar": null,
+    "kiryat-alon": null,
+    "pisgat-alon-yoseftal": null,
+    "beilinson": null,
+    "hadar-ganim": null,
+    "amishav": {
+      "avg_price_per_m2": 27320,
+      "avg_listing_price": 2640000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 4,
+      "sales_in_window": 5
+    },
+    "kfar-ganim-alef": null,
+    "kfar-ganim-bet": {
+      "avg_price_per_m2": 33654,
+      "avg_listing_price": 5150000,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 6.5,
+      "sales_in_window": 4
+    },
+    "kfar-ganim-gimel": null,
+    "bat-ganim": null,
+    "ramat-verber": null,
+    "bar-yehuda": null,
+    "neve-ganim": null,
+    "neve-oz": {
+      "avg_price_per_m2": 32422,
+      "avg_listing_price": 4197340,
+      "avg_price_yoy_pct": null,
+      "median_rooms": 5,
+      "sales_in_window": 68
+    },
+    "kiryat-matalon": null
+  }
+}

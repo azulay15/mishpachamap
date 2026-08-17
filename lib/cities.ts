@@ -202,8 +202,96 @@ const nyc: City = {
   },
 };
 
+/** Ra'anana — 15 neighborhoods (27 CBS stat areas, 2 discarded). */
+const raanana: City = {
+  id: "raanana",
+  slug: "raanana",
+  name_he: "רעננה",
+  name_en: "Ra'anana",
+  semel: 8700,
+  center: [34.8686, 32.1848],
+  zoom: 13.2,
+  status: "live",
+  tagline_he: "15 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.raanana.geo.json",
+    demographics: "raanana.demographics.json",
+    crime: "raanana.crime.json",
+    schools: "raanana.schools.json",
+    transit: "raanana.transit.json",
+    environment: "raanana.environment.json",
+    prices: "raanana.prices.json",
+  },
+};
+
+/** Herzliya — 15 neighborhoods (36 CBS stat areas, 8 discarded). */
+const herzliya: City = {
+  id: "herzliya",
+  slug: "herzliya",
+  name_he: "הרצליה",
+  name_en: "Herzliya",
+  semel: 6400,
+  center: [34.8362, 32.1656],
+  zoom: 12.8,
+  status: "live",
+  tagline_he: "15 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.herzliya.geo.json",
+    demographics: "herzliya.demographics.json",
+    crime: "herzliya.crime.json",
+    schools: "herzliya.schools.json",
+    transit: "herzliya.transit.json",
+    environment: "herzliya.environment.json",
+    prices: "herzliya.prices.json",
+  },
+};
+
+/** Netanya — 27 neighborhoods (73 CBS stat areas, 8 discarded). */
+const netanya: City = {
+  id: "netanya",
+  slug: "netanya",
+  name_he: "נתניה",
+  name_en: "Netanya",
+  semel: 7400,
+  center: [34.8613, 32.3126],
+  zoom: 12.3,
+  status: "live",
+  tagline_he: "27 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.netanya.geo.json",
+    demographics: "netanya.demographics.json",
+    crime: "netanya.crime.json",
+    schools: "netanya.schools.json",
+    transit: "netanya.transit.json",
+    environment: "netanya.environment.json",
+    prices: "netanya.prices.json",
+  },
+};
+
+/** Petah Tikva — 29 neighborhoods (81 CBS stat areas, 8 discarded). Largest city in the app. */
+const petahtikva: City = {
+  id: "petahtikva",
+  slug: "petah-tikva",
+  name_he: "פתח תקווה",
+  name_en: "Petah Tikva",
+  semel: 7900,
+  center: [34.8878, 32.0898],
+  zoom: 12.6,
+  status: "live",
+  tagline_he: "29 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.petahtikva.geo.json",
+    demographics: "petahtikva.demographics.json",
+    crime: "petahtikva.crime.json",
+    schools: "petahtikva.schools.json",
+    transit: "petahtikva.transit.json",
+    environment: "petahtikva.environment.json",
+    prices: "petahtikva.prices.json",
+  },
+};
+
 /** All cities, in display order. */
-export const CITIES: City[] = [modiin, oryehuda, rishon, kefarsava, nyc];
+export const CITIES: City[] = [modiin, oryehuda, rishon, kefarsava, raanana, herzliya, netanya, petahtikva, nyc];
 
 /** The city shown when no city is specified (legacy `/map` deep links). */
 export const DEFAULT_CITY_ID = "modiin";

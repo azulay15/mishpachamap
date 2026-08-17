@@ -24,22 +24,40 @@ import { sb } from "./_env";
 
 const UA = "MishpachaMap/0.1 (environment ingest)";
 
+/** Overpass with mirror fallback — the main endpoint rate-limits (429, or an
+ *  HTML quota page with a 200) when several city builds run near each other. */
 async function overpass<T>(query: string): Promise<T> {
   const body = "data=" + encodeURIComponent(query);
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const res = await fetch("https://overpass-api.de/api/interpreter", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json", "User-Agent": UA },
-      body,
-    });
-    if (res.ok) return (await res.json()) as T;
-    if (res.status === 429 || res.status === 504) {
+  const endpoints = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+  ];
+  let lastErr = "";
+  for (const ep of endpoints) {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        const res = await fetch(ep, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json", "User-Agent": UA },
+          body,
+        });
+        if (res.ok) {
+          const text = await res.text();
+          if (!text.startsWith("<")) return JSON.parse(text) as T;
+          lastErr = "HTML quota response";
+        } else {
+          lastErr = `${res.status}`;
+          if (res.status !== 429 && res.status !== 504) throw new Error(`Overpass ${res.status}`);
+        }
+      } catch (e) {
+        lastErr = String(e);
+      }
       await new Promise((r) => setTimeout(r, attempt * 5000));
-      continue;
     }
-    throw new Error(`Overpass ${res.status}`);
+    console.warn(`  (Overpass ${lastErr} — trying next mirror)`);
   }
-  throw new Error("Overpass: exhausted retries");
+  throw new Error(`Overpass: all mirrors failed (last: ${lastErr})`);
 }
 
 type OsmEl = { type: string; geometry?: { lat: number; lon: number }[] };
