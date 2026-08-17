@@ -1,0 +1,197 @@
+{
+  "meta": {
+    "source": "Israel Police 2024",
+    "resource": "5fc13c50-b6f3-4712-b831-a75e0f91a17e",
+    "locality": 6400
+  },
+  "neighborhoods": {
+    "herzliya-pituach": {
+      "name_he": "הרצליה פיתוח",
+      "cases_2024_total": 369,
+      "cases_2024_person": 63,
+      "cases_2024_property": 189,
+      "per_1000_residents": 55.4,
+      "safety_score": 40,
+      "safety_rank": 10,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          64000064,
+          64000065
+        ]
+      }
+    },
+    "nof-yam": {
+      "name_he": "נוף ים",
+      "cases_2024_total": 211,
+      "cases_2024_person": 33,
+      "cases_2024_property": 69,
+      "per_1000_residents": 47.3,
+      "safety_score": 40,
+      "safety_rank": 7,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          64000066
+        ]
+      }
+    },
+    "herzliya-bet": null,
+    "galil-yam": null,
+    "nahalat-israel": null,
+    "shchunat-weizmann": {
+      "name_he": "שכונת ויצמן",
+      "cases_2024_total": 242,
+      "cases_2024_person": 41,
+      "cases_2024_property": 83,
+      "per_1000_residents": 33.7,
+      "safety_score": 46,
+      "safety_rank": 6,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          64000056,
+          64000057
+        ]
+      }
+    },
+    "merkaz-hair": {
+      "name_he": "מרכז העיר",
+      "cases_2024_total": 111,
+      "cases_2024_person": 10,
+      "cases_2024_property": 52,
+      "per_1000_residents": 4.1,
+      "safety_score": 94,
+      "safety_rank": 1,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          64000042
+        ]
+      }
+    },
+    "herzliya-hayeruka": null,
+    "gan-rashal": {
+      "name_he": "גן רש\"ל",
+      "cases_2024_total": 155,
+      "cases_2024_person": 21,
+      "cases_2024_property": 63,
+      "per_1000_residents": 48.4,
+      "safety_score": 40,
+      "safety_rank": 9,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          64000051
+        ]
+      }
+    },
+    "yad-hatisha": {
+      "name_he": "יד התשעה",
+      "cases_2024_total": 163,
+      "cases_2024_person": 27,
+      "cases_2024_property": 57,
+      "per_1000_residents": 48.1,
+      "safety_score": 40,
+      "safety_rank": 8,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          64000011
+        ]
+      }
+    },
+    "neve-amal": {
+      "name_he": "נווה עמל",
+      "cases_2024_total": 252,
+      "cases_2024_person": 47,
+      "cases_2024_property": 94,
+      "per_1000_residents": 28.5,
+      "safety_score": 54,
+      "safety_rank": 3,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          64000012,
+          64000013
+        ]
+      }
+    },
+    "tsamarot": {
+      "name_he": "צמרות",
+      "cases_2024_total": 97,
+      "cases_2024_person": 12,
+      "cases_2024_property": 46,
+      "per_1000_residents": 20.1,
+      "safety_score": 68,
+      "safety_rank": 2,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          64000021
+        ]
+      }
+    },
+    "herzliya-hatzeira": null,
+    "neve-amirim": {
+      "name_he": "נווה אמירים",
+      "cases_2024_total": 123,
+      "cases_2024_person": 16,
+      "cases_2024_property": 56,
+      "per_1000_residents": 30.1,
+      "safety_score": 52,
+      "safety_rank": 4,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          64000023
+        ]
+      }
+    },
+    "neve-israel": {
+      "name_he": "נווה ישראל",
+      "cases_2024_total": 102,
+      "cases_2024_person": 13,
+      "cases_2024_property": 41,
+      "per_1000_residents": 30.5,
+      "safety_score": 51,
+      "safety_rank": 5,
+      "safety_rank_of": 10,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          64000024
+        ]
+      }
+    }
+  }
+}

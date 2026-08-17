@@ -59,26 +59,52 @@ async function fetchCbsAreas(semelYishuv: number): Promise<CbsFeature[]> {
 /** POST an Overpass query, with the User-Agent + retry Overpass expects. */
 async function fetchOverpass<T>(query: string): Promise<T> {
   const body = "data=" + encodeURIComponent(query);
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const res = await fetch("https://overpass-api.de/api/interpreter", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-        "User-Agent": UA,
-      },
-      body,
-    });
-    if (res.ok) return (await res.json()) as T;
-    if (res.status === 429 || res.status === 504) {
-      const wait = attempt * 5000;
-      console.warn(`  Overpass ${res.status}; retrying in ${wait / 1000}s (${attempt}/3)…`);
-      await new Promise((r) => setTimeout(r, wait));
-      continue;
+  // Try each mirror in turn: the main endpoint rate-limits hard (429) when
+  // several city builds run at once, and a single endpoint makes the whole
+  // pipeline fail on a transient quota message. The mirrors serve the same data.
+  const endpoints = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+  ];
+  let lastErr = "";
+  for (const ep of endpoints) {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      let res: Response;
+      try {
+        res = await fetch(ep, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "User-Agent": UA,
+          },
+          body,
+        });
+      } catch (e) {
+        lastErr = String(e);
+        await new Promise((r) => setTimeout(r, attempt * 4000));
+        continue;
+      }
+      if (res.ok) {
+        // A quota message can arrive as HTML with a 200 — treat that as a miss.
+        const text = await res.text();
+        if (!text.startsWith("<")) return JSON.parse(text) as T;
+        lastErr = "HTML quota response";
+      } else {
+        lastErr = `${res.status} ${res.statusText}`;
+      }
+      if (res.status === 429 || res.status === 504 || lastErr === "HTML quota response") {
+        const wait = attempt * 5000;
+        console.warn(`  Overpass ${lastErr}; retrying in ${wait / 1000}s (${attempt}/3)…`);
+        await new Promise((r) => setTimeout(r, wait));
+        continue;
+      }
+      throw new Error(`Overpass: ${lastErr}`);
     }
-    throw new Error(`Overpass: ${res.status} ${res.statusText}`);
+    console.warn(`  (endpoint exhausted, trying next mirror)`);
   }
-  throw new Error("Overpass: exhausted retries");
+  throw new Error(`Overpass: all mirrors failed (last: ${lastErr})`);
 }
 
 /** Building-footprint centers inside a bbox [w,s,e,n]. */

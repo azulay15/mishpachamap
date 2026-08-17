@@ -1,0 +1,125 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "petahtikva",
+    "generated_from": "public/neighborhoods.petahtikva.geo.json"
+  },
+  "neighborhoods": {
+    "bar-yehuda": {
+      "green_score": 72,
+      "quiet_score": 71
+    },
+    "kiryat-elazar": {
+      "green_score": 56,
+      "quiet_score": 36
+    },
+    "kfar-ganim-gimel": {
+      "green_score": 49,
+      "quiet_score": 42
+    },
+    "neve-gan": {
+      "green_score": 41,
+      "quiet_score": 45
+    },
+    "kiryat-alon": {
+      "green_score": 40,
+      "quiet_score": 42
+    },
+    "em-hamoshavot-hadasha": {
+      "green_score": 37,
+      "quiet_score": 58
+    },
+    "ramat-verber": {
+      "green_score": 34,
+      "quiet_score": 46
+    },
+    "hadar-ganim": {
+      "green_score": 33,
+      "quiet_score": 46
+    },
+    "bat-ganim": {
+      "green_score": 22,
+      "quiet_score": 39
+    },
+    "kfar-ganim-alef": {
+      "green_score": 21,
+      "quiet_score": 81
+    },
+    "amishav": {
+      "green_score": 20,
+      "quiet_score": 60
+    },
+    "kfar-ganim-bet": {
+      "green_score": 19,
+      "quiet_score": 59
+    },
+    "em-hamoshavot-vatika": {
+      "green_score": 18,
+      "quiet_score": 49
+    },
+    "neve-ganim": {
+      "green_score": 17,
+      "quiet_score": 44
+    },
+    "neve-maoz": {
+      "green_score": 16,
+      "quiet_score": 44
+    },
+    "shifer-neve-dekalim": {
+      "green_score": 15,
+      "quiet_score": 31
+    },
+    "ahdut": {
+      "green_score": 10,
+      "quiet_score": 46
+    },
+    "neve-oz": {
+      "green_score": 10,
+      "quiet_score": 53
+    },
+    "ein-ganim": {
+      "green_score": 9,
+      "quiet_score": 69
+    },
+    "mahane-yehuda": {
+      "green_score": 9,
+      "quiet_score": 61
+    },
+    "beilinson": {
+      "green_score": 8,
+      "quiet_score": 94
+    },
+    "merkaz-hashaket": {
+      "green_score": 7,
+      "quiet_score": 80
+    },
+    "kfar-avraham": {
+      "green_score": 5,
+      "quiet_score": 51
+    },
+    "shaariya": {
+      "green_score": 5,
+      "quiet_score": 41
+    },
+    "krol": {
+      "green_score": 4,
+      "quiet_score": 33
+    },
+    "pisgat-alon-yoseftal": {
+      "green_score": 4,
+      "quiet_score": 44
+    },
+    "kiryat-matalon": {
+      "green_score": 4,
+      "quiet_score": 40
+    },
+    "lev-hamoshava": {
+      "green_score": 2,
+      "quiet_score": 59
+    },
+    "chen-hatzafon": {
+      "green_score": 1,
+      "quiet_score": 32
+    }
+  }
+}

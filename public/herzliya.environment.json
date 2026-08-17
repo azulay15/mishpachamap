@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "herzliya",
+    "generated_from": "public/neighborhoods.herzliya.geo.json"
+  },
+  "neighborhoods": {
+    "galil-yam": {
+      "green_score": 95,
+      "quiet_score": 59
+    },
+    "tsamarot": {
+      "green_score": 83,
+      "quiet_score": 46
+    },
+    "herzliya-bet": {
+      "green_score": 64,
+      "quiet_score": 42
+    },
+    "gan-rashal": {
+      "green_score": 62,
+      "quiet_score": 36
+    },
+    "shchunat-weizmann": {
+      "green_score": 60,
+      "quiet_score": 69
+    },
+    "nof-yam": {
+      "green_score": 46,
+      "quiet_score": 59
+    },
+    "nahalat-israel": {
+      "green_score": 46,
+      "quiet_score": 77
+    },
+    "herzliya-hayeruka": {
+      "green_score": 46,
+      "quiet_score": 66
+    },
+    "yad-hatisha": {
+      "green_score": 43,
+      "quiet_score": 38
+    },
+    "neve-amirim": {
+      "green_score": 39,
+      "quiet_score": 51
+    },
+    "neve-israel": {
+      "green_score": 38,
+      "quiet_score": 36
+    },
+    "herzliya-pituach": {
+      "green_score": 35,
+      "quiet_score": 79
+    },
+    "herzliya-hatzeira": {
+      "green_score": 34,
+      "quiet_score": 41
+    },
+    "merkaz-hair": {
+      "green_score": 32,
+      "quiet_score": 63
+    },
+    "neve-amal": {
+      "green_score": 32,
+      "quiet_score": 63
+    }
+  }
+}

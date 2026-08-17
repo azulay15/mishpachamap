@@ -1,0 +1,117 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "netanya",
+    "generated_from": "public/neighborhoods.netanya.geo.json"
+  },
+  "neighborhoods": {
+    "ir-yamim": {
+      "green_score": 93,
+      "quiet_score": 79
+    },
+    "ofek-hayam": {
+      "green_score": 84,
+      "quiet_score": 79
+    },
+    "galei-yam": {
+      "green_score": 84,
+      "quiet_score": 98
+    },
+    "agamim": {
+      "green_score": 55,
+      "quiet_score": 59
+    },
+    "kiryat-nordau": {
+      "green_score": 47,
+      "quiet_score": 38
+    },
+    "neot-ganim": {
+      "green_score": 38,
+      "quiet_score": 44
+    },
+    "ramat-hen": {
+      "green_score": 34,
+      "quiet_score": 63
+    },
+    "givat-hairusim": {
+      "green_score": 34,
+      "quiet_score": 74
+    },
+    "kiryat-hasharon": {
+      "green_score": 33,
+      "quiet_score": 59
+    },
+    "ben-zion": {
+      "green_score": 30,
+      "quiet_score": 56
+    },
+    "ramat-poleg": {
+      "green_score": 29,
+      "quiet_score": 41
+    },
+    "ramat-efraim": {
+      "green_score": 26,
+      "quiet_score": 41
+    },
+    "neot-golda": {
+      "green_score": 25,
+      "quiet_score": 51
+    },
+    "kokhav-hatzafon": {
+      "green_score": 24,
+      "quiet_score": 39
+    },
+    "neot-herzl": {
+      "green_score": 22,
+      "quiet_score": 48
+    },
+    "neot-shaked": {
+      "green_score": 20,
+      "quiet_score": 94
+    },
+    "kiryat-rabin": {
+      "green_score": 19,
+      "quiet_score": 70
+    },
+    "kiryat-sanz": {
+      "green_score": 17,
+      "quiet_score": 98
+    },
+    "nof-hatayelet": {
+      "green_score": 13,
+      "quiet_score": 98
+    },
+    "ramat-yadin": {
+      "green_score": 13,
+      "quiet_score": 53
+    },
+    "merkaz-hair-tzafon-mizrach": {
+      "green_score": 10,
+      "quiet_score": 61
+    },
+    "merkaz-hair-tzafon-maarav": {
+      "green_score": 9,
+      "quiet_score": 95
+    },
+    "ein-hatchelet": {
+      "green_score": 8,
+      "quiet_score": 93
+    },
+    "merkaz-hair-darom": {
+      "green_score": 8,
+      "quiet_score": 80
+    },
+    "pardes-hagdud": {
+      "green_score": 5,
+      "quiet_score": 78
+    },
+    "neve-itamar": {
+      "green_score": 0,
+      "quiet_score": 36
+    },
+    "mishkenot-zevulun": {
+      "green_score": 0,
+      "quiet_score": 46
+    }
+  }
+}

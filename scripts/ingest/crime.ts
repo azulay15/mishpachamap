@@ -81,6 +81,60 @@ const CROSSWALKS: Record<string, Record<number, string | null>> = {
     69000035: null, // בי"ח גריאטרי — geriatric hospital, ~0 residents
     69000051: null, // תחנה מרכזית — central bus station, commercial
   },
+  // Ra'anana: police names are street/sub-area level. Mapped where the name
+  // states a neighborhood; school- and street-only areas left unplaced.
+  raanana: {
+    87000023: "rasco-ben-tzvi", // קרית בן צבי (רסקו) קרית שז"ר
+    87000018: "kiryat-remez", // קרית דוד רמז (דרום-מזרח)
+    87000019: "kiryat-remez", // קרית דוד רמז (דרום-מערב)
+    87000013: "kiryat-remez", // לסטר/רבוצקי + קרית רמז (צפון-מזרח) — compound, remez named
+    87000025: "kiryat-ganim", // קרית גנים שיכון אשר 2003 (מערב)
+    87000024: "kiryat-ganim", // 2003 (מזרח) — שכונת 2003 is part of the Kiryat Ganim area
+    87000033: "ha-mea", // אוסטרובסקי/פרדס משותף — exactly HaMe'a's stated bounds
+  },
+  // Herzliya: ditto. Note קרית רבין / גבעת הסופר are not in the neighborhood
+  // roster (sub-areas), so they stay unplaced rather than being force-fitted.
+  herzliya: {
+    64000051: "gan-rashal", // גן רש"ל נחלת עדה (the two share one stat area)
+    64000056: "shchunat-weizmann", // וייצמן (מזרח)
+    64000057: "shchunat-weizmann", // וייצמן (מערב)
+    64000033: null, // תחנה מרכזית + המועצה הדתית — civic/commercial
+  },
+  // Netanya: 35 unmatched, mostly street-level or civic. Confident placements
+  // below; the hotel strip / stadium / college are excluded as non-residential.
+  netanya: {
+    74000117: "kiryat-hasharon", // קרית השרון צפון
+    74000522: "kiryat-nordau", // קרית נורדאו (צפון-מערב)
+    74000521: "kiryat-nordau", // קרית נורדאו (דרום-מערב)
+    74000512: "kiryat-nordau", // קרית נורדאו (דרום-מזרח)
+    74000312: "merkaz-hair-tzafon-mizrach", // מרכז העיר (צפון-מזרח)
+    74000313: "merkaz-hair-tzafon-maarav", // מרכז העיר (צפון-מערב)
+    74000213: "neot-herzl", // רמת הרצל — a component of Neot Herzl
+    74000211: "neot-herzl", // אום חאלד סלע — שיכון סלע is part of Neot Herzl
+    74000533: "ramat-poleg", // נאות מנחם בגין (דרום) — known as Ramat Poleg
+    74000322: null, // רצועת החוף והמלונות (צפון) — hotel strip, commercial
+    74000323: null, // רצועת החוף והמלונות (דרום) — hotel strip, commercial
+    74000243: null, // אזור אצטדיון הקופסא — stadium
+    74000321: null, // המכללה למנהל — college campus
+  },
+  // Petah Tikva: 32 unmatched. The industrial zones here are already discarded
+  // from the polygon build, so they map to null for safety too.
+  petahtikva: {
+    79000111: null, // סגולה — industrial zone
+    79000128: null, // רמת סיב — business park
+    79000125: null, // קרית אריה (מזרח) — industrial
+    79000311: null, // עיריית פ"ת + בי"ס — civic core
+    79000312: null, // השוק העירוני — municipal market, commercial
+    79000313: null, // היכל לתרבות + תחנת משטרה — civic
+    79000231: null, // בי"ח השרון — hospital
+    79000121: "em-hamoshavot-hadasha", // הדר המושבות החדשה (מרכז)
+    79000129: "em-hamoshavot-hadasha", // הדר המושבות החדשה (ב')
+    79000122: "em-hamoshavot-vatika", // הדר המושבות הותיקה
+    79000523: "hadar-ganim", // גני הדר — folded into Hadar Ganim
+    79000422: "ein-ganim", // עין הגנים (דרום)
+    79000321: "ein-ganim", // עין הגנים (צפון)
+    79000515: "kiryat-alon", // קרית אלון (מזרח) קרית דוד אליעזר
+  },
 };
 
 const num = (v: unknown): number | null => {
