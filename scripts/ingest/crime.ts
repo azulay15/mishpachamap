@@ -135,6 +135,173 @@ const CROSSWALKS: Record<string, Record<number, string | null>> = {
     79000321: "ein-ganim", // עין הגנים (צפון)
     79000515: "kiryat-alon", // קרית אלון (מזרח) קרית דוד אליעזר
   },
+  // Haifa: police codes are 4000xxxx where xxxx is the (older) CBS stat-area
+  // number, and almost all still line up with the 2022 SAs our polygons use
+  // (names confirm it). So the crosswalk is FULLY explicit, keyed off the SA,
+  // not auto-match: our compound names (e.g. "קריית שפרינצק ועין הים") make
+  // the substring matcher unreliable, and it mis-files "הדר (צפון-מערב)".
+  haifa: {
+    40000111: "hfa-kiryat-shmuel", 40000112: "hfa-kiryat-shmuel",
+    40000121: "hfa-kiryat-haim-west", 40000122: "hfa-kiryat-haim-west",
+    40000131: "hfa-kiryat-haim-east", 40000132: "hfa-kiryat-haim-east", 40000133: "hfa-kiryat-haim-east",
+    40000134: "hfa-kiryat-haim-east", 40000135: "hfa-kiryat-haim-east",
+    40000123: null, // מתחם מיכלי הנפט — tank farm
+    40000221: null, // מכון הטיהור — sewage works
+    40000231: null, // אזור הקישון — port industry
+    40000232: null, // נמל חיפה — port
+    40000314: null, // ואדי סאליב — lower-city commercial core (crime ≠ residential pop)
+    40000324: null, // העיר התחתית (מרכז) - שער פלמר — commercial core, ditto
+    40000331: "hfa-wadi-nisnas", 40000332: "hfa-wadi-nisnas", 40000333: "hfa-wadi-nisnas",
+    40000334: "hfa-german-colony",
+    40000411: "hfa-kiryat-eliezer", 40000412: "hfa-kiryat-eliezer", 40000413: "hfa-kiryat-eliezer", 40000414: "hfa-kiryat-eliezer",
+    40000417: "hfa-bat-galim",
+    // בת גלים (מזרח) + Rambam hospital: can't be split, so it stays with Bat
+    // Galim and the implausible-rate guard suppresses the result.
+    40000418: "hfa-bat-galim",
+    40000421: "hfa-kiryat-sprinzak", 40000422: "hfa-kiryat-sprinzak", 40000423: "hfa-kiryat-sprinzak",
+    40000424: "hfa-shaar-haaliya",
+    40000425: "hfa-neve-david", 40000426: "hfa-neve-david",
+    40000511: "hfa-carmelia", 40000512: "hfa-carmelia", // 512 = SA512 (Shambur)
+    40000513: "hfa-vardia", 40000514: "hfa-vardia", // 513 = SA513 (Na'amat)
+    40000521: "hfa-merkaz-hacarmel", 40000522: "hfa-merkaz-hacarmel", 40000523: "hfa-merkaz-hacarmel", 40000524: "hfa-merkaz-hacarmel",
+    40000525: "hfa-carmel-west", 40000526: "hfa-carmel-west", 40000528: "hfa-carmel-west",
+    40000527: "hfa-kababir",
+    40000531: "hfa-ramat-shaul",
+    40000532: "hfa-french-carmel",
+    40000533: "hfa-ramat-hatishbi",
+    40000611: "hfa-abbas", 40000612: "hfa-abbas", 40000613: "hfa-abbas", // SA611-613 (Abbas, Bahai gardens, Masada)
+    40000621: "hfa-hadar-elyon", 40000622: "hfa-hadar-elyon", 40000623: "hfa-hadar-elyon",
+    40000631: "hfa-hadar-merkaz", 40000632: "hfa-hadar-merkaz", 40000633: "hfa-hadar-merkaz", 40000634: "hfa-hadar-merkaz",
+    40000641: "hfa-geula", 40000642: "hfa-geula",
+    40000643: "hfa-ramat-vizhnitz",
+    40000711: "hfa-halisa", 40000712: "hfa-halisa",
+    40000713: "hfa-neve-paz", // נווה גנים (צפון) = SA713
+    40000714: "hfa-neve-yosef",
+    40000721: "hfa-neve-shaanan", 40000722: "hfa-neve-shaanan", 40000723: "hfa-neve-shaanan",
+    40000731: "hfa-yizreelia", 40000732: "hfa-yizreelia", 40000733: "hfa-yizreelia",
+    40000811: "hfa-ziv",
+    40000812: null, // קרית הטכניון — campus
+    40000813: "hfa-ramat-alon",
+    40000821: "hfa-ramot-remez", 40000822: "hfa-ramot-remez",
+    40000823: "hfa-ramat-sapir", 40000824: "hfa-ramat-sapir",
+    40000825: null, // גבעת זמר — open land
+    40000911: "hfa-romema", 40000912: "hfa-romema", // רמת בן גוריון (צפון) = SA911 (רוממה החדשה)
+    40000921: "hfa-ahuza", 40000922: "hfa-ahuza",
+    40000933: "hfa-ahuza", 40000934: "hfa-ahuza", // police call these רמת בן גוריון; SA933/934 are Ahuza (Givat Downes)
+    40000931: "hfa-ramat-begin", 40000932: "hfa-ramat-begin",
+    40000941: "hfa-ramat-golda", 40000942: "hfa-ramat-golda",
+    40000943: "hfa-savyonei-hacarmel",
+    40000944: "hfa-hod-hacarmel",
+    40000945: null, // אוניברסיטת חיפה — campus
+    // 40000432/433 (מת"ם) are already excluded as industrial; note 433's police
+    // area is MATAM, so Neot Peres (CBS SA433 since 2022) has no police area.
+  },
+  // Jerusalem: the police use the OLD (pre-2022) numbering, which no longer
+  // lines up with CBS 2022 codes (e.g. police 30000411 = Ramat Shlomo, CBS 411
+  // = Ramot), so this is FULLY explicit and name-based. Auto-match is unsafe
+  // here: "פת" substring-matches "הצרפתית", "שועפאט" matches the camp unit, and
+  // "המבתר" trips the non-residential regex.
+  // Unplaced on purpose (ambiguous, spans several of our units):
+  //   30000835 אחווה יגיע כפיים, 30001351 מעלות מוריה.
+  jerusalem: {
+    30000111: "jlm-neve-yaakov", 30000112: "jlm-neve-yaakov", 30000113: "jlm-neve-yaakov",
+    30000114: "jlm-neve-yaakov", 30000115: "jlm-neve-yaakov", 30000116: "jlm-neve-yaakov",
+    30000121: "jlm-pisgat-zeev", 30000122: "jlm-pisgat-zeev", 30000123: "jlm-pisgat-zeev", 30000124: "jlm-pisgat-zeev",
+    30000125: "jlm-pisgat-zeev", 30000131: "jlm-pisgat-zeev", 30000132: "jlm-pisgat-zeev", 30000133: "jlm-pisgat-zeev",
+    30000134: "jlm-pisgat-zeev", 30000135: "jlm-pisgat-zeev", 30000136: "jlm-pisgat-zeev",
+    30000411: "jlm-ramat-shlomo", 30000412: "jlm-ramat-shlomo", 30000413: "jlm-ramat-shlomo",
+    30000421: "jlm-ramot", 30000422: "jlm-ramot", 30000423: "jlm-ramot", 30000424: "jlm-ramot", 30000425: "jlm-ramot",
+    30000426: "jlm-ramot", 30000431: "jlm-ramot", 30000432: "jlm-ramot", 30000433: "jlm-ramot", 30000434: "jlm-ramot",
+    30000435: "jlm-ramot", 30000436: "jlm-ramot", // 436 עמק הארזים — the Ramot quarter's police area
+    30000511: null, // הר חוצבים — hi-tech park
+    30000512: "jlm-tel-arza", 30000513: "jlm-tel-arza", 30000514: "jlm-tel-arza", // עזרת תורה, שיכון חב"ד, מחניים תל ארזה
+    30000515: "jlm-sanhedria", 30000521: "jlm-sanhedria",
+    30000522: "jlm-ramat-eshkol", // "רמות אשכול" — a spelling of רמת אשכול, not Ramot
+    30000523: "jlm-ramat-eshkol", // גבעת המבתר רמת אשכול
+    30000531: "jlm-maalot-dafna", 30000532: "jlm-maalot-dafna", 30000533: "jlm-maalot-dafna",
+    30000541: "jlm-french-hill", 30000542: "jlm-french-hill",
+    30000543: null, // הר הצופים — Hadassah + Hebrew University campus
+    30000812: "jlm-musrara",
+    30000821: "jlm-mea-shearim",
+    30000822: "jlm-beit-israel", 30000823: "jlm-beit-israel",
+    30000824: "jlm-bukharim",
+    30000825: "jlm-geula", 30000836: "jlm-geula", // גאולה, זכרון משה
+    30000826: "jlm-kerem-avraham",
+    30000832: "jlm-mekor-baruch", 30000834: "jlm-mekor-baruch",
+    30000833: "jlm-nachlaot", // מחנה יהודה (צפון)
+    30000854: "jlm-nachlaot", 30000855: "jlm-nachlaot", // זכרון יוסף/שבט צדק, זכרון טוביה/נחלת ציון — Nachlaot courtyards
+    30000856: "jlm-nachlaot", 30000857: "jlm-nachlaot",
+    30000841: null, // מרכז ירושלים — commercial center (crime ≠ residential pop)
+    30000846: null, // גן העצמאות — park
+    30000848: null, // נחלת שבעה / מדרחוב בן-יהודה — commercial core
+    30000853: null, // שוק מחנה יהודה / מרכז כלל — market + mall
+    30000862: "jlm-rehavia", 30000863: "jlm-rehavia", 30000864: "jlm-rehavia", // קרית שמואל is inside our Rehavia unit
+    30000911: "jlm-kiryat-sanz", 30000912: "jlm-kiryat-sanz",
+    30000913: "jlm-romema", // קריית מטרסדורף — SA922, part of our Romema unit
+    30000914: "jlm-romema", 30000915: "jlm-romema", 30000916: "jlm-romema", // 914 includes the central bus station
+    30000921: "jlm-givat-shaul", 30000922: "jlm-givat-shaul", 30000923: "jlm-givat-shaul",
+    30000924: null, // אזור תעשייה גבעת שאול + הר המנוחות
+    30000931: "jlm-har-nof", 30000932: "jlm-har-nof", 30000933: "jlm-har-nof", 30000934: "jlm-har-nof",
+    30001011: "jlm-beit-hakerem", 30001012: "jlm-beit-hakerem", 30001013: "jlm-beit-hakerem", 30001014: "jlm-beit-hakerem", // 1011 = יפה נוף
+    30001015: "jlm-kiryat-moshe", 30001016: "jlm-kiryat-moshe",
+    30001021: null, // קרית בן גוריון / קרית הלאום — government precinct
+    30001022: "jlm-nayot",
+    30001023: null, 30001024: null, // גבעת רם — university campus
+    30001031: "jlm-bayit-vegan", 30001032: "jlm-bayit-vegan", 30001034: "jlm-bayit-vegan", 30001035: "jlm-bayit-vegan",
+    30001041: "jlm-ramat-sharett", 30001042: "jlm-ramat-sharett", 30001043: "jlm-ramat-sharett",
+    30001044: "jlm-holyland",
+    30001114: null, // הדסה עין כרם — hospital
+    30001115: "jlm-ein-kerem",
+    30001121: "jlm-kiryat-hayovel", 30001122: "jlm-kiryat-hayovel", 30001123: "jlm-kiryat-hayovel", 30001124: "jlm-kiryat-hayovel",
+    30001131: "jlm-kiryat-hayovel", 30001132: "jlm-kiryat-hayovel", 30001133: "jlm-kiryat-hayovel",
+    30001134: "jlm-kiryat-menachem", 30001141: "jlm-kiryat-menachem", 30001142: "jlm-kiryat-menachem", 30001143: "jlm-kiryat-menachem", // עיר גנים א'-ג', קרית מנחם
+    30001144: "jlm-givat-masua",
+    30001147: "jlm-malha", // מלחה / מורדות מלחה
+    30001211: "jlm-katamonim", 30001212: "jlm-katamonim", 30001213: "jlm-katamonim", // גונן ט', גונן ח', פת
+    30001214: "jlm-katamonim", 30001215: "jlm-katamonim", 30001217: "jlm-katamonim",
+    30001216: "jlm-old-katamon", 30001311: "jlm-old-katamon", 30001312: "jlm-old-katamon",
+    30001221: "jlm-givat-mordechai",
+    30001222: "jlm-rassco", 30001223: "jlm-rassco",
+    30001313: "jlm-german-colony", 30001314: "jlm-german-colony",
+    30001321: "jlm-talbiyeh",
+    30001322: null, // מתחם ימק"א — hotel/civic compound
+    30001333: "jlm-baka", 30001334: "jlm-baka", 30001335: "jlm-baka",
+    30001336: "jlm-talpiot", // צמרת אלנבי — CBS SA1331
+    // ימין משה + הר ציון + גבעת חנניה + צפון תלפיות in ONE police area spans
+    // three of our units (Talbiyeh, Abu Tor, Talpiot), so it can't be attributed.
+    30001337: null,
+    30001341: "jlm-ramot-rachel",
+    30001342: "jlm-talpiot", 30001344: "jlm-talpiot",
+    30001343: "jlm-arnona", // ארנונה תלפיות (דרום-מזרח)
+    30001345: null, // אזור תעשייה ומסחר תלפיות
+    30001346: "jlm-mekor-haim",
+    30001352: "jlm-east-talpiot", 30001353: "jlm-east-talpiot", 30001354: "jlm-east-talpiot", 30001355: "jlm-east-talpiot",
+    30001622: "jlm-har-homa", 30001623: "jlm-har-homa", 30001624: "jlm-har-homa", 30001625: "jlm-har-homa",
+    30001626: null, // מנזר מר אליאס — monastery
+    30001631: "jlm-gilo", 30001632: "jlm-gilo", 30001633: "jlm-gilo", 30001634: "jlm-gilo",
+    30001641: "jlm-gilo", 30001642: "jlm-gilo", 30001643: "jlm-gilo", 30001644: "jlm-gilo",
+    // Kafr Aqab and the Shu'fat camp / New Anata area lie beyond the separation
+    // barrier, where police presence and reporting are limited, so their case
+    // counts aren't comparable with the rest of the city. Left empty on purpose.
+    30002111: null, // כפר עקב עטרות
+    30002212: null, // מחנה פליטים שועפאט
+    30002213: null, // ענאתה החדשה
+    30002112: "jlm-beit-hanina", // police name: בית חנינא
+    30002211: "jlm-shuafat", // police name: שועפאט
+    30002311: "jlm-issawiya",
+    30002312: "jlm-a-tur", // א-טור ומורדות הר הזיתים
+    30002411: "jlm-sheikh-jarrah", // ואדי אל ג'וז ושיח ג'ראח
+    30002412: "jlm-bab-a-zahra", // באב א זהרה ומסעודיה
+    30002511: "jlm-muslim-quarter", 30002512: "jlm-jewish-quarter", 30002513: "jlm-armenian-quarter", 30002514: "jlm-christian-quarter",
+    30002611: "jlm-silwan",
+    // אבו תור covers the eastern part only; the western part (גבעת חנניה) sits in
+    // 30001337 above, so the rate would be understated. Left empty.
+    30002612: null,
+    30002613: "jlm-ras-al-amud",
+    30002711: "jlm-jabel-mukaber",
+    30002811: "jlm-sur-baher",
+    30002911: "jlm-beit-safafa",
+  },
 };
 
 const num = (v: unknown): number | null => {

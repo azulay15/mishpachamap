@@ -569,6 +569,350 @@ const petahTikva: CityConfig = {
   gtfsCityName: "פתח תקווה",
 };
 
+/**
+ * Haifa (semel 4000, ~290k) — 40 residential neighborhoods from 106 CBS stat
+ * areas (88 used, 18 discarded).
+ * Roster = the MUNICIPALITY's own neighborhood layer (opendata.haifa.muni.il
+ * "שכונות העיר", 76 polygons, which nests exactly inside the CBS stat areas —
+ * every SA sits 100% inside one municipal neighborhood). Its ~60 residential
+ * units are grouped within the municipality's own תת-רובע where they're tiny
+ * or share one SA, e.g. קריית אליהו into קריית אליעזר, רמת הדר into מרכז הכרמל.
+ * Every SA is listed in statOverrides, so no SA is placed by nearest-anchor.
+ * 18 discards (COD_TIFKUD 2/4/5/6 + no census population): the whole Haifa Bay
+ * industrial belt (port, refineries, Kishon, Checkpost), MATAM, the Technion
+ * and University campuses, the Carmel beach strip, cemeteries, open land.
+ * Expect a large hole north-east of downtown; that's the bay industry, not a bug.
+ * Census rows CBS publishes combined (e.g. 713 = 713+221+222+223) keep their
+ * residential member intact; only the non-residential members are discarded.
+ * Review flags: hfa-downtown includes SA321 (Kiryat HaMemshala, the government
+ * complex) only so 311 and 322 stay one polygon; hfa-carmel-west folds in
+ * כבירים (SA525); hfa-abbas pairs Abbas with Masada (same תת-רובע 61).
+ */
+const haifa: CityConfig = {
+  id: "haifa",
+  semelYishuv: 4000,
+  outFile: "public/neighborhoods.haifa.geo.json",
+  anchors: [
+    { id: "hfa-kiryat-shmuel", name_he: "קריית שמואל", name_en: "Kiryat Shmuel", lng: 35.06983, lat: 32.83731 },
+    { id: "hfa-kiryat-haim-west", name_he: "קריית חיים מערבית", name_en: "Kiryat Haim West", lng: 35.06196, lat: 32.83286 },
+    { id: "hfa-kiryat-haim-east", name_he: "קריית חיים מזרחית", name_en: "Kiryat Haim East", lng: 35.07425, lat: 32.82321 },
+    { id: "hfa-downtown", name_he: "העיר התחתית", name_en: "Downtown", lng: 35.00426, lat: 32.81038 },
+    { id: "hfa-wadi-nisnas", name_he: "ואדי ניסנאס", name_en: "Wadi Nisnas", lng: 34.99463, lat: 32.81736 },
+    { id: "hfa-german-colony", name_he: "המושבה הגרמנית", name_en: "German Colony", lng: 34.98943, lat: 32.82122 },
+    { id: "hfa-kiryat-eliezer", name_he: "קריית אליעזר וקריית אליהו", name_en: "Kiryat Eliezer & Kiryat Eliyahu", lng: 34.98032, lat: 32.82492 },
+    { id: "hfa-bat-galim", name_he: "בת גלים", name_en: "Bat Galim", lng: 34.98328, lat: 32.83386 },
+    { id: "hfa-kiryat-sprinzak", name_he: "קריית שפרינצק ועין הים", name_en: "Kiryat Sprinzak & Ein HaYam", lng: 34.96324, lat: 32.82131 },
+    { id: "hfa-shaar-haaliya", name_he: "שער העלייה", name_en: "Sha'ar HaAliya", lng: 34.95736, lat: 32.81907 },
+    { id: "hfa-neve-david", name_he: "נווה דוד ורמת הנשיא", name_en: "Neve David & Ramat HaNasi", lng: 34.96004, lat: 32.81107 },
+    { id: "hfa-neot-peres", name_he: "נאות פרס", name_en: "Neot Peres", lng: 34.96692, lat: 32.77825 },
+    { id: "hfa-carmelia", name_he: "כרמליה ושמבור", name_en: "Carmelia & Shambur", lng: 34.98236, lat: 32.79516 },
+    { id: "hfa-vardia", name_he: 'ורדיה ונעמ"ת', name_en: "Vardia & Na'amat", lng: 34.99342, lat: 32.79518 },
+    { id: "hfa-merkaz-hacarmel", name_he: "מרכז הכרמל", name_en: "Merkaz HaCarmel", lng: 34.98888, lat: 32.80175 },
+    { id: "hfa-carmel-west", name_he: "הכרמל המערבי וכבירים", name_en: "Western Carmel & Kabirim", lng: 34.97719, lat: 32.80578 },
+    { id: "hfa-kababir", name_he: "כבאביר", name_en: "Kababir", lng: 34.97055, lat: 32.80444 },
+    { id: "hfa-ramat-shaul", name_he: "רמת שאול", name_en: "Ramat Shaul", lng: 34.96938, lat: 32.82285 },
+    { id: "hfa-french-carmel", name_he: "הכרמל הצרפתי", name_en: "French Carmel", lng: 34.97549, lat: 32.82083 },
+    { id: "hfa-ramat-hatishbi", name_he: "רמת התשבי", name_en: "Ramat HaTishbi", lng: 34.98273, lat: 32.8112 },
+    { id: "hfa-abbas", name_he: "עבאס ומסדה", name_en: "Abbas & Masada", lng: 34.98862, lat: 32.81361 },
+    { id: "hfa-hadar-elyon", name_he: "הדר עליון", name_en: "Upper Hadar", lng: 34.99468, lat: 32.80545 },
+    { id: "hfa-hadar-merkaz", name_he: "הדר מרכז", name_en: "Central Hadar", lng: 34.99707, lat: 32.81128 },
+    { id: "hfa-geula", name_he: 'גאולה ויל"ג', name_en: "Geula & Yalag", lng: 35.00256, lat: 32.80406 },
+    { id: "hfa-ramat-vizhnitz", name_he: "רמת ויז'ניץ", name_en: "Ramat Vizhnitz", lng: 35.00232, lat: 32.7989 },
+    { id: "hfa-halisa", name_he: "חליסה ותל עמל", name_en: "Halisa & Tel Amal", lng: 35.01221, lat: 32.79841 },
+    { id: "hfa-neve-paz", name_he: "נווה פז", name_en: "Neve Paz", lng: 35.02106, lat: 32.79342 },
+    { id: "hfa-neve-yosef", name_he: "נווה יוסף", name_en: "Neve Yosef", lng: 35.02023, lat: 32.79112 },
+    { id: "hfa-neve-shaanan", name_he: "נווה שאנן", name_en: "Neve Sha'anan", lng: 35.02374, lat: 32.78453 },
+    { id: "hfa-yizreelia", name_he: "יזרעאליה", name_en: "Yizre'elia", lng: 35.00991, lat: 32.79231 },
+    { id: "hfa-ziv", name_he: "זיו", name_en: "Ziv", lng: 35.01467, lat: 32.78368 },
+    { id: "hfa-ramat-alon", name_he: "רמת אלון", name_en: "Ramat Alon", lng: 35.01302, lat: 32.7748 },
+    { id: "hfa-ramot-remez", name_he: "רמות רמז", name_en: "Ramot Remez", lng: 35.0099, lat: 32.77952 },
+    { id: "hfa-ramat-sapir", name_he: "רמת ספיר ורמת חן", name_en: "Ramat Sapir & Ramat Hen", lng: 35.00495, lat: 32.7869 },
+    { id: "hfa-romema", name_he: "רוממה", name_en: "Romema", lng: 34.99656, lat: 32.78921 },
+    { id: "hfa-ahuza", name_he: "אחוזה", name_en: "Ahuza", lng: 34.99062, lat: 32.78493 },
+    { id: "hfa-ramat-begin", name_he: "רמת בגין ורמת אשכול", name_en: "Ramat Begin & Ramat Eshkol", lng: 34.98201, lat: 32.77644 },
+    { id: "hfa-ramat-golda", name_he: "רמת גולדה ורמת אלמוגי", name_en: "Ramat Golda & Ramat Almogi", lng: 35.00494, lat: 32.77385 },
+    { id: "hfa-savyonei-hacarmel", name_he: "סביוני הכרמל", name_en: "Savyonei HaCarmel", lng: 35.01219, lat: 32.76972 },
+    { id: "hfa-hod-hacarmel", name_he: "הוד הכרמל (דניה)", name_en: "Hod HaCarmel (Denya)", lng: 34.99145, lat: 32.7636 },
+  ],
+  // Fully explicit (every STAT_2022 listed): neighborhoods follow the municipal
+  // list, not nearest-anchor.
+  statOverrides: {
+    123: "__nonresidential_discard__", // COD_TIFKUD=2 — חוות המיכלים (fuel tank farm)
+    124: "__nonresidential_discard__", // =6 — Kiryat Haim stadium
+    211: "__nonresidential_discard__", // =2 — Haifa Bay industrial zone
+    212: "__nonresidential_discard__", // =2 — Haifa Bay industrial zone
+    213: "__nonresidential_discard__", // =2 — Haifa Bay industrial zone
+    214: "__nonresidential_discard__", // =2 — oil refineries (בז"ן)
+    221: "__nonresidential_discard__", // =2 — sewage works
+    222: "__nonresidential_discard__", // =2 — Checkpost / Shemen beach industrial
+    223: "__nonresidential_discard__", // =2 — Shemen beach industrial
+    231: "__nonresidential_discard__", // =2 — Kishon port + industry
+    232: "__nonresidential_discard__", // =2 — Haifa port
+    431: "__nonresidential_discard__", // =6 — Carmel beach strip + hotels
+    432: "__nonresidential_discard__", // =2 — MATAM hi-tech park
+    434: "__nonresidential_discard__", // =6 — cemeteries
+    435: "__nonresidential_discard__", // =4 — open land by Neot Peres
+    812: "__nonresidential_discard__", // =5 — Technion campus
+    825: "__nonresidential_discard__", // =4 — Givat Zemer open land
+    945: "__nonresidential_discard__", // =6 — University of Haifa campus
+    111: "hfa-kiryat-shmuel", 112: "hfa-kiryat-shmuel",
+    121: "hfa-kiryat-haim-west", 122: "hfa-kiryat-haim-west",
+    131: "hfa-kiryat-haim-east", 132: "hfa-kiryat-haim-east", 133: "hfa-kiryat-haim-east", 134: "hfa-kiryat-haim-east", 135: "hfa-kiryat-haim-east",
+    311: "hfa-downtown", 321: "hfa-downtown", 322: "hfa-downtown",
+    331: "hfa-wadi-nisnas", 332: "hfa-wadi-nisnas", 333: "hfa-wadi-nisnas",
+    334: "hfa-german-colony",
+    411: "hfa-kiryat-eliezer", 412: "hfa-kiryat-eliezer", 413: "hfa-kiryat-eliezer", 414: "hfa-kiryat-eliezer",
+    415: "hfa-bat-galim", 416: "hfa-bat-galim", 417: "hfa-bat-galim",
+    421: "hfa-kiryat-sprinzak", 422: "hfa-kiryat-sprinzak", 423: "hfa-kiryat-sprinzak",
+    424: "hfa-shaar-haaliya",
+    425: "hfa-neve-david", 426: "hfa-neve-david",
+    433: "hfa-neot-peres",
+    511: "hfa-carmelia", 512: "hfa-carmelia",
+    513: "hfa-vardia", 514: "hfa-vardia",
+    521: "hfa-merkaz-hacarmel", 522: "hfa-merkaz-hacarmel", 523: "hfa-merkaz-hacarmel", 524: "hfa-merkaz-hacarmel",
+    525: "hfa-carmel-west", 526: "hfa-carmel-west", 528: "hfa-carmel-west",
+    527: "hfa-kababir",
+    531: "hfa-ramat-shaul",
+    532: "hfa-french-carmel",
+    533: "hfa-ramat-hatishbi",
+    611: "hfa-abbas", 612: "hfa-abbas", 613: "hfa-abbas",
+    621: "hfa-hadar-elyon", 622: "hfa-hadar-elyon", 623: "hfa-hadar-elyon",
+    631: "hfa-hadar-merkaz", 632: "hfa-hadar-merkaz", 633: "hfa-hadar-merkaz", 634: "hfa-hadar-merkaz",
+    641: "hfa-geula", 642: "hfa-geula",
+    643: "hfa-ramat-vizhnitz", 644: "hfa-ramat-vizhnitz",
+    711: "hfa-halisa", 712: "hfa-halisa",
+    713: "hfa-neve-paz",
+    714: "hfa-neve-yosef", 715: "hfa-neve-yosef",
+    721: "hfa-neve-shaanan", 722: "hfa-neve-shaanan", 723: "hfa-neve-shaanan",
+    731: "hfa-yizreelia", 732: "hfa-yizreelia", 733: "hfa-yizreelia",
+    811: "hfa-ziv",
+    813: "hfa-ramat-alon",
+    821: "hfa-ramot-remez", 822: "hfa-ramot-remez",
+    823: "hfa-ramat-sapir", 824: "hfa-ramat-sapir",
+    911: "hfa-romema", 912: "hfa-romema",
+    921: "hfa-ahuza", 922: "hfa-ahuza", 933: "hfa-ahuza", 934: "hfa-ahuza",
+    931: "hfa-ramat-begin", 932: "hfa-ramat-begin",
+    941: "hfa-ramat-golda", 942: "hfa-ramat-golda",
+    943: "hfa-savyonei-hacarmel",
+    944: "hfa-hod-hacarmel",
+  },
+  demographicsOut: "haifa.demographics.json",
+  crimeOut: "haifa.crime.json",
+  schoolsOut: "haifa.schools.json",
+  transitOut: "haifa.transit.json",
+  environmentOut: "haifa.environment.json",
+  pricesOut: "haifa.prices.json",
+  moeCityName: "חיפה",
+  gtfsCityName: "חיפה",
+};
+
+/**
+ * Jerusalem (semel 3000, ~982k) — 66 residential neighborhoods from 243 CBS
+ * stat areas (218 used, 25 discarded). By far the largest city in the app.
+ * Roster = the Jerusalem Transportation Masterplan Team's municipal neighborhood
+ * layer (ArcGIS "שכונות ירושלים", 115 polygons, JTMT) cross-checked against
+ * OSM place nodes and the CBS רובע/תת-רובע codes. Each SA went to the
+ * neighborhood it overlaps most (boundary calls flagged below); tiny units are
+ * grouped (e.g. the Mea She'arim courtyards, Nachlaot + Mahane Yehuda). Every SA
+ * is listed in statOverrides.
+ * CENSUS CONSTRAINT: CBS publishes many 2022 census rows only for COMBINED
+ * areas (StatAreaCmb, e.g. 2123 = 2121-2126, ~51k people). A combined row is
+ * kept inside ONE neighborhood so population, and therefore crime per 1,000
+ * residents, isn't attributed to the wrong place. That sets the granularity in
+ * the east: Beit Hanina, Shu'fat, Sur Baher etc. are each a single unit.
+ * One deliberate exception: SA1332 (Yemin Moshe + Mt Zion) sits with Talbiyeh,
+ * where it physically belongs, though its few residents are counted inside
+ * census row 1336 (Abu Tor).
+ * East Jerusalem: every residential SA inside the municipal boundary that the
+ * census covers is included (Kafr Aqab and the Shu'fat camp area too), with
+ * names from the municipal list. Police / price / school coverage there is
+ * expected to be thin; empty layers stay empty.
+ * 25 discards (COD_TIFKUD 2/4/5/6 + no census row): Har Hotzvim, Atarot,
+ * Talpiot and Givat Shaul industry, Kiryat HaLeom, the Givat Ram, Mt Scopus and
+ * Hadassah campuses, Yad Vashem + Mt Herzl, Malha mall, forest and open land.
+ * Review flags: SA1611 Givat HaMatos and SA1813 Arnona Hills were open land in
+ * 2022 and are being built now (discarded); SA1025 (Kiryat HaLeom's small
+ * residential pocket) sits in jlm-nachlaot; SA1337 (North Talpiot 40% / Abu Tor
+ * 41%, ~900 people) sits in jlm-talpiot; jlm-abu-tor joins CBS's two Abu Tor
+ * areas (1336 + 2612), as the municipal list does.
+ */
+const jerusalem: CityConfig = {
+  id: "jerusalem",
+  semelYishuv: 3000,
+  outFile: "public/neighborhoods.jerusalem.geo.json",
+  anchors: [
+    { id: "jlm-neve-yaakov", name_he: "נווה יעקב", name_en: "Neve Ya'akov", lng: 35.24364, lat: 31.8407 },
+    { id: "jlm-pisgat-zeev", name_he: "פסגת זאב", name_en: "Pisgat Ze'ev", lng: 35.25142, lat: 31.82689 },
+    { id: "jlm-ramot", name_he: "רמות", name_en: "Ramot", lng: 35.19566, lat: 31.81906 },
+    { id: "jlm-tel-arza", name_he: "תל ארזה ועזרת תורה", name_en: "Tel Arza & Ezrat Torah", lng: 35.21469, lat: 31.79596 },
+    { id: "jlm-sanhedria", name_he: "סנהדריה", name_en: "Sanhedria", lng: 35.21901, lat: 31.80022 },
+    { id: "jlm-ramat-eshkol", name_he: "רמת אשכול וגבעת המבתר", name_en: "Ramat Eshkol & Givat HaMivtar", lng: 35.22594, lat: 31.80134 },
+    { id: "jlm-maalot-dafna", name_he: "מעלות דפנה ושמואל הנביא", name_en: "Ma'alot Dafna & Shmuel HaNavi", lng: 35.22594, lat: 31.79502 },
+    { id: "jlm-french-hill", name_he: "הגבעה הצרפתית", name_en: "French Hill", lng: 35.23789, lat: 31.8027 },
+    { id: "jlm-ramat-shlomo", name_he: "רמת שלמה", name_en: "Ramat Shlomo", lng: 35.21868, lat: 31.81128 },
+    { id: "jlm-bukharim", name_he: "שכונת הבוכרים", name_en: "Bukharim Quarter", lng: 35.21957, lat: 31.7928 },
+    { id: "jlm-kerem-avraham", name_he: "כרם אברהם", name_en: "Kerem Avraham", lng: 35.21667, lat: 31.79095 },
+    { id: "jlm-geula", name_he: "גאולה וזכרון משה", name_en: "Geula & Zikhron Moshe", lng: 35.21692, lat: 31.78777 },
+    { id: "jlm-beit-israel", name_he: "בית ישראל", name_en: "Beit Yisrael", lng: 35.22288, lat: 31.78929 },
+    { id: "jlm-mea-shearim", name_he: "מאה שערים", name_en: "Mea She'arim", lng: 35.22199, lat: 31.78641 },
+    { id: "jlm-mekor-baruch", name_he: "מקור ברוך", name_en: "Mekor Baruch", lng: 35.2111, lat: 31.78904 },
+    { id: "jlm-kiryat-sanz", name_he: "קריית צאנז, בעלז ואונסדורף", name_en: "Kiryat Sanz, Belz & Unsdorf", lng: 35.20583, lat: 31.79614 },
+    { id: "jlm-romema", name_he: "רוממה", name_en: "Romema", lng: 35.20304, lat: 31.79295 },
+    { id: "jlm-beit-hakerem", name_he: "בית הכרם", name_en: "Beit HaKerem", lng: 35.18888, lat: 31.77769 },
+    { id: "jlm-nayot", name_he: "ניות", name_en: "Nayot", lng: 35.20466, lat: 31.77085 },
+    { id: "jlm-kiryat-moshe", name_he: "קריית משה", name_en: "Kiryat Moshe", lng: 35.19551, lat: 31.78676 },
+    { id: "jlm-ein-kerem", name_he: "עין כרם", name_en: "Ein Kerem", lng: 35.15801, lat: 31.76568 },
+    { id: "jlm-kiryat-hayovel", name_he: "קריית היובל", name_en: "Kiryat HaYovel", lng: 35.17608, lat: 31.76278 },
+    { id: "jlm-kiryat-menachem", name_he: "קריית מנחם ועיר גנים", name_en: "Kiryat Menachem & Ir Ganim", lng: 35.17067, lat: 31.75463 },
+    { id: "jlm-malha", name_he: "מנחת (מלחה)", name_en: "Manahat (Malha)", lng: 35.1848, lat: 31.75176 },
+    { id: "jlm-givat-masua", name_he: "גבעת משואה", name_en: "Givat Masua", lng: 35.16971, lat: 31.74923 },
+    { id: "jlm-katamonim", name_he: "הקטמונים ופת", name_en: "Katamonim & Pat", lng: 35.20444, lat: 31.75569 },
+    { id: "jlm-givat-mordechai", name_he: "גבעת מרדכי", name_en: "Givat Mordechai", lng: 35.1984, lat: 31.76263 },
+    { id: "jlm-rassco", name_he: "רסקו וגבעת הוורדים", name_en: "Rassco & Givat HaVradim", lng: 35.20644, lat: 31.76417 },
+    { id: "jlm-old-katamon", name_he: "קטמון הישנה", name_en: "Old Katamon", lng: 35.21117, lat: 31.76328 },
+    { id: "jlm-german-colony", name_he: "המושבה הגרמנית והיוונית", name_en: "German & Greek Colony", lng: 35.21871, lat: 31.7649 },
+    { id: "jlm-talbiyeh", name_he: "טלביה וימין משה", name_en: "Talbiyeh & Yemin Moshe", lng: 35.22299, lat: 31.77183 },
+    { id: "jlm-baka", name_he: "בקעה", name_en: "Baka", lng: 35.21888, lat: 31.75778 },
+    { id: "jlm-abu-tor", name_he: "אבו תור", name_en: "Abu Tor", lng: 35.23043, lat: 31.76491 },
+    { id: "jlm-talpiot", name_he: "תלפיות", name_en: "Talpiot", lng: 35.22318, lat: 31.75355 },
+    { id: "jlm-musrara", name_he: "מוסררה (מורשה)", name_en: "Musrara (Morasha)", lng: 35.22613, lat: 31.78301 },
+    { id: "jlm-city-center", name_he: "מרכז העיר", name_en: "City Center", lng: 35.2192, lat: 31.78195 },
+    { id: "jlm-nachlaot", name_he: "נחלאות ומחנה יהודה", name_en: "Nachlaot & Mahane Yehuda", lng: 35.21066, lat: 31.78259 },
+    { id: "jlm-rehavia", name_he: "רחביה", name_en: "Rehavia", lng: 35.21194, lat: 31.77359 },
+    { id: "jlm-givat-shaul", name_he: "גבעת שאול", name_en: "Givat Shaul", lng: 35.19259, lat: 31.79059 },
+    { id: "jlm-har-nof", name_he: "הר נוף", name_en: "Har Nof", lng: 35.16816, lat: 31.7883 },
+    { id: "jlm-har-homa", name_he: "הר חומה (חומת שמואל)", name_en: "Har Homa (Homat Shmuel)", lng: 35.2241, lat: 31.72214 },
+    { id: "jlm-bayit-vegan", name_he: "בית וגן", name_en: "Bayit VeGan", lng: 35.18555, lat: 31.76642 },
+    { id: "jlm-ramat-sharett", name_he: "רמת שרת ורמת דניה", name_en: "Ramat Sharett & Ramat Denya", lng: 35.18436, lat: 31.75937 },
+    { id: "jlm-holyland", name_he: "הולילנד", name_en: "Holyland", lng: 35.19054, lat: 31.75813 },
+    { id: "jlm-arnona", name_he: "ארנונה", name_en: "Arnona", lng: 35.21975, lat: 31.74573 },
+    { id: "jlm-ramot-rachel", name_he: "רמות רחל (ארנונה החדשה)", name_en: "Ramot Rachel (New Arnona)", lng: 35.22567, lat: 31.75166 },
+    { id: "jlm-mekor-haim", name_he: "מקור חיים", name_en: "Mekor Haim", lng: 35.21217, lat: 31.75426 },
+    { id: "jlm-east-talpiot", name_he: "תלפיות מזרח (ארמון הנציב)", name_en: "East Talpiot (Armon HaNatziv)", lng: 35.23522, lat: 31.74846 },
+    { id: "jlm-gilo", name_he: "גילה", name_en: "Gilo", lng: 35.18917, lat: 31.73473 },
+    { id: "jlm-kafr-aqab", name_he: "כפר עקב", name_en: "Kafr Aqab", lng: 35.22133, lat: 31.87236 },
+    { id: "jlm-beit-hanina", name_he: "בית חנינא", name_en: "Beit Hanina", lng: 35.22145, lat: 31.83665 },
+    { id: "jlm-anata-shuafat-camp", name_he: "ענאתא ומחנה שועפאט", name_en: "Anata & Shu'fat Camp", lng: 35.25341, lat: 31.80833 },
+    { id: "jlm-shuafat", name_he: "שועפאט", name_en: "Shu'fat", lng: 35.23084, lat: 31.81427 },
+    { id: "jlm-issawiya", name_he: "עיסאוויה", name_en: "Issawiya", lng: 35.25456, lat: 31.79452 },
+    { id: "jlm-a-tur", name_he: "א-טור והר הזיתים", name_en: "At-Tur & Mount of Olives", lng: 35.24935, lat: 31.77963 },
+    { id: "jlm-sheikh-jarrah", name_he: "שייח' ג'ראח ו-ואדי ג'וז", name_en: "Sheikh Jarrah & Wadi al-Joz", lng: 35.23459, lat: 31.79085 },
+    { id: "jlm-bab-a-zahra", name_he: "באב א-זהרה", name_en: "Bab al-Zahra", lng: 35.23118, lat: 31.78493 },
+    { id: "jlm-muslim-quarter", name_he: "הרובע המוסלמי", name_en: "Muslim Quarter", lng: 35.23364, lat: 31.78019 },
+    { id: "jlm-jewish-quarter", name_he: "הרובע היהודי", name_en: "Jewish Quarter", lng: 35.23277, lat: 31.77526 },
+    { id: "jlm-armenian-quarter", name_he: "הרובע הארמני", name_en: "Armenian Quarter", lng: 35.22899, lat: 31.77478 },
+    { id: "jlm-christian-quarter", name_he: "הרובע הנוצרי", name_en: "Christian Quarter", lng: 35.22904, lat: 31.77914 },
+    { id: "jlm-silwan", name_he: "סילואן ועיר דוד", name_en: "Silwan & City of David", lng: 35.2371, lat: 31.77244 },
+    { id: "jlm-ras-al-amud", name_he: "ראס אל-עמוד", name_en: "Ras al-Amud", lng: 35.24827, lat: 31.76681 },
+    { id: "jlm-jabel-mukaber", name_he: "ג'בל מוקאבר וא-סוואחרה", name_en: "Jabel Mukaber & as-Sawahira", lng: 35.25037, lat: 31.75254 },
+    { id: "jlm-sur-baher", name_he: "צור באהר ואום טובא", name_en: "Sur Baher & Umm Tuba", lng: 35.2409, lat: 31.72829 },
+    { id: "jlm-beit-safafa", name_he: "בית צפאפא ושרפאת", name_en: "Beit Safafa & Sharafat", lng: 35.20171, lat: 31.74281 },
+  ],
+  // Fully explicit (every STAT_2022 listed): neighborhoods follow the municipal
+  // list, not nearest-anchor.
+  statOverrides: {
+    324: "__nonresidential_discard__", // COD_TIFKUD=4 — open land N of Ramot
+    511: "__nonresidential_discard__", // =2 — Har Hotzvim hi-tech park
+    543: "__nonresidential_discard__", // =6 — Mt Scopus campus (Hebrew U + Hadassah)
+    924: "__nonresidential_discard__", // =4 — Lifta valley
+    1021: "__nonresidential_discard__", // =6 — Kiryat HaLeom (Knesset, ministries, Israel Museum)
+    1023: "__nonresidential_discard__", // =6 — Givat Ram campus
+    1024: "__nonresidential_discard__", // =5 — Givat Ram campus
+    1026: "__nonresidential_discard__", // =6 — Kiryat HaLeom
+    1111: "__nonresidential_discard__", // =4 — Jerusalem forest / open land
+    1112: "__nonresidential_discard__", // =4 — open land W of Kiryat HaYovel
+    1113: "__nonresidential_discard__", // =4 — open land by Hadassah
+    1114: "__nonresidential_discard__", // =5 — Hadassah Ein Kerem medical center
+    1151: "__nonresidential_discard__", // =6 — Malha mall + Teddy stadium
+    1153: "__nonresidential_discard__", // =6 — non-residential belt by Givat Masua, no census pop
+    1155: "__nonresidential_discard__", // =4 — open land (Refaim valley)
+    1411: "__nonresidential_discard__", // =6 — Mamilla commercial
+    1515: "__nonresidential_discard__", // =6 — Givat Shaul industrial + Har HaMenuchot cemetery
+    1611: "__nonresidential_discard__", // =4 — Givat HaMatos (open in 2022; under construction since) ⚠ REVIEW
+    1612: "__nonresidential_discard__", // =4 — open land, Mar Elias / Har Homa slopes
+    1713: "__nonresidential_discard__", // =6 — Yad Vashem + Mt Herzl
+    1813: "__nonresidential_discard__", // =4 — kibbutz Ramat Rachel + Arnona Hills (new build after 2022; no census row) ⚠ REVIEW
+    1817: "__nonresidential_discard__", // =2 — Talpiot industrial zone
+    2112: "__nonresidential_discard__", // =2 — Atarot industrial zone + former airport
+    2214: "__nonresidential_discard__", // =4 — open land
+    2914: "__nonresidential_discard__", // =4 — open land S of Beit Safafa / Gilo slopes
+    111: "jlm-neve-yaakov", 112: "jlm-neve-yaakov", 113: "jlm-neve-yaakov", 114: "jlm-neve-yaakov", 115: "jlm-neve-yaakov", 116: "jlm-neve-yaakov", 117: "jlm-neve-yaakov",
+    211: "jlm-pisgat-zeev", 212: "jlm-pisgat-zeev", 213: "jlm-pisgat-zeev", 214: "jlm-pisgat-zeev", 215: "jlm-pisgat-zeev", 221: "jlm-pisgat-zeev", 222: "jlm-pisgat-zeev", 223: "jlm-pisgat-zeev", 224: "jlm-pisgat-zeev", 225: "jlm-pisgat-zeev", 226: "jlm-pisgat-zeev",
+    311: "jlm-ramot", 312: "jlm-ramot", 321: "jlm-ramot", 322: "jlm-ramot", 323: "jlm-ramot", 411: "jlm-ramot", 412: "jlm-ramot", 413: "jlm-ramot", 421: "jlm-ramot", 422: "jlm-ramot", 431: "jlm-ramot", 432: "jlm-ramot", 433: "jlm-ramot",
+    512: "jlm-tel-arza", 513: "jlm-tel-arza", 514: "jlm-tel-arza",
+    515: "jlm-sanhedria", 521: "jlm-sanhedria",
+    522: "jlm-ramat-eshkol", 523: "jlm-ramat-eshkol", 524: "jlm-ramat-eshkol",
+    531: "jlm-maalot-dafna", 532: "jlm-maalot-dafna", 533: "jlm-maalot-dafna",
+    541: "jlm-french-hill", 542: "jlm-french-hill",
+    611: "jlm-ramat-shlomo", 612: "jlm-ramat-shlomo", 613: "jlm-ramat-shlomo",
+    711: "jlm-bukharim", 712: "jlm-bukharim",
+    713: "jlm-kerem-avraham",
+    714: "jlm-geula", 815: "jlm-geula", 816: "jlm-geula",
+    721: "jlm-beit-israel", 722: "jlm-beit-israel",
+    723: "jlm-mea-shearim", 724: "jlm-mea-shearim",
+    811: "jlm-mekor-baruch", 812: "jlm-mekor-baruch", 813: "jlm-mekor-baruch", 814: "jlm-mekor-baruch",
+    911: "jlm-kiryat-sanz", 912: "jlm-kiryat-sanz", 921: "jlm-kiryat-sanz",
+    913: "jlm-romema", 914: "jlm-romema", 922: "jlm-romema", 923: "jlm-romema",
+    1011: "jlm-beit-hakerem", 1012: "jlm-beit-hakerem", 1013: "jlm-beit-hakerem", 1014: "jlm-beit-hakerem",
+    1022: "jlm-nayot",
+    1031: "jlm-kiryat-moshe", 1032: "jlm-kiryat-moshe", 1033: "jlm-kiryat-moshe",
+    1115: "jlm-ein-kerem", 1116: "jlm-ein-kerem",
+    1121: "jlm-kiryat-hayovel", 1122: "jlm-kiryat-hayovel", 1123: "jlm-kiryat-hayovel", 1124: "jlm-kiryat-hayovel", 1125: "jlm-kiryat-hayovel", 1131: "jlm-kiryat-hayovel", 1132: "jlm-kiryat-hayovel", 1133: "jlm-kiryat-hayovel",
+    1141: "jlm-kiryat-menachem", 1142: "jlm-kiryat-menachem", 1143: "jlm-kiryat-menachem", 1144: "jlm-kiryat-menachem",
+    1152: "jlm-malha",
+    1154: "jlm-givat-masua",
+    1211: "jlm-katamonim", 1212: "jlm-katamonim", 1213: "jlm-katamonim", 1214: "jlm-katamonim", 1215: "jlm-katamonim", 1216: "jlm-katamonim",
+    1221: "jlm-givat-mordechai",
+    1222: "jlm-rassco", 1223: "jlm-rassco",
+    1311: "jlm-old-katamon", 1312: "jlm-old-katamon", 1315: "jlm-old-katamon",
+    1313: "jlm-german-colony", 1314: "jlm-german-colony",
+    1321: "jlm-talbiyeh", 1322: "jlm-talbiyeh", 1332: "jlm-talbiyeh",
+    1333: "jlm-baka", 1334: "jlm-baka", 1335: "jlm-baka",
+    1336: "jlm-abu-tor", 2612: "jlm-abu-tor",
+    1331: "jlm-talpiot", 1337: "jlm-talpiot", 1812: "jlm-talpiot", 1815: "jlm-talpiot", 1816: "jlm-talpiot",
+    1412: "jlm-musrara",
+    1421: "jlm-city-center", 1422: "jlm-city-center", 1423: "jlm-city-center", 1424: "jlm-city-center", 1425: "jlm-city-center",
+    1025: "jlm-nachlaot", 1431: "jlm-nachlaot", 1432: "jlm-nachlaot", 1433: "jlm-nachlaot", 1434: "jlm-nachlaot", 1435: "jlm-nachlaot", 1436: "jlm-nachlaot", 1437: "jlm-nachlaot", 1438: "jlm-nachlaot",
+    1426: "jlm-rehavia", 1441: "jlm-rehavia", 1442: "jlm-rehavia", 1443: "jlm-rehavia", 1444: "jlm-rehavia",
+    1511: "jlm-givat-shaul", 1512: "jlm-givat-shaul", 1513: "jlm-givat-shaul", 1514: "jlm-givat-shaul",
+    1516: "jlm-har-nof", 1521: "jlm-har-nof", 1522: "jlm-har-nof", 1523: "jlm-har-nof", 1524: "jlm-har-nof", 1525: "jlm-har-nof",
+    1613: "jlm-har-homa", 1614: "jlm-har-homa", 1615: "jlm-har-homa", 1616: "jlm-har-homa", 1617: "jlm-har-homa", 1618: "jlm-har-homa",
+    1711: "jlm-bayit-vegan", 1712: "jlm-bayit-vegan", 1714: "jlm-bayit-vegan", 1715: "jlm-bayit-vegan", 1716: "jlm-bayit-vegan",
+    1721: "jlm-ramat-sharett", 1722: "jlm-ramat-sharett", 1723: "jlm-ramat-sharett",
+    1724: "jlm-holyland",
+    1814: "jlm-arnona",
+    1811: "jlm-ramot-rachel",
+    1818: "jlm-mekor-haim",
+    1821: "jlm-east-talpiot", 1822: "jlm-east-talpiot", 1823: "jlm-east-talpiot", 1824: "jlm-east-talpiot", 1825: "jlm-east-talpiot",
+    1911: "jlm-gilo", 1912: "jlm-gilo", 1913: "jlm-gilo", 1914: "jlm-gilo", 1921: "jlm-gilo", 1922: "jlm-gilo", 1923: "jlm-gilo", 1924: "jlm-gilo",
+    2111: "jlm-kafr-aqab",
+    2121: "jlm-beit-hanina", 2122: "jlm-beit-hanina", 2123: "jlm-beit-hanina", 2124: "jlm-beit-hanina", 2125: "jlm-beit-hanina", 2126: "jlm-beit-hanina",
+    2211: "jlm-anata-shuafat-camp", 2212: "jlm-anata-shuafat-camp", 2213: "jlm-anata-shuafat-camp",
+    2221: "jlm-shuafat", 2222: "jlm-shuafat",
+    2311: "jlm-issawiya", 2312: "jlm-issawiya",
+    2321: "jlm-a-tur", 2322: "jlm-a-tur", 2323: "jlm-a-tur", 2324: "jlm-a-tur",
+    2411: "jlm-sheikh-jarrah", 2412: "jlm-sheikh-jarrah",
+    2413: "jlm-bab-a-zahra", 2414: "jlm-bab-a-zahra",
+    2511: "jlm-muslim-quarter",
+    2512: "jlm-jewish-quarter",
+    2513: "jlm-armenian-quarter",
+    2514: "jlm-christian-quarter",
+    2611: "jlm-silwan", 2613: "jlm-silwan",
+    2621: "jlm-ras-al-amud", 2622: "jlm-ras-al-amud",
+    2711: "jlm-jabel-mukaber", 2712: "jlm-jabel-mukaber",
+    2811: "jlm-sur-baher", 2812: "jlm-sur-baher", 2813: "jlm-sur-baher",
+    2911: "jlm-beit-safafa", 2912: "jlm-beit-safafa", 2913: "jlm-beit-safafa",
+  },
+  demographicsOut: "jerusalem.demographics.json",
+  crimeOut: "jerusalem.crime.json",
+  schoolsOut: "jerusalem.schools.json",
+  transitOut: "jerusalem.transit.json",
+  environmentOut: "jerusalem.environment.json",
+  pricesOut: "jerusalem.prices.json",
+  moeCityName: "ירושלים",
+  gtfsCityName: "ירושלים",
+};
+
 export const CITIES: Record<string, CityConfig> = {
   modiin,
   mevomodiim: mevoModiim,
@@ -579,4 +923,6 @@ export const CITIES: Record<string, CityConfig> = {
   herzliya,
   netanya,
   petahtikva: petahTikva,
+  haifa,
+  jerusalem,
 };

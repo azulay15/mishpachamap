@@ -43,6 +43,18 @@ async function ckan(resource: string, params: Record<string, string>): Promise<R
   return j.result.records;
 }
 
+/** Every matching row, paged. The mosdot roster has one row per institution
+ *  PER YEAR, so a big city blows far past a single page (Jerusalem ~13k rows,
+ *  Haifa ~3.2k) and a single `limit` silently returns only the oldest years. */
+async function ckanAll(resource: string, params: Record<string, string>, pageSize = 1000): Promise<Rec[]> {
+  const out: Rec[] = [];
+  for (let offset = 0; ; offset += pageSize) {
+    const page = await ckan(resource, { ...params, limit: String(pageSize), offset: String(offset) });
+    out.push(...page);
+    if (page.length < pageSize) return out;
+  }
+}
+
 const num = (v: unknown): number | null => {
   if (v == null || v === "") return null;
   const n = Number(v);
@@ -97,7 +109,7 @@ async function main() {
   const writeDb = process.argv.includes("--db");
 
   console.log(`→ fetching MoE roster (mosdot) for ${city.id} ("${CITY}")…`);
-  const all = await ckan(MOSDOT, { limit: "1000", filters: JSON.stringify({ "שם ישוב": CITY }) });
+  const all = await ckanAll(MOSDOT, { filters: JSON.stringify({ "שם ישוב": CITY }) });
   // Latest year per semel; keep schools (grade-bearing), drop kindergartens.
   const latestBySemel = new Map<number, Rec>();
   for (const r of all) {
