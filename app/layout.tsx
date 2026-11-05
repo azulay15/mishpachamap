@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Heebo, Inter } from "next/font/google";
+import { Heebo, Rubik } from "next/font/google";
 import "./globals.css";
 
 const heebo = Heebo({
@@ -9,10 +9,10 @@ const heebo = Heebo({
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
+const rubik = Rubik({
+  subsets: ["hebrew", "latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-rubik",
   display: "swap",
 });
 
@@ -76,7 +76,7 @@ export default function RootLayout({
     <html
       lang="he"
       dir="rtl"
-      className={`${heebo.variable} ${inter.variable} h-full antialiased`}
+      className={`${heebo.variable} ${rubik.variable} h-full antialiased`}
     >
       <body className="min-h-full">{children}</body>
     </html>

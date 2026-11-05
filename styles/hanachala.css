@@ -1,0 +1,200 @@
+/* ============================================================================
+   הנחלה — design tokens · direction "נבט" (family sprout)
+
+   Two parts:
+   1. Semantic tokens (--hn-*). This is the API. New and refactored code uses
+      only these, never a raw hex and never a primitive like --grey-500.
+   2. Legacy aliases. Components still reference the Investing.com DS
+      primitives from tokens.css (--grey-500 ×101, --pumpkin-orange ×51, …).
+      Re-pointing those names here reskins the whole app before any component
+      is touched. Delete an alias once nothing references it.
+
+   Imported LAST in app/globals.css so these :root values win over
+   tokens.css and mishpachamap.css.
+   ============================================================================ */
+
+:root {
+  /* ---------- brand primitives (reference only; prefer semantic tokens) --- */
+  --hn-green-900: #0F3D23;
+  --hn-green-700: #19663A;
+  --hn-green-600: #1F7A45; /* logo leaf */
+  --hn-green-400: #4AA16A;
+  --hn-green-200: #BADFC3;
+  --hn-green-100: #DDEFE2;
+  --hn-green-50:  #EDF3EE;
+  --hn-orange-600: #D45610;
+  --hn-orange-500: #EF6A1B; /* logo bud */
+  --hn-orange-100: #FDE9DC;
+
+  /* ---------- surfaces ---------- */
+  --hn-bg:          #F6F8F5;
+  --hn-surface:     #FFFFFF;
+  --hn-surface-2:   #EDF3EE;
+  --hn-surface-3:   #E3ECE5;
+  --hn-border:      #DAE4DC;
+  --hn-border-strong: #C3D1C6;
+
+  /* ---------- text (all ≥4.5:1 on --hn-surface) ---------- */
+  --hn-text:          #14231A; /* 16.3:1 */
+  --hn-text-2:        #4A5A50; /*  7.3:1 */
+  --hn-text-3:        #637267; /*  5.1:1 — replaces --grey-500 (#84888E, 3.6:1) */
+  --hn-text-disabled: #A3AFA6;
+
+  /* ---------- actions ---------- */
+  --hn-primary:       #1F7A45; /* 5.4:1 with white */
+  --hn-primary-hover: #19663A;
+  --hn-on-primary:    #FFFFFF;
+  --hn-accent:        #EF6A1B; /* selection + highlights only, never body text */
+  --hn-accent-hover:  #D45610;
+  --hn-on-accent:     #1A1208;
+  --hn-link:          #19663A;
+  --hn-focus:         #1F7A45;
+  --hn-chip-on:       #DDEFE2;
+  --hn-on-chip-on:    #14532D;
+
+  /* ---------- status ---------- */
+  --hn-positive:    #1F7A45;
+  --hn-positive-bg: #E3F1E6;
+  --hn-warning:     #9A5D00;
+  --hn-warning-bg:  #FBF0DD;
+  --hn-negative:    #C2362B;
+  --hn-negative-bg: #FCEDEB;
+
+  /* ---------- trust labels (source + as-of date on every number) ---------- */
+  --hn-trust-verified: var(--hn-positive);
+  --hn-trust-estimate: var(--hn-warning);
+  --hn-trust-missing:  var(--hn-text-3);
+
+  /* ---------- map ---------- */
+  --hn-map-land:     #E9EFE8;
+  --hn-map-edge:     #FFFFFF;
+  --hn-map-selected: var(--hn-accent);
+  --hn-map-veto:     var(--hn-negative);
+  --hn-score-1: #E3F1E6; /* match score ramp, low → high */
+  --hn-score-2: #BADFC3;
+  --hn-score-3: #85C496;
+  --hn-score-4: #4AA16A;
+  --hn-score-5: #1F7A45;
+
+  /* ---------- shape ---------- */
+  --hn-radius-sm:      8px;
+  --hn-radius-control: 12px;
+  --hn-radius-card:    16px;
+  --hn-radius-sheet:   20px;
+  --hn-radius-pill:    9999px;
+  --hn-shadow-1: 0 1px 2px rgba(20, 35, 26, 0.06);
+  --hn-shadow-2: 0 1px 2px rgba(20, 35, 26, 0.06), 0 8px 24px rgba(20, 35, 26, 0.08);
+  --hn-shadow-3: 0 16px 40px rgba(20, 35, 26, 0.14);
+
+  /* ---------- type (fonts loaded by next/font in app/layout.tsx) ---------- */
+  --hn-font-display: var(--font-rubik, "Rubik"), var(--font-heebo, "Heebo"), "Arial Hebrew", sans-serif;
+  --hn-font-body:    var(--font-heebo, "Heebo"), "Arial Hebrew", -apple-system, "Segoe UI", Arial, sans-serif;
+  --hn-font-num:     var(--font-rubik, "Rubik"), var(--font-heebo, "Heebo"), sans-serif;
+}
+
+/* Dark palette — defined, NOT wired yet. Turning it on needs the remaining
+   hex values in mishpachamap.css and MMMap's Mapbox paint colors moved onto
+   tokens first (refactor phase 2), or parts of the UI stay light. */
+[data-theme="dark"] {
+  --hn-bg:          #0E1611;
+  --hn-surface:     #152019;
+  --hn-surface-2:   #1C2A21;
+  --hn-surface-3:   #233328;
+  --hn-border:      #2A3B30;
+  --hn-border-strong: #3A4E41;
+  --hn-text:          #E6EFE8;
+  --hn-text-2:        #B3C4B8;
+  --hn-text-3:        #8FA396;
+  --hn-text-disabled: #5A6B5F;
+  --hn-primary:       #5CCB8A;
+  --hn-primary-hover: #74D79C;
+  --hn-on-primary:    #0A1A10;
+  --hn-accent:        #FF8A3D;
+  --hn-accent-hover:  #FF9E5C;
+  --hn-on-accent:     #1A1208;
+  --hn-link:          #5CCB8A;
+  --hn-focus:         #5CCB8A;
+  --hn-chip-on:       #1F3A2A;
+  --hn-on-chip-on:    #BFF0D2;
+  --hn-positive:    #5CCB8A;
+  --hn-positive-bg: #17301F;
+  --hn-warning:     #E0A33B;
+  --hn-warning-bg:  #33270F;
+  --hn-negative:    #F07468;
+  --hn-negative-bg: #3A1E1B;
+  --hn-map-land:  #121C16;
+  --hn-map-edge:  #0E1611;
+  --hn-score-1: #1B2E22;
+  --hn-score-2: #1F4B33;
+  --hn-score-3: #267048;
+  --hn-score-4: #3A9A63;
+  --hn-score-5: #6FD49A;
+  --hn-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --hn-shadow-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --hn-shadow-3: 0 16px 40px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+/* ============================================================================
+   Legacy aliases — Investing.com DS primitive names → הנחלה tokens.
+   ============================================================================ */
+:root {
+  --grey-0:   var(--hn-surface);
+  --grey-5:   var(--hn-bg);
+  --grey-10:  var(--hn-bg);
+  --grey-15:  var(--hn-surface-2);
+  --grey-20:  var(--hn-border);
+  --grey-50:  var(--hn-border-strong);
+  --grey-100: var(--hn-text-disabled);
+  --grey-500: var(--hn-text-3);
+  --grey-700: var(--hn-text-2);
+  --grey-800: #2B3B31;
+  --grey-900: var(--hn-text);
+  --grey-950: #0B140E;
+
+  --pumpkin-orange:       var(--hn-primary);
+  --pumpkin-orange-hover: var(--hn-primary-hover);
+  --mandarin-orange:      var(--hn-accent);
+  --orange-bright:        var(--hn-accent);
+
+  --blue-link:        var(--hn-link);
+  --blue-interactive: var(--hn-primary);
+
+  --green-positive: var(--hn-positive);
+  --green-bg:       var(--hn-positive-bg);
+  --red-negative:   var(--hn-negative);
+  --red-bg:         var(--hn-negative-bg);
+
+  --stroke-hairline: var(--hn-border);
+  --stroke-weak:     var(--hn-border);
+  --stroke-medium:   var(--hn-border-strong);
+
+  --surface-page: var(--hn-bg);
+  --surface-well: var(--hn-surface-2);
+  --surface-alt:  var(--hn-bg);
+  --border-focus: var(--hn-focus);
+  --icon-brand:   var(--hn-primary);
+
+  --radius-normal: var(--hn-radius-sm);
+  --radius-medium: 10px;
+  --radius-big:    var(--hn-radius-control);
+  --radius-huge:   var(--hn-radius-card);
+
+  --shadow-sm: var(--hn-shadow-1);
+  --shadow-md: var(--hn-shadow-2);
+  --shadow-lg: var(--hn-shadow-2);
+  --shadow-xl: var(--hn-shadow-3);
+
+  /* Fonts: Heebo for text, Rubik for numbers and headings. --font-inter is
+     still referenced ~40 times for numbers; it now resolves to Rubik
+     (Inter is no longer loaded). */
+  --font-inter: var(--font-rubik, "Rubik");
+  --font-sans:  var(--hn-font-body);
+  --font-heb:   var(--hn-font-body);
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.hn-display {
+  font-family: var(--hn-font-display);
+}
