@@ -75,6 +75,35 @@
   --hn-score-3: #85C496;
   --hn-score-4: #4AA16A;
   --hn-score-5: #1F7A45;
+  --hn-map-landuse:      #E1E9DF;
+  --hn-map-park:         #CFE3C8;
+  --hn-map-park-edge:    #A9CBA0;
+  --hn-map-building:     #DCE4DB;
+  --hn-map-water:        #C3DDE6;
+  --hn-map-road:         #FFFFFF;
+  --hn-map-road-case:    #CCD7CD;
+  --hn-map-highway:      #F3D2A6;
+  --hn-map-highway-case: #DDB27C;
+  --hn-map-label:        #4A5A50;
+  --hn-map-hover:        #14231A;
+
+  /* ---------- POI categories (map dots, legends, popups) ----------
+     Picked to read on the green match ramp. Transit is a quiet slate on
+     purpose: there are hundreds of stops and they shouldn't shout. */
+  --hn-poi-price:      #14231A;
+  --hn-poi-school:     #2B5FA8;
+  --hn-poi-preschool:  #5B93D6;
+  --hn-poi-park:       #2E7D4F;
+  --hn-poi-shop:       #B86E00;
+  --hn-poi-transit:    #5B6670;
+  --hn-poi-community:  #7A5BC0;
+  --hn-poi-clinic:     #C2477E;
+  --hn-poi-celiac:     #C2477E;
+  --hn-poi-playground: #D9661F;
+
+  /* ---------- logo (נבט משפחתי: shape 1, Rubik, colour 1) ---------- */
+  --hn-logo-leaf: #1F7A45;
+  --hn-logo-bud:  #EF6A1B;
 
   /* ---------- shape ---------- */
   --hn-radius-sm:      8px;
@@ -129,6 +158,8 @@
   --hn-score-3: #267048;
   --hn-score-4: #3A9A63;
   --hn-score-5: #6FD49A;
+  --hn-logo-leaf: #5CCB8A;
+  --hn-logo-bud:  #FF8A3D;
   --hn-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3);
   --hn-shadow-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
   --hn-shadow-3: 0 16px 40px rgba(0, 0, 0, 0.5);

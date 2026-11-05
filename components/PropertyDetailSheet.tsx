@@ -102,7 +102,7 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, neighborhoodId, l
             )}
             <span
               className="mm-tag mm-tag-soft"
-              style={{ background: "rgba(255,255,255,0.92)", color: "#181C21" }}
+              style={{ background: "rgba(255,255,255,0.92)", color: "var(--hn-text)" }}
             >
               {listing.days_on_market ?? "?"} ימים בשוק
             </span>

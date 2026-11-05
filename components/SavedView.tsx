@@ -150,14 +150,14 @@ export function SavedView({ neighborhoods, listings }: Props) {
                   <div style={{ fontSize: 13, color: "var(--grey-700)", marginBottom: 6 }}>{l.address}</div>
                   <div style={{ display: "flex", gap: 10, fontSize: 11, color: "var(--grey-500)" }}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                      <MMIcon name="bed" size={12} color="#84888E" /> {l.rooms} חד׳
+                      <MMIcon name="bed" size={12} color="var(--hn-text-3)" /> {l.rooms} חד׳
                     </span>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                      <MMIcon name="ruler" size={12} color="#84888E" /> {l.sqm} מ"ר
+                      <MMIcon name="ruler" size={12} color="var(--hn-text-3)" /> {l.sqm} מ"ר
                     </span>
                     {l.garden_sqm != null && (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                        <MMIcon name="garden" size={12} color="#84888E" /> {l.garden_sqm} גינה
+                        <MMIcon name="garden" size={12} color="var(--hn-text-3)" /> {l.garden_sqm} גינה
                       </span>
                     )}
                   </div>

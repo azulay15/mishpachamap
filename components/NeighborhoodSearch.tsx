@@ -127,7 +127,7 @@ export function NeighborhoodSearch({ neighborhoods, onPick, onAIClick }: Props) 
           borderRadius: 999,
         }}
       >
-        <MMIcon name="search" size={16} color="#84888E" />
+        <MMIcon name="search" size={16} color="var(--hn-text-3)" />
         <input
           ref={inputRef}
           value={query}

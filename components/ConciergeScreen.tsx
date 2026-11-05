@@ -576,7 +576,7 @@ export function ConciergeScreen({
                 }}
               >
                 <div style={{ textAlign: "center" }}>
-                  <MMIcon name="grid" size={20} color="#5B616E" />
+                  <MMIcon name="grid" size={20} color="var(--hn-text-2)" />
                   <br />
                   כל {neighborhoodsWithScore.length} השכונות
                 </div>

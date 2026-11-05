@@ -71,7 +71,7 @@ export function HomeScreen({ data }: Props) {
   }, [data.neighborhoods]);
 
   return (
-    <div className="mm-shell" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--bg, #F6F4EF)" }}>
+    <div className="mm-shell" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--hn-bg)" }}>
       <MMHeader activeNav="בית" />
       <main style={{ flex: 1, width: "100%", maxWidth: 1120, margin: "0 auto", padding: "clamp(16px, 3.5vw, 40px) clamp(16px, 3vw, 32px) 64px" }}>
         {hasPersona ? (

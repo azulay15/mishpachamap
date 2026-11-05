@@ -53,7 +53,7 @@ function Skeleton({
         height: h,
         borderRadius: radius,
         background:
-          "linear-gradient(90deg, var(--grey-15) 0%, #ECECEE 50%, var(--grey-15) 100%)",
+          "linear-gradient(90deg, var(--grey-15) 0%, var(--hn-border) 50%, var(--grey-15) 100%)",
         backgroundSize: "200% 100%",
         animation: "mm-skel 1.4s ease-in-out infinite",
         ...style,

@@ -83,8 +83,8 @@ describe("totalScore", () => {
 
 describe("scoreColor", () => {
   it("buckets by threshold", () => {
-    expect(scoreColor(95)).toBe("var(--green-positive)");
-    expect(scoreColor(85)).toBe("var(--pumpkin-orange)");
-    expect(scoreColor(70)).toBe("var(--grey-700)");
+    expect(scoreColor(95)).toBe("var(--hn-green-700)");
+    expect(scoreColor(85)).toBe("var(--hn-primary)");
+    expect(scoreColor(70)).toBe("var(--hn-text-2)");
   });
 });

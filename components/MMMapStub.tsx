@@ -250,7 +250,7 @@ export function MMMapStub({
                 x={0}
                 y={6}
                 textAnchor="middle"
-                fill="#FF6B00"
+                fill="#EF6A1B"
                 style={{ fontSize: 11, fontWeight: 700 }}
               >
                 התאמה {n.matchScore}/100 · ₪{(n.avgListing / 1_000_000).toFixed(2)}M ממוצע

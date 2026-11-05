@@ -16,23 +16,23 @@ const rubik = Rubik({
   display: "swap",
 });
 
-const TITLE = "MishpachaMap — אתרו את השכונה שמתאימה למשפחה שלכם";
+const TITLE = "הנחלה · מוצאים את השכונה שמתאימה למשפחה שלכם";
 const DESCRIPTION =
-  "פלטפורמה לבחירת שכונה במודיעין: עסקאות נדל״ן, בתי ספר, פארקים, GreenScore — וקונסיירז' AI שיודע לדבר על השכונות.";
+  "בחירת שכונה למשפחות, לפי מה שחשוב לכם: מחירי עסקאות, בתי ספר, פארקים, ציון ירוק ובטיחות, ויועץ AI שמכיר את השכונות.";
 
 export const metadata: Metadata = {
   title: {
     default: TITLE,
-    template: "%s · MishpachaMap",
+    template: "%s · הנחלה",
   },
   description: DESCRIPTION,
-  applicationName: "MishpachaMap",
-  authors: [{ name: "MishpachaMap" }],
+  applicationName: "הנחלה",
+  authors: [{ name: "הנחלה" }],
   keywords: [
     "מודיעין",
     "נדלן",
     "שכונות",
-    "MishpachaMap",
+    "הנחלה",
     "Modi'in real estate",
     "neighborhood discovery",
     "Israel housing",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     locale: "he_IL",
     title: TITLE,
     description: DESCRIPTION,
-    siteName: "MishpachaMap",
+    siteName: "הנחלה",
   },
   twitter: {
     card: "summary_large_image",
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: "#FF6B00",
+  themeColor: "#1F7A45",
   width: "device-width",
   initialScale: 1,
   // Lets safe-area-inset-* env vars resolve inside the notch on iOS so the

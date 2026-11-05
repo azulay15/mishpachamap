@@ -36,7 +36,7 @@ export function ElectionsPanel({ election }: Props) {
       stack.push({
         partyId: "_other",
         partyHe: "אחרים",
-        color: "#84888E",
+        color: "var(--hn-text-3)",
         votes: otherVotes,
         pct: total > 0 ? (otherVotes / total) * 100 : 0,
       });
