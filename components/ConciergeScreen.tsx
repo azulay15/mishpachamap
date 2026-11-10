@@ -59,6 +59,12 @@ export type ConciergeData = {
 const INITIAL_LAYERS: LayerId[] = ["school", "park", "shop"];
 const INITIAL_SELECTED = "hashvatim";
 
+/** Mobile bottom-carousel geometry. The floating badges above the carousel are
+ *  positioned from these, so they can't drift apart again. */
+const CAROUSEL_CARD_H = 128;
+const CAROUSEL_BOTTOM = "calc(14px + env(safe-area-inset-bottom, 0px))";
+const ABOVE_CAROUSEL = `calc(${14 + CAROUSEL_CARD_H + 12}px + env(safe-area-inset-bottom, 0px))`;
+
 function ElectionsLegend({
   electionsByNeighborhood,
   isMobile,
@@ -284,14 +290,13 @@ export function ConciergeScreen({
 
   return (
     <div
-      className="mm-shell"
+      className="mm-shell mm-fullscreen"
       // Per-city language/direction: Israeli cities are he/RTL (the app default);
       // international cities (NYC) render en/LTR. The CSS uses logical
       // properties (insetInlineStart etc.), so the layout re-flows for free.
       dir={city.dir ?? "rtl"}
       lang={city.lang ?? "he"}
       style={{
-        height: "100vh",
         display: "grid",
         gridTemplateRows: "auto minmax(0, 1fr)",
         overflow: "hidden",
@@ -351,7 +356,7 @@ export function ConciergeScreen({
           <div
             style={{
               position: "absolute",
-              top: 16,
+              top: isMobile ? 10 : 16,
               left: 0,
               right: 0,
               zIndex: 4,
@@ -359,12 +364,22 @@ export function ConciergeScreen({
               alignItems: "center",
               justifyContent: "center",
               gap: 8,
-              padding: "0 16px",
+              padding: isMobile ? "0 12px" : "0 16px",
               flexWrap: "wrap",
             }}
           >
             <CitySwitcher city={city} />
             <LayersButton active={layers} onToggle={toggle} />
+            {/* Phones get exactly two rows whatever the city name's length:
+                city · layers, then search · profile. */}
+            {isMobile && <div aria-hidden style={{ order: 2, flex: "0 0 100%", height: 0, marginTop: -8 }} />}
+            <div
+              style={
+                isMobile
+                  ? { order: 3, flex: "1 1 0", minWidth: 0, display: "flex" }
+                  : { display: "contents" }
+              }
+            >
             <NeighborhoodSearch
               neighborhoods={neighborhoodsWithScore.map((n) => ({
                 id: n.id,
@@ -381,7 +396,10 @@ export function ConciergeScreen({
                 if (isMobile) setDrawerOpen(true);
               }}
             />
-            <PersonaPill />
+            </div>
+            <div style={isMobile ? { order: 4, flex: "none" } : { display: "contents" }}>
+              <PersonaPill />
+            </div>
           </div>
 
           {/* GreenScore corner badge — clickable, opens breakdown sheet.
@@ -396,8 +414,8 @@ export function ConciergeScreen({
                 // Desktop has no bottom carousel, so the GreenScore badge sits
                 // just above the map's bottom edge; mobile keeps the carousel
                 // and the badge rides above it.
-                bottom: isMobile ? 200 : 16,
-                insetInlineStart: 16,
+                bottom: isMobile ? ABOVE_CAROUSEL : 16,
+                insetInlineStart: isMobile ? 12 : 16,
                 zIndex: 4,
                 background: "#fff",
                 borderRadius: 8,
@@ -461,8 +479,8 @@ export function ConciergeScreen({
                 position: "absolute",
                 // Same logic as the GreenScore badge — sits low on desktop
                 // (no carousel), rides higher on mobile.
-                bottom: isMobile ? 230 : 16,
-                insetInlineEnd: 16,
+                bottom: isMobile ? ABOVE_CAROUSEL : 16,
+                insetInlineEnd: isMobile ? 12 : 16,
                 zIndex: 5,
                 background: "var(--grey-900)",
                 color: "#fff",
@@ -525,20 +543,26 @@ export function ConciergeScreen({
               className="mm-scroll"
               style={{
                 position: "absolute",
-                bottom: 14,
-                left: 14,
-                right: 14,
+                bottom: CAROUSEL_BOTTOM,
+                left: 0,
+                right: 0,
+                // Edge-to-edge scroller with inner padding, so the next card
+                // peeks in from the screen edge instead of being clipped.
+                padding: "4px 12px",
+                scrollPaddingInline: 12,
                 zIndex: 4,
                 display: "flex",
                 gap: 10,
                 overflowX: "auto",
                 scrollBehavior: "smooth",
+                scrollbarWidth: "none",
               }}
             >
               {sortedCards.map((n) => (
-                <div key={n.id} data-nb-id={n.id} style={{ flex: `0 0 260px` }}>
+                <div key={n.id} data-nb-id={n.id} style={{ flex: "0 0 min(76vw, 280px)", height: CAROUSEL_CARD_H }}>
                   <NeighborhoodCard
                     n={n}
+                    compact
                     selected={selectedId === n.id}
                     inCompare={compareIds.has(n.id)}
                     onToggleCompare={() => {
@@ -562,7 +586,8 @@ export function ConciergeScreen({
                 onClick={() => setAllOpen(true)}
                 className="mm-card"
                 style={{
-                  flex: "0 0 200px",
+                  flex: "0 0 150px",
+                  height: CAROUSEL_CARD_H,
                   display: "grid",
                   placeItems: "center",
                   padding: 14,
@@ -571,7 +596,7 @@ export function ConciergeScreen({
                   fontWeight: 700,
                   cursor: "pointer",
                   borderStyle: "dashed",
-                  background: "transparent",
+                  background: "rgba(255,255,255,0.85)",
                   fontFamily: "inherit",
                 }}
               >

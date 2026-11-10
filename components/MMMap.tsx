@@ -113,6 +113,51 @@ export function MMMap({
   // Tracks the last `selected` we flew to so a persona-driven `neighborhoods`
   // change doesn't snap the map back when the user has panned away.
   const lastFlownToRef = useRef<string | null>(null);
+  // Latest props, readable from the one-time `load` handler. The effects below
+  // bail out until the style has loaded, so without this the initial layer
+  // filter and selection were never applied (every POI type — thousands of
+  // transit stops included — stayed visible until the first toggle).
+  const latestRef = useRef({ activeLayers, selected, neighborhoods });
+  useEffect(() => {
+    latestRef.current = { activeLayers, selected, neighborhoods };
+  });
+
+  /** Show only the POI types whose layer is switched on. */
+  function applyPoiFilter(map: MapboxMap, layers: Set<LayerId>) {
+    const types = Array.from(layers).filter(
+      (l) => l !== "price" && l !== "greenscore" && l !== "elections", // these are not POI types
+    );
+    map.setFilter("pois-circles", ["in", ["get", "type"], ["literal", types]]);
+  }
+
+  /** Outline the selected polygon and frame it. */
+  function applySelection(
+    map: MapboxMap,
+    sel: string | null,
+    fc: Props["neighborhoods"],
+  ) {
+    map.setFilter("neighborhoods-stroke-selected", ["==", ["get", "id"], sel ?? ""]);
+
+    // Fly to the selected polygon — but only when `selected` actually changed,
+    // not on every `neighborhoods` recompute (e.g. persona change), so panning
+    // away isn't undone by an unrelated state update.
+    if (sel && sel !== lastFlownToRef.current) {
+      const feature = fc.features.find((f) => f.properties.id === sel);
+      const bbox = feature ? polygonBbox(feature.geometry) : null;
+      if (bbox) {
+        // Leave room for the floating controls; phones have less to spare.
+        const narrow = map.getContainer().clientWidth < 600;
+        map.fitBounds(bbox, {
+          padding: narrow
+            ? { top: 120, bottom: 190, left: 24, right: 24 }
+            : { top: 140, bottom: 220, left: 60, right: 60 },
+          maxZoom: 15,
+          duration: 700,
+        });
+      }
+    }
+    lastFlownToRef.current = sel;
+  }
 
   // ---- One-time map init ----
   useEffect(() => {
@@ -245,7 +290,8 @@ export function MMMap({
         type: "circle",
         source: "pois",
         paint: {
-          "circle-radius": 7,
+          // Scale with zoom so a whole-city view isn't buried under dots.
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 2.5, 13, 4.5, 15, 7],
           "circle-color": [
             "case",
             // Playground without shade: hollow (white core, orange ring).
@@ -274,12 +320,7 @@ export function MMMap({
             poiColor("playground"),
             token("--hn-map-edge"),
           ],
-          "circle-stroke-width": [
-            "case",
-            ["==", ["get", "type"], "playground"],
-            2.5,
-            2,
-          ],
+          "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 11, 0.75, 13, 1.25, 15, 2],
           "circle-opacity": 0.95,
         },
       });
@@ -355,6 +396,10 @@ export function MMMap({
       });
 
       initializedRef.current = true;
+      // Apply the state the effects skipped while the style was loading.
+      const latest = latestRef.current;
+      applyPoiFilter(map, latest.activeLayers);
+      applySelection(map, latest.selected, latest.neighborhoods);
     });
 
     return () => {
@@ -384,11 +429,7 @@ export function MMMap({
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !initializedRef.current) return;
-    // Filter POI circles by active layer types.
-    const types = Array.from(activeLayers).filter(
-      (l) => l !== "price" && l !== "greenscore" && l !== "elections", // these are not POI types
-    );
-    map.setFilter("pois-circles", ["in", ["get", "type"], ["literal", types]]);
+    applyPoiFilter(map, activeLayers);
 
     // Elections layer recolors polygons by leading party. Fall back to the
     // baseline green for neighborhoods that have no results yet.
@@ -427,23 +468,7 @@ export function MMMap({
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !initializedRef.current) return;
-    map.setFilter("neighborhoods-stroke-selected", ["==", ["get", "id"], selected ?? ""]);
-
-    // Fly to the selected polygon — but only when `selected` actually changed,
-    // not on every `neighborhoods` recompute (e.g. persona change), so panning
-    // away isn't undone by an unrelated state update.
-    if (selected && selected !== lastFlownToRef.current) {
-      const feature = neighborhoods.features.find((f) => f.properties.id === selected);
-      const bbox = feature ? polygonBbox(feature.geometry) : null;
-      if (bbox) {
-        map.fitBounds(bbox, {
-          padding: { top: 140, bottom: 220, left: 60, right: 60 },
-          maxZoom: 15,
-          duration: 700,
-        });
-      }
-    }
-    lastFlownToRef.current = selected;
+    applySelection(map, selected, neighborhoods);
   }, [selected, neighborhoods]);
 
   useEffect(() => {

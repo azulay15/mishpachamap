@@ -6,9 +6,8 @@
 export default function Loading() {
   return (
     <div
-      className="mm-shell"
+      className="mm-shell mm-fullscreen"
       style={{
-        height: "100vh",
         display: "grid",
         gridTemplateRows: "auto minmax(0, 1fr)",
         overflow: "hidden",
@@ -29,6 +28,7 @@ export default function Loading() {
       </div>
 
       <div
+        className="mm-skel-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "minmax(0, 1fr) 380px",
@@ -73,6 +73,7 @@ export default function Loading() {
 
         {/* Right rail */}
         <div
+          className="mm-skel-rail"
           style={{
             background: "#fff",
             borderInlineStart: "1px solid var(--stroke-weak)",

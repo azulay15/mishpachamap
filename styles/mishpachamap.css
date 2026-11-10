@@ -303,21 +303,35 @@ a:focus-visible,
    Mobile responsive helpers
    ========================================================================== */
 
+/* Full-height app shell. `dvh` tracks the visible viewport on phones, where
+   100vh is taller than the screen while the browser's address bar is showing
+   (which pushed the bottom carousel off-screen). vh stays as the fallback. */
+.mm-fullscreen { height: 100vh; height: 100dvh; }
+
 /* Mobile-optimized modal: takes the full viewport on narrow screens. */
 @media (max-width: 768px) {
   .mm-modal-content {
     width: 100% !important;
     max-width: 100% !important;
     max-height: 100vh !important;
+    max-height: 100dvh !important;
     border-radius: 0 !important;
     height: 100vh !important;
+    height: 100dvh !important;
   }
+
+  /* The utility strip (greeting, account links) wraps to two cramped lines on
+     a phone and pushes the map down — drop it and slim the main bar. */
+  .mm-header-utility { display: none; }
+  .mm-header-main { height: 52px; }
+
+  /* Loading skeleton: single column, like the real mobile layout. */
+  .mm-skel-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .mm-skel-rail { display: none !important; }
 
   /* Hide the multi-link nav on the main header — keeps logo + actions only. */
   .mm-header-main nav { display: none; }
-  .mm-header-main { padding: 0 12px; gap: 12px; }
-  .mm-header-utility { padding: 0 12px; font-size: 11px; gap: 10px; }
-  .mm-header-utility a { font-size: 11px; }
+  .mm-header-main { padding: 0 12px; gap: 12px; justify-content: space-between; }
 
   /* Hide the header search — there's a primary search on the map. */
   .mm-header-main .mm-input { display: none; }
@@ -356,7 +370,9 @@ a:focus-visible,
   inset-inline-end: 0;
   bottom: 0;
   height: 85vh;
+  height: 85dvh;
   max-height: 85vh;
+  max-height: 85dvh;
   background: var(--hn-surface);
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;

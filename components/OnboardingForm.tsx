@@ -68,7 +68,7 @@ export function OnboardingForm() {
         style={{
           maxWidth: 640,
           margin: "0 auto",
-          padding: "32px 24px 64px",
+          padding: "clamp(20px, 5vw, 32px) clamp(16px, 5vw, 24px) 64px",
         }}
       >
         <h2 style={{ marginBottom: 8 }}>הגדרת פרופיל המשפחה</h2>
@@ -126,6 +126,7 @@ export function OnboardingForm() {
               style={{
                 display: "flex",
                 alignItems: "center",
+                flexWrap: "wrap",
                 gap: 10,
                 padding: "10px 12px",
                 border: "1px solid var(--stroke-medium)",
@@ -145,14 +146,14 @@ export function OnboardingForm() {
               <span style={{ fontSize: 13, fontWeight: 600 }}>
                 בן משפחה עם צליאק
               </span>
-              <span style={{ fontSize: 12, color: "var(--grey-500)", marginInlineStart: "auto" }}>
+              <span style={{ fontSize: 12, color: "var(--grey-500)", flex: "1 1 200px" }}>
                 מקדם שכונות עם מסעדות ומאפיות ללא גלוטן בטווח הליכה
               </span>
             </label>
           </Field>
 
           <Field label={`תקציב: ${NISshort(persona.budget.min)} – ${NISshort(persona.budget.max)}`}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 12 }}>
               <NumericField
                 label="מינימום"
                 value={persona.budget.min}
@@ -167,7 +168,7 @@ export function OnboardingForm() {
           </Field>
 
           <Field label="חדרים">
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 12 }}>
               <NumericField
                 label="מינימום"
                 value={persona.rooms.min}
@@ -255,7 +256,7 @@ function NumericField({
           inputMode="numeric"
           value={value}
           onChange={(e) => onChange(Number(e.target.value) || 0)}
-          style={{ direction: "ltr", textAlign: "right" }}
+          style={{ direction: "ltr", textAlign: "right", width: "100%" }}
         />
       </div>
     </div>

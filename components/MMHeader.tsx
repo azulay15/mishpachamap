@@ -3,6 +3,7 @@
 import { MMIcon } from "@/lib/icons";
 import { SproutMark } from "@/components/BrandLogo";
 import { useFavorites } from "@/lib/useFavorites";
+import { usePersona } from "@/lib/usePersona";
 
 // Label → destination. בית and מפה are real routes; the rest still point at
 // the map (their features live there) until they get dedicated pages.
@@ -17,15 +18,15 @@ const NAV: Array<{ label: string; href: string }> = [
 
 export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
   const { count } = useFavorites();
+  const persona = usePersona();
   return (
     <header>
       <div className="mm-header-utility">
-        <span style={{ opacity: 0.6 }}>שלום, משפחת לוי</span>
+        <span style={{ opacity: 0.6 }}>שלום, {persona.name}</span>
         <span style={{ opacity: 0.4 }}>·</span>
         <a href="#">העדפות</a>
         <a href="#">חשבון</a>
-        <span style={{ marginInlineStart: "auto", opacity: 0.6 }}>עדכון אחרון: 14:32</span>
-        <a href="#" style={{ color: "var(--hn-accent)", fontWeight: 700 }}>שדרגו ל-Pro</a>
+        <a href="#" style={{ marginInlineStart: "auto", color: "var(--hn-accent)", fontWeight: 700 }}>שדרגו ל-Pro</a>
         <a href="#" aria-label="שפה"><MMIcon name="globe" size={14} color="#fff" /></a>
       </div>
       <div className="mm-header-main">
