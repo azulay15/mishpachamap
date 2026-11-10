@@ -43,7 +43,7 @@ export function CityPicker({ variant = "hero" }: { variant?: "hero" | "compact" 
         className="mm-input"
         style={{ width: "100%", maxWidth: 420, height: 44, marginBottom: 16 }}
       >
-        <MMIcon name="search" size={16} color="#84888E" />
+        <MMIcon name="search" size={16} color="var(--hn-text-3)" />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -71,7 +71,7 @@ export function CityPicker({ variant = "hero" }: { variant?: "hero" | "compact" 
                       placeItems: "center",
                     }}
                   >
-                    <MMIcon name="pin" size={19} color={isLive ? "#fff" : "#84888E"} />
+                    <MMIcon name="pin" size={19} color={isLive ? "var(--hn-on-primary)" : "var(--hn-text-3)"} />
                   </span>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontWeight: 800, fontSize: 17, color: "var(--grey-900)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>

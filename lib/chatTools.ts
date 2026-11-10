@@ -256,7 +256,7 @@ async function queryNeighborhoods(
     content: ranked.length === 0
       ? "לא נמצאו שכונות שמתאימות לסינונים."
       : `נמצאו ${ranked.length} שכונות (ממויינות לפי התאמה לפרסונה הנוכחית):\n${lines.join("\n")}`,
-    sources: ["data.gov.il · עסקאות נדל״ן", "OpenStreetMap · POIs", "MishpachaMap match score"],
+    sources: ["data.gov.il · עסקאות נדל״ן", "OpenStreetMap · POIs", "ציון ההתאמה של הנחלה"],
   };
 }
 
@@ -290,7 +290,7 @@ async function compareNeighborhoods(
 
   return {
     content: `השוואה (לפי הפרסונה הנוכחית):\n${rows.join("\n")}`,
-    sources: ["data.gov.il", "OpenStreetMap", "MishpachaMap match score"],
+    sources: ["data.gov.il", "OpenStreetMap", "ציון ההתאמה של הנחלה"],
   };
 }
 
@@ -314,6 +314,6 @@ async function getMatchBreakdown(
   const rows = breakdown.map((r) => `  - ${r.label}: ${r.hit}/${r.weight} משקל`);
   return {
     content: `${nb.name_he} — ציון התאמה כולל ${total}/100\n${rows.join("\n")}`,
-    sources: ["MishpachaMap match score · breakdown"],
+    sources: ["ציון ההתאמה של הנחלה · פירוט"],
   };
 }

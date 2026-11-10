@@ -57,7 +57,7 @@ export function WelcomeCard() {
         alignItems: "start",
       }}
       role="region"
-      aria-label="ברוכים הבאים ל-MishpachaMap"
+      aria-label="ברוכים הבאים להנחלה"
     >
       <div
         style={{
@@ -75,7 +75,7 @@ export function WelcomeCard() {
       </div>
       <div style={{ minWidth: 0 }}>
         <strong style={{ display: "block", fontSize: 14, marginBottom: 4 }}>
-          ברוכים הבאים ל-MishpachaMap
+          ברוכים הבאים להנחלה
         </strong>
         <p style={{ margin: 0, fontSize: 12, color: "var(--grey-700)", lineHeight: "18px" }}>
           הגדירו פרופיל משפחה וקבלו ציוני התאמה אמיתיים לכל שכונה — תקציב, גודל משפחה, צרכים תזונתיים ועוד.

@@ -137,7 +137,7 @@ export function totalScore(rows: MatchBreakdownRow[] = MATCH_BREAKDOWN): number 
 }
 
 export function scoreColor(score: number): string {
-  if (score >= 90) return "var(--green-positive)";
-  if (score >= 80) return "var(--pumpkin-orange)";
-  return "var(--grey-700)";
+  if (score >= 90) return "var(--hn-green-700)";
+  if (score >= 80) return "var(--hn-primary)";
+  return "var(--hn-text-2)";
 }

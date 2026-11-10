@@ -57,7 +57,7 @@ export function CitySwitcher({ city }: { city: City }) {
         <MMIcon
           name="chevron-down"
           size={14}
-          color="#84888E"
+          color="var(--hn-text-3)"
           style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform .15s" }}
         />
       </button>
@@ -90,7 +90,7 @@ export function CitySwitcher({ city }: { city: City }) {
                 <MMIcon
                   name="pin"
                   size={14}
-                  color={isCurrent ? "var(--pumpkin-orange)" : isLive ? "#84888E" : "var(--grey-300, #C9CDD4)"}
+                  color={isCurrent ? "var(--pumpkin-orange)" : isLive ? "var(--hn-text-3)" : "var(--hn-text-disabled)"}
                 />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div

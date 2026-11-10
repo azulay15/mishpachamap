@@ -549,7 +549,7 @@ function SchoolRowCard({ school }: { school: SchoolRow }) {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
         {school.walkMinutes != null && (
           <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11.5, fontWeight: 800, color: "var(--grey-700)", whiteSpace: "nowrap" }}>
-            <MMIcon name="directions" size={13} color="#84888E" />
+            <MMIcon name="directions" size={13} color="var(--hn-text-3)" />
             {school.walkMinutes} דק׳
           </span>
         )}
@@ -577,7 +577,7 @@ function SchoolRowCard({ school }: { school: SchoolRow }) {
 function Inline({ icon, text }: { icon: string; text: string }) {
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-      <MMIcon name={icon} size={12} color="#84888E" />
+      <MMIcon name={icon} size={12} color="var(--hn-text-3)" />
       {text}
     </span>
   );

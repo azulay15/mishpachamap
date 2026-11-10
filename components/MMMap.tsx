@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import mapboxgl, { Map as MapboxMap, MapMouseEvent, MapLayerMouseEvent } from "mapbox-gl";
 import type { LayerId } from "@/lib/layers";
+import { poiColor, scoreFillExpression, token } from "@/lib/theme";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
 if (typeof window !== "undefined" && !mapboxgl.getRTLTextPluginStatus().includes("loaded")) {
@@ -55,19 +56,7 @@ type Props = {
 };
 
 const MODIIN_CENTER: [number, number] = [35.0078, 31.8969];
-const LAYER_COLORS: Record<LayerId, string> = {
-  price: "#181C21",
-  school: "#1256A0",
-  preschool: "#4F8FD6",
-  park: "#2F8F4F",
-  shop: "#C6810E",
-  transit: "#B83333",
-  community: "#7D5BBE",
-  greenscore: "#2F8F4F",
-  celiac: "#D45A8A",
-  playground: "#F2A93B",
-  elections: "#84888E", // not a POI type — fills are data-driven per polygon
-};
+// POI / layer colours come from the --hn-poi-* tokens (lib/theme.ts → styles/hanachala.css).
 
 // Per-POI-type presentation for the map popups. Since the popup is a raw HTML
 // string (not React), we can't use <MMIcon> — so we inline the matching lucide
@@ -92,7 +81,7 @@ const POI_DEFAULT_ICON = `<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 
  */
 function poiPopupHeader(type: string, nameHe: string): string {
   const meta = POI_TYPE_META[type];
-  const color = LAYER_COLORS[type as LayerId] ?? "#84888E";
+  const color = poiColor(type);
   const icon = meta?.icon ?? POI_DEFAULT_ICON;
   const label = meta?.he ?? "";
   const title = nameHe.trim() || label || "נקודת עניין";
@@ -143,14 +132,15 @@ export function MMMap({
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
 
     map.on("load", () => {
-      // Recolor streets-v12 to match the handoff mockup:
-      //  - warm cream land
-      //  - bold pumpkin-orange highways
-      //  - subtle white local roads
-      //  - bright park green
+      // Recolor streets-v12 in the הנחלה (נבט) palette — values from the
+      // --hn-map-* tokens: soft green-grey land, quiet amber highways, white
+      // local roads, muted park green.
       // Each setPaintProperty is wrapped in a try since style layer ids can
       // change between mapbox style versions.
       const safeSet = (layerId: string, prop: string, value: unknown) => {
+        // Mapbox reports a missing layer through its error event (console
+        // noise) rather than throwing, so check first.
+        if (!map.getLayer(layerId)) return;
         try {
           (map.setPaintProperty as unknown as (
             id: string,
@@ -163,55 +153,54 @@ export function MMMap({
       };
 
       // Background / land
-      safeSet("land", "background-color", "#F4EFE3");
-      safeSet("landuse", "fill-color", "#EFE7D2");
-      safeSet("national-park", "fill-color", "#D4E5BA");
-      safeSet("park", "fill-color", "#D4E5BA");
-      safeSet("pitch", "fill-color", "#D4E5BA");
+      safeSet("land", "background-color", token("--hn-map-land"));
+      safeSet("landuse", "fill-color", token("--hn-map-landuse"));
+      safeSet("national-park", "fill-color", token("--hn-map-park"));
+      safeSet("park", "fill-color", token("--hn-map-park"));
+      safeSet("pitch", "fill-color", token("--hn-map-park"));
 
-      // Highways — pumpkin orange, bold
+      // Highways — quiet amber, bold
       for (const layer of ["road-motorway", "road-motorway-link", "road-trunk", "road-trunk-link"]) {
-        safeSet(layer, "line-color", "#F2A93B");
+        safeSet(layer, "line-color", token("--hn-map-highway"));
         safeSet(layer, "line-width", 6);
       }
       for (const layer of ["road-motorway-case", "road-trunk-case"]) {
-        safeSet(layer, "line-color", "#D9842B");
+        safeSet(layer, "line-color", token("--hn-map-highway-case"));
       }
 
       // Primary / secondary roads — white with subtle outline
       for (const layer of ["road-primary", "road-secondary", "road-tertiary"]) {
-        safeSet(layer, "line-color", "#FFFFFF");
+        safeSet(layer, "line-color", token("--hn-map-road"));
       }
       for (const layer of ["road-primary-case", "road-secondary-case", "road-tertiary-case"]) {
-        safeSet(layer, "line-color", "#D9CDB3");
+        safeSet(layer, "line-color", token("--hn-map-road-case"));
       }
 
       // Buildings — fade them so neighborhood polygons dominate
       safeSet("building", "fill-opacity", 0.25);
-      safeSet("building", "fill-color", "#E8E4DA");
+      safeSet("building", "fill-color", token("--hn-map-building"));
 
-      // Neighborhoods — uniform bold green like the mockup. The match score
-      // is shown elsewhere (cards + ring + selected callout); the map fill
-      // just says "this is a neighborhood".
+      // Neighborhoods — coloured by the family's match score on the green
+      // ramp (--hn-score-1…5), so the map itself answers "where fits us".
       map.addSource("neighborhoods", { type: "geojson", data: neighborhoods });
       map.addLayer({
         id: "neighborhoods-fill",
         type: "fill",
         source: "neighborhoods",
         paint: {
-          "fill-color": "#9BC97E",
+          "fill-color": scoreFillExpression(),
           "fill-opacity": [
             "interpolate",
             ["linear"],
             ["zoom"],
             11,
-            0.55,
+            0.72,
             13,
-            0.50,
+            0.62,
             15,
-            0.40,
+            0.45,
             17,
-            0.25,
+            0.28,
           ],
         },
       });
@@ -220,21 +209,20 @@ export function MMMap({
         type: "line",
         source: "neighborhoods",
         paint: {
-          "line-color": "#5B9F40",
+          "line-color": token("--hn-map-edge"),
           "line-width": 1.5,
-          "line-opacity": 0.8,
+          "line-opacity": 0.9,
         },
       });
-      // Selected polygon — dashed pumpkin orange stroke matching the mockup.
+      // Selected polygon — solid accent (logo-bud orange) outline.
       map.addLayer({
         id: "neighborhoods-stroke-selected",
         type: "line",
         source: "neighborhoods",
         filter: ["==", ["get", "id"], ""],
         paint: {
-          "line-color": "#FF6B00",
+          "line-color": token("--hn-accent"),
           "line-width": 3.5,
-          "line-dasharray": [3, 1.5],
         },
       });
       // Hover — solid dark stroke.
@@ -244,7 +232,7 @@ export function MMMap({
         source: "neighborhoods",
         filter: ["==", ["get", "id"], ""],
         paint: {
-          "line-color": "#181C21",
+          "line-color": token("--hn-map-hover"),
           "line-width": 2.5,
           "line-opacity": 0.8,
         },
@@ -265,26 +253,26 @@ export function MMMap({
               ["==", ["get", "type"], "playground"],
               ["!=", ["get", "has_shade"], true],
             ],
-            "#FFFFFF",
+            token("--hn-map-edge"),
             [
               "match",
               ["get", "type"],
-              "school", LAYER_COLORS.school,
-              "preschool", LAYER_COLORS.preschool,
-              "park", LAYER_COLORS.park,
-              "shop", LAYER_COLORS.shop,
-              "transit", LAYER_COLORS.transit,
-              "community", LAYER_COLORS.community,
-              "celiac", LAYER_COLORS.celiac,
-              "playground", LAYER_COLORS.playground,
-              /* default */ "#84888E",
+              "school", poiColor("school"),
+              "preschool", poiColor("preschool"),
+              "park", poiColor("park"),
+              "shop", poiColor("shop"),
+              "transit", poiColor("transit"),
+              "community", poiColor("community"),
+              "celiac", poiColor("celiac"),
+              "playground", poiColor("playground"),
+              /* default */ token("--hn-text-3"),
             ],
           ],
           "circle-stroke-color": [
             "case",
             ["==", ["get", "type"], "playground"],
-            LAYER_COLORS.playground,
-            "#FFFFFF",
+            poiColor("playground"),
+            token("--hn-map-edge"),
           ],
           "circle-stroke-width": [
             "case",
@@ -331,10 +319,10 @@ export function MMMap({
           const shade = props.has_shade === true;
           const modern = props.modern_equipment === true;
           extra = `<div style="margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap;">
-            <span style="background: ${shade ? "#FFF1D6" : "#F4F5F7"}; color: ${shade ? "#9C5A00" : "#84888E"}; padding: 2px 6px; border-radius: 999px; font-size: 10px; font-weight: 700;">
+            <span style="background: ${shade ? token("--hn-warning-bg") : token("--hn-surface-2")}; color: ${shade ? token("--hn-warning") : token("--hn-text-3")}; padding: 2px 6px; border-radius: 999px; font-size: 10px; font-weight: 700;">
               ${shade ? "✓ הצללה" : "✗ ללא הצללה"}
             </span>
-            <span style="background: ${modern ? "#E6F2EC" : "#F4F5F7"}; color: ${modern ? "#0E7C5A" : "#84888E"}; padding: 2px 6px; border-radius: 999px; font-size: 10px; font-weight: 700;">
+            <span style="background: ${modern ? token("--hn-positive-bg") : token("--hn-surface-2")}; color: ${modern ? token("--hn-positive") : token("--hn-text-3")}; padding: 2px 6px; border-radius: 999px; font-size: 10px; font-weight: 700;">
               ${modern ? "✓ מתקנים מודרניים" : "מתקנים ישנים"}
             </span>
           </div>`;
@@ -413,24 +401,24 @@ export function MMMap({
       setFill("neighborhoods-fill", "fill-color", [
         "case",
         ["has", "leading_party_color"],
-        ["coalesce", ["get", "leading_party_color"], "#9BC97E"],
-        "#9BC97E",
+        ["coalesce", ["get", "leading_party_color"], token("--hn-score-3")],
+        token("--hn-score-3"),
       ]);
       setFill("neighborhoods-fill", "fill-opacity", 0.55);
     } else {
-      setFill("neighborhoods-fill", "fill-color", "#9BC97E");
+      setFill("neighborhoods-fill", "fill-color", scoreFillExpression());
       setFill("neighborhoods-fill", "fill-opacity", [
         "interpolate",
         ["linear"],
         ["zoom"],
         11,
-        0.55,
+        0.72,
         13,
-        0.50,
+        0.62,
         15,
-        0.40,
+        0.45,
         17,
-        0.25,
+        0.28,
       ]);
     }
   }, [activeLayers]);
@@ -481,7 +469,7 @@ function renderPhotoBlock(p: {
   if (p.title) {
     credits.push(
       p.pageUrl
-        ? `<a href="${escapeHtml(p.pageUrl)}" target="_blank" rel="noopener noreferrer" style="color: #1256A0; text-decoration: none;">${escapeHtml(p.title)}</a>`
+        ? `<a href="${escapeHtml(p.pageUrl)}" target="_blank" rel="noopener noreferrer" style="color: ${token("--hn-link")}; text-decoration: none;">${escapeHtml(p.title)}</a>`
         : escapeHtml(p.title),
     );
   } else {
@@ -489,9 +477,9 @@ function renderPhotoBlock(p: {
   }
   if (p.artist) credits.push(escapeHtml(p.artist));
   if (p.license) credits.push(escapeHtml(p.license));
-  return `<div style="margin: 0 0 8px; border-radius: 6px; overflow: hidden; background: #F4F5F7;">
+  return `<div style="margin: 0 0 8px; border-radius: 6px; overflow: hidden; background: ${token("--hn-surface-2")};">
     <img src="${escapeHtml(p.url)}" alt="${escapeHtml(p.title ?? "")}" loading="lazy" style="width: 100%; height: 130px; object-fit: cover; display: block;" />
-    <div style="padding: 4px 6px; font-size: 10px; color: #5B616E; line-height: 14px;">${credits.join(" · ")}</div>
+    <div style="padding: 4px 6px; font-size: 10px; color: ${token("--hn-text-2")}; line-height: 14px;">${credits.join(" · ")}</div>
   </div>`;
 }
 
