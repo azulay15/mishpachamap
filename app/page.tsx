@@ -5,6 +5,7 @@ import { HomeScreen } from "@/components/HomeScreen";
 import { MOCK_DATA } from "@/lib/mockData";
 import { fetchConciergeData } from "@/lib/assembleConcierge";
 import { defaultCity } from "@/lib/cities";
+import { LAST_CITY_COOKIE, cityFromCookie } from "@/lib/lastCity";
 
 export const revalidate = 60;
 
@@ -38,13 +39,17 @@ export default async function HomePage({
     redirect(`/map/${defaultCity().slug}?${qs.toString()}`);
   }
 
+  // Home shows the city the visitor last explored (default city on a first visit).
+  const cookieStore = await cookies();
+  const city = cityFromCookie(cookieStore.get(LAST_CITY_COOKIE)?.value);
+
   if (!envConfigured()) {
-    return <HomeScreen data={MOCK_DATA} />;
+    return <HomeScreen data={MOCK_DATA} city={defaultCity()} />;
   }
 
-  const cookieStore = await cookies();
   const sb = serverSupabase(cookieStore);
-  const data = await fetchConciergeData(sb);
+  const data = await fetchConciergeData(sb, city);
+  if (data) return <HomeScreen data={data} city={city} />;
 
-  return <HomeScreen data={data ?? MOCK_DATA} />;
+  return <HomeScreen data={MOCK_DATA} city={defaultCity()} />;
 }

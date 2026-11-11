@@ -5,15 +5,13 @@ import { SproutMark } from "@/components/BrandLogo";
 import { useFavorites } from "@/lib/useFavorites";
 import { usePersona } from "@/lib/usePersona";
 
-// Label → destination. בית and מפה are real routes; the rest still point at
-// the map (their features live there) until they get dedicated pages.
+// Label → destination. Only links that go somewhere real: `/map` resolves to
+// the visitor's last city on the server, and `?view=` opens the matching panel.
 const NAV: Array<{ label: string; href: string }> = [
   { label: "בית", href: "/" },
   { label: "מפה", href: "/map" },
-  { label: "שכונות", href: "/map" },
-  { label: "נכסים", href: "/map" },
-  { label: "מחשבונים", href: "#" },
-  { label: "מומחה השכונה", href: "/map" },
+  { label: "שכונות", href: "/map?view=list" },
+  { label: "מומחה השכונה", href: "/map?view=ai" },
 ];
 
 export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
@@ -23,11 +21,7 @@ export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
     <header>
       <div className="mm-header-utility">
         <span style={{ opacity: 0.6 }}>שלום, {persona.name}</span>
-        <span style={{ opacity: 0.4 }}>·</span>
-        <a href="#">העדפות</a>
-        <a href="#">חשבון</a>
-        <a href="#" style={{ marginInlineStart: "auto", color: "var(--hn-accent)", fontWeight: 700 }}>שדרגו ל-Pro</a>
-        <a href="#" aria-label="שפה"><MMIcon name="globe" size={14} color="#fff" /></a>
+        <a href="/onboarding" style={{ marginInlineStart: "auto" }}>פרופיל המשפחה</a>
       </div>
       <div className="mm-header-main">
         <a href="/" className="mm-logo" aria-label="הנחלה, לדף הבית">
@@ -41,16 +35,9 @@ export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
             </a>
           ))}
         </nav>
-        <div className="mm-input" style={{ width: 280, height: 36 }}>
-          <MMIcon name="search" size={16} color="var(--hn-text-3)" />
-          <input placeholder="חפשו שכונה, רחוב או נכס" />
-        </div>
-        <button className="mm-btn mm-btn-ghost mm-btn-sm" aria-label="התראות">
-          <MMIcon name="bell" size={16} />
-        </button>
         <a
           href="/saved"
-          className="mm-btn mm-btn-secondary mm-btn-sm"
+          className="mm-btn mm-btn-secondary mm-btn-sm mm-header-saved"
           style={{ textDecoration: "none", color: "var(--grey-900)", fontWeight: 700, position: "relative" }}
         >
           <MMIcon

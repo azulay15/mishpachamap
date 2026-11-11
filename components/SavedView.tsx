@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { MMHeader } from "./MMHeader";
+import { MobileTabBar } from "./MobileTabBar";
 import { MMIcon } from "@/lib/icons";
 import { useFavorites } from "@/lib/useFavorites";
 import { NISshort } from "@/lib/format";
@@ -42,9 +43,9 @@ export function SavedView({ neighborhoods, listings }: Props) {
   );
 
   return (
-    <div className="mm-shell" style={{ minHeight: "100vh" }}>
+    <div className="mm-shell" style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
       <MMHeader activeNav="" />
-      <main style={{ maxWidth: 880, margin: "0 auto", padding: "32px 24px 64px" }}>
+      <main style={{ flex: 1, width: "100%", maxWidth: 880, margin: "0 auto", padding: "clamp(20px, 5vw, 32px) clamp(16px, 5vw, 24px) 64px" }}>
         <header style={{ marginBottom: 24, display: "flex", alignItems: "baseline", gap: 12 }}>
           <h2 style={{ margin: 0 }}>שמורים</h2>
           <span style={{ fontSize: 14, color: "var(--grey-500)" }}>
@@ -167,6 +168,7 @@ export function SavedView({ neighborhoods, listings }: Props) {
           </section>
         )}
       </main>
+      <MobileTabBar active="saved" />
     </div>
   );
 }

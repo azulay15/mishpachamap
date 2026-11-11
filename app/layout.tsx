@@ -20,7 +20,15 @@ const TITLE = "הנחלה · מוצאים את השכונה שמתאימה למ�
 const DESCRIPTION =
   "בחירת שכונה למשפחות, לפי מה שחשוב לכם: מחירי עסקאות, בתי ספר, פארקים, ציון ירוק ובטיחות, ויועץ AI שמכיר את השכונות.";
 
+// Absolute base for og:image / canonical URLs (chat apps need full URLs).
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: TITLE,
     template: "%s · הנחלה",

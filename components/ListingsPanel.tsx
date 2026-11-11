@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MMIcon } from "@/lib/icons";
 import { ScoreChip } from "./ScoreChip";
 import { MatchBadge } from "./MatchBadge";
+import { ShareButton } from "./ShareButton";
 import { PropertyDetailSheet } from "./PropertyDetailSheet";
 import { LeadGenModal, type LeadKind } from "./LeadGenModal";
 import { ElectionsPanel, type NeighborhoodElection } from "./ElectionsPanel";
@@ -107,9 +108,11 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
               </div>
             )}
           </div>
-          <button className="mm-btn mm-btn-ghost mm-btn-sm" aria-label="פעולות נוספות">
-            <MMIcon name="more" size={16} />
-          </button>
+          <ShareButton
+            path={`/map/${city.slug}?n=${selected.id}`}
+            title={`${selected.he}, ${city.searchName ?? city.name_he}`}
+            text={`${selected.he} ב${city.searchName ?? city.name_he}: ציון התאמה ${selected.matchScore}/100 בהנחלה`}
+          />
         </div>
         {selected.summary && (
           <p style={{ margin: 0, fontSize: 13, color: "var(--grey-700)", lineHeight: "18px" }}>
@@ -117,6 +120,17 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           </p>
         )}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: 4 }}>
+          {selected.avgListing <= 0 && selected.avgPrice <= 0 ? (
+            // No price data for this neighborhood (new cities): say so once
+            // instead of a dash next to a "no recent data" label.
+            <div style={{ gridColumn: "span 2" }}>
+              <Stat
+                label="מחירי עסקאות"
+                value={<span style={{ color: "var(--grey-500)", fontSize: 12, fontWeight: 600 }}>יתווספו בקרוב</span>}
+              />
+            </div>
+          ) : (
+          <>
           <Stat label="חציון" value={selected.avgListing > 0 ? NISshort(selected.avgListing) : "—"} />
           <Stat
             label='מחיר/מ"ר'
@@ -135,6 +149,8 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
               )
             }
           />
+          </>
+          )}
           <Stat
             label="GreenScore"
             value={<span style={{ color: "var(--green-positive)" }}>{selected.greenScore}</span>}

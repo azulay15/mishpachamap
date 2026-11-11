@@ -645,3 +645,105 @@ a:focus-visible,
   .mm-home-rise, .mm-home-rise-2, .mm-home-rise-3, .mm-home-rise-4 { animation: none; }
   .mm-home-cardlink, .mm-home-cardlink .go { transition: none; }
 }
+
+/* ===================== Mobile bottom tab bar ===================== */
+.mm-tabbar { display: none; }
+@media (max-width: 768px) {
+  .mm-tabbar {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* Sticks to the bottom of scrolling pages; on the map shell it is simply
+       the last grid row. */
+    position: sticky;
+    bottom: 0;
+    z-index: 30;
+    flex: none;
+    background: var(--hn-surface);
+    border-top: 1px solid var(--stroke-weak);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .mm-tabbar > a,
+  .mm-tabbar > button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    height: 54px;
+    border: 0;
+    background: transparent;
+    font-family: var(--font-heb);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--hn-text-3);
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mm-tabbar > .on { color: var(--hn-primary); }
+  .mm-tabbar-badge {
+    position: absolute;
+    top: -5px;
+    inset-inline-end: -10px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: var(--hn-accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 16px;
+    text-align: center;
+    font-family: var(--font-inter, Inter);
+  }
+  /* The tab bar carries "saved" on phones. */
+  .mm-header-saved { display: none !important; }
+}
+
+/* ===================== Mobile peek sheet (map tap) ===================== */
+.mm-peek {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 6;
+  background: var(--hn-surface);
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  box-shadow: 0 -8px 24px rgba(20, 35, 26, 0.16);
+  animation: mm-drawer-up 220ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mm-peek-icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--grey-15);
+  color: var(--grey-700);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mm-peek { animation: none; transition: none; }
+}
+
+/* Home city picker: phones show the first few cities + a "show all" button. */
+.mm-city-more { display: none; }
+@media (max-width: 768px) {
+  .mm-city-grid.is-collapsed > :nth-child(n + 5) { display: none; }
+  .mm-city-more { display: inline-flex; }
+}
+
+/* "All neighborhoods" on phones: a full page above the tab bar (which stays
+   usable), sort chips on their own row. */
+@media (max-width: 768px) {
+  .mm-sheet-tabbed {
+    padding: 0 !important;
+    bottom: calc(55px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  .mm-sheet-tabbed > .mm-modal-content { height: 100% !important; max-height: 100% !important; }
+  .mm-sheet-sorts { order: 2; flex: 1 0 100%; }
+}

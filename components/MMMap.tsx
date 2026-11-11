@@ -117,9 +117,11 @@ export function MMMap({
   // bail out until the style has loaded, so without this the initial layer
   // filter and selection were never applied (every POI type — thousands of
   // transit stops included — stayed visible until the first toggle).
-  const latestRef = useRef({ activeLayers, selected, neighborhoods });
+  // Also carries the callbacks: the map's event handlers are bound once, so
+  // calling the props directly would freeze them at their first-render value.
+  const latestRef = useRef({ activeLayers, selected, neighborhoods, onSelect, onHover });
   useEffect(() => {
-    latestRef.current = { activeLayers, selected, neighborhoods };
+    latestRef.current = { activeLayers, selected, neighborhoods, onSelect, onHover };
   });
 
   /** Show only the POI types whose layer is switched on. */
@@ -328,25 +330,25 @@ export function MMMap({
       // Click → select
       map.on("click", "neighborhoods-fill", (e: MapLayerMouseEvent) => {
         const id = e.features?.[0]?.properties?.id as string | undefined;
-        if (id) onSelect(id);
+        if (id) latestRef.current.onSelect(id);
       });
       // Click on empty map deselects
       map.on("click", (e: MapMouseEvent) => {
         const features = map.queryRenderedFeatures(e.point, {
           layers: ["neighborhoods-fill"],
         });
-        if (features.length === 0) onSelect(null);
+        if (features.length === 0) latestRef.current.onSelect(null);
       });
 
       // Hover
       map.on("mousemove", "neighborhoods-fill", (e: MapLayerMouseEvent) => {
         map.getCanvas().style.cursor = "pointer";
         const id = e.features?.[0]?.properties?.id as string | undefined;
-        onHover(id ?? null);
+        latestRef.current.onHover(id ?? null);
       });
       map.on("mouseleave", "neighborhoods-fill", () => {
         map.getCanvas().style.cursor = "";
-        onHover(null);
+        latestRef.current.onHover(null);
       });
 
       // POI popups

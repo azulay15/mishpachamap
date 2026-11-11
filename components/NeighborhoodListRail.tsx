@@ -47,6 +47,11 @@ export function NeighborhoodListRail({ items, selectedId, onSelect, cityName = "
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
+  // A city with no price data at all (new cities) doesn't offer price sorting
+  // or repeat "no price" on every row — one note in the header says it once.
+  const hasPrices = useMemo(() => items.some((n) => n.avgListing > 0), [items]);
+  const sorts = (Object.keys(SORT_LABELS) as Sort[]).filter((s) => hasPrices || !s.startsWith("price"));
+
   const sorted = useMemo(() => {
     const arr = [...items];
     if (sort === "match") arr.sort((a, b) => b.matchScore - a.matchScore);
@@ -93,10 +98,11 @@ export function NeighborhoodListRail({ items, selectedId, onSelect, cityName = "
           <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800 }}>כל השכונות</h3>
           <div style={{ fontSize: 11, color: "var(--grey-500)", marginTop: 2 }}>
             {items.length} שכונות ב{cityName}
+            {!hasPrices && " · מחירי עסקאות בקרוב"}
           </div>
         </div>
         <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-          {(Object.keys(SORT_LABELS) as Sort[]).map((s) => (
+          {sorts.map((s) => (
             <button
               key={s}
               type="button"
@@ -230,8 +236,12 @@ export function NeighborhoodListRail({ items, selectedId, onSelect, cityName = "
                   alignItems: "center",
                 }}
               >
-                <span>{n.avgListing > 0 ? `חציון ${NISshort(n.avgListing)}` : "אין נתוני מחיר"}</span>
-                <span>·</span>
+                {hasPrices && (
+                  <>
+                    <span>{n.avgListing > 0 ? `חציון ${NISshort(n.avgListing)}` : "אין נתוני מחיר"}</span>
+                    <span>·</span>
+                  </>
+                )}
                 <span style={{ color: "var(--green-positive)" }}>GS {n.greenScore}</span>
               </div>
             </div>
