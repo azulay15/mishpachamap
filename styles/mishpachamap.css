@@ -697,6 +697,9 @@ a:focus-visible,
     text-align: center;
     font-family: var(--font-inter, Inter);
   }
+  /* Profile link: icon only on phones. */
+  .mm-header-profile > span { display: none; }
+  .mm-header-profile { padding: 0 8px !important; }
   /* The tab bar carries "saved" on phones. */
   .mm-header-saved { display: none !important; }
 }
@@ -746,4 +749,30 @@ a:focus-visible,
   }
   .mm-sheet-tabbed > .mm-modal-content { height: 100% !important; max-height: 100% !important; }
   .mm-sheet-sorts { order: 2; flex: 1 0 100%; }
+}
+
+/* Map hover tooltip: neighborhood name + match score. */
+.mm-map-tip { pointer-events: none; z-index: 3; }
+.mm-map-tip .mapboxgl-popup-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px 5px 10px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-heb);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--grey-900);
+  white-space: nowrap;
+}
+.mm-map-tip .mapboxgl-popup-tip { display: none; }
+.mm-map-tip-score {
+  background: var(--hn-primary);
+  color: var(--hn-on-primary);
+  border-radius: 999px;
+  padding: 1px 7px;
+  font-family: var(--font-inter, Inter);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
 }

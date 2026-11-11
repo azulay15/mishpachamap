@@ -340,15 +340,38 @@ export function MMMap({
         if (features.length === 0) latestRef.current.onSelect(null);
       });
 
-      // Hover
+      // Hover — outline + a small name / score tooltip that follows the
+      // pointer (mouse only: touch devices don't fire mousemove).
+      const hoverTip = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        offset: 14,
+        className: "mm-map-tip",
+      });
+      let tipFor: string | null = null;
       map.on("mousemove", "neighborhoods-fill", (e: MapLayerMouseEvent) => {
         map.getCanvas().style.cursor = "pointer";
-        const id = e.features?.[0]?.properties?.id as string | undefined;
+        const props = e.features?.[0]?.properties;
+        const id = props?.id as string | undefined;
         latestRef.current.onHover(id ?? null);
+        if (!id) return;
+        hoverTip.setLngLat(e.lngLat);
+        if (tipFor !== id) {
+          tipFor = id;
+          const score = Number(props?.match_score);
+          hoverTip
+            .setHTML(
+              `<span class="mm-map-tip-name">${escapeHtml(String(props?.name_he ?? ""))}</span>` +
+                (Number.isFinite(score) ? `<span class="mm-map-tip-score">${Math.round(score)}</span>` : ""),
+            )
+            .addTo(map);
+        }
       });
       map.on("mouseleave", "neighborhoods-fill", () => {
         map.getCanvas().style.cursor = "";
         latestRef.current.onHover(null);
+        tipFor = null;
+        hoverTip.remove();
       });
 
       // POI popups

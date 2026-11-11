@@ -32,6 +32,7 @@ import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { type Demographics, type Safety } from "@/lib/staticData";
 import { usePersona } from "@/lib/usePersona";
 import { useLayerPrefs } from "@/lib/useLayerPrefs";
+import { SCORE_STEPS } from "@/lib/theme";
 
 /** A neighborhood as the page server-fetched it, with the data needed to
  * compute the persona-aware match score on the client. `matchScore` here is
@@ -131,6 +132,39 @@ function ElectionsLegend({
   );
 }
 
+/** Key for the map's green ramp: polygons are shaded by family-match score. */
+function MatchLegend() {
+  const labels = [`עד ${SCORE_STEPS[0]}`, ...SCORE_STEPS.map((t) => `${t}+`)];
+  return (
+    <div
+      role="img"
+      aria-label={`מקרא: צבע השכונה לפי ציון ההתאמה, ${labels.join(", ")}`}
+      style={{
+        position: "absolute",
+        insetInlineEnd: 16,
+        bottom: 44,
+        zIndex: 4,
+        background: "#fff",
+        borderRadius: 8,
+        padding: "8px 10px",
+        boxShadow: "var(--shadow-md)",
+        fontSize: 10,
+        color: "var(--grey-700)",
+      }}
+    >
+      <div style={{ fontWeight: 700, color: "var(--grey-500)", marginBottom: 5 }}>צבע = ציון התאמה למשפחה</div>
+      <div style={{ display: "flex", gap: 2 }}>
+        {labels.map((label, i) => (
+          <div key={label} style={{ flex: 1, minWidth: 30, textAlign: "center" }}>
+            <div style={{ height: 8, borderRadius: 2, background: `var(--hn-score-${i + 1})`, border: "1px solid var(--stroke-weak)" }} />
+            <div style={{ marginTop: 3, fontFamily: "var(--font-inter, Inter)", fontVariantNumeric: "tabular-nums", fontWeight: 600 }}>{label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function ConciergeScreen({
   data,
   renderer = "mapbox",
@@ -226,6 +260,15 @@ export function ConciergeScreen({
       window.history.replaceState(null, "", url.toString());
     }
   }, [selectedId]);
+
+  /** Add / remove a neighborhood from the comparison set (max 4). */
+  const toggleCompare = (id: string) =>
+    setCompareIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else if (next.size < 4) next.add(id);
+      return next;
+    });
 
   // Recompute matchScore per current persona (vs. the server's default-persona score).
   const neighborhoodsWithScore = useMemo(
@@ -339,7 +382,7 @@ export function ConciergeScreen({
           // column 2 = center map, column 3 = visual left (RightRail / Listings+AI).
           // Mobile collapses to single column; the rails surface via the bottom
           // carousel + drawer.
-          gridTemplateColumns: isMobile ? "minmax(0, 1fr)" : "340px minmax(0, 1fr) 360px",
+          gridTemplateColumns: isMobile ? "minmax(0, 1fr)" : "340px minmax(0, 1fr) clamp(360px, 27vw, 440px)",
           gridTemplateRows: "100%",
           height: "100%",
           minHeight: 0,
@@ -352,6 +395,10 @@ export function ConciergeScreen({
             selectedId={selectedId}
             onSelect={(id) => setSelectedId(id)}
             cityName={city.name_he}
+            hoverId={hoverId}
+            onHover={setHoverId}
+            compareIds={compareIds}
+            onToggleCompare={toggleCompare}
           />
         )}
         <main style={{ position: "relative", overflow: "hidden", background: "var(--map-bg)" }}>
@@ -474,6 +521,11 @@ export function ConciergeScreen({
             </button>
           )}
 
+          {/* What the polygon colours mean — desktop only (phones have no
+              room, and the cards carry the score). Hidden while the elections
+              layer recolours the map. */}
+          {!isMobile && !layers.has("elections") && <MatchLegend />}
+
           {/* Legend for the elections layer — lists the unique leading parties
               across visible neighborhoods, with their brand color. */}
           {layers.has("elections") && (
@@ -514,7 +566,9 @@ export function ConciergeScreen({
                 // Same logic as the GreenScore badge — sits low on desktop
                 // (no carousel), rides higher on mobile.
                 bottom: isMobile ? ABOVE_CAROUSEL : 16,
-                insetInlineEnd: isMobile ? 12 : 16,
+                ...(isMobile
+                  ? { insetInlineEnd: 12 }
+                  : { left: "50%", transform: "translateX(-50%)" }),
                 zIndex: 5,
                 background: "var(--grey-900)",
                 color: "#fff",
@@ -622,14 +676,7 @@ export function ConciergeScreen({
                     compact
                     selected={selectedId === n.id}
                     inCompare={compareIds.has(n.id)}
-                    onToggleCompare={() => {
-                      setCompareIds((prev) => {
-                        const next = new Set(prev);
-                        if (next.has(n.id)) next.delete(n.id);
-                        else if (next.size < 4) next.add(n.id);
-                        return next;
-                      });
-                    }}
+                    onToggleCompare={() => toggleCompare(n.id)}
                     onClick={() => {
                       setSelectedId(n.id);
                       setDrawerOpen(true);

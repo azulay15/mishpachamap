@@ -19,10 +19,6 @@ export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
   const persona = usePersona();
   return (
     <header>
-      <div className="mm-header-utility">
-        <span style={{ opacity: 0.6 }}>שלום, {persona.name}</span>
-        <a href="/onboarding" style={{ marginInlineStart: "auto" }}>פרופיל המשפחה</a>
-      </div>
       <div className="mm-header-main">
         <a href="/" className="mm-logo" aria-label="הנחלה, לדף הבית">
           <SproutMark size={30} />
@@ -35,6 +31,18 @@ export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
             </a>
           ))}
         </nav>
+        {/* The family profile — what every match score is computed from. (This
+            used to sit in a separate dark strip above the bar.) */}
+        <a
+          href="/onboarding"
+          className="mm-btn mm-btn-ghost mm-btn-sm mm-header-profile"
+          style={{ textDecoration: "none", marginInlineStart: "auto", gap: 6 }}
+          aria-label={`פרופיל המשפחה: ${persona.name}`}
+          title="עריכת פרופיל המשפחה"
+        >
+          <MMIcon name="users" size={15} />
+          <span>{persona.name}</span>
+        </a>
         <a
           href="/saved"
           className="mm-btn mm-btn-secondary mm-btn-sm mm-header-saved"
