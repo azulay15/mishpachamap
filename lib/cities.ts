@@ -42,6 +42,9 @@ export type CityFiles = {
   /** Rent + sale prices by apartment size per neighborhood (nadlan.gov.il,
    *  from scripts/ingest/market.ts). Optional — absent → no by-size figures. */
   market?: string;
+  /** Parks, playgrounds, grocery shops, preschools and community places from
+   *  OpenStreetMap (scripts/ingest/pois.ts). Optional. */
+  pois?: string;
 };
 
 export type City = {
@@ -95,6 +98,7 @@ const modiin: City = {
     environment: "modiin.environment.json",
     prices: "modiin.prices.json",
     market: "modiin.market.json",
+    pois: "modiin.pois.json",
   },
 };
 
@@ -123,6 +127,7 @@ const oryehuda: City = {
     environment: "oryehuda.environment.json",
     prices: "oryehuda.prices.json",
     market: "oryehuda.market.json",
+    pois: "oryehuda.pois.json",
   },
 };
 
@@ -150,6 +155,7 @@ const rishon: City = {
     environment: "rishon.environment.json",
     prices: "rishon.prices.json",
     market: "rishon.market.json",
+    pois: "rishon.pois.json",
   },
 };
 
@@ -174,6 +180,7 @@ const kefarsava: City = {
     environment: "kefarsava.environment.json",
     prices: "kefarsava.prices.json",
     market: "kefarsava.market.json",
+    pois: "kefarsava.pois.json",
   },
 };
 
@@ -229,6 +236,7 @@ const raanana: City = {
     environment: "raanana.environment.json",
     prices: "raanana.prices.json",
     market: "raanana.market.json",
+    pois: "raanana.pois.json",
   },
 };
 
@@ -252,6 +260,7 @@ const herzliya: City = {
     environment: "herzliya.environment.json",
     prices: "herzliya.prices.json",
     market: "herzliya.market.json",
+    pois: "herzliya.pois.json",
   },
 };
 
@@ -275,6 +284,7 @@ const netanya: City = {
     environment: "netanya.environment.json",
     prices: "netanya.prices.json",
     market: "netanya.market.json",
+    pois: "netanya.pois.json",
   },
 };
 
@@ -298,6 +308,7 @@ const petahtikva: City = {
     environment: "petahtikva.environment.json",
     prices: "petahtikva.prices.json",
     market: "petahtikva.market.json",
+    pois: "petahtikva.pois.json",
   },
 };
 
@@ -321,6 +332,7 @@ const haifa: City = {
     environment: "haifa.environment.json",
     prices: "haifa.prices.json",
     market: "haifa.market.json",
+    pois: "haifa.pois.json",
   },
 };
 
@@ -344,6 +356,7 @@ const jerusalem: City = {
     environment: "jerusalem.environment.json",
     prices: "jerusalem.prices.json",
     market: "jerusalem.market.json",
+    pois: "jerusalem.pois.json",
   },
 };
 

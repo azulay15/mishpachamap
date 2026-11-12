@@ -9,7 +9,7 @@ import type { ConciergeData } from "@/components/ConciergeScreen";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { PERSONA_DEFAULT } from "@/lib/persona";
 import { loadNeighborhoodFeatures, centroidOf, type NeighborhoodFeatureCollection } from "@/lib/geoData";
-import { loadDemographics, loadSafety, loadSchools, loadTransitStops, loadEnvironment, loadPrices, loadMarket, type StaticSchool } from "@/lib/staticData";
+import { loadDemographics, loadSafety, loadSchools, loadTransitStops, loadEnvironment, loadPrices, loadMarket, loadStaticPois, type StaticSchool } from "@/lib/staticData";
 import { defaultCity, type City } from "@/lib/cities";
 
 type NeighborhoodRow = {
@@ -110,12 +110,26 @@ export async function fetchConciergeData(
 
   const poisInCity = ((pois ?? []) as POIDB[]).filter((p) => p.point && inBbox(p.point.coordinates as [number, number], bbox));
 
+  // Everyday places from the city's static OpenStreetMap file fill in whatever
+  // place types the DB doesn't hold for this city (the DB only covers Modi'in;
+  // a type it does cover is left to it, so nothing shows twice).
+  const dbTypes = new Set(poisInCity.map((p) => p.type));
+  const staticPois: POIDB[] = loadStaticPois(city)
+    .filter((p) => !dbTypes.has(p.type))
+    .map((p) => ({
+      id: p.id,
+      type: p.type,
+      name_he: p.name,
+      point: { type: "Point", coordinates: [p.lon, p.lat] },
+      meta: null,
+    }));
+
   return assemble({
     city,
     geoFeatures,
     nb: (nb ?? []) as NeighborhoodRow[],
     metrics: (metrics ?? []) as MetricsRow[],
-    pois: poisInCity,
+    pois: [...poisInCity, ...staticPois],
     listings: (listings ?? []) as ListingDB[],
     elections: (elections ?? []) as ElectionRow[],
     parties: (parties ?? []) as PartyRow[],

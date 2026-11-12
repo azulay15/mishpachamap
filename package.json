@@ -33,6 +33,8 @@
     "ingest:environment": "tsx scripts/ingest/environment.ts",
     "ingest:transit": "tsx scripts/ingest/transit.ts",
     "ingest:prices": "tsx scripts/ingest/prices.ts",
+    "ingest:market": "tsx scripts/ingest/market.ts",
+    "ingest:pois": "tsx scripts/ingest/pois.ts",
     "city:scaffold": "tsx scripts/ingest/city_scaffold.ts",
     "city:build": "tsx scripts/ingest/city_build.ts",
     "city:qa": "tsx scripts/ingest/city_qa.ts"

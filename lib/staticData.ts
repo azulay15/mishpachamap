@@ -117,6 +117,15 @@ export function loadMarket(city: City = defaultCity()): {
   return { city: toMarket(raw.city), neighborhoods, sourceVersion: raw.meta?.source_version ?? null };
 }
 
+export type StaticPoi = { id: string; type: string; name: string; lon: number; lat: number };
+
+/** Everyday places (parks, playgrounds, groceries…) from the city's static
+ *  OpenStreetMap file. Empty when the city has none. */
+export function loadStaticPois(city: City = defaultCity()): StaticPoi[] {
+  if (!city.files.pois) return [];
+  return readJsonSafe<{ pois: StaticPoi[] }>(city.files.pois, { pois: [] }).pois;
+}
+
 export type BusStop = { code: number; name: string; lat: number; lon: number };
 
 /**
