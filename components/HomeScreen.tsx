@@ -310,6 +310,14 @@ function Hero({
               <MMIcon name="map" size={16} />
               ישר למפה
             </a>
+            <a
+              href="/more"
+              className="mm-btn mm-btn-secondary"
+              style={{ textDecoration: "none", color: "var(--grey-900)", padding: "12px 20px", fontSize: 15, borderRadius: 12 }}
+            >
+              <MMIcon name="trend-up" size={16} />
+              איפה נשלם פחות?
+            </a>
           </div>
         </div>
 
@@ -454,6 +462,16 @@ function Dashboard({
             )}
           </div>
         </div>
+
+        <a href="/more" className="mm-home-card mm-home-cardlink">
+          <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 800, color: "var(--grey-900)" }}>
+            <MMIcon name="home" size={16} color="var(--hn-primary)" />
+            יותר בפחות
+          </div>
+          <div style={{ fontSize: 13, color: "var(--grey-700)", marginTop: 6, lineHeight: 1.5 }}>
+            ספרו כמה אתם משלמים היום ואיפה אתם עובדים, ונמצא שכונות שבהן משפחה כמוכם משלמת פחות.
+          </div>
+        </a>
 
         <a href={mapHref} className="mm-home-card mm-home-cardlink">
           <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 800, color: "var(--grey-900)" }}>

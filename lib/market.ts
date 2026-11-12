@@ -40,7 +40,11 @@ export const MAX_OPTIONS: Record<Deal, number[]> = {
 };
 
 /** The figure for one deal type + size, or null when the source has none. */
-export function marketPrice(market: Market | null | undefined, deal: Deal, rooms: RoomKey): number | null {
+export function marketPrice(
+  market: Pick<Market, "rent" | "buy"> | null | undefined,
+  deal: Deal,
+  rooms: RoomKey,
+): number | null {
   const v = market?.[deal]?.[rooms];
   return v != null && v > 0 ? v : null;
 }
