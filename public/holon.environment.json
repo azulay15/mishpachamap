@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "holon",
+    "generated_from": "public/neighborhoods.holon.geo.json"
+  },
+  "neighborhoods": {
+    "hol-kiryat-ayalon": {
+      "green_score": 65,
+      "quiet_score": 98
+    },
+    "hol-neot-yehudit": {
+      "green_score": 49,
+      "quiet_score": 43
+    },
+    "hol-kiryat-sharett": {
+      "green_score": 48,
+      "quiet_score": 31
+    },
+    "hol-h-501": {
+      "green_score": 48,
+      "quiet_score": 89
+    },
+    "hol-jesse-cohen": {
+      "green_score": 46,
+      "quiet_score": 40
+    },
+    "hol-kiryat-ben-gurion": {
+      "green_score": 36,
+      "quiet_score": 44
+    },
+    "hol-kiryat-avoda": {
+      "green_score": 34,
+      "quiet_score": 75
+    },
+    "hol-neot-shoshanim": {
+      "green_score": 34,
+      "quiet_score": 95
+    },
+    "hol-shikun-vatikim": {
+      "green_score": 33,
+      "quiet_score": 47
+    },
+    "hol-neve-remez": {
+      "green_score": 20,
+      "quiet_score": 60
+    },
+    "hol-rassco-alef": {
+      "green_score": 18,
+      "quiet_score": 75
+    },
+    "hol-agrobank": {
+      "green_score": 18,
+      "quiet_score": 82
+    },
+    "hol-kiryat-rabin": {
+      "green_score": 16,
+      "quiet_score": 69
+    },
+    "hol-kiryat-sharett-west": {
+      "green_score": 14,
+      "quiet_score": 62
+    },
+    "hol-neot-rachel": {
+      "green_score": 14,
+      "quiet_score": 47
+    },
+    "hol-green": {
+      "green_score": 13,
+      "quiet_score": 72
+    },
+    "hol-neve-arazim": {
+      "green_score": 13,
+      "quiet_score": 32
+    },
+    "hol-mifde-ezrahi": {
+      "green_score": 12,
+      "quiet_score": 44
+    },
+    "hol-tel-giborim": {
+      "green_score": 11,
+      "quiet_score": 52
+    },
+    "hol-rassco-gimel": {
+      "green_score": 7,
+      "quiet_score": 66
+    },
+    "hol-rassco-bet": {
+      "green_score": 6,
+      "quiet_score": 55
+    }
+  }
+}

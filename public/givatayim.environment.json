@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "givatayim",
+    "generated_from": "public/neighborhoods.givatayim.geo.json"
+  },
+  "neighborhoods": {
+    "giv-givat-kozlovsky": {
+      "green_score": 66,
+      "quiet_score": 98
+    },
+    "giv-shetach-9": {
+      "green_score": 63,
+      "quiet_score": 98
+    },
+    "giv-shikun-hevrat-hashmal": {
+      "green_score": 37,
+      "quiet_score": 98
+    },
+    "giv-poalei-harakevet": {
+      "green_score": 19,
+      "quiet_score": 98
+    },
+    "giv-tel-ganim": {
+      "green_score": 19,
+      "quiet_score": 98
+    },
+    "giv-givat-rambam": {
+      "green_score": 14,
+      "quiet_score": 90
+    },
+    "giv-kiryat-yosef": {
+      "green_score": 11,
+      "quiet_score": 43
+    },
+    "giv-halah": {
+      "green_score": 11,
+      "quiet_score": 72
+    },
+    "giv-borochov": {
+      "green_score": 8,
+      "quiet_score": 69
+    },
+    "giv-arlozorov": {
+      "green_score": 8,
+      "quiet_score": 98
+    },
+    "giv-sheinkin": {
+      "green_score": 3,
+      "quiet_score": 93
+    }
+  }
+}

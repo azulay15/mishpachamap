@@ -1,0 +1,117 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "rehovot",
+    "generated_from": "public/neighborhoods.rehovot.geo.json"
+  },
+  "neighborhoods": {
+    "rhv-rehovot-hatzeira": {
+      "green_score": 100,
+      "quiet_score": 69
+    },
+    "rhv-yahad": {
+      "green_score": 93,
+      "quiet_score": 53
+    },
+    "rhv-rehovot-hamada": {
+      "green_score": 93,
+      "quiet_score": 40
+    },
+    "rhv-havatzelet": {
+      "green_score": 62,
+      "quiet_score": 46
+    },
+    "rhv-rehovot-hahadasha": {
+      "green_score": 58,
+      "quiet_score": 60
+    },
+    "rhv-oshiot": {
+      "green_score": 51,
+      "quiet_score": 39
+    },
+    "rhv-rehovot-haholandit": {
+      "green_score": 48,
+      "quiet_score": 48
+    },
+    "rhv-hayovel": {
+      "green_score": 42,
+      "quiet_score": 54
+    },
+    "rhv-ibn-gabirol": {
+      "green_score": 41,
+      "quiet_score": 53
+    },
+    "rhv-neve-amit": {
+      "green_score": 35,
+      "quiet_score": 36
+    },
+    "rhv-azorei-weizmann": {
+      "green_score": 35,
+      "quiet_score": 42
+    },
+    "rhv-kiryat-david": {
+      "green_score": 33,
+      "quiet_score": 40
+    },
+    "rhv-kiryat-hahagana": {
+      "green_score": 32,
+      "quiet_score": 41
+    },
+    "rhv-marmorek": {
+      "green_score": 31,
+      "quiet_score": 76
+    },
+    "rhv-kiryat-moshe": {
+      "green_score": 29,
+      "quiet_score": 44
+    },
+    "rhv-denya": {
+      "green_score": 27,
+      "quiet_score": 45
+    },
+    "rhv-sela": {
+      "green_score": 24,
+      "quiet_score": 49
+    },
+    "rhv-neve-alon": {
+      "green_score": 20,
+      "quiet_score": 48
+    },
+    "rhv-binyamin-nordau": {
+      "green_score": 19,
+      "quiet_score": 44
+    },
+    "rhv-miller-meltzer": {
+      "green_score": 18,
+      "quiet_score": 60
+    },
+    "rhv-eisenberg-aharoni": {
+      "green_score": 18,
+      "quiet_score": 42
+    },
+    "rhv-hehalutz-haavoda": {
+      "green_score": 16,
+      "quiet_score": 43
+    },
+    "rhv-weisburg-shkolnik": {
+      "green_score": 12,
+      "quiet_score": 64
+    },
+    "rhv-shaarayim": {
+      "green_score": 11,
+      "quiet_score": 33
+    },
+    "rhv-avnei-chen": {
+      "green_score": 11,
+      "quiet_score": 40
+    },
+    "rhv-neve-yehuda": {
+      "green_score": 10,
+      "quiet_score": 40
+    },
+    "rhv-merkaz-hair": {
+      "green_score": 10,
+      "quiet_score": 45
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "hodhasharon",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 5000,
+      "4": 6750,
+      "5": 8700,
+      "all": 7400
+    },
+    "buy": {
+      "3": 2799000,
+      "4": 3265000,
+      "5": 4340000,
+      "all": 3247000
+    },
+    "rent_change_pct": 4.2,
+    "yield_pct": 2.73
+  },
+  "neighborhoods": {
+    "hod-mitham-1200": {
+      "rent": {
+        "4": 7450,
+        "all": 9500
+      },
+      "buy": {
+        "5": 4226000,
+        "all": 4026000
+      },
+      "rent_change_pct": 6.7,
+      "yield_pct": 2.83,
+      "sources": [
+        "מתחם 1200"
+      ]
+    },
+    "hod-magdiel": {
+      "rent": {
+        "3": 4980,
+        "4": 7000,
+        "5": 8380,
+        "all": 7100
+      },
+      "buy": {
+        "3": 2735000,
+        "4": 3086000,
+        "5": 3734000,
+        "all": 3185000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 2.68,
+      "sources": [
+        "מגדיאל"
+      ]
+    },
+    "hod-gil-amal": {
+      "rent": {
+        "all": 6750
+      },
+      "buy": {},
+      "rent_change_pct": -10,
+      "yield_pct": null,
+      "sources": [
+        "גיל עמל"
+      ]
+    },
+    "hod-sharett": {
+      "rent": {
+        "3": 5000,
+        "4": 6580,
+        "5": 7300,
+        "all": 6300
+      },
+      "buy": {
+        "4": 3211000,
+        "5": 4014000,
+        "all": 3094000
+      },
+      "rent_change_pct": 0.8,
+      "yield_pct": 2.44,
+      "sources": [
+        "שרת"
+      ]
+    },
+    "hod-ramatayim": {
+      "rent": {
+        "3": 4750,
+        "all": 5000
+      },
+      "buy": {},
+      "rent_change_pct": -13.4,
+      "yield_pct": null,
+      "sources": [
+        "רמתיים"
+      ]
+    },
+    "hod-hadar": {
+      "rent": {
+        "3": 4400,
+        "4": 6600,
+        "5": 8600,
+        "all": 7700
+      },
+      "buy": {
+        "4": 3151000,
+        "all": 2921000
+      },
+      "rent_change_pct": 6.2,
+      "yield_pct": 3.16,
+      "sources": [
+        "הדר"
+      ]
+    },
+    "hod-neve-hadar": {
+      "rent": {
+        "all": 9000
+      },
+      "buy": {},
+      "rent_change_pct": -2.7,
+      "yield_pct": null,
+      "sources": [
+        "נווה הדר"
+      ]
+    },
+    "hod-ramot-menachem": {
+      "rent": {
+        "5": 10000,
+        "all": 8900
+      },
+      "buy": {},
+      "rent_change_pct": -11,
+      "yield_pct": null,
+      "sources": [
+        "רמות מנחם"
+      ]
+    },
+    "hod-neve-neeman": {
+      "rent": {
+        "all": 7250
+      },
+      "buy": {},
+      "rent_change_pct": 0.7,
+      "yield_pct": null,
+      "sources": [
+        "נווה נאמן"
+      ]
+    }
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "holon",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 4600,
+      "4": 6250,
+      "5": 7850,
+      "all": 5100
+    },
+    "buy": {
+      "3": 1923000,
+      "4": 2257000,
+      "5": 3143000,
+      "all": 2088000
+    },
+    "rent_change_pct": 4.1,
+    "yield_pct": 2.93
+  },
+  "neighborhoods": {
+    "hol-green": {
+      "rent": {
+        "3": 4500,
+        "4": 6200,
+        "5": 6750,
+        "all": 4750
+      },
+      "buy": {
+        "3": 1658000,
+        "all": 1818000
+      },
+      "rent_change_pct": 0.5,
+      "yield_pct": 3.14,
+      "sources": [
+        "גרין"
+      ]
+    },
+    "hol-kiryat-ben-gurion": {
+      "rent": {
+        "3": 5500,
+        "4": 6650,
+        "5": 7250,
+        "all": 6850
+      },
+      "buy": {
+        "4": 2266000,
+        "5": 2422000,
+        "all": 2238000
+      },
+      "rent_change_pct": 2.2,
+      "yield_pct": 3.67,
+      "sources": [
+        "קרית בן גוריון"
+      ]
+    },
+    "hol-neve-arazim": {
+      "rent": {
+        "3": 4400,
+        "4": 5850,
+        "all": 4600
+      },
+      "buy": {},
+      "rent_change_pct": 4.6,
+      "yield_pct": null,
+      "sources": [
+        "נווה ארזים"
+      ]
+    },
+    "hol-rassco-gimel": {
+      "rent": {
+        "3": 4350,
+        "4": 5600,
+        "all": 4700
+      },
+      "buy": {
+        "all": 2382000
+      },
+      "rent_change_pct": 5.6,
+      "yield_pct": 2.37,
+      "sources": [
+        "רסקו ג"
+      ]
+    },
+    "hol-rassco-alef": {
+      "rent": {
+        "3": 4730,
+        "4": 6100,
+        "5": 7000,
+        "all": 4800
+      },
+      "buy": {
+        "3": 2269000,
+        "4": 2567000,
+        "all": 1997000
+      },
+      "rent_change_pct": 5.5,
+      "yield_pct": 2.88,
+      "sources": [
+        "רסקו א"
+      ]
+    },
+    "hol-kiryat-sharett": {
+      "rent": {
+        "3": 4500,
+        "4": 5680,
+        "all": 4700
+      },
+      "buy": {
+        "3": 1692000,
+        "all": 1897000
+      },
+      "rent_change_pct": 4.4,
+      "yield_pct": null,
+      "sources": [
+        "קריית שרת"
+      ]
+    },
+    "hol-jesse-cohen": {
+      "rent": {
+        "3": 4250,
+        "4": 6000,
+        "5": 6600,
+        "all": 4100
+      },
+      "buy": {
+        "all": 1770000
+      },
+      "rent_change_pct": 2.5,
+      "yield_pct": 2.78,
+      "sources": [
+        "ג'סי כהן"
+      ]
+    },
+    "hol-kiryat-ayalon": {
+      "rent": {
+        "3": 4700,
+        "4": 7500,
+        "5": 8250,
+        "all": 7800
+      },
+      "buy": {
+        "4": 3017000,
+        "5": 3289000,
+        "all": 3145000
+      },
+      "rent_change_pct": 4,
+      "yield_pct": 2.98,
+      "sources": [
+        "קרית פנחס איילון"
+      ]
+    },
+    "hol-agrobank": {
+      "rent": {
+        "3": 4600,
+        "4": 5950,
+        "5": 7130,
+        "all": 4980
+      },
+      "buy": {
+        "3": 1837000,
+        "4": 2600000,
+        "all": 2240000
+      },
+      "rent_change_pct": 1.5,
+      "yield_pct": 2.67,
+      "sources": [
+        "אגרובנק"
+      ]
+    },
+    "hol-tel-giborim": {
+      "rent": {
+        "3": 4450,
+        "4": 6500,
+        "5": 7430,
+        "all": 4850
+      },
+      "buy": {
+        "4": 2723000,
+        "all": 2077000
+      },
+      "rent_change_pct": 8.4,
+      "yield_pct": 2.8,
+      "sources": [
+        "תל גיבורים"
+      ]
+    },
+    "hol-kiryat-rabin": {
+      "rent": {
+        "5": 8750,
+        "all": 8650
+      },
+      "buy": {},
+      "rent_change_pct": 1.2,
+      "yield_pct": null,
+      "sources": [
+        "קרית רבין"
+      ]
+    },
+    "hol-shikun-vatikim": {
+      "rent": {
+        "3": 4500,
+        "4": 5350,
+        "5": 6400,
+        "all": 4950
+      },
+      "buy": {
+        "3": 2227000,
+        "4": 2617000,
+        "all": 2433000
+      },
+      "rent_change_pct": -1,
+      "yield_pct": 2.44,
+      "sources": [
+        "שיכון ותיקים"
+      ]
+    },
+    "hol-kiryat-avoda": {
+      "rent": {
+        "3": 4700,
+        "4": 6550,
+        "5": 7730,
+        "all": 5150
+      },
+      "buy": {
+        "3": 1685000,
+        "4": 2595000,
+        "all": 2035000
+      },
+      "rent_change_pct": 4.6,
+      "yield_pct": 3.04,
+      "sources": [
+        "קרית עבודה"
+      ]
+    },
+    "hol-neve-remez": {
+      "rent": {
+        "3": 4830,
+        "4": 6550,
+        "all": 6250
+      },
+      "buy": {
+        "3": 2228000,
+        "all": 2197000
+      },
+      "rent_change_pct": 9.2,
+      "yield_pct": 3.41,
+      "sources": [
+        "נווה רמז"
+      ]
+    },
+    "hol-neot-shoshanim": {
+      "rent": {
+        "3": 4650,
+        "4": 6700,
+        "all": 4550
+      },
+      "buy": {},
+      "rent_change_pct": 5.8,
+      "yield_pct": null,
+      "sources": [
+        "נאות שושנים"
+      ]
+    },
+    "hol-mifde-ezrahi": {
+      "rent": {
+        "all": 5500
+      },
+      "buy": {},
+      "rent_change_pct": 13.4,
+      "yield_pct": null,
+      "sources": [
+        "מפדה אזרחי"
+      ]
+    },
+    "hol-kiryat-sharett-west": {
+      "rent": {
+        "3": 4650,
+        "4": 6000,
+        "5": 7000,
+        "all": 6000
+      },
+      "buy": {
+        "4": 2310000,
+        "5": 3427000,
+        "all": 2397000
+      },
+      "rent_change_pct": 4.8,
+      "yield_pct": 3,
+      "sources": [
+        "קרית שרת מערב"
+      ]
+    },
+    "hol-neot-rachel": {
+      "rent": {
+        "3": 4730,
+        "4": 5850,
+        "5": 6800,
+        "all": 4900
+      },
+      "buy": {
+        "3": 1794000,
+        "4": 2069000,
+        "all": 1787000
+      },
+      "rent_change_pct": 2.6,
+      "yield_pct": 3.29,
+      "sources": [
+        "נאות רחל"
+      ]
+    },
+    "hol-h-501": {
+      "rent": {
+        "4": 7600,
+        "5": 8600,
+        "all": 7850
+      },
+      "buy": {
+        "all": 3500000
+      },
+      "rent_change_pct": -7.6,
+      "yield_pct": 2.69,
+      "sources": [
+        "ח-501 - שדרת המגדלים"
+      ]
+    },
+    "hol-neot-yehudit": {
+      "rent": {
+        "3": 4700,
+        "4": 6400,
+        "all": 5530
+      },
+      "buy": {
+        "all": 2149000
+      },
+      "rent_change_pct": 6.3,
+      "yield_pct": 3.09,
+      "sources": [
+        "נאות יהודית"
+      ]
+    },
+    "hol-rassco-bet": {
+      "rent": {
+        "3": 4650,
+        "4": 5550,
+        "all": 5200
+      },
+      "buy": {
+        "3": 2297000,
+        "all": 2281000
+      },
+      "rent_change_pct": -1.9,
+      "yield_pct": 2.74,
+      "sources": [
+        "רסקו ב"
+      ]
+    }
+  }
+}

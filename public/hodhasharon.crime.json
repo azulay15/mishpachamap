@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "source": "Israel Police 2024",
+    "resource": "5fc13c50-b6f3-4712-b831-a75e0f91a17e",
+    "locality": 9700
+  },
+  "neighborhoods": {
+    "hod-mitham-1200": null,
+    "hod-magdiel": {
+      "name_he": "מגדיאל",
+      "cases_2024_total": 667,
+      "cases_2024_person": 92,
+      "cases_2024_property": 356,
+      "per_1000_residents": 39.9,
+      "safety_score": 40,
+      "safety_rank": 2,
+      "safety_rank_of": 2,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          97000012,
+          97000013,
+          97000014,
+          97000015
+        ]
+      }
+    },
+    "hod-gil-amal": null,
+    "hod-sharett": null,
+    "hod-ramatayim": null,
+    "hod-hadar": null,
+    "hod-neve-hadar": null,
+    "hod-ramot-menachem": {
+      "name_he": "רמות מנחם",
+      "cases_2024_total": 182,
+      "cases_2024_person": 22,
+      "cases_2024_property": 100,
+      "per_1000_residents": 36.6,
+      "safety_score": 41,
+      "safety_rank": 1,
+      "safety_rank_of": 2,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          97000031
+        ]
+      }
+    },
+    "hod-neve-neeman": null
+  }
+}

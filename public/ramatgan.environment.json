@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "ramatgan",
+    "generated_from": "public/neighborhoods.ramatgan.geo.json"
+  },
+  "neighborhoods": {
+    "rg-ramat-shikma": {
+      "green_score": 76,
+      "quiet_score": 73
+    },
+    "rg-vatikim": {
+      "green_score": 62,
+      "quiet_score": 39
+    },
+    "rg-shikun-tzanhanim": {
+      "green_score": 61,
+      "quiet_score": 40
+    },
+    "rg-marom-nave": {
+      "green_score": 36,
+      "quiet_score": 83
+    },
+    "rg-neve-yehoshua": {
+      "green_score": 36,
+      "quiet_score": 54
+    },
+    "rg-tel-ganim": {
+      "green_score": 35,
+      "quiet_score": 93
+    },
+    "rg-kiryat-krinitzi": {
+      "green_score": 32,
+      "quiet_score": 76
+    },
+    "rg-merkaz-gimel": {
+      "green_score": 30,
+      "quiet_score": 45
+    },
+    "rg-yad-labanim": {
+      "green_score": 29,
+      "quiet_score": 95
+    },
+    "rg-shikun-hamizrahi": {
+      "green_score": 27,
+      "quiet_score": 58
+    },
+    "rg-kiryat-borochov": {
+      "green_score": 27,
+      "quiet_score": 98
+    },
+    "rg-ramat-amidar": {
+      "green_score": 26,
+      "quiet_score": 31
+    },
+    "rg-ramat-efal": {
+      "green_score": 24,
+      "quiet_score": 53
+    },
+    "rg-harishonim": {
+      "green_score": 21,
+      "quiet_score": 39
+    },
+    "rg-merkaz-alef": {
+      "green_score": 21,
+      "quiet_score": 45
+    },
+    "rg-haruzim": {
+      "green_score": 18,
+      "quiet_score": 44
+    },
+    "rg-negba": {
+      "green_score": 17,
+      "quiet_score": 81
+    },
+    "rg-nahalat-ganim": {
+      "green_score": 16,
+      "quiet_score": 39
+    },
+    "rg-tel-binyamin": {
+      "green_score": 14,
+      "quiet_score": 38
+    },
+    "rg-ramat-chen": {
+      "green_score": 11,
+      "quiet_score": 91
+    },
+    "rg-tel-yehuda": {
+      "green_score": 9,
+      "quiet_score": 98
+    },
+    "rg-hagefen": {
+      "green_score": 9,
+      "quiet_score": 39
+    },
+    "rg-hillel": {
+      "green_score": 8,
+      "quiet_score": 74
+    },
+    "rg-habursa": {
+      "green_score": 7,
+      "quiet_score": 38
+    },
+    "rg-merkaz-bet": {
+      "green_score": 2,
+      "quiet_score": 65
+    },
+    "rg-kfar-azar": {
+      "green_score": 0,
+      "quiet_score": 43
+    }
+  }
+}

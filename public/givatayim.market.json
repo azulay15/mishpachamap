@@ -1,0 +1,198 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "givatayim",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 6100,
+      "4": 7500,
+      "5": 9700,
+      "all": 6150
+    },
+    "buy": {
+      "3": 2815000,
+      "4": 3999000,
+      "5": 4988000,
+      "all": 3339000
+    },
+    "rent_change_pct": -5.4,
+    "yield_pct": 2.21
+  },
+  "neighborhoods": {
+    "giv-kiryat-yosef": {
+      "rent": {
+        "3": 6430,
+        "4": 7800,
+        "all": 7200
+      },
+      "buy": {},
+      "rent_change_pct": 9.9,
+      "yield_pct": null,
+      "sources": [
+        "קריית יוסף"
+      ]
+    },
+    "giv-borochov": {
+      "rent": {
+        "3": 6400,
+        "4": 7650,
+        "5": 10100,
+        "all": 6750
+      },
+      "buy": {
+        "3": 3206000,
+        "4": 4357000,
+        "all": 4136000
+      },
+      "rent_change_pct": -5.6,
+      "yield_pct": 1.96,
+      "sources": [
+        "בורוכוב"
+      ]
+    },
+    "giv-halah": {
+      "rent": {
+        "3": 5950,
+        "4": 7500,
+        "all": 6100
+      },
+      "buy": {
+        "all": 2471000
+      },
+      "rent_change_pct": 0.8,
+      "yield_pct": 2.96,
+      "sources": [
+        "הל\"ה"
+      ]
+    },
+    "giv-poalei-harakevet": {
+      "rent": {
+        "3": 6000,
+        "4": 7350,
+        "5": 9750,
+        "all": 6300
+      },
+      "buy": {
+        "all": 2113000
+      },
+      "rent_change_pct": -1.2,
+      "yield_pct": 3.58,
+      "sources": [
+        "פועלי הרכבת"
+      ]
+    },
+    "giv-sheinkin": {
+      "rent": {
+        "3": 5950,
+        "4": 7500,
+        "all": 5400
+      },
+      "buy": {
+        "all": 2665000
+      },
+      "rent_change_pct": -3.2,
+      "yield_pct": 2.43,
+      "sources": [
+        "שינקין"
+      ]
+    },
+    "giv-givat-kozlovsky": {
+      "rent": {
+        "3": 6250,
+        "all": 6450
+      },
+      "buy": {},
+      "rent_change_pct": -3,
+      "yield_pct": null,
+      "sources": [
+        "גבעת קוזלובסקי"
+      ]
+    },
+    "giv-arlozorov": {
+      "rent": {
+        "3": 6000,
+        "4": 8100,
+        "5": 9450,
+        "all": 6500
+      },
+      "buy": {
+        "3": 2593000,
+        "4": 4059000,
+        "5": 5442000,
+        "all": 3839000
+      },
+      "rent_change_pct": -8.4,
+      "yield_pct": 2.03,
+      "sources": [
+        "ארלוזרוב"
+      ]
+    },
+    "giv-givat-rambam": {
+      "rent": {
+        "3": 6300,
+        "4": 7700,
+        "5": 8100,
+        "all": 6000
+      },
+      "buy": {
+        "all": 2784000
+      },
+      "rent_change_pct": -1.6,
+      "yield_pct": 2.59,
+      "sources": [
+        "גבעת רמב\"ם"
+      ]
+    },
+    "giv-shetach-9": {
+      "rent": {
+        "3": 6800,
+        "4": 9230,
+        "5": 10250,
+        "all": 7600
+      },
+      "buy": {
+        "all": 4229000
+      },
+      "rent_change_pct": -5,
+      "yield_pct": 2.16,
+      "sources": [
+        "שטח 9"
+      ]
+    },
+    "giv-shikun-hevrat-hashmal": {
+      "rent": {
+        "3": 5900,
+        "4": 6800,
+        "all": 6250
+      },
+      "buy": {},
+      "rent_change_pct": 1.6,
+      "yield_pct": null,
+      "sources": [
+        "שיכון חברת חשמל"
+      ]
+    },
+    "giv-tel-ganim": {
+      "rent": {
+        "3": 6000,
+        "4": 7030,
+        "5": 9500,
+        "all": 6000
+      },
+      "buy": {
+        "3": 3589000,
+        "4": 4615000,
+        "5": 5203000,
+        "all": 4378000
+      },
+      "rent_change_pct": -1.6,
+      "yield_pct": 1.64,
+      "sources": [
+        "תל גנים"
+      ]
+    }
+  }
+}

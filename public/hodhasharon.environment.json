@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "hodhasharon",
+    "generated_from": "public/neighborhoods.hodhasharon.geo.json"
+  },
+  "neighborhoods": {
+    "hod-ramot-menachem": {
+      "green_score": 65,
+      "quiet_score": 44
+    },
+    "hod-mitham-1200": {
+      "green_score": 63,
+      "quiet_score": 39
+    },
+    "hod-sharett": {
+      "green_score": 22,
+      "quiet_score": 39
+    },
+    "hod-magdiel": {
+      "green_score": 19,
+      "quiet_score": 68
+    },
+    "hod-hadar": {
+      "green_score": 14,
+      "quiet_score": 78
+    },
+    "hod-neve-neeman": {
+      "green_score": 14,
+      "quiet_score": 32
+    },
+    "hod-gil-amal": {
+      "green_score": 9,
+      "quiet_score": 45
+    },
+    "hod-ramatayim": {
+      "green_score": 7,
+      "quiet_score": 55
+    },
+    "hod-neve-hadar": {
+      "green_score": 1,
+      "quiet_score": 55
+    }
+  }
+}
