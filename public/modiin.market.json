@@ -1,0 +1,227 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "modiin",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 5800,
+      "4": 6850,
+      "5": 8500,
+      "all": 7000
+    },
+    "buy": {
+      "3": 2195000,
+      "4": 2748000,
+      "5": 3649000,
+      "all": 2837000
+    },
+    "rent_change_pct": 6.1,
+    "yield_pct": 2.96
+  },
+  "neighborhoods": {
+    "hanechalim": {
+      "rent": {
+        "3": 5830,
+        "4": 6750,
+        "all": 6580
+      },
+      "buy": {
+        "3": 2339000,
+        "4": 2944000,
+        "5": 3373000,
+        "all": 2863000
+      },
+      "rent_change_pct": 6.1,
+      "yield_pct": 2.76,
+      "sources": [
+        "הנחלים"
+      ]
+    },
+    "hashvatim": {
+      "rent": {
+        "all": 7880
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "השבטים"
+      ]
+    },
+    "hareut": {
+      "rent": {
+        "all": 12250
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "רעות"
+      ]
+    },
+    "nofim": {
+      "rent": {
+        "4": 7280,
+        "5": 8250,
+        "all": 8750
+      },
+      "buy": {},
+      "rent_change_pct": 12.2,
+      "yield_pct": null,
+      "sources": [
+        "נופים"
+      ]
+    },
+    "avneichen": {
+      "rent": {
+        "3": 5650,
+        "4": 6630,
+        "all": 7230
+      },
+      "buy": {
+        "4": 2941000,
+        "all": 2841000
+      },
+      "rent_change_pct": 7.4,
+      "yield_pct": 3.05,
+      "sources": [
+        "אבני חן"
+      ]
+    },
+    "hameginim": {
+      "rent": {
+        "3": 5850,
+        "4": 6480,
+        "5": 8000,
+        "all": 6400
+      },
+      "buy": {
+        "3": 2542000,
+        "4": 2718000,
+        "all": 2934000
+      },
+      "rent_change_pct": -3.4,
+      "yield_pct": 2.62,
+      "sources": [
+        "המגינים"
+      ]
+    },
+    "haprachim": {
+      "rent": {
+        "3": 5780,
+        "4": 6550,
+        "all": 5900
+      },
+      "buy": {
+        "3": 2189000,
+        "all": 2890000
+      },
+      "rent_change_pct": 1.7,
+      "yield_pct": 2.45,
+      "sources": [
+        "הפרחים"
+      ]
+    },
+    "hanevim": {
+      "rent": {
+        "3": 5880,
+        "4": 6750,
+        "5": 7600,
+        "all": 6330
+      },
+      "buy": {
+        "3": 2472000,
+        "4": 2795000,
+        "5": 3448000,
+        "all": 2882000
+      },
+      "rent_change_pct": -3.4,
+      "yield_pct": 2.63,
+      "sources": [
+        "הנביאים"
+      ]
+    },
+    "moriah": {
+      "rent": {
+        "4": 7100,
+        "all": 8150
+      },
+      "buy": {
+        "all": 4083000
+      },
+      "rent_change_pct": 4.2,
+      "yield_pct": 2.4,
+      "sources": [
+        "מוריה"
+      ]
+    },
+    "hamakkabim": null,
+    "hakramim": {
+      "rent": {
+        "3": 5550,
+        "4": 7050,
+        "5": 7350,
+        "all": 6700
+      },
+      "buy": {
+        "3": 1579000,
+        "4": 2516000,
+        "5": 3333000,
+        "all": 2502000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 3.21,
+      "sources": [
+        "הכרמים"
+      ]
+    },
+    "masuah": {
+      "rent": {
+        "3": 5500,
+        "4": 6680,
+        "all": 6800
+      },
+      "buy": {
+        "4": 2915000,
+        "all": 2843000
+      },
+      "rent_change_pct": 6.3,
+      "yield_pct": 2.87,
+      "sources": [
+        "משואה"
+      ]
+    },
+    "hatsiporim": {
+      "rent": {
+        "3": 5500,
+        "5": 7600,
+        "all": 6750
+      },
+      "buy": {
+        "all": 3525000
+      },
+      "rent_change_pct": 5.5,
+      "yield_pct": 2.3,
+      "sources": [
+        "הציפורים"
+      ]
+    },
+    "moreshet": {
+      "rent": {
+        "3": 6000,
+        "4": 7100,
+        "5": 7970,
+        "all": 7650
+      },
+      "buy": {},
+      "rent_change_pct": 12.5,
+      "yield_pct": null,
+      "sources": [
+        "מורשת - תכנון בעתיד"
+      ]
+    }
+  }
+}

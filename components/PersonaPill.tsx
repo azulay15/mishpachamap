@@ -126,7 +126,14 @@ export function PersonaPill() {
             <Stat label="נפשות" value={String(p.size)} />
             <Stat label="ילדים" value={String(p.kids.length)} />
             <Stat label="חדרים" value={`${p.rooms.min}–${p.rooms.max}`} />
-            <Stat label="תקציב" value={`${NISshort(p.budget.min)}–${NISshort(p.budget.max)}`} />
+            <Stat
+              label={p.deal === "rent" ? "שכירות לחודש" : "תקציב קנייה"}
+              value={
+                p.deal === "rent"
+                  ? `${NISshort(p.rentBudget.min)}–${NISshort(p.rentBudget.max)}`
+                  : `${NISshort(p.budget.min)}–${NISshort(p.budget.max)}`
+              }
+            />
           </div>
 
           {p.celiacInFamily && (

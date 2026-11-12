@@ -1,0 +1,441 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "petahtikva",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 4500,
+      "4": 5850,
+      "5": 7150,
+      "all": 5000
+    },
+    "buy": {
+      "3": 2044000,
+      "4": 2497000,
+      "5": 3300000,
+      "all": 2441000
+    },
+    "rent_change_pct": 2,
+    "yield_pct": 2.46
+  },
+  "neighborhoods": {
+    "em-hamoshavot-hadasha": {
+      "rent": {
+        "4": 7500,
+        "5": 8030,
+        "all": 7850
+      },
+      "buy": {
+        "4": 2763000,
+        "5": 3361000,
+        "all": 3097000
+      },
+      "rent_change_pct": 0.3,
+      "yield_pct": 3.04,
+      "sources": [
+        "הדר המושבות החדשה"
+      ]
+    },
+    "em-hamoshavot-vatika": {
+      "rent": {
+        "3": 6200,
+        "4": 7000,
+        "all": 6750
+      },
+      "buy": {
+        "4": 2559000,
+        "all": 2586000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 3.13,
+      "sources": [
+        "הדר המושבות",
+        "האחים ישראלית"
+      ]
+    },
+    "neve-gan": {
+      "rent": {
+        "3": 6300,
+        "4": 7650,
+        "5": 8030,
+        "all": 8700
+      },
+      "buy": {
+        "4": 2834000,
+        "5": 4038000,
+        "all": 4065000
+      },
+      "rent_change_pct": 14.9,
+      "yield_pct": 2.57,
+      "sources": [
+        "נווה גן"
+      ]
+    },
+    "shifer-neve-dekalim": {
+      "rent": {
+        "3": 4500,
+        "4": 5550,
+        "all": 5500
+      },
+      "buy": {
+        "4": 2599000,
+        "all": 2620000
+      },
+      "rent_change_pct": 4.8,
+      "yield_pct": 2.52,
+      "sources": [
+        "שיפר"
+      ]
+    },
+    "neve-maoz": {
+      "rent": {},
+      "buy": {
+        "4": 2693000,
+        "all": 2610000
+      },
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "נווה מעוז"
+      ]
+    },
+    "krol": {
+      "rent": {
+        "3": 4580,
+        "4": 6050,
+        "all": 4750
+      },
+      "buy": {
+        "3": 2134000,
+        "4": 2715000,
+        "all": 2449000
+      },
+      "rent_change_pct": -1,
+      "yield_pct": 2.33,
+      "sources": [
+        "קרול"
+      ]
+    },
+    "chen-hatzafon": {
+      "rent": {
+        "3": 4500,
+        "4": 6000,
+        "all": 5800
+      },
+      "buy": {
+        "all": 2160000
+      },
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "קריית הרב סלומון",
+        "שיכון הפועל המזרחי"
+      ]
+    },
+    "kfar-avraham": {
+      "rent": {
+        "all": 4370
+      },
+      "buy": {},
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "כפר אברהם"
+      ]
+    },
+    "lev-hamoshava": null,
+    "merkaz-hashaket": {
+      "rent": {
+        "3": 4500,
+        "4": 5850,
+        "5": 7000,
+        "all": 4630
+      },
+      "buy": {
+        "3": 1895000,
+        "4": 2399000,
+        "5": 2960000,
+        "all": 2182000
+      },
+      "rent_change_pct": -0.5,
+      "yield_pct": 2.54,
+      "sources": [
+        "מרכז העיר"
+      ]
+    },
+    "ein-ganim": {
+      "rent": {
+        "3": 4600,
+        "4": 6000,
+        "5": 6850,
+        "all": 5350
+      },
+      "buy": {
+        "3": 1891000,
+        "4": 2245000,
+        "all": 2082000
+      },
+      "rent_change_pct": 5.9,
+      "yield_pct": 3.08,
+      "sources": [
+        "עין גנים"
+      ]
+    },
+    "mahane-yehuda": {
+      "rent": {
+        "3": 4500,
+        "4": 5850,
+        "all": 5010
+      },
+      "buy": {
+        "3": 1951000,
+        "4": 2340000,
+        "all": 2317000
+      },
+      "rent_change_pct": -4.5,
+      "yield_pct": 2.6,
+      "sources": [
+        "מחנה יהודה"
+      ]
+    },
+    "shaariya": {
+      "rent": {
+        "3": 4450,
+        "4": 5200,
+        "all": 4530
+      },
+      "buy": {
+        "3": 1987000,
+        "4": 2445000,
+        "all": 2258000
+      },
+      "rent_change_pct": -0.5,
+      "yield_pct": 2.4,
+      "sources": [
+        "שעריה"
+      ]
+    },
+    "ahdut": {
+      "rent": {
+        "3": 4200,
+        "4": 5300,
+        "all": 4200
+      },
+      "buy": {
+        "4": 2340000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "אחדות"
+      ]
+    },
+    "kiryat-elazar": {
+      "rent": {
+        "3": 4300,
+        "4": 5200,
+        "all": 4740
+      },
+      "buy": {},
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "קריית דוד אלעזר",
+        "קרית אליעזר פרי"
+      ]
+    },
+    "kiryat-alon": {
+      "rent": {
+        "all": 6000
+      },
+      "buy": {},
+      "rent_change_pct": 27.7,
+      "yield_pct": null,
+      "sources": [
+        "קריית אלון"
+      ]
+    },
+    "pisgat-alon-yoseftal": {
+      "rent": {
+        "3": 4000,
+        "all": 4000
+      },
+      "buy": {
+        "all": 1806000
+      },
+      "rent_change_pct": 5.3,
+      "yield_pct": 2.66,
+      "sources": [
+        "יוספטל"
+      ]
+    },
+    "beilinson": {
+      "rent": {
+        "all": 4350
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "בילינסון"
+      ]
+    },
+    "hadar-ganim": {
+      "rent": {
+        "3": 4600,
+        "4": 6100,
+        "all": 5950
+      },
+      "buy": {
+        "4": 2220000,
+        "all": 2286000
+      },
+      "rent_change_pct": -0.8,
+      "yield_pct": 3.12,
+      "sources": [
+        "הדר גנים"
+      ]
+    },
+    "amishav": {
+      "rent": {
+        "3": 4150,
+        "4": 4800,
+        "all": 4150
+      },
+      "buy": {
+        "3": 2194000,
+        "4": 2401000,
+        "all": 2083000
+      },
+      "rent_change_pct": 3.8,
+      "yield_pct": 2.39,
+      "sources": [
+        "עמישב"
+      ]
+    },
+    "kfar-ganim-alef": {
+      "rent": {
+        "3": 4700,
+        "4": 6080,
+        "5": 7250,
+        "all": 6000
+      },
+      "buy": {
+        "4": 2490000,
+        "5": 3155000,
+        "all": 2569000
+      },
+      "rent_change_pct": 2.6,
+      "yield_pct": 2.8,
+      "sources": [
+        "כפר גנים א"
+      ]
+    },
+    "kfar-ganim-bet": {
+      "rent": {
+        "3": 4900,
+        "4": 6030,
+        "5": 7480,
+        "all": 5950
+      },
+      "buy": {
+        "3": 2212000,
+        "4": 2595000,
+        "5": 2934000,
+        "all": 2527000
+      },
+      "rent_change_pct": -5.6,
+      "yield_pct": 2.83,
+      "sources": [
+        "כפר גנים ב"
+      ]
+    },
+    "kfar-ganim-gimel": {
+      "rent": {
+        "4": 7500,
+        "5": 8380,
+        "all": 8750
+      },
+      "buy": {
+        "5": 3687000,
+        "all": 3651000
+      },
+      "rent_change_pct": 4.2,
+      "yield_pct": 2.88,
+      "sources": [
+        "כפר גנים ג"
+      ]
+    },
+    "bat-ganim": null,
+    "ramat-verber": {
+      "rent": {
+        "3": 4380,
+        "4": 5630,
+        "5": 7000,
+        "all": 4500
+      },
+      "buy": {
+        "3": 2430000,
+        "4": 2489000,
+        "all": 2406000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 2.24,
+      "sources": [
+        "רמת ורבר"
+      ]
+    },
+    "bar-yehuda": {
+      "rent": {
+        "3": 3150,
+        "5": 6750
+      },
+      "buy": {
+        "all": 2526000
+      },
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "בר יהודה"
+      ]
+    },
+    "neve-ganim": {
+      "rent": {
+        "3": 4050,
+        "all": 4000
+      },
+      "buy": {},
+      "rent_change_pct": 2.6,
+      "yield_pct": null,
+      "sources": [
+        "נווה גנים"
+      ]
+    },
+    "neve-oz": {
+      "rent": {
+        "all": 9000
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "נוה עוז"
+      ]
+    },
+    "kiryat-matalon": {
+      "rent": {
+        "3": 4100,
+        "all": 6050
+      },
+      "buy": {},
+      "rent_change_pct": 0.8,
+      "yield_pct": null,
+      "sources": [
+        "קריית מטלון"
+      ]
+    }
+  }
+}

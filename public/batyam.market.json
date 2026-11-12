@@ -1,0 +1,163 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "batyam",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 4600,
+      "4": 6380,
+      "5": 8500,
+      "all": 4630
+    },
+    "buy": {
+      "3": 1864000,
+      "4": 2825000,
+      "5": 3444000,
+      "all": 1900000
+    },
+    "rent_change_pct": 0.5,
+    "yield_pct": 2.92
+  },
+  "neighborhoods": {
+    "by-north-west": {
+      "rent": {
+        "3": 4650,
+        "4": 6700,
+        "5": 7250,
+        "all": 4850
+      },
+      "buy": {
+        "3": 1907000,
+        "4": 3011000,
+        "all": 1913000
+      },
+      "rent_change_pct": 2.1,
+      "yield_pct": 3.04,
+      "sources": [
+        "צפון-מערב"
+      ]
+    },
+    "by-merkaz-hair": {
+      "rent": {
+        "3": 4800,
+        "4": 6250,
+        "5": 8000,
+        "all": 4580
+      },
+      "buy": {
+        "3": 1770000,
+        "4": 2600000,
+        "all": 1800000
+      },
+      "rent_change_pct": -2.1,
+      "yield_pct": 3.05,
+      "sources": [
+        "מרכז העיר"
+      ]
+    },
+    "by-ramat-hanasi": {
+      "rent": {
+        "3": 4500,
+        "4": 6150,
+        "all": 4750
+      },
+      "buy": {
+        "3": 2075000,
+        "4": 3067000,
+        "all": 2573000
+      },
+      "rent_change_pct": 5.6,
+      "yield_pct": 2.22,
+      "sources": [
+        "רמת הנשיא"
+      ]
+    },
+    "by-south-west": {
+      "rent": {
+        "3": 4800,
+        "4": 7630,
+        "5": 9180,
+        "all": 7950
+      },
+      "buy": {
+        "3": 1872000,
+        "4": 2734000,
+        "5": 3788000,
+        "all": 1957000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 4.26,
+      "sources": [
+        "דרום-מערב",
+        "מתחם גן העיר"
+      ]
+    },
+    "by-ramat-yosef": {
+      "rent": {
+        "3": 4350,
+        "4": 5700,
+        "all": 4050
+      },
+      "buy": {
+        "3": 2322000,
+        "all": 2026000
+      },
+      "rent_change_pct": 1.3,
+      "yield_pct": 2.4,
+      "sources": [
+        "רמת יוסף"
+      ]
+    },
+    "by-amidar": {
+      "rent": {
+        "3": 4550,
+        "4": 5500,
+        "5": 6250,
+        "all": 4350
+      },
+      "buy": {
+        "3": 1804000,
+        "all": 1776000
+      },
+      "rent_change_pct": 2.4,
+      "yield_pct": 2.94,
+      "sources": [
+        "עמידר"
+      ]
+    },
+    "by-bayit-vagan": {
+      "rent": {
+        "3": 4630,
+        "4": 5500,
+        "all": 4300
+      },
+      "buy": {
+        "all": 1529000
+      },
+      "rent_change_pct": -0.6,
+      "yield_pct": 3.38,
+      "sources": [
+        "בית וגן"
+      ]
+    },
+    "by-vatikim": {
+      "rent": {
+        "3": 4750,
+        "4": 6150,
+        "all": 4550
+      },
+      "buy": {
+        "3": 1714000,
+        "all": 1640000
+      },
+      "rent_change_pct": 5.8,
+      "yield_pct": 3.33,
+      "sources": [
+        "ותיקים"
+      ]
+    }
+  }
+}

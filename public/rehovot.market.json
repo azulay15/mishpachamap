@@ -1,0 +1,431 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "rehovot",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 4450,
+      "4": 5600,
+      "5": 7500,
+      "all": 4800
+    },
+    "buy": {
+      "3": 1889000,
+      "4": 2437000,
+      "5": 3207000,
+      "all": 2347000
+    },
+    "rent_change_pct": -1,
+    "yield_pct": 2.45
+  },
+  "neighborhoods": {
+    "rhv-rehovot-hatzeira": {
+      "rent": {
+        "4": 6450,
+        "5": 6700,
+        "all": 7500
+      },
+      "buy": {
+        "4": 2331000,
+        "all": 2328000
+      },
+      "rent_change_pct": 15.4,
+      "yield_pct": 3.87,
+      "sources": [
+        "רחובות הצעירה"
+      ]
+    },
+    "rhv-kiryat-moshe": {
+      "rent": {
+        "3": 3580,
+        "4": 5550,
+        "5": 7450,
+        "all": 3630
+      },
+      "buy": {
+        "3": 2238000,
+        "5": 2848000,
+        "all": 2465000
+      },
+      "rent_change_pct": -4.6,
+      "yield_pct": 1.76,
+      "sources": [
+        "קרית משה"
+      ]
+    },
+    "rhv-sela": {
+      "rent": {
+        "3": 4250,
+        "4": 6400,
+        "all": 6300
+      },
+      "buy": {
+        "4": 2342000,
+        "5": 3256000,
+        "all": 2476000
+      },
+      "rent_change_pct": 6.8,
+      "yield_pct": 3.05,
+      "sources": [
+        "סלע"
+      ]
+    },
+    "rhv-rehovot-haholandit": {
+      "rent": {
+        "3": 4950,
+        "4": 6400,
+        "5": 7400,
+        "all": 6500
+      },
+      "buy": {
+        "4": 2394000,
+        "all": 2330000
+      },
+      "rent_change_pct": 4,
+      "yield_pct": 3.35,
+      "sources": [
+        "רחובות ההולנדית"
+      ]
+    },
+    "rhv-ibn-gabirol": {
+      "rent": {
+        "3": 4000,
+        "4": 4500,
+        "5": 6630,
+        "all": 4500
+      },
+      "buy": {
+        "all": 2381000
+      },
+      "rent_change_pct": 12.5,
+      "yield_pct": 2.27,
+      "sources": [
+        "אבן גבירול"
+      ]
+    },
+    "rhv-neve-amit": {
+      "rent": {
+        "all": 4500
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "נווה עמית"
+      ]
+    },
+    "rhv-neve-yehuda": {
+      "rent": {
+        "3": 4230,
+        "4": 5860,
+        "all": 4750
+      },
+      "buy": {
+        "all": 2278000
+      },
+      "rent_change_pct": 6.7,
+      "yield_pct": 2.5,
+      "sources": [
+        "נווה יהודה"
+      ]
+    },
+    "rhv-marmorek": {
+      "rent": {
+        "3": 4200,
+        "4": 6500,
+        "all": 4500
+      },
+      "buy": {},
+      "rent_change_pct": 15.4,
+      "yield_pct": null,
+      "sources": [
+        "מרמורק"
+      ]
+    },
+    "rhv-havatzelet": null,
+    "rhv-rehovot-hahadasha": {
+      "rent": {
+        "4": 6450,
+        "5": 7500,
+        "all": 7380
+      },
+      "buy": {
+        "4": 2557000,
+        "all": 2645000
+      },
+      "rent_change_pct": 13.5,
+      "yield_pct": 3.35,
+      "sources": [
+        "רחובות החדשה"
+      ]
+    },
+    "rhv-oshiot": {
+      "rent": {
+        "3": 4150,
+        "all": 3950
+      },
+      "buy": {},
+      "rent_change_pct": 2.6,
+      "yield_pct": null,
+      "sources": [
+        "אושיות"
+      ]
+    },
+    "rhv-kiryat-hahagana": {
+      "rent": {
+        "all": 4430
+      },
+      "buy": {},
+      "rent_change_pct": -29.8,
+      "yield_pct": null,
+      "sources": [
+        "קריית ההגנה"
+      ]
+    },
+    "rhv-hayovel": {
+      "rent": {
+        "3": 5250,
+        "4": 6200,
+        "all": 6000
+      },
+      "buy": {
+        "all": 2385000
+      },
+      "rent_change_pct": 4.4,
+      "yield_pct": 3.02,
+      "sources": [
+        "היובל"
+      ]
+    },
+    "rhv-kiryat-david": {
+      "rent": {
+        "3": 3850,
+        "all": 3950
+      },
+      "buy": {
+        "all": 2319000
+      },
+      "rent_change_pct": -1.2,
+      "yield_pct": 2.04,
+      "sources": [
+        "קריית דוד"
+      ]
+    },
+    "rhv-denya": {
+      "rent": {
+        "3": 4200,
+        "all": 4380
+      },
+      "buy": {
+        "3": 1692000,
+        "all": 1646000
+      },
+      "rent_change_pct": 10.1,
+      "yield_pct": 3.19,
+      "sources": [
+        "דניה"
+      ]
+    },
+    "rhv-shaarayim": {
+      "rent": {
+        "3": 4300,
+        "4": 5680,
+        "5": 7000,
+        "all": 4500
+      },
+      "buy": {
+        "3": 1933000,
+        "4": 2012000,
+        "5": 3204000,
+        "all": 2200000
+      },
+      "rent_change_pct": 3.5,
+      "yield_pct": 2.45,
+      "sources": [
+        "שעריים"
+      ]
+    },
+    "rhv-merkaz-hair": {
+      "rent": {
+        "3": 4500,
+        "4": 5160,
+        "5": 7500,
+        "all": 4500
+      },
+      "buy": {
+        "4": 2745000,
+        "5": 3389000,
+        "all": 2419000
+      },
+      "rent_change_pct": -2.7,
+      "yield_pct": null,
+      "sources": [
+        "מתחם התחנה המרכזית"
+      ]
+    },
+    "rhv-neve-alon": {
+      "rent": {
+        "3": 4500,
+        "4": 5650,
+        "5": 7350,
+        "all": 4850
+      },
+      "buy": {
+        "3": 2540000,
+        "4": 2356000,
+        "5": 3784000,
+        "all": 2487000
+      },
+      "rent_change_pct": 3.2,
+      "yield_pct": 2.34,
+      "sources": [
+        "נווה אלון"
+      ]
+    },
+    "rhv-binyamin-nordau": {
+      "rent": {
+        "3": 4400,
+        "4": 4950,
+        "all": 4600
+      },
+      "buy": {
+        "3": 1832000,
+        "all": 1853000
+      },
+      "rent_change_pct": 2.2,
+      "yield_pct": 2.98,
+      "sources": [
+        "בנימין\\ נורדאו"
+      ]
+    },
+    "rhv-weisburg-shkolnik": {
+      "rent": {
+        "3": 4650,
+        "4": 5450,
+        "5": 6000,
+        "all": 5130
+      },
+      "buy": {
+        "all": 1613000
+      },
+      "rent_change_pct": -6,
+      "yield_pct": 3.81,
+      "sources": [
+        "וייסבורג\\ שקולניק"
+      ]
+    },
+    "rhv-avnei-chen": {
+      "rent": {
+        "3": 4800,
+        "all": 4680
+      },
+      "buy": {
+        "all": 2048000
+      },
+      "rent_change_pct": 14,
+      "yield_pct": 2.74,
+      "sources": [
+        "אבני חן"
+      ]
+    },
+    "rhv-azorei-weizmann": {
+      "rent": {
+        "all": 5850
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "אזורי ויצמן"
+      ]
+    },
+    "rhv-hehalutz-haavoda": {
+      "rent": {
+        "3": 4700,
+        "4": 5600,
+        "all": 5000
+      },
+      "buy": {
+        "3": 1956000,
+        "all": 1971000
+      },
+      "rent_change_pct": 6.4,
+      "yield_pct": 3.04,
+      "sources": [
+        "החלוץ\\ העבודה"
+      ]
+    },
+    "rhv-miller-meltzer": {
+      "rent": {
+        "3": 4600,
+        "4": 5600,
+        "5": 6700,
+        "all": 4830
+      },
+      "buy": {
+        "4": 3074000,
+        "5": 3758000
+      },
+      "rent_change_pct": 6,
+      "yield_pct": null,
+      "sources": [
+        "מילר\\ מלצר"
+      ]
+    },
+    "rhv-eisenberg-aharoni": {
+      "rent": {
+        "3": 4450,
+        "4": 5600,
+        "5": 7600,
+        "all": 5250
+      },
+      "buy": {
+        "3": 2095000,
+        "4": 3217000,
+        "all": 2724000
+      },
+      "rent_change_pct": 5,
+      "yield_pct": 2.31,
+      "sources": [
+        "אייזנבר\\ אהרוני"
+      ]
+    },
+    "rhv-yahad": {
+      "rent": {
+        "3": 4800,
+        "4": 5750,
+        "5": 6000,
+        "all": 5350
+      },
+      "buy": {
+        "3": 2709000,
+        "5": 4356000,
+        "all": 2990000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 2.15,
+      "sources": [
+        "יחד"
+      ]
+    },
+    "rhv-rehovot-hamada": {
+      "rent": {
+        "4": 6550,
+        "5": 8150,
+        "all": 8100
+      },
+      "buy": {
+        "5": 3444000,
+        "all": 3452000
+      },
+      "rent_change_pct": 4.2,
+      "yield_pct": 2.82,
+      "sources": [
+        "רחובות המדע"
+      ]
+    }
+  }
+}

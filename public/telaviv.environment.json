@@ -1,0 +1,253 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "telaviv",
+    "generated_from": "public/neighborhoods.telaviv.geo.json"
+  },
+  "neighborhoods": {
+    "tlv-ramat-aviv": {
+      "green_score": 97,
+      "quiet_score": 59
+    },
+    "tlv-givat-herzl": {
+      "green_score": 86,
+      "quiet_score": 55
+    },
+    "tlv-orot": {
+      "green_score": 82,
+      "quiet_score": 82
+    },
+    "tlv-hamishtala": {
+      "green_score": 79,
+      "quiet_score": 42
+    },
+    "tlv-ramat-aviv-gimel": {
+      "green_score": 78,
+      "quiet_score": 59
+    },
+    "tlv-azorei-chen": {
+      "green_score": 75,
+      "quiet_score": 32
+    },
+    "tlv-neve-avivim": {
+      "green_score": 73,
+      "quiet_score": 49
+    },
+    "tlv-hadar-yosef": {
+      "green_score": 65,
+      "quiet_score": 49
+    },
+    "tlv-tochnit-lamed": {
+      "green_score": 64,
+      "quiet_score": 41
+    },
+    "tlv-tzahala": {
+      "green_score": 62,
+      "quiet_score": 75
+    },
+    "tlv-ramat-aviv-hahadasha": {
+      "green_score": 62,
+      "quiet_score": 37
+    },
+    "tlv-tel-baruch-north": {
+      "green_score": 61,
+      "quiet_score": 58
+    },
+    "tlv-neve-sharett": {
+      "green_score": 57,
+      "quiet_score": 53
+    },
+    "tlv-neot-afeka-alef": {
+      "green_score": 55,
+      "quiet_score": 53
+    },
+    "tlv-ramat-hahayal": {
+      "green_score": 54,
+      "quiet_score": 32
+    },
+    "tlv-revivim": {
+      "green_score": 52,
+      "quiet_score": 51
+    },
+    "tlv-afeka": {
+      "green_score": 50,
+      "quiet_score": 42
+    },
+    "tlv-bavli": {
+      "green_score": 49,
+      "quiet_score": 45
+    },
+    "tlv-neot-afeka-bet": {
+      "green_score": 49,
+      "quiet_score": 44
+    },
+    "tlv-tel-baruch": {
+      "green_score": 48,
+      "quiet_score": 43
+    },
+    "tlv-maoz-aviv": {
+      "green_score": 47,
+      "quiet_score": 43
+    },
+    "tlv-kochav-hatzafon": {
+      "green_score": 45,
+      "quiet_score": 47
+    },
+    "tlv-ganei-sarona": {
+      "green_score": 43,
+      "quiet_score": 49
+    },
+    "tlv-yafo-gimel": {
+      "green_score": 42,
+      "quiet_score": 86
+    },
+    "tlv-ajami": {
+      "green_score": 42,
+      "quiet_score": 98
+    },
+    "tlv-kfar-shalem-west": {
+      "green_score": 41,
+      "quiet_score": 62
+    },
+    "tlv-nofei-yam": {
+      "green_score": 40,
+      "quiet_score": 56
+    },
+    "tlv-dakar": {
+      "green_score": 39,
+      "quiet_score": 50
+    },
+    "tlv-ganei-tzahala": {
+      "green_score": 37,
+      "quiet_score": 47
+    },
+    "tlv-tel-kabir": {
+      "green_score": 37,
+      "quiet_score": 37
+    },
+    "tlv-old-jaffa": {
+      "green_score": 33,
+      "quiet_score": 98
+    },
+    "tlv-kiryat-shalom": {
+      "green_score": 32,
+      "quiet_score": 45
+    },
+    "tlv-kikar-hamedina": {
+      "green_score": 30,
+      "quiet_score": 72
+    },
+    "tlv-neve-tzedek": {
+      "green_score": 30,
+      "quiet_score": 91
+    },
+    "tlv-bitzaron": {
+      "green_score": 28,
+      "quiet_score": 47
+    },
+    "tlv-yafo-dalet": {
+      "green_score": 28,
+      "quiet_score": 55
+    },
+    "tlv-old-north-north": {
+      "green_score": 27,
+      "quiet_score": 79
+    },
+    "tlv-tel-haim": {
+      "green_score": 27,
+      "quiet_score": 74
+    },
+    "tlv-ramat-hatayasim": {
+      "green_score": 27,
+      "quiet_score": 98
+    },
+    "tlv-new-north-south": {
+      "green_score": 24,
+      "quiet_score": 64
+    },
+    "tlv-tzahalon": {
+      "green_score": 22,
+      "quiet_score": 82
+    },
+    "tlv-north-jaffa": {
+      "green_score": 21,
+      "quiet_score": 83
+    },
+    "tlv-neve-chen": {
+      "green_score": 20,
+      "quiet_score": 73
+    },
+    "tlv-livne-yedidya": {
+      "green_score": 20,
+      "quiet_score": 44
+    },
+    "tlv-nir-aviv": {
+      "green_score": 19,
+      "quiet_score": 44
+    },
+    "tlv-haargazim": {
+      "green_score": 19,
+      "quiet_score": 47
+    },
+    "tlv-new-north-north": {
+      "green_score": 16,
+      "quiet_score": 67
+    },
+    "tlv-hatikva": {
+      "green_score": 16,
+      "quiet_score": 48
+    },
+    "tlv-neve-dan": {
+      "green_score": 16,
+      "quiet_score": 43
+    },
+    "tlv-old-north-south": {
+      "green_score": 15,
+      "quiet_score": 98
+    },
+    "tlv-lev-hair": {
+      "green_score": 14,
+      "quiet_score": 95
+    },
+    "tlv-shapira": {
+      "green_score": 13,
+      "quiet_score": 44
+    },
+    "tlv-nahalat-yitzhak": {
+      "green_score": 12,
+      "quiet_score": 39
+    },
+    "tlv-yad-eliyahu": {
+      "green_score": 12,
+      "quiet_score": 42
+    },
+    "tlv-neve-shaanan": {
+      "green_score": 11,
+      "quiet_score": 48
+    },
+    "tlv-kfar-shalem-east": {
+      "green_score": 7,
+      "quiet_score": 64
+    },
+    "tlv-park-tzameret": {
+      "green_score": 6,
+      "quiet_score": 36
+    },
+    "tlv-florentin": {
+      "green_score": 6,
+      "quiet_score": 53
+    },
+    "tlv-montefiore": {
+      "green_score": 3,
+      "quiet_score": 36
+    },
+    "tlv-neve-kfir": {
+      "green_score": 3,
+      "quiet_score": 44
+    },
+    "tlv-kerem-hateimanim": {
+      "green_score": 0,
+      "quiet_score": 98
+    }
+  }
+}

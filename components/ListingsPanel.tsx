@@ -1,5 +1,8 @@
 "use client";
 
+import { PricesBySize } from "./PricesBySize";
+import type { Market } from "@/lib/market";
+import { usePersona } from "@/lib/usePersona";
 import { useState } from "react";
 import { MMIcon } from "@/lib/icons";
 import { ScoreChip } from "./ScoreChip";
@@ -53,6 +56,11 @@ export type Selected = {
   avgPrice: number;
   avgPriceDelta: number;
   avgListing: number;
+  /** Rent + sale prices by apartment size; null = none for this neighborhood. */
+  market?: Market | null;
+  /** City-wide figures + the source's update stamp, for the by-size table. */
+  cityMarket?: Market | null;
+  marketVersion?: string | null;
   greenScore: number;
   schoolScore: number;
   demographics?: Demographics | null;
@@ -74,6 +82,7 @@ type Props = {
 export function ListingsPanel({ selected, listings, schools, election, onExplainMatch, city = defaultCity() }: Props) {
   const [openListing, setOpenListing] = useState<ListingRow | null>(null);
   const [leadOpen, setLeadOpen] = useState<LeadKind | null>(null);
+  const persona = usePersona();
 
   if (!selected) {
     return (
@@ -131,7 +140,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
             </div>
           ) : (
           <>
-          <Stat label="חציון" value={selected.avgListing > 0 ? NISshort(selected.avgListing) : "—"} />
+          <Stat label="מחיר דירה" value={selected.avgListing > 0 ? NISshort(selected.avgListing) : "—"} />
           <Stat
             label='מחיר/מ"ר'
             value={
@@ -178,6 +187,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           }}
         >
           {[
+            (selected.market || selected.cityMarket) && { id: "prices", label: "מחירים" },
             (selected.demographics || selected.safety) && { id: "people", label: "מי גר כאן" },
             { id: "listings", label: "נכסים" },
             { id: "schools", label: "בתי ספר" },
@@ -201,6 +211,17 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
               </button>
             ))}
         </nav>
+        {(selected.market || selected.cityMarket) && (
+          <Section title="מחירים לפי גודל דירה" id="prices">
+            <PricesBySize
+              market={selected.market ?? null}
+              cityMarket={selected.cityMarket ?? null}
+              cityName={city.searchName ?? city.name_he}
+              version={selected.marketVersion}
+              deal={persona.deal}
+            />
+          </Section>
+        )}
         <WhoLivesHere demographics={selected.demographics ?? null} safety={selected.safety ?? null} cityName={city.searchName ?? city.name_he} />
 
         <Section title="נכסים פעילים" id="listings">
