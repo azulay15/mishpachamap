@@ -15,6 +15,7 @@ import { type NeighborhoodElection } from "./ElectionsPanel";
 import { RightRail, type RailMode } from "./RightRail";
 import { NeighborhoodListRail, type NeighborhoodListItem } from "./NeighborhoodListRail";
 import { PersonaPill } from "./PersonaPill";
+import { priceContext } from "./PriceFilterBar";
 import { ScoreChip } from "./ScoreChip";
 import { GreenScoreSheet } from "./GreenScoreSheet";
 import { MatchBreakdownSheet } from "./MatchBreakdownSheet";
@@ -30,7 +31,8 @@ import { useIsMobile } from "@/lib/useMediaQuery";
 import { MMIcon } from "@/lib/icons";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { type Demographics, type Safety } from "@/lib/staticData";
-import { usePersona } from "@/lib/usePersona";
+import { usePersona, writePersona } from "@/lib/usePersona";
+import { filterPrice, hasDeal, passesFilter, priceLabel, type Market, type PriceFilter, type RoomKey } from "@/lib/market";
 import { useLayerPrefs } from "@/lib/useLayerPrefs";
 import { SCORE_STEPS } from "@/lib/theme";
 
@@ -42,6 +44,8 @@ type ServerNeighborhood = NeighborhoodCardData & {
   polygon: GeoJSON.Polygon;
   center: GeoJSON.Position;
   facts: NeighborhoodFacts;
+  /** Rent + sale prices by apartment size. Null = the source has none here. */
+  market?: Market | null;
   /** Aliases for free-text search (Kaiser, Buchman, etc.). */
   aliases?: string[];
   /** Real per-neighborhood enrichment (CBS census / Police). Null = no coverage. */
@@ -54,6 +58,10 @@ type ServerNeighborhood = NeighborhoodCardData & {
 
 export type ConciergeData = {
   neighborhoods: ServerNeighborhood[];
+  /** City-wide rent + sale prices by apartment size, for context. */
+  cityMarket?: Market | null;
+  /** The price source's own "updated" stamp (dd-mm-yyyy). */
+  marketVersion?: string | null;
   pois: GeoJSON.Feature<GeoJSON.Point, POIFeatureProps>[];
   listingsByNeighborhood: Record<string, ListingRow[]>;
   schoolsByNeighborhood: Record<string, SchoolRow[]>;
@@ -197,6 +205,20 @@ export function ConciergeScreen({
   // Phones: the short sheet shown after tapping a neighborhood on the map.
   const [peekOpen, setPeekOpen] = useState(false);
   const persona = usePersona();
+  // Price filter: buy/rent follows the family profile (so the match score and
+  // the prices shown always talk about the same thing); size + ceiling are
+  // browsing state.
+  const [priceRooms, setPriceRooms] = useState<RoomKey>("all");
+  const [priceMax, setPriceMax] = useState<number | null>(null);
+  const priceFilter = useMemo<PriceFilter>(
+    () => ({ deal: persona.deal, rooms: priceRooms, max: priceMax }),
+    [persona.deal, priceRooms, priceMax],
+  );
+  const setPriceFilter = (next: PriceFilter) => {
+    setPriceRooms(next.rooms);
+    setPriceMax(next.max);
+    if (next.deal !== persona.deal) writePersona({ ...persona, deal: next.deal });
+  };
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
   const carouselRef = useRef<HTMLDivElement | null>(null);
@@ -276,9 +298,15 @@ export function ConciergeScreen({
       data.neighborhoods.map((n) => {
         const breakdown = breakdownFor(n.facts, persona);
         const score = Math.min(99, totalScore(breakdown));
-        return { ...n, matchScore: score };
+        const price = filterPrice(n, priceFilter);
+        return { ...n, matchScore: score, price, fits: passesFilter(price, priceFilter) };
       }),
-    [data.neighborhoods, persona],
+    [data.neighborhoods, persona, priceFilter],
+  );
+
+  const priceAvailable = useMemo(
+    () => ({ buy: hasDeal(data.neighborhoods, "buy"), rent: hasDeal(data.neighborhoods, "rent") }),
+    [data.neighborhoods],
   );
 
   const scoreById = useMemo(
@@ -290,7 +318,8 @@ export function ConciergeScreen({
   // carousel visibly reflects what the user picked from search/sheet/map.
   const sortedCards = useMemo(() => {
     const ranked = [...neighborhoodsWithScore].sort((a, b) => b.matchScore - a.matchScore);
-    const top = ranked.slice(0, 5);
+    // The price ceiling applies to the carousel too.
+    const top = ranked.filter((n) => n.fits).slice(0, 5);
     if (selectedId && !top.some((n) => n.id === selectedId)) {
       const sel = ranked.find((n) => n.id === selectedId);
       if (sel) return [sel, ...top.slice(0, 4)];
@@ -311,6 +340,9 @@ export function ConciergeScreen({
       avgPrice: n.avgPrice,
       avgPriceDelta: n.avgPriceDelta,
       avgListing: n.avgListing,
+      market: n.market ?? null,
+      cityMarket: data.cityMarket ?? null,
+      marketVersion: data.marketVersion ?? null,
       greenScore: n.greenScore,
       schoolScore: n.schoolScore,
       demographics: n.demographics ?? null,
@@ -334,6 +366,7 @@ export function ConciergeScreen({
             id: n.id,
             name_he: n.he,
             match_score: n.matchScore,
+            dim: !n.fits,
             leading_party_color: top?.color ?? null,
             leading_party_he: top?.partyHe ?? null,
           },
@@ -395,6 +428,9 @@ export function ConciergeScreen({
             selectedId={selectedId}
             onSelect={(id) => setSelectedId(id)}
             cityName={city.name_he}
+            priceFilter={priceFilter}
+            onPriceFilter={setPriceFilter}
+            priceAvailable={priceAvailable}
             hoverId={hoverId}
             onHover={setHoverId}
             compareIds={compareIds}
@@ -619,6 +655,9 @@ export function ConciergeScreen({
               }}
               onClose={() => setAllOpen(false)}
               cityName={city.name_he}
+              priceFilter={priceFilter}
+              onPriceFilter={setPriceFilter}
+              priceAvailable={priceAvailable}
             />
           )}
 
@@ -635,7 +674,7 @@ export function ConciergeScreen({
                 family={n.family}
                 matchScore={n.matchScore}
                 greenScore={n.greenScore}
-                avgListing={n.avgListing}
+                priceText={n.price != null ? `${priceContext(priceFilter)} ${priceLabel(n.price, priceFilter.deal)}` : null}
                 breakdown={breakdownFor(n.facts, persona)}
                 onExpand={() => {
                   setPeekOpen(false);
@@ -674,6 +713,11 @@ export function ConciergeScreen({
                   <NeighborhoodCard
                     n={n}
                     compact
+                    priceStat={
+                      n.price != null
+                        ? { value: priceLabel(n.price, priceFilter.deal), label: priceContext(priceFilter) }
+                        : undefined
+                    }
                     selected={selectedId === n.id}
                     inCompare={compareIds.has(n.id)}
                     onToggleCompare={() => toggleCompare(n.id)}

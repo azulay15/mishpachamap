@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { MMIcon } from "@/lib/icons";
-import { NISshort } from "@/lib/format";
+import { priceLabel, type Deal, type PriceFilter } from "@/lib/market";
+import { PriceFilterBar, priceContext } from "./PriceFilterBar";
 import { MatchBadge } from "./MatchBadge";
 import { useFavorites } from "@/lib/useFavorites";
 import { useFocusTrap } from "@/lib/useFocusTrap";
@@ -15,6 +16,10 @@ export type AllNeighborhoodsItem = {
   matchScore: number;
   avgListing: number;
   greenScore: number;
+  /** Price under the active filter (deal type + apartment size); null = no figure. */
+  price: number | null;
+  /** Passes the active price ceiling. */
+  fits: boolean;
 };
 
 type Props = {
@@ -23,6 +28,10 @@ type Props = {
   onSelect: (id: string) => void;
   onClose: () => void;
   cityName?: string;
+  priceFilter: PriceFilter;
+  onPriceFilter: (next: PriceFilter) => void;
+  /** Which deal types this city has figures for. */
+  priceAvailable: Record<Deal, boolean>;
 };
 
 type Sort = "match" | "price-asc" | "price-desc" | "green";
@@ -34,7 +43,7 @@ const SORT_LABELS: Record<Sort, string> = {
   green: "GreenScore",
 };
 
-export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, cityName = "מודיעין-מכבים-רעות" }: Props) {
+export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, cityName = "מודיעין-מכבים-רעות", priceFilter, onPriceFilter, priceAvailable }: Props) {
   const trapRef = useFocusTrap<HTMLDivElement>(true);
   const [sort, setSort] = useState<Sort>("match");
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
@@ -47,19 +56,27 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  // A city with no price data at all (new cities) doesn't offer price sorting
-  // or repeat "no price" on every row — one note in the header says it once.
-  const hasPrices = useMemo(() => items.some((n) => n.avgListing > 0), [items]);
+  // A city with no price data at all doesn't offer price sorting or repeat
+  // "no price" on every row — one note in the header says it once.
+  const hasPrices = priceAvailable.buy || priceAvailable.rent;
   const sorts = (Object.keys(SORT_LABELS) as Sort[]).filter((s) => hasPrices || !s.startsWith("price"));
 
+  // The price ceiling hides what doesn't fit; the selected neighborhood stays
+  // listed so the row for what's open on the map never vanishes.
+  const visible = useMemo(() => items.filter((n) => n.fits || n.id === selectedId), [items, selectedId]);
+  const hiddenCount = items.length - items.filter((n) => n.fits).length;
+
   const sorted = useMemo(() => {
-    const arr = [...items];
+    const arr = [...visible];
+    // Neighborhoods with no figure go last in either price order.
+    const byPrice = (dir: 1 | -1) => (a: (typeof arr)[number], b: (typeof arr)[number]) =>
+      a.price == null ? (b.price == null ? 0 : 1) : b.price == null ? -1 : dir * (a.price - b.price);
     if (sort === "match") arr.sort((a, b) => b.matchScore - a.matchScore);
-    else if (sort === "price-asc") arr.sort((a, b) => a.avgListing - b.avgListing);
-    else if (sort === "price-desc") arr.sort((a, b) => b.avgListing - a.avgListing);
+    else if (sort === "price-asc") arr.sort(byPrice(1));
+    else if (sort === "price-desc") arr.sort(byPrice(-1));
     else if (sort === "green") arr.sort((a, b) => b.greenScore - a.greenScore);
     return arr;
-  }, [items, sort]);
+  }, [visible, sort]);
 
   return (
     <div
@@ -111,7 +128,7 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
             <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>כל השכונות</h3>
             <div style={{ fontSize: 12, color: "var(--grey-500)", marginTop: 2 }}>
               {items.length} שכונות ב{cityName}
-            {!hasPrices && " · מחירי עסקאות בקרוב"}
+            {!hasPrices && " · נתוני מחירים בקרוב"}
             </div>
           </div>
           <div className="mm-sheet-sorts" style={{ display: "flex", gap: 6 }}>
@@ -137,6 +154,15 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
           >
             <MMIcon name="x" size={16} />
           </button>
+          <div style={{ flex: "1 1 100%", order: 3 }}>
+            <PriceFilterBar
+              filter={priceFilter}
+              onChange={onPriceFilter}
+              available={priceAvailable}
+              shown={items.length - hiddenCount}
+              total={items.length}
+            />
+          </div>
         </header>
 
         <div
@@ -268,7 +294,11 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
                 >
                   {hasPrices && (
                     <>
-                      <span>{n.avgListing > 0 ? `חציון ${NISshort(n.avgListing)}` : "אין נתוני מחיר"}</span>
+                      <span style={n.fits ? undefined : { color: "var(--grey-500)" }}>
+                      {n.price != null
+                        ? `${priceContext(priceFilter)} ${priceLabel(n.price, priceFilter.deal)}`
+                        : `${priceContext(priceFilter)}: אין נתון`}
+                    </span>
                       <span>·</span>
                     </>
                   )}
@@ -277,6 +307,11 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
               </div>
             );
           })}
+        {hiddenCount > 0 && (
+          <p className="mm-pricefilter-note">
+            {hiddenCount} שכונות לא מוצגות: מעל התקציב שבחרתם, או שאין עליהן נתון לגודל הזה.
+          </p>
+        )}
         </div>
       </div>
     </div>

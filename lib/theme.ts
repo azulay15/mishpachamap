@@ -31,6 +31,7 @@ export const FALLBACK = {
   "--hn-map-highway": "#F3D2A6",
   "--hn-map-highway-case": "#DDB27C",
   "--hn-map-hover": "#14231A",
+  "--hn-map-dim": "#D9DEDA",
   "--hn-score-1": "#E3F1E6",
   "--hn-score-2": "#BADFC3",
   "--hn-score-3": "#85C496",
@@ -90,12 +91,18 @@ export function scoreStep(score: number): 1 | 2 | 3 | 4 | 5 {
 /** Mapbox `fill-color` expression: neighborhoods coloured by `match_score`. */
 export function scoreFillExpression(): ExpressionSpecification {
   return [
-    "step",
-    ["coalesce", ["get", "match_score"], 0],
-    token("--hn-score-1"),
-    SCORE_STEPS[0], token("--hn-score-2"),
-    SCORE_STEPS[1], token("--hn-score-3"),
-    SCORE_STEPS[2], token("--hn-score-4"),
-    SCORE_STEPS[3], token("--hn-score-5"),
+    "case",
+    // Ruled out by the price filter → neutral, so what fits stands out.
+    ["==", ["get", "dim"], true],
+    token("--hn-map-dim"),
+    [
+      "step",
+      ["coalesce", ["get", "match_score"], 0],
+      token("--hn-score-1"),
+      SCORE_STEPS[0], token("--hn-score-2"),
+      SCORE_STEPS[1], token("--hn-score-3"),
+      SCORE_STEPS[2], token("--hn-score-4"),
+      SCORE_STEPS[3], token("--hn-score-5"),
+    ],
   ] as ExpressionSpecification;
 }

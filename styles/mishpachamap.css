@@ -776,3 +776,35 @@ a:focus-visible,
   font-variant-numeric: tabular-nums;
   font-size: 11px;
 }
+
+/* ---- Price filter (buy / rent · apartment size · ceiling) ---- */
+.mm-pricefilter { display: flex; flex-direction: column; gap: 6px; padding-top: 8px; border-top: 1px dashed var(--stroke-weak); }
+.mm-pricefilter-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mm-pricefilter-rooms { display: flex; gap: 4px; flex-wrap: wrap; }
+.mm-seg { display: inline-flex; padding: 2px; border-radius: var(--radius-pill); background: var(--hn-surface-2); border: 1px solid var(--stroke-weak); }
+.mm-seg button { height: 24px; padding: 0 10px; border: 0; border-radius: var(--radius-pill); background: transparent; font: inherit; font-size: 11px; font-weight: 700; color: var(--grey-700); cursor: pointer; }
+.mm-seg button.is-on { background: var(--hn-primary); color: var(--hn-on-primary); }
+.mm-seg button:focus-visible { outline: 2px solid var(--hn-primary); outline-offset: 1px; }
+.mm-pricefilter-label { font-size: 11px; font-weight: 600; color: var(--grey-700); }
+.mm-pricefilter-select { height: 28px; padding: 0 8px; border-radius: 8px; border: 1px solid var(--stroke-medium); background: var(--hn-surface); color: inherit; font: inherit; font-size: 12px; font-weight: 600; }
+.mm-pricefilter-count { font-size: 11px; color: var(--grey-500); font-variant-numeric: tabular-nums; }
+.mm-pricefilter-note { margin: 4px 2px 8px; font-size: 11px; line-height: 1.5; color: var(--grey-500); grid-column: 1 / -1; }
+@media (max-width: 768px) {
+  .mm-seg button { height: 30px; padding: 0 14px; font-size: 12px; }
+  .mm-pricefilter-select { height: 34px; font-size: 14px; }
+}
+
+/* ---- Prices by apartment size (neighborhood details) ---- */
+.mm-sizes { width: 100%; border-collapse: collapse; font-size: 13px; }
+.mm-sizes th, .mm-sizes td { padding: 7px 8px; text-align: start; border-bottom: 1px solid var(--stroke-weak); vertical-align: top; }
+.mm-sizes thead th { font-size: 11px; font-weight: 700; color: var(--grey-500); }
+.mm-sizes tbody th { font-weight: 700; white-space: nowrap; }
+.mm-sizes td strong { display: block; font-family: var(--font-inter, Inter); font-variant-numeric: tabular-nums; font-weight: 800; }
+.mm-sizes td small { display: block; font-size: 10.5px; color: var(--grey-500); font-variant-numeric: tabular-nums; }
+.mm-sizes .is-focus { background: var(--hn-surface-2); }
+.mm-sizes thead .is-focus { color: var(--hn-text); }
+.mm-sizes-none { font-size: 11px; color: var(--grey-500); }
+.mm-sizes-note { margin: 0 0 8px; padding: 8px 10px; border-radius: 8px; background: var(--hn-warning-bg); font-size: 12px; line-height: 1.5; }
+.mm-sizes-foot { margin: 8px 0 0; font-size: 11px; line-height: 1.5; color: var(--grey-500); }
+.mm-seg-lg { align-self: flex-start; }
+.mm-seg-lg button { height: 36px; padding: 0 22px; font-size: 14px; }

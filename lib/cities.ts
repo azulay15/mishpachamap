@@ -39,6 +39,9 @@ export type CityFiles = {
   /** Govmap sale-price metrics per neighborhood. Optional — absent → the app
    *  falls back to the DB metrics (Modi'in's legacy path). */
   prices?: string;
+  /** Rent + sale prices by apartment size per neighborhood (nadlan.gov.il,
+   *  from scripts/ingest/market.ts). Optional — absent → no by-size figures. */
+  market?: string;
 };
 
 export type City = {
@@ -91,6 +94,7 @@ const modiin: City = {
     transit: "transit.modiin.json",
     environment: "modiin.environment.json",
     prices: "modiin.prices.json",
+    market: "modiin.market.json",
   },
 };
 
@@ -118,6 +122,7 @@ const oryehuda: City = {
     transit: "oryehuda.transit.json",
     environment: "oryehuda.environment.json",
     prices: "oryehuda.prices.json",
+    market: "oryehuda.market.json",
   },
 };
 
@@ -144,6 +149,7 @@ const rishon: City = {
     transit: "rishon.transit.json",
     environment: "rishon.environment.json",
     prices: "rishon.prices.json",
+    market: "rishon.market.json",
   },
 };
 
@@ -167,6 +173,7 @@ const kefarsava: City = {
     transit: "kefarsava.transit.json",
     environment: "kefarsava.environment.json",
     prices: "kefarsava.prices.json",
+    market: "kefarsava.market.json",
   },
 };
 
@@ -221,6 +228,7 @@ const raanana: City = {
     transit: "raanana.transit.json",
     environment: "raanana.environment.json",
     prices: "raanana.prices.json",
+    market: "raanana.market.json",
   },
 };
 
@@ -243,6 +251,7 @@ const herzliya: City = {
     transit: "herzliya.transit.json",
     environment: "herzliya.environment.json",
     prices: "herzliya.prices.json",
+    market: "herzliya.market.json",
   },
 };
 
@@ -265,6 +274,7 @@ const netanya: City = {
     transit: "netanya.transit.json",
     environment: "netanya.environment.json",
     prices: "netanya.prices.json",
+    market: "netanya.market.json",
   },
 };
 
@@ -287,6 +297,7 @@ const petahtikva: City = {
     transit: "petahtikva.transit.json",
     environment: "petahtikva.environment.json",
     prices: "petahtikva.prices.json",
+    market: "petahtikva.market.json",
   },
 };
 
@@ -309,6 +320,7 @@ const haifa: City = {
     transit: "haifa.transit.json",
     environment: "haifa.environment.json",
     prices: "haifa.prices.json",
+    market: "haifa.market.json",
   },
 };
 
@@ -331,6 +343,7 @@ const jerusalem: City = {
     transit: "jerusalem.transit.json",
     environment: "jerusalem.environment.json",
     prices: "jerusalem.prices.json",
+    market: "jerusalem.market.json",
   },
 };
 

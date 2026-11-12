@@ -32,6 +32,8 @@ type Props = {
   /** Short card for the mobile bottom carousel: no summary, one row of the
    *  stats that actually have a value, no min-height. */
   compact?: boolean;
+  /** Compact card only: the price under the active filter (deal + size). */
+  priceStat?: { value: string; label: string };
 };
 
 export function NeighborhoodCard({
@@ -43,6 +45,7 @@ export function NeighborhoodCard({
   onToggleCompare,
   variant = "list",
   compact = false,
+  priceStat,
 }: Props) {
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
   const isFav = hasNeighborhood(n.id);
@@ -189,7 +192,7 @@ export function NeighborhoodCard({
         {/* Stats grid — 2×2 by default (works at 260-340px card widths),
              expands to 4-across on wide variants. */}
         {compact ? (
-          <CompactStats n={n} />
+          <CompactStats n={n} priceStat={priceStat} />
         ) : (
         <div
           className="mm-card-stats"
@@ -203,7 +206,7 @@ export function NeighborhoodCard({
             marginTop: "auto",
           }}
         >
-          <Stat value={n.avgListing > 0 ? NISshort(n.avgListing) : "—"} label="חציון" />
+          <Stat value={n.avgListing > 0 ? NISshort(n.avgListing) : "—"} label="מחיר דירה" />
           <Stat value={n.avgPrice > 0 ? `₪${(n.avgPrice / 1000).toFixed(1)}K` : "—"} label='למ"ר' border />
           <Stat value={n.schoolScore > 0 ? n.schoolScore : "—"} label="בתי ספר" />
           <Stat
@@ -227,9 +230,10 @@ export function NeighborhoodCard({
 
 /** One row of stats for the compact card. Missing values are dropped rather
  *  than shown as a row of dashes (new cities have no price data yet). */
-function CompactStats({ n }: { n: NeighborhoodCardData }) {
+function CompactStats({ n, priceStat }: { n: NeighborhoodCardData; priceStat?: { value: string; label: string } }) {
   const stats: { value: React.ReactNode; label: string; color?: string }[] = [];
-  if (n.avgListing > 0) stats.push({ value: NISshort(n.avgListing), label: "חציון" });
+  if (priceStat) stats.push(priceStat);
+  else if (n.avgListing > 0) stats.push({ value: NISshort(n.avgListing), label: "מחיר דירה" });
   // Three columns is what fits a phone card without truncating; per-m² price
   // only steps in when there's no median to show.
   else if (n.avgPrice > 0) stats.push({ value: `₪${(n.avgPrice / 1000).toFixed(1)}K`, label: 'למ"ר' });

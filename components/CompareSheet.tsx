@@ -6,6 +6,7 @@ import { NIS, NISshort, pct } from "@/lib/format";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { scoreColor } from "@/lib/match";
 import type { Persona } from "@/lib/persona";
+import { marketPrice, priceLabel, type Market, type RoomKey } from "@/lib/market";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import type { NeighborhoodElection } from "./ElectionsPanel";
 
@@ -16,6 +17,7 @@ export type CompareItem = {
   avgListing: number;
   avgPrice: number;
   avgPriceDelta: number;
+  market?: Market | null;
   greenScore: number;
   schoolScore: number;
   facts: NeighborhoodFacts;
@@ -59,7 +61,7 @@ export function CompareSheet({ items, persona, electionsByNeighborhood, onClose,
       higherIsBetter: true,
     },
     {
-      label: "חציון מחיר",
+      label: "מחיר דירה",
       get: (n) => n.avgListing,
       format: (v) => (v > 0 ? NISshort(v) : "—"),
       higherIsBetter: null, // depends on persona — don't highlight
@@ -76,6 +78,12 @@ export function CompareSheet({ items, persona, electionsByNeighborhood, onClose,
       format: (v) => (v !== 0 ? pct(v) : "—"),
       higherIsBetter: null,
     },
+    ...(["3", "4", "5"] as RoomKey[]).map((k) => ({
+      label: `שכירות ${k} חד׳`,
+      get: (n: (typeof enriched)[number]) => marketPrice(n.market, "rent", k) ?? 0,
+      format: (v: number) => (v > 0 ? priceLabel(v, "rent") : "—"),
+      higherIsBetter: null,
+    })),
     {
       label: "GreenScore",
       get: (n) => n.greenScore,

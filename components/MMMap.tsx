@@ -22,6 +22,8 @@ export type NeighborhoodFeatureProps = {
    *  `elections` map layer). Null when the neighborhood has no results yet. */
   leading_party_color?: string | null;
   leading_party_he?: string | null;
+  /** Ruled out by the price filter — drawn in a neutral tone. */
+  dim?: boolean;
 };
 
 export type POIFeatureProps = {

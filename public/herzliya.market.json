@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "herzliya",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 6300,
+      "4": 7950,
+      "5": 10250,
+      "all": 7800
+    },
+    "buy": {
+      "3": 2870000,
+      "4": 3463000,
+      "5": 4266000,
+      "all": 3189000
+    },
+    "rent_change_pct": 0.7,
+    "yield_pct": 2.94
+  },
+  "neighborhoods": {
+    "herzliya-pituach": {
+      "rent": {
+        "3": 7780,
+        "4": 13000,
+        "all": 14150
+      },
+      "buy": {
+        "all": 6933000
+      },
+      "rent_change_pct": -29.2,
+      "yield_pct": 2.45,
+      "sources": [
+        "הרצליה פיתוח"
+      ]
+    },
+    "nof-yam": {
+      "rent": {
+        "all": 7550
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "נוף ים"
+      ]
+    },
+    "herzliya-bet": {
+      "rent": {
+        "3": 7700,
+        "5": 13650,
+        "all": 10500
+      },
+      "buy": {},
+      "rent_change_pct": -17.6,
+      "yield_pct": null,
+      "sources": [
+        "הרצליה ב"
+      ]
+    },
+    "galil-yam": null,
+    "nahalat-israel": null,
+    "shchunat-weizmann": {
+      "rent": {
+        "3": 5550,
+        "4": 7900,
+        "5": 11200,
+        "all": 7300
+      },
+      "buy": {
+        "4": 3519000,
+        "5": 4820000,
+        "all": 3940000
+      },
+      "rent_change_pct": 12.7,
+      "yield_pct": 2.22,
+      "sources": [
+        "וייצמן"
+      ]
+    },
+    "merkaz-hair": {
+      "rent": {
+        "3": 6500,
+        "4": 7600,
+        "5": 9250,
+        "all": 7200
+      },
+      "buy": {
+        "3": 2747000,
+        "4": 3312000,
+        "5": 4038000,
+        "all": 3063000
+      },
+      "rent_change_pct": 5.9,
+      "yield_pct": 2.82,
+      "sources": [
+        "מרכז העיר"
+      ]
+    },
+    "herzliya-hayeruka": {
+      "rent": {
+        "3": 6950,
+        "4": 8000,
+        "5": 10750,
+        "all": 8100
+      },
+      "buy": {
+        "4": 3654000,
+        "5": 4232000,
+        "all": 3085000
+      },
+      "rent_change_pct": 1.6,
+      "yield_pct": 3.15,
+      "sources": [
+        "הרצליה הירוקה"
+      ]
+    },
+    "gan-rashal": {
+      "rent": {
+        "3": 6800,
+        "4": 8100,
+        "all": 8300
+      },
+      "buy": {
+        "all": 3993000
+      },
+      "rent_change_pct": 7.8,
+      "yield_pct": 2.49,
+      "sources": [
+        "גן רש\"ל"
+      ]
+    },
+    "yad-hatisha": {
+      "rent": {
+        "3": 5200,
+        "4": 5900,
+        "all": 5000
+      },
+      "buy": {
+        "all": 1978000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 3.03,
+      "sources": [
+        "יד התשעה"
+      ]
+    },
+    "neve-amal": {
+      "rent": {
+        "3": 6000,
+        "4": 6850,
+        "all": 6870
+      },
+      "buy": {
+        "all": 2441000
+      },
+      "rent_change_pct": 2.9,
+      "yield_pct": 3.38,
+      "sources": [
+        "נווה עמל"
+      ]
+    },
+    "tsamarot": {
+      "rent": {
+        "4": 10250,
+        "all": 9950
+      },
+      "buy": {},
+      "rent_change_pct": 4.7,
+      "yield_pct": null,
+      "sources": [
+        "צמרות"
+      ]
+    },
+    "herzliya-hatzeira": {
+      "rent": {
+        "3": 6000,
+        "4": 7880,
+        "5": 9500,
+        "all": 7650
+      },
+      "buy": {
+        "all": 4203000
+      },
+      "rent_change_pct": 4.1,
+      "yield_pct": 2.18,
+      "sources": [
+        "הרצליה הצעירה"
+      ]
+    },
+    "neve-amirim": {
+      "rent": {
+        "4": 8380,
+        "all": 8450
+      },
+      "buy": {},
+      "rent_change_pct": 5.6,
+      "yield_pct": null,
+      "sources": [
+        "נווה אמירים"
+      ]
+    },
+    "neve-israel": {
+      "rent": {
+        "3": 6000,
+        "4": 8800,
+        "5": 10500,
+        "all": 8450
+      },
+      "buy": {},
+      "rent_change_pct": 7,
+      "yield_pct": null,
+      "sources": [
+        "נווה ישראל"
+      ]
+    }
+  }
+}

@@ -9,7 +9,7 @@ import type { ConciergeData } from "@/components/ConciergeScreen";
 import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { PERSONA_DEFAULT } from "@/lib/persona";
 import { loadNeighborhoodFeatures, centroidOf, type NeighborhoodFeatureCollection } from "@/lib/geoData";
-import { loadDemographics, loadSafety, loadSchools, loadTransitStops, loadEnvironment, loadPrices, type StaticSchool } from "@/lib/staticData";
+import { loadDemographics, loadSafety, loadSchools, loadTransitStops, loadEnvironment, loadPrices, loadMarket, type StaticSchool } from "@/lib/staticData";
 import { defaultCity, type City } from "@/lib/cities";
 
 type NeighborhoodRow = {
@@ -167,6 +167,8 @@ function assemble(input: {
   const environment = loadEnvironment(input.city);
   // Sale prices: prefer the city's static prices file; fall back to DB metrics.
   const prices = loadPrices(input.city);
+  // Rent + sale prices by apartment size (nadlan.gov.il), plus city figures.
+  const market = loadMarket(input.city);
 
   // Step 1 — build base neighborhood records (no matchScore yet), GEO-FIRST:
   // every polygon in the city's static file is a neighborhood; DB rows only
@@ -180,6 +182,7 @@ function assemble(input: {
     const m = metricsByNb.get(id);
     const env = environment[id];
     const pr = prices[id];
+    const mk = market.neighborhoods[id] ?? null;
     return {
       id,
       he: n?.name_he ?? feature.properties.name_he,
@@ -190,7 +193,10 @@ function assemble(input: {
       aliases: n?.aliases ?? [],
       avgPrice: pr?.avg_price_per_m2 ?? m?.avg_price_per_m2 ?? 0,
       avgPriceDelta: Number(pr?.avg_price_yoy_pct ?? m?.avg_price_yoy_pct ?? 0),
-      avgListing: Number(pr?.avg_listing_price ?? m?.avg_listing_price ?? 0),
+      // Overall sale price: the Govmap/DB median when we have one, else the
+      // official all-sizes average (covers cities with no Govmap prices file).
+      avgListing: Number(pr?.avg_listing_price ?? m?.avg_listing_price ?? mk?.buy.all ?? 0),
+      market: mk,
       greenScore: env?.green_score ?? m?.green_score ?? 0,
       schoolScore: m?.school_score ?? 0,
       quietScore: env?.quiet_score ?? m?.quiet_score ?? 70,
@@ -281,15 +287,18 @@ function assemble(input: {
   // Step 5 — compute facts per neighborhood, plus a server-side matchScore
   // using the default persona. The client may recompute matchScore using the
   // user's actual persona from localStorage.
+  const busStops = loadTransitStops(input.city);
   const neighborhoods = base.map((n) => {
     const facts: NeighborhoodFacts = {
       id: n.id,
       avgListing: n.avgListing > 0 ? n.avgListing : null,
+      market: n.market,
       gardenAvailability: gardenShare(listingRowsByNb[n.id] ?? []),
       schoolWalkMeters: nearestSchoolMeters(n.center, schools),
       parkMeters: nearestPOIMeters(n.center, input.pois, "park"),
       shopMeters: nearestPOIMeters(n.center, input.pois, "shop"),
-      transitMeters: nearestPOIMeters(n.center, input.pois, "transit"),
+      // Nearest of: DB transit POIs (train stations) and the city's real bus stops.
+      transitMeters: minOrNull(nearestPOIMeters(n.center, input.pois, "transit"), nearestStopMeters(n.center, busStops)),
       quietScore: n.quietScore,
       greenScore: n.greenScore,
       celiacDistance: nearestPOIMeters(n.center, input.pois, "celiac"),
@@ -385,6 +394,8 @@ function assemble(input: {
 
   return {
     neighborhoods,
+    cityMarket: market.city,
+    marketVersion: market.sourceVersion,
     pois: [...pois, ...schoolPois, ...transitPois],
     listingsByNeighborhood,
     schoolsByNeighborhood,
@@ -429,6 +440,21 @@ function poisWithinMeters(
     if (haversineMeters(from, p.point.coordinates as [number, number]) <= meters) count++;
   }
   return count;
+}
+
+function minOrNull(a: number | null, b: number | null): number | null {
+  if (a == null) return b;
+  if (b == null) return a;
+  return Math.min(a, b);
+}
+
+function nearestStopMeters(from: [number, number], stops: Array<{ lon: number; lat: number }>): number | null {
+  let best: number | null = null;
+  for (const s of stops) {
+    const d = haversineMeters(from, [s.lon, s.lat]);
+    if (best == null || d < best) best = d;
+  }
+  return best;
 }
 
 function nearestSchoolMeters(from: [number, number], schools: StaticSchool[]): number | null {

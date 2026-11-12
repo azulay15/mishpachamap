@@ -70,6 +70,7 @@
   --hn-map-edge:     #FFFFFF;
   --hn-map-selected: var(--hn-accent);
   --hn-map-veto:     var(--hn-negative);
+  --hn-map-dim: #D9DEDA; /* neighborhoods ruled out by the price filter */
   --hn-score-1: #E3F1E6; /* match score ramp, low → high */
   --hn-score-2: #BADFC3;
   --hn-score-3: #85C496;
@@ -153,6 +154,7 @@
   --hn-negative-bg: #3A1E1B;
   --hn-map-land:  #121C16;
   --hn-map-edge:  #0E1611;
+  --hn-map-dim: #222B25;
   --hn-score-1: #1B2E22;
   --hn-score-2: #1F4B33;
   --hn-score-3: #267048;

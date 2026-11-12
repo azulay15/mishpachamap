@@ -20,6 +20,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { defaultCity, type City } from "@/lib/cities";
+import type { Market, SizePrices } from "@/lib/market";
 
 /** Read a public/ JSON file, or return `fallback` if the file doesn't exist. */
 function readJsonSafe<T>(file: string, fallback: T): T {
@@ -87,6 +88,33 @@ export function loadPrices(city: City = defaultCity()): Record<string, Prices | 
   return readJsonSafe<{ neighborhoods: Record<string, Prices | null> }>(city.files.prices, {
     neighborhoods: {},
   }).neighborhoods;
+}
+
+type MarketFileEntry = {
+  rent?: SizePrices;
+  buy?: SizePrices;
+  rent_change_pct?: number | null;
+  yield_pct?: number | null;
+};
+const toMarket = (e: MarketFileEntry | null | undefined): Market | null =>
+  e ? { rent: e.rent ?? {}, buy: e.buy ?? {}, rentChangePct: e.rent_change_pct ?? null, yieldPct: e.yield_pct ?? null } : null;
+
+/** Rent + sale prices by apartment size: per neighborhood, plus the city-wide
+ *  figures for context. Empty when the city has no market file. */
+export function loadMarket(city: City = defaultCity()): {
+  city: Market | null;
+  neighborhoods: Record<string, Market | null>;
+  sourceVersion: string | null;
+} {
+  if (!city.files.market) return { city: null, neighborhoods: {}, sourceVersion: null };
+  const raw = readJsonSafe<{
+    meta?: { source_version?: string | null };
+    city?: MarketFileEntry | null;
+    neighborhoods: Record<string, MarketFileEntry | null>;
+  }>(city.files.market, { neighborhoods: {} });
+  const neighborhoods: Record<string, Market | null> = {};
+  for (const [id, e] of Object.entries(raw.neighborhoods)) neighborhoods[id] = toMarket(e);
+  return { city: toMarket(raw.city), neighborhoods, sourceVersion: raw.meta?.source_version ?? null };
 }
 
 export type BusStop = { code: number; name: string; lat: number; lon: number };

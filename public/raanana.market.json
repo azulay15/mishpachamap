@@ -1,0 +1,210 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "raanana",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 5800,
+      "4": 6950,
+      "5": 8600,
+      "all": 7650
+    },
+    "buy": {
+      "3": 2889000,
+      "4": 3382000,
+      "5": 4375000,
+      "all": 3659000
+    },
+    "rent_change_pct": 0,
+    "yield_pct": 2.51
+  },
+  "neighborhoods": {
+    "kiryat-eliyahu-golomb": {
+      "rent": {
+        "all": 10000
+      },
+      "buy": {
+        "all": 3956000
+      },
+      "rent_change_pct": 25,
+      "yield_pct": null,
+      "sources": [
+        "קריית אליהו גולומב"
+      ]
+    },
+    "lester": {
+      "rent": {
+        "4": 6900,
+        "5": 8150,
+        "all": 8000
+      },
+      "buy": {
+        "5": 3690000,
+        "all": 3361000
+      },
+      "rent_change_pct": 6.7,
+      "yield_pct": 2.86,
+      "sources": [
+        "לסטר/רבוצקי"
+      ]
+    },
+    "kiryat-remez": {
+      "rent": {
+        "3": 5380,
+        "4": 6850,
+        "5": 8600,
+        "all": 7500
+      },
+      "buy": {
+        "4": 3083000,
+        "5": 3487000,
+        "all": 3187000
+      },
+      "rent_change_pct": 2,
+      "yield_pct": 2.82,
+      "sources": [
+        "קריית דוד רמז"
+      ]
+    },
+    "kiryat-weizmann": {
+      "rent": {
+        "3": 5800,
+        "4": 6730,
+        "5": 9600,
+        "all": 6830
+      },
+      "buy": {
+        "all": 2824000
+      },
+      "rent_change_pct": 5,
+      "yield_pct": 2.9,
+      "sources": [
+        "קריית ויצמן"
+      ]
+    },
+    "rasco-ben-tzvi": {
+      "rent": {
+        "5": 7950,
+        "all": 6200
+      },
+      "buy": {},
+      "rent_change_pct": -18.4,
+      "yield_pct": null,
+      "sources": [
+        "קרית שז\"ר",
+        "קריית בן צבי(רסקו"
+      ]
+    },
+    "amidar": null,
+    "kiryat-ganim": {
+      "rent": {
+        "all": 13850
+      },
+      "buy": {},
+      "rent_change_pct": -0.2,
+      "yield_pct": null,
+      "sources": [
+        "קריית גנים"
+      ]
+    },
+    "kfar-batya": null,
+    "rom-2000": null,
+    "merkaz-darom": {
+      "rent": {
+        "3": 5600,
+        "4": 6680,
+        "5": 8530,
+        "all": 7640
+      },
+      "buy": {
+        "3": 3016000,
+        "4": 3405000,
+        "5": 4068000,
+        "all": 3205000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2.86,
+      "sources": [
+        "קזן",
+        "מרכז"
+      ]
+    },
+    "ha-mea": {
+      "rent": {
+        "all": 8000
+      },
+      "buy": {},
+      "rent_change_pct": -16.2,
+      "yield_pct": null,
+      "sources": [
+        "פרדס משותף"
+      ]
+    },
+    "kiryat-haprachim": {
+      "rent": {
+        "3": 6800,
+        "4": 8150,
+        "all": 7350
+      },
+      "buy": {
+        "all": 3178000
+      },
+      "rent_change_pct": -7,
+      "yield_pct": 2.78,
+      "sources": [
+        "קרית הפרחים - 2005"
+      ]
+    },
+    "neve-zemer": {
+      "rent": {
+        "4": 6650,
+        "5": 9050,
+        "all": 8900
+      },
+      "buy": {
+        "4": 3511000,
+        "5": 4286000,
+        "all": 4273000
+      },
+      "rent_change_pct": 4.7,
+      "yield_pct": 2.5,
+      "sources": [
+        "נווה זמר"
+      ]
+    },
+    "kiryat-sharett": {
+      "rent": {
+        "3": 6050,
+        "4": 6900,
+        "all": 6800
+      },
+      "buy": {
+        "5": 4508000,
+        "all": 3340000
+      },
+      "rent_change_pct": -2.9,
+      "yield_pct": null,
+      "sources": [
+        "קריית שרת"
+      ]
+    },
+    "lev-hapark": {
+      "rent": {
+        "4": 7300,
+        "all": 7400
+      },
+      "buy": {
+        "4": 2972000,
+        "all": 2924000
+      },
+      "rent_change_pct": 2.1,
+      "yield_pct": 3.04,
+      "sources": [
+        "לב הפארק"
+      ]
+    }
+  }
+}
