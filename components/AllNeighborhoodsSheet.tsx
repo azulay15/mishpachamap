@@ -47,6 +47,11 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
+  // A city with no price data at all (new cities) doesn't offer price sorting
+  // or repeat "no price" on every row — one note in the header says it once.
+  const hasPrices = useMemo(() => items.some((n) => n.avgListing > 0), [items]);
+  const sorts = (Object.keys(SORT_LABELS) as Sort[]).filter((s) => hasPrices || !s.startsWith("price"));
+
   const sorted = useMemo(() => {
     const arr = [...items];
     if (sort === "match") arr.sort((a, b) => b.matchScore - a.matchScore);
@@ -59,6 +64,7 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
   return (
     <div
       onClick={onClose}
+      className="mm-sheet-tabbed"
       style={{
         position: "fixed",
         inset: 0,
@@ -89,10 +95,11 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
       >
         <header
           style={{
-            padding: "16px 20px",
+            padding: "14px 16px",
             display: "flex",
             alignItems: "center",
-            gap: 14,
+            flexWrap: "wrap",
+            gap: "10px 14px",
             borderBottom: "1px solid var(--stroke-weak)",
             position: "sticky",
             top: 0,
@@ -100,14 +107,15 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
             zIndex: 1,
           }}
         >
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: "1 1 160px", minWidth: 0 }}>
             <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>כל השכונות</h3>
             <div style={{ fontSize: 12, color: "var(--grey-500)", marginTop: 2 }}>
               {items.length} שכונות ב{cityName}
+            {!hasPrices && " · מחירי עסקאות בקרוב"}
             </div>
           </div>
-          <div style={{ display: "flex", gap: 6 }}>
-            {(Object.keys(SORT_LABELS) as Sort[]).map((s) => (
+          <div className="mm-sheet-sorts" style={{ display: "flex", gap: 6 }}>
+            {sorts.map((s) => (
               <button
                 key={s}
                 type="button"
@@ -125,7 +133,7 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
             onClick={onClose}
             className="mm-btn mm-btn-ghost mm-btn-sm"
             aria-label="סגור"
-            style={{ padding: 6 }}
+            style={{ padding: 6, order: 1 }}
           >
             <MMIcon name="x" size={16} />
           </button>
@@ -143,12 +151,23 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
             const isSelected = n.id === selectedId;
             const isFav = hasNeighborhood(n.id);
             return (
-              <button
+              // A div, not a <button>: the row contains its own save button,
+              // and a button inside a button is invalid HTML.
+              <div
                 key={n.id}
-                type="button"
+                role="button"
+                tabIndex={0}
                 onClick={() => {
                   onSelect(n.id);
                   onClose();
+                }}
+                onKeyDown={(e) => {
+                  if (e.target !== e.currentTarget) return;
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    onSelect(n.id);
+                    onClose();
+                  }
                 }}
                 aria-pressed={isSelected}
                 className="mm-card mm-card-hover"
@@ -247,11 +266,15 @@ export function AllNeighborhoodsSheet({ items, selectedId, onSelect, onClose, ci
                     color: "var(--grey-700)",
                   }}
                 >
-                  <span>{n.avgListing > 0 ? `חציון ${NISshort(n.avgListing)}` : "אין נתוני מחיר"}</span>
-                  <span>·</span>
+                  {hasPrices && (
+                    <>
+                      <span>{n.avgListing > 0 ? `חציון ${NISshort(n.avgListing)}` : "אין נתוני מחיר"}</span>
+                      <span>·</span>
+                    </>
+                  )}
                   <span style={{ color: "var(--green-positive)" }}>GS {n.greenScore}</span>
                 </div>
-              </button>
+              </div>
             );
           })}
         </div>

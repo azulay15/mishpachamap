@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MMIcon } from "@/lib/icons";
+import { useIsMobile } from "@/lib/useMediaQuery";
 
 const DISMISS_KEY = "mishpachamap.welcome_dismissed.v1";
 const PERSONA_KEY = "mishpachamap.persona.v1";
@@ -14,6 +15,7 @@ const PERSONA_KEY = "mishpachamap.persona.v1";
 export function WelcomeCard() {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     try {
@@ -40,10 +42,11 @@ export function WelcomeCard() {
     <div
       style={{
         position: "absolute",
-        // Hover above the bottom carousel — the carousel itself sits at
-        // bottom: 14 with ~180px height.
-        bottom: 210,
-        insetInlineStart: 14,
+        // Phones: above the bottom carousel and the GreenScore badge that
+        // rides on it. Desktop has no carousel, just the badge in the corner.
+        bottom: isMobile ? "calc(212px + env(safe-area-inset-bottom, 0px))" : 76,
+        insetInlineStart: isMobile ? 12 : 14,
+        insetInlineEnd: isMobile ? 12 : undefined,
         zIndex: 5,
         maxWidth: 360,
         background: "#fff",
@@ -57,7 +60,7 @@ export function WelcomeCard() {
         alignItems: "start",
       }}
       role="region"
-      aria-label="ברוכים הבאים ל-MishpachaMap"
+      aria-label="ברוכים הבאים להנחלה"
     >
       <div
         style={{
@@ -75,7 +78,7 @@ export function WelcomeCard() {
       </div>
       <div style={{ minWidth: 0 }}>
         <strong style={{ display: "block", fontSize: 14, marginBottom: 4 }}>
-          ברוכים הבאים ל-MishpachaMap
+          ברוכים הבאים להנחלה
         </strong>
         <p style={{ margin: 0, fontSize: 12, color: "var(--grey-700)", lineHeight: "18px" }}>
           הגדירו פרופיל משפחה וקבלו ציוני התאמה אמיתיים לכל שכונה — תקציב, גודל משפחה, צרכים תזונתיים ועוד.

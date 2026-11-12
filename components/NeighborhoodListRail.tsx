@@ -40,12 +40,33 @@ type Props = {
   selectedId: string | null;
   onSelect: (id: string) => void;
   cityName?: string;
+  /** Neighborhood hovered on the map — its row is tinted. */
+  hoverId?: string | null;
+  /** Hovering / focusing a row outlines that neighborhood on the map. */
+  onHover?: (id: string | null) => void;
+  /** Ids currently in the comparison set. */
+  compareIds?: Set<string>;
+  onToggleCompare?: (id: string) => void;
 };
 
-export function NeighborhoodListRail({ items, selectedId, onSelect, cityName = "מודיעין-מכבים-רעות" }: Props) {
+export function NeighborhoodListRail({
+  items,
+  selectedId,
+  onSelect,
+  cityName = "מודיעין-מכבים-רעות",
+  hoverId = null,
+  onHover,
+  compareIds,
+  onToggleCompare,
+}: Props) {
   const [sort, setSort] = useState<Sort>("match");
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  // A city with no price data at all (new cities) doesn't offer price sorting
+  // or repeat "no price" on every row — one note in the header says it once.
+  const hasPrices = useMemo(() => items.some((n) => n.avgListing > 0), [items]);
+  const sorts = (Object.keys(SORT_LABELS) as Sort[]).filter((s) => hasPrices || !s.startsWith("price"));
 
   const sorted = useMemo(() => {
     const arr = [...items];
@@ -93,10 +114,11 @@ export function NeighborhoodListRail({ items, selectedId, onSelect, cityName = "
           <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800 }}>כל השכונות</h3>
           <div style={{ fontSize: 11, color: "var(--grey-500)", marginTop: 2 }}>
             {items.length} שכונות ב{cityName}
+            {!hasPrices && " · מחירי עסקאות בקרוב"}
           </div>
         </div>
         <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-          {(Object.keys(SORT_LABELS) as Sort[]).map((s) => (
+          {sorts.map((s) => (
             <button
               key={s}
               type="button"
@@ -125,15 +147,21 @@ export function NeighborhoodListRail({ items, selectedId, onSelect, cityName = "
         {sorted.map((n) => {
           const isSelected = n.id === selectedId;
           const isFav = hasNeighborhood(n.id);
+          const inCompare = compareIds?.has(n.id) ?? false;
           return (
             <div
               key={n.id}
               data-nb-id={n.id}
               className="mm-card mm-card-hover"
+              onMouseEnter={() => onHover?.(n.id)}
+              onMouseLeave={() => onHover?.(null)}
+              onFocus={() => onHover?.(n.id)}
+              onBlur={() => onHover?.(null)}
               style={{
                 padding: 10,
                 cursor: "pointer",
                 fontFamily: "inherit",
+                background: hoverId === n.id && !isSelected ? "var(--hn-surface-2)" : undefined,
                 borderColor: isSelected ? "var(--pumpkin-orange)" : undefined,
                 boxShadow: isSelected ? "0 0 0 2px var(--pumpkin-orange)" : undefined,
                 display: "flex",
@@ -145,9 +173,18 @@ export function NeighborhoodListRail({ items, selectedId, onSelect, cityName = "
               tabIndex={0}
               onClick={() => onSelect(n.id)}
               onKeyDown={(e) => {
+                if (e.target !== e.currentTarget) return; // keys on the inner buttons are theirs
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   onSelect(n.id);
+                } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+                  // Walk the list with the arrow keys (focus outlines the
+                  // neighborhood on the map); Enter selects.
+                  e.preventDefault();
+                  const row = e.currentTarget;
+                  const next = (e.key === "ArrowDown" ? row.nextElementSibling : row.previousElementSibling) as HTMLElement | null;
+                  next?.focus();
+                  next?.scrollIntoView({ block: "nearest" });
                 }
               }}
             >
@@ -174,6 +211,32 @@ export function NeighborhoodListRail({ items, selectedId, onSelect, cityName = "
                 >
                   <MMIcon name={isFav ? "heart-fill" : "heart"} size={10} color="currentColor" />
                 </button>
+                {onToggleCompare && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onToggleCompare(n.id);
+                    }}
+                    aria-label={inCompare ? `הסר את ${n.he} מההשוואה` : `הוסף את ${n.he} להשוואה`}
+                    aria-pressed={inCompare}
+                    title={inCompare ? "בהשוואה" : "הוסף להשוואה"}
+                    style={{
+                      width: 22,
+                      height: 22,
+                      borderRadius: 999,
+                      border: 0,
+                      background: inCompare ? "var(--grey-900)" : "var(--grey-15)",
+                      color: inCompare ? "#fff" : "var(--grey-500)",
+                      cursor: "pointer",
+                      display: "grid",
+                      placeItems: "center",
+                      flex: "none",
+                    }}
+                  >
+                    <MMIcon name="compare" size={10} color="currentColor" />
+                  </button>
+                )}
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div
                     style={{
@@ -230,8 +293,12 @@ export function NeighborhoodListRail({ items, selectedId, onSelect, cityName = "
                   alignItems: "center",
                 }}
               >
-                <span>{n.avgListing > 0 ? `חציון ${NISshort(n.avgListing)}` : "אין נתוני מחיר"}</span>
-                <span>·</span>
+                {hasPrices && (
+                  <>
+                    <span>{n.avgListing > 0 ? `חציון ${NISshort(n.avgListing)}` : "אין נתוני מחיר"}</span>
+                    <span>·</span>
+                  </>
+                )}
                 <span style={{ color: "var(--green-positive)" }}>GS {n.greenScore}</span>
               </div>
             </div>

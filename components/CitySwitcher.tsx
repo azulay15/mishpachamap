@@ -53,11 +53,15 @@ export function CitySwitcher({ city }: { city: City }) {
         }}
       >
         <MMIcon name="pin" size={15} color="var(--pumpkin-orange)" />
-        <span>{city.name_he}</span>
+        {/* Long names (מודיעין-מכבים-רעות) truncate instead of pushing the
+            other map controls onto a third row on phones. */}
+        <span style={{ maxWidth: "44vw", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {city.name_he}
+        </span>
         <MMIcon
           name="chevron-down"
           size={14}
-          color="#84888E"
+          color="var(--hn-text-3)"
           style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform .15s" }}
         />
       </button>
@@ -70,6 +74,8 @@ export function CitySwitcher({ city }: { city: City }) {
             top: "calc(100% + 6px)",
             insetInlineStart: 0,
             minWidth: 220,
+            maxHeight: "min(420px, 60vh)",
+            overflowY: "auto",
             background: "#fff",
             borderRadius: 10,
             boxShadow: "var(--shadow-lg)",
@@ -90,7 +96,7 @@ export function CitySwitcher({ city }: { city: City }) {
                 <MMIcon
                   name="pin"
                   size={14}
-                  color={isCurrent ? "var(--pumpkin-orange)" : isLive ? "#84888E" : "var(--grey-300, #C9CDD4)"}
+                  color={isCurrent ? "var(--pumpkin-orange)" : isLive ? "var(--hn-text-3)" : "var(--hn-text-disabled)"}
                 />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div

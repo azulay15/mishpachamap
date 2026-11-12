@@ -1,11 +1,12 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { defaultCity } from "@/lib/cities";
+import { LAST_CITY_COOKIE, cityFromCookie } from "@/lib/lastCity";
 
 export const revalidate = 60;
 
 /**
  * Legacy `/map` entry. The map is now per-city at `/map/[city]`; this redirects
- * to the default city, preserving any `?n=<id>` (and other) deep-link query so
+ * to the city the visitor last looked at (default city on a first visit), preserving any `?n=<id>` (and other) deep-link query so
  * old shared links and bookmarks keep working.
  */
 export default async function MapIndex({
@@ -20,5 +21,6 @@ export default async function MapIndex({
     else if (Array.isArray(v) && v.length > 0) qs.set(k, v[0]);
   }
   const query = qs.toString();
-  redirect(`/map/${defaultCity().slug}${query ? `?${query}` : ""}`);
+  const city = cityFromCookie((await cookies()).get(LAST_CITY_COOKIE)?.value);
+  redirect(`/map/${city.slug}${query ? `?${query}` : ""}`);
 }

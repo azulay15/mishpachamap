@@ -6,6 +6,8 @@ import { PERSONA_DEFAULT, type Persona } from "@/lib/persona";
 import { writePersona, resetPersona } from "@/lib/usePersona";
 import { FEATURES } from "@/lib/match";
 import { MMHeader } from "./MMHeader";
+import { MobileTabBar } from "./MobileTabBar";
+import { useIsMobile } from "@/lib/useMediaQuery";
 import { MMIcon } from "@/lib/icons";
 import { NIS, NISshort } from "@/lib/format";
 
@@ -13,9 +15,23 @@ import { NIS, NISshort } from "@/lib/format";
  *  families (the old range slider wrongly maxed at 5). */
 const MAX_KIDS = 15;
 
+/** Phones walk through the form in three short steps instead of one long page. */
+const STEPS = ["המשפחה", "תקציב וחדרים", "מה חשוב לכם"] as const;
+
+/** Budget slider range (₪). Values outside it (typed on desktop) still work —
+ *  the slider just pins to its end. */
+const BUDGET_MIN = 500_000;
+const BUDGET_MAX = 12_000_000;
+const BUDGET_STEP = 100_000;
+
 export function OnboardingForm() {
   const router = useRouter();
   const [persona, setPersona] = useState<Persona>(PERSONA_DEFAULT);
+  const isMobile = useIsMobile();
+  const [step, setStep] = useState(0);
+  const lastStep = STEPS.length - 1;
+  /** Desktop shows every section; phones show only the current step. */
+  const show = (i: number) => !isMobile || step === i;
 
   // Read existing persona (if any) on mount so the form starts populated.
   useEffect(() => {
@@ -52,6 +68,11 @@ export function OnboardingForm() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Enter in a field on an early step moves on rather than saving.
+    if (isMobile && step < lastStep) {
+      setStep(step + 1);
+      return;
+    }
     writePersona(persona);
     router.push("/map");
   };
@@ -62,13 +83,15 @@ export function OnboardingForm() {
   };
 
   return (
-    <div className="mm-shell" style={{ minHeight: "100vh" }}>
+    <div className="mm-shell" style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
       <MMHeader activeNav="" />
       <main
         style={{
+          flex: 1,
+          width: "100%",
           maxWidth: 640,
           margin: "0 auto",
-          padding: "32px 24px 64px",
+          padding: "clamp(20px, 5vw, 32px) clamp(16px, 5vw, 24px) 64px",
         }}
       >
         <h2 style={{ marginBottom: 8 }}>הגדרת פרופיל המשפחה</h2>
@@ -76,7 +99,30 @@ export function OnboardingForm() {
           שינוי הפרופיל יחשב מחדש את ציוני ההתאמה לכל שכונה.
         </p>
 
+        {isMobile && (
+          <div style={{ marginBottom: 20 }} aria-label={`שלב ${step + 1} מתוך ${STEPS.length}: ${STEPS[step]}`}>
+            <div style={{ display: "flex", gap: 6 }} aria-hidden>
+              {STEPS.map((label, i) => (
+                <span
+                  key={label}
+                  style={{
+                    flex: 1,
+                    height: 4,
+                    borderRadius: 2,
+                    background: i <= step ? "var(--hn-primary)" : "var(--grey-15)",
+                    transition: "background 160ms",
+                  }}
+                />
+              ))}
+            </div>
+            <div style={{ marginTop: 8, fontSize: 12, color: "var(--grey-500)", fontWeight: 600 }}>
+              שלב {step + 1} מתוך {STEPS.length} · <span style={{ color: "var(--grey-900)", fontWeight: 800 }}>{STEPS[step]}</span>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={onSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {show(0) && (<>
           <Field label="שם המשפחה">
             <div className="mm-input">
               <input
@@ -126,6 +172,7 @@ export function OnboardingForm() {
               style={{
                 display: "flex",
                 alignItems: "center",
+                flexWrap: "wrap",
                 gap: 10,
                 padding: "10px 12px",
                 border: "1px solid var(--stroke-medium)",
@@ -145,14 +192,37 @@ export function OnboardingForm() {
               <span style={{ fontSize: 13, fontWeight: 600 }}>
                 בן משפחה עם צליאק
               </span>
-              <span style={{ fontSize: 12, color: "var(--grey-500)", marginInlineStart: "auto" }}>
+              <span style={{ fontSize: 12, color: "var(--grey-500)", flex: "1 1 200px" }}>
                 מקדם שכונות עם מסעדות ומאפיות ללא גלוטן בטווח הליכה
               </span>
             </label>
           </Field>
+          </>)}
 
+          {show(1) && (<>
           <Field label={`תקציב: ${NISshort(persona.budget.min)} – ${NISshort(persona.budget.max)}`}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            {isMobile ? (
+              // Phones: two sliders (typing seven-digit numbers on a phone
+              // keyboard is the slow part of this form). Each one pushes the
+              // other so min never passes max.
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                <BudgetSlider
+                  label="מינימום"
+                  value={persona.budget.min}
+                  onChange={(v) =>
+                    setPersona({ ...persona, budget: { min: v, max: Math.max(v, persona.budget.max) } })
+                  }
+                />
+                <BudgetSlider
+                  label="מקסימום"
+                  value={persona.budget.max}
+                  onChange={(v) =>
+                    setPersona({ ...persona, budget: { min: Math.min(v, persona.budget.min), max: v } })
+                  }
+                />
+              </div>
+            ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 12 }}>
               <NumericField
                 label="מינימום"
                 value={persona.budget.min}
@@ -164,10 +234,11 @@ export function OnboardingForm() {
                 onChange={(v) => setPersona({ ...persona, budget: { ...persona.budget, max: v } })}
               />
             </div>
+            )}
           </Field>
 
           <Field label="חדרים">
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 12 }}>
               <NumericField
                 label="מינימום"
                 value={persona.rooms.min}
@@ -181,6 +252,9 @@ export function OnboardingForm() {
             </div>
           </Field>
 
+          </>)}
+
+          {show(2) && (<>
           <Field label="חובה (Must-Have)">
             <ChipRow
               options={FEATURES}
@@ -202,28 +276,87 @@ export function OnboardingForm() {
             לחיצה על תכונה בשורה אחת מעבירה אותה לשם. אותה תכונה לא יכולה להיות גם חובה וגם כדאי.
             תכונות שלא מסומנות באף שורה לא משפיעות על ציון ההתאמה.
           </p>
+          </>)}
 
           <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
-            <button type="submit" className="mm-btn mm-btn-accent" style={{ flex: 1 }}>
-              <MMIcon name="check" size={14} color="#fff" />
-              שמרו ופתחו את המפה
+            {isMobile && step > 0 && (
+              <button
+                type="button"
+                className="mm-btn mm-btn-secondary"
+                style={{ height: 46 }}
+                onClick={() => setStep(step - 1)}
+              >
+                <MMIcon name="chevron-right" size={15} />
+                חזרה
+              </button>
+            )}
+            <button type="submit" className="mm-btn mm-btn-accent" style={{ flex: 1, height: isMobile ? 46 : undefined }}>
+              {isMobile && step < lastStep ? (
+                <>
+                  המשך
+                  <MMIcon name="chevron-left" size={15} color="#fff" />
+                </>
+              ) : (
+                <>
+                  <MMIcon name="check" size={14} color="#fff" />
+                  שמרו ופתחו את המפה
+                </>
+              )}
             </button>
+            {(!isMobile || step === lastStep) && (
             <button
               type="button"
               className="mm-btn mm-btn-secondary"
+              style={{ height: isMobile ? 46 : undefined }}
               onClick={onReset}
               title="חזרה לערכי ברירת המחדל"
             >
               אפסו
             </button>
+            )}
           </div>
 
+          {(!isMobile || step === lastStep) && (
           <div style={{ marginTop: 8, fontSize: 12, color: "var(--grey-500)" }}>
             הפרופיל נשמר בדפדפן בלבד (localStorage). אין שמירה בענן עדיין.
             תקציב: {NIS(persona.budget.min)} עד {NIS(persona.budget.max)}.
           </div>
+          )}
         </form>
       </main>
+      <MobileTabBar />
+    </div>
+  );
+}
+
+function BudgetSlider({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (n: number) => void;
+}) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+        <span style={{ fontSize: 12, color: "var(--grey-500)" }}>{label}</span>
+        <span style={{ fontSize: 17, fontWeight: 800, fontFamily: "var(--font-inter, Inter)", fontVariantNumeric: "tabular-nums" }}>
+          {NISshort(value)}
+        </span>
+      </div>
+      <input
+        type="range"
+        min={BUDGET_MIN}
+        max={BUDGET_MAX}
+        step={BUDGET_STEP}
+        value={Math.min(BUDGET_MAX, Math.max(BUDGET_MIN, value))}
+        onChange={(e) => onChange(Number(e.target.value))}
+        aria-label={`תקציב ${label}`}
+        aria-valuetext={NISshort(value)}
+        style={{ width: "100%", height: 32, accentColor: "var(--hn-primary)", direction: "ltr" }}
+      />
     </div>
   );
 }
@@ -255,7 +388,7 @@ function NumericField({
           inputMode="numeric"
           value={value}
           onChange={(e) => onChange(Number(e.target.value) || 0)}
-          style={{ direction: "ltr", textAlign: "right" }}
+          style={{ direction: "ltr", textAlign: "right", width: "100%" }}
         />
       </div>
     </div>

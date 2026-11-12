@@ -1,35 +1,28 @@
 "use client";
 
 import { MMIcon } from "@/lib/icons";
+import { SproutMark } from "@/components/BrandLogo";
 import { useFavorites } from "@/lib/useFavorites";
+import { usePersona } from "@/lib/usePersona";
 
-// Label → destination. בית and מפה are real routes; the rest still point at
-// the map (their features live there) until they get dedicated pages.
+// Label → destination. Only links that go somewhere real: `/map` resolves to
+// the visitor's last city on the server, and `?view=` opens the matching panel.
 const NAV: Array<{ label: string; href: string }> = [
   { label: "בית", href: "/" },
   { label: "מפה", href: "/map" },
-  { label: "שכונות", href: "/map" },
-  { label: "נכסים", href: "/map" },
-  { label: "מחשבונים", href: "#" },
-  { label: "מומחה השכונה", href: "/map" },
+  { label: "שכונות", href: "/map?view=list" },
+  { label: "מומחה השכונה", href: "/map?view=ai" },
 ];
 
 export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
   const { count } = useFavorites();
+  const persona = usePersona();
   return (
     <header>
-      <div className="mm-header-utility">
-        <span style={{ opacity: 0.6 }}>שלום, משפחת לוי</span>
-        <span style={{ opacity: 0.4 }}>·</span>
-        <a href="#">העדפות</a>
-        <a href="#">חשבון</a>
-        <span style={{ marginInlineStart: "auto", opacity: 0.6 }}>עדכון אחרון: 14:32</span>
-        <a href="#" style={{ color: "#FF6B00", fontWeight: 700 }}>שדרגו ל-Pro</a>
-        <a href="#" aria-label="שפה"><MMIcon name="globe" size={14} color="#fff" /></a>
-      </div>
       <div className="mm-header-main">
-        <a href="/" className="mm-logo">
-          MishpachaMap<span className="lg-dot">.</span>
+        <a href="/" className="mm-logo" aria-label="הנחלה, לדף הבית">
+          <SproutMark size={30} />
+          <span>הנחלה</span>
         </a>
         <nav>
           {NAV.map((n) => (
@@ -38,29 +31,34 @@ export function MMHeader({ activeNav = "מפה" }: { activeNav?: string }) {
             </a>
           ))}
         </nav>
-        <div className="mm-input" style={{ width: 280, height: 36 }}>
-          <MMIcon name="search" size={16} color="#84888E" />
-          <input placeholder="חפשו שכונה, רחוב או נכס" />
-        </div>
-        <button className="mm-btn mm-btn-ghost mm-btn-sm" aria-label="התראות">
-          <MMIcon name="bell" size={16} />
-        </button>
+        {/* The family profile — what every match score is computed from. (This
+            used to sit in a separate dark strip above the bar.) */}
+        <a
+          href="/onboarding"
+          className="mm-btn mm-btn-ghost mm-btn-sm mm-header-profile"
+          style={{ textDecoration: "none", marginInlineStart: "auto", gap: 6 }}
+          aria-label={`פרופיל המשפחה: ${persona.name}`}
+          title="עריכת פרופיל המשפחה"
+        >
+          <MMIcon name="users" size={15} />
+          <span>{persona.name}</span>
+        </a>
         <a
           href="/saved"
-          className="mm-btn mm-btn-secondary mm-btn-sm"
+          className="mm-btn mm-btn-secondary mm-btn-sm mm-header-saved"
           style={{ textDecoration: "none", color: "var(--grey-900)", fontWeight: 700, position: "relative" }}
         >
           <MMIcon
             name={count > 0 ? "heart-fill" : "heart"}
             size={14}
-            color={count > 0 ? "var(--pumpkin-orange)" : "currentColor"}
+            color={count > 0 ? "var(--hn-accent)" : "currentColor"}
           />
           שמורים
           {count > 0 && (
             <span
               style={{
-                background: "var(--pumpkin-orange)",
-                color: "#fff",
+                background: "var(--hn-primary)",
+                color: "var(--hn-on-primary)",
                 fontSize: 10,
                 fontWeight: 800,
                 borderRadius: 999,

@@ -21,6 +21,9 @@ import { MatchBreakdownSheet } from "./MatchBreakdownSheet";
 import { NeighborhoodSearch } from "./NeighborhoodSearch";
 import { WelcomeCard } from "./WelcomeCard";
 import { MobileRailDrawer } from "./MobileRailDrawer";
+import { MobileTabBar } from "./MobileTabBar";
+import { NeighborhoodPeek } from "./NeighborhoodPeek";
+import { rememberCity } from "@/lib/lastCity";
 import { CompareSheet, type CompareItem } from "./CompareSheet";
 import { AllNeighborhoodsSheet, type AllNeighborhoodsItem } from "./AllNeighborhoodsSheet";
 import { useIsMobile } from "@/lib/useMediaQuery";
@@ -29,6 +32,7 @@ import { breakdownFor, totalScore, type NeighborhoodFacts } from "@/lib/match";
 import { type Demographics, type Safety } from "@/lib/staticData";
 import { usePersona } from "@/lib/usePersona";
 import { useLayerPrefs } from "@/lib/useLayerPrefs";
+import { SCORE_STEPS } from "@/lib/theme";
 
 /** A neighborhood as the page server-fetched it, with the data needed to
  * compute the persona-aware match score on the client. `matchScore` here is
@@ -58,6 +62,12 @@ export type ConciergeData = {
 
 const INITIAL_LAYERS: LayerId[] = ["school", "park", "shop"];
 const INITIAL_SELECTED = "hashvatim";
+
+/** Mobile bottom-carousel geometry. The floating badges above the carousel are
+ *  positioned from these, so they can't drift apart again. */
+const CAROUSEL_CARD_H = 128;
+const CAROUSEL_BOTTOM = "calc(14px + env(safe-area-inset-bottom, 0px))";
+const ABOVE_CAROUSEL = `calc(${14 + CAROUSEL_CARD_H + 12}px + env(safe-area-inset-bottom, 0px))`;
 
 function ElectionsLegend({
   electionsByNeighborhood,
@@ -122,6 +132,39 @@ function ElectionsLegend({
   );
 }
 
+/** Key for the map's green ramp: polygons are shaded by family-match score. */
+function MatchLegend() {
+  const labels = [`עד ${SCORE_STEPS[0]}`, ...SCORE_STEPS.map((t) => `${t}+`)];
+  return (
+    <div
+      role="img"
+      aria-label={`מקרא: צבע השכונה לפי ציון ההתאמה, ${labels.join(", ")}`}
+      style={{
+        position: "absolute",
+        insetInlineEnd: 16,
+        bottom: 44,
+        zIndex: 4,
+        background: "#fff",
+        borderRadius: 8,
+        padding: "8px 10px",
+        boxShadow: "var(--shadow-md)",
+        fontSize: 10,
+        color: "var(--grey-700)",
+      }}
+    >
+      <div style={{ fontWeight: 700, color: "var(--grey-500)", marginBottom: 5 }}>צבע = ציון התאמה למשפחה</div>
+      <div style={{ display: "flex", gap: 2 }}>
+        {labels.map((label, i) => (
+          <div key={label} style={{ flex: 1, minWidth: 30, textAlign: "center" }}>
+            <div style={{ height: 8, borderRadius: 2, background: `var(--hn-score-${i + 1})`, border: "1px solid var(--stroke-weak)" }} />
+            <div style={{ marginTop: 3, fontFamily: "var(--font-inter, Inter)", fontVariantNumeric: "tabular-nums", fontWeight: 600 }}>{label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function ConciergeScreen({
   data,
   renderer = "mapbox",
@@ -151,6 +194,8 @@ export function ConciergeScreen({
   const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
   const [compareOpen, setCompareOpen] = useState(false);
   const [allOpen, setAllOpen] = useState(false);
+  // Phones: the short sheet shown after tapping a neighborhood on the map.
+  const [peekOpen, setPeekOpen] = useState(false);
   const persona = usePersona();
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
@@ -169,6 +214,28 @@ export function ConciergeScreen({
     });
     return () => cancelAnimationFrame(id);
   }, [selectedId]);
+
+  // Remember this city so `/map` and Home come back to it (server-read cookie).
+  useEffect(() => {
+    rememberCity(city.slug);
+  }, [city.slug]);
+
+  // `?view=list|ai` (header nav / tab bar links from other pages) opens the
+  // matching panel once, then is dropped from the URL.
+  useEffect(() => {
+    const view = new URLSearchParams(window.location.search).get("view");
+    if (!view) return;
+    const phone = window.matchMedia("(max-width: 768px)").matches;
+    if (view === "ai") {
+      setRailMode("ai");
+      if (phone) setDrawerOpen(true);
+    } else if (view === "list" && phone) {
+      setAllOpen(true);
+    }
+    const url = new URL(window.location.href);
+    url.searchParams.delete("view");
+    window.history.replaceState(null, "", url.toString());
+  }, []);
 
   // Deep-link support: ?n=<id> selects that neighborhood on mount.
   useEffect(() => {
@@ -193,6 +260,15 @@ export function ConciergeScreen({
       window.history.replaceState(null, "", url.toString());
     }
   }, [selectedId]);
+
+  /** Add / remove a neighborhood from the comparison set (max 4). */
+  const toggleCompare = (id: string) =>
+    setCompareIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else if (next.size < 4) next.add(id);
+      return next;
+    });
 
   // Recompute matchScore per current persona (vs. the server's default-persona score).
   const neighborhoodsWithScore = useMemo(
@@ -284,16 +360,17 @@ export function ConciergeScreen({
 
   return (
     <div
-      className="mm-shell"
+      className="mm-shell mm-fullscreen"
       // Per-city language/direction: Israeli cities are he/RTL (the app default);
       // international cities (NYC) render en/LTR. The CSS uses logical
       // properties (insetInlineStart etc.), so the layout re-flows for free.
       dir={city.dir ?? "rtl"}
       lang={city.lang ?? "he"}
       style={{
-        height: "100vh",
         display: "grid",
-        gridTemplateRows: "auto minmax(0, 1fr)",
+        // header · map · (phones) tab bar — the tab bar is display:none on
+        // desktop, so its row collapses to nothing there.
+        gridTemplateRows: "auto minmax(0, 1fr) auto",
         overflow: "hidden",
       }}
     >
@@ -305,7 +382,7 @@ export function ConciergeScreen({
           // column 2 = center map, column 3 = visual left (RightRail / Listings+AI).
           // Mobile collapses to single column; the rails surface via the bottom
           // carousel + drawer.
-          gridTemplateColumns: isMobile ? "minmax(0, 1fr)" : "340px minmax(0, 1fr) 360px",
+          gridTemplateColumns: isMobile ? "minmax(0, 1fr)" : "340px minmax(0, 1fr) clamp(360px, 27vw, 440px)",
           gridTemplateRows: "100%",
           height: "100%",
           minHeight: 0,
@@ -318,6 +395,10 @@ export function ConciergeScreen({
             selectedId={selectedId}
             onSelect={(id) => setSelectedId(id)}
             cityName={city.name_he}
+            hoverId={hoverId}
+            onHover={setHoverId}
+            compareIds={compareIds}
+            onToggleCompare={toggleCompare}
           />
         )}
         <main style={{ position: "relative", overflow: "hidden", background: "var(--map-bg)" }}>
@@ -328,7 +409,12 @@ export function ConciergeScreen({
               activeLayers={layers}
               selected={selectedId}
               hover={hoverId}
-              onSelect={setSelectedId}
+              onSelect={(id) => {
+                setSelectedId(id);
+                // Phones: a map tap opens the short peek sheet (or closes it
+                // when the tap lands outside every neighborhood).
+                if (isMobile) setPeekOpen(id !== null);
+              }}
               onHover={setHoverId}
               center={city.center}
               zoom={city.zoom}
@@ -351,7 +437,7 @@ export function ConciergeScreen({
           <div
             style={{
               position: "absolute",
-              top: 16,
+              top: isMobile ? 10 : 16,
               left: 0,
               right: 0,
               zIndex: 4,
@@ -359,12 +445,22 @@ export function ConciergeScreen({
               alignItems: "center",
               justifyContent: "center",
               gap: 8,
-              padding: "0 16px",
+              padding: isMobile ? "0 12px" : "0 16px",
               flexWrap: "wrap",
             }}
           >
             <CitySwitcher city={city} />
             <LayersButton active={layers} onToggle={toggle} />
+            {/* Phones get exactly two rows whatever the city name's length:
+                city · layers, then search · profile. */}
+            {isMobile && <div aria-hidden style={{ order: 2, flex: "0 0 100%", height: 0, marginTop: -8 }} />}
+            <div
+              style={
+                isMobile
+                  ? { order: 3, flex: "1 1 0", minWidth: 0, display: "flex" }
+                  : { display: "contents" }
+              }
+            >
             <NeighborhoodSearch
               neighborhoods={neighborhoodsWithScore.map((n) => ({
                 id: n.id,
@@ -381,13 +477,16 @@ export function ConciergeScreen({
                 if (isMobile) setDrawerOpen(true);
               }}
             />
-            <PersonaPill />
+            </div>
+            <div style={isMobile ? { order: 4, flex: "none" } : { display: "contents" }}>
+              <PersonaPill />
+            </div>
           </div>
 
           {/* GreenScore corner badge — clickable, opens breakdown sheet.
               Lives in the bottom-start corner above the carousel so it
               doesn't compete with the top overlay row. */}
-          {selected && (
+          {selected && !(isMobile && peekOpen) && (
             <button
               type="button"
               onClick={() => setGreenSheetOpen(true)}
@@ -396,8 +495,8 @@ export function ConciergeScreen({
                 // Desktop has no bottom carousel, so the GreenScore badge sits
                 // just above the map's bottom edge; mobile keeps the carousel
                 // and the badge rides above it.
-                bottom: isMobile ? 200 : 16,
-                insetInlineStart: 16,
+                bottom: isMobile ? ABOVE_CAROUSEL : 16,
+                insetInlineStart: isMobile ? 12 : 16,
                 zIndex: 4,
                 background: "#fff",
                 borderRadius: 8,
@@ -421,6 +520,11 @@ export function ConciergeScreen({
               </div>
             </button>
           )}
+
+          {/* What the polygon colours mean — desktop only (phones have no
+              room, and the cards carry the score). Hidden while the elections
+              layer recolours the map. */}
+          {!isMobile && !layers.has("elections") && <MatchLegend />}
 
           {/* Legend for the elections layer — lists the unique leading parties
               across visible neighborhoods, with their brand color. */}
@@ -449,7 +553,7 @@ export function ConciergeScreen({
             );
           })()}
 
-          <WelcomeCard />
+          {!(isMobile && peekOpen) && <WelcomeCard />}
 
           {/* Floating compare CTA — appears when 2+ neighborhoods are in the
               compare set. Tap to open the side-by-side sheet. */}
@@ -461,8 +565,10 @@ export function ConciergeScreen({
                 position: "absolute",
                 // Same logic as the GreenScore badge — sits low on desktop
                 // (no carousel), rides higher on mobile.
-                bottom: isMobile ? 230 : 16,
-                insetInlineEnd: 16,
+                bottom: isMobile ? ABOVE_CAROUSEL : 16,
+                ...(isMobile
+                  ? { insetInlineEnd: 12 }
+                  : { left: "50%", transform: "translateX(-50%)" }),
                 zIndex: 5,
                 background: "var(--grey-900)",
                 color: "#fff",
@@ -519,36 +625,58 @@ export function ConciergeScreen({
           {/* Bottom carousel — mobile only. Desktop shows all neighborhoods in
               the right rail instead, with a click-to-open details sheet for
               listings + AI. */}
-          {isMobile && (
+          {isMobile && peekOpen && selected && (() => {
+            const n = neighborhoodsWithScore.find((x) => x.id === selected.id);
+            if (!n) return null;
+            return (
+              <NeighborhoodPeek
+                id={n.id}
+                he={n.he}
+                family={n.family}
+                matchScore={n.matchScore}
+                greenScore={n.greenScore}
+                avgListing={n.avgListing}
+                breakdown={breakdownFor(n.facts, persona)}
+                onExpand={() => {
+                  setPeekOpen(false);
+                  setRailMode("listings");
+                  setDrawerOpen(true);
+                }}
+                onClose={() => setPeekOpen(false)}
+                onExplainMatch={() => setMatchSheetFor(n.id)}
+              />
+            );
+          })()}
+
+          {isMobile && !peekOpen && (
             <div
               ref={carouselRef}
               className="mm-scroll"
               style={{
                 position: "absolute",
-                bottom: 14,
-                left: 14,
-                right: 14,
+                bottom: CAROUSEL_BOTTOM,
+                left: 0,
+                right: 0,
+                // Edge-to-edge scroller with inner padding, so the next card
+                // peeks in from the screen edge instead of being clipped.
+                padding: "4px 12px",
+                scrollPaddingInline: 12,
                 zIndex: 4,
                 display: "flex",
                 gap: 10,
                 overflowX: "auto",
                 scrollBehavior: "smooth",
+                scrollbarWidth: "none",
               }}
             >
               {sortedCards.map((n) => (
-                <div key={n.id} data-nb-id={n.id} style={{ flex: `0 0 260px` }}>
+                <div key={n.id} data-nb-id={n.id} style={{ flex: "0 0 min(76vw, 280px)", height: CAROUSEL_CARD_H }}>
                   <NeighborhoodCard
                     n={n}
+                    compact
                     selected={selectedId === n.id}
                     inCompare={compareIds.has(n.id)}
-                    onToggleCompare={() => {
-                      setCompareIds((prev) => {
-                        const next = new Set(prev);
-                        if (next.has(n.id)) next.delete(n.id);
-                        else if (next.size < 4) next.add(n.id);
-                        return next;
-                      });
-                    }}
+                    onToggleCompare={() => toggleCompare(n.id)}
                     onClick={() => {
                       setSelectedId(n.id);
                       setDrawerOpen(true);
@@ -562,7 +690,8 @@ export function ConciergeScreen({
                 onClick={() => setAllOpen(true)}
                 className="mm-card"
                 style={{
-                  flex: "0 0 200px",
+                  flex: "0 0 150px",
+                  height: CAROUSEL_CARD_H,
                   display: "grid",
                   placeItems: "center",
                   padding: 14,
@@ -571,12 +700,12 @@ export function ConciergeScreen({
                   fontWeight: 700,
                   cursor: "pointer",
                   borderStyle: "dashed",
-                  background: "transparent",
+                  background: "rgba(255,255,255,0.85)",
                   fontFamily: "inherit",
                 }}
               >
                 <div style={{ textAlign: "center" }}>
-                  <MMIcon name="grid" size={20} color="#5B616E" />
+                  <MMIcon name="grid" size={20} color="var(--hn-text-2)" />
                   <br />
                   כל {neighborhoodsWithScore.length} השכונות
                 </div>
@@ -612,6 +741,24 @@ export function ConciergeScreen({
           />
         )}
       </div>
+      <MobileTabBar
+        active={allOpen ? "list" : drawerOpen && railMode === "ai" ? "ai" : "map"}
+        onMap={() => {
+          setAllOpen(false);
+          setDrawerOpen(false);
+        }}
+        onList={() => {
+          setDrawerOpen(false);
+          setPeekOpen(false);
+          setAllOpen(true);
+        }}
+        onAI={() => {
+          setAllOpen(false);
+          setPeekOpen(false);
+          setRailMode("ai");
+          setDrawerOpen(true);
+        }}
+      />
     </div>
   );
 }

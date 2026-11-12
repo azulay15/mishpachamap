@@ -4,15 +4,17 @@ import { useEffect, useMemo, useState } from "react";
 import { MMHeader } from "./MMHeader";
 import { MatchBadge } from "./MatchBadge";
 import { CityPicker } from "./CityPicker";
+import { MobileTabBar } from "./MobileTabBar";
 import { MMIcon } from "@/lib/icons";
 import { usePersona } from "@/lib/usePersona";
 import { useFavorites } from "@/lib/useFavorites";
 import { breakdownFor, totalScore } from "@/lib/match";
 import type { ConciergeData } from "./ConciergeScreen";
+import type { City } from "@/lib/cities";
 
 const PERSONA_KEY = "mishpachamap.persona.v1";
 
-type Props = { data: ConciergeData };
+type Props = { data: ConciergeData; city: City };
 type RankedNeighborhood = ConciergeData["neighborhoods"][number];
 
 /**
@@ -25,7 +27,9 @@ type RankedNeighborhood = ConciergeData["neighborhoods"][number];
  * The hero art is the product itself: an SVG of the real CBS-derived
  * neighborhood polygons, projected straight from the GeoJSON the map uses.
  */
-export function HomeScreen({ data }: Props) {
+export function HomeScreen({ data, city }: Props) {
+  const cityShort = city.searchName ?? city.name_he;
+  const mapHref = `/map/${city.slug}`;
   const persona = usePersona();
   const { favs } = useFavorites();
   const [hasPersona, setHasPersona] = useState<boolean | null>(null);
@@ -55,12 +59,12 @@ export function HomeScreen({ data }: Props) {
     const schoolIds = new Set<string>();
     for (const arr of Object.values(data.schoolsByNeighborhood)) for (const s of arr) schoolIds.add(s.id);
     return [
-      { icon: "pin", value: data.neighborhoods.length, label: "שכונות" },
+      { icon: "pin", value: data.neighborhoods.length, label: `שכונות ב${cityShort}` },
       { icon: "home", value: listings, label: "נכסים פעילים" },
       { icon: "school", value: schoolIds.size, label: "בתי ספר" },
       { icon: "tree", value: data.pois.length, label: "נקודות עניין במפה" },
     ].filter((s) => s.value > 0);
-  }, [data]);
+  }, [data, cityShort]);
 
   const market = useMemo(() => {
     const prices = data.neighborhoods.map((n) => n.avgPrice).filter((p) => p > 0).sort((a, b) => a - b);
@@ -71,7 +75,7 @@ export function HomeScreen({ data }: Props) {
   }, [data.neighborhoods]);
 
   return (
-    <div className="mm-shell" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--bg, #F6F4EF)" }}>
+    <div className="mm-shell" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--hn-bg)" }}>
       <MMHeader activeNav="בית" />
       <main style={{ flex: 1, width: "100%", maxWidth: 1120, margin: "0 auto", padding: "clamp(16px, 3.5vw, 40px) clamp(16px, 3vw, 32px) 64px" }}>
         {hasPersona ? (
@@ -82,14 +86,17 @@ export function HomeScreen({ data }: Props) {
             favListings={favs.listings}
             market={market}
             data={data}
+            mapHref={mapHref}
+            city={city}
           />
         ) : (
-          <Hero stats={stats} ranked={ranked} />
+          <Hero stats={stats} ranked={ranked} mapHref={mapHref} city={city} />
         )}
       </main>
       <footer style={{ padding: "16px 24px", borderTop: "1px solid var(--stroke-weak)", fontSize: 11.5, color: "var(--grey-500)", textAlign: "center" }}>
         גבולות השכונות מבוססים על אזורים סטטיסטיים של הלמ״ס (2022). חלק מנתוני הנכסים הם נתוני הדגמה.
       </footer>
+      <MobileTabBar />
     </div>
   );
 }
@@ -145,7 +152,7 @@ function projectCity(neighborhoods: RankedNeighborhood[]): Projected | null {
 }
 
 /** The hero visual: every real neighborhood polygon, top matches highlighted. */
-function CityMap({ ranked }: { ranked: RankedNeighborhood[] }) {
+function CityMap({ ranked, cityName }: { ranked: RankedNeighborhood[]; cityName: string }) {
   const proj = useMemo(() => projectCity(ranked), [ranked]);
   if (!proj) return null;
   const topIds = ranked.slice(0, 3).map((n) => n.id);
@@ -171,7 +178,7 @@ function CityMap({ ranked }: { ranked: RankedNeighborhood[] }) {
       <svg
         viewBox={`0 0 ${proj.width} ${proj.height}`}
         role="img"
-        aria-label="מפת השכונות של מודיעין־מכבים־רעות"
+        aria-label={`מפת השכונות של ${cityName}`}
         style={{ display: "block", width: "100%", height: "auto" }}
       >
         {proj.paths.map(({ id, d }) => {
@@ -263,10 +270,15 @@ function MiniPoly({ polygon }: { polygon: GeoJSON.Polygon }) {
 function Hero({
   stats,
   ranked,
+  mapHref,
+  city,
 }: {
   stats: { icon: string; value: number; label: string }[];
   ranked: RankedNeighborhood[];
+  mapHref: string;
+  city: City;
 }) {
+  const cityShort = city.searchName ?? city.name_he;
   const top3 = ranked.slice(0, 3);
   return (
     <>
@@ -290,7 +302,7 @@ function Hero({
               בנו את פרופיל המשפחה
             </a>
             <a
-              href="/map/modiin"
+              href={mapHref}
               className="mm-btn mm-btn-secondary"
               style={{ textDecoration: "none", color: "var(--grey-900)", padding: "12px 20px", fontSize: 15, borderRadius: 12 }}
             >
@@ -302,13 +314,13 @@ function Hero({
 
         <div className="mm-home-heromap mm-home-rise mm-home-rise-2">
           <div className="mm-home-heromap-card">
-            <CityMap ranked={ranked} />
+            <CityMap ranked={ranked} cityName={city.name_he} />
           </div>
         </div>
       </section>
 
       <div className="mm-home-rise mm-home-rise-2">
-        <CityPicker variant="hero" />
+        <CityPicker variant="hero" currentSlug={city.slug} />
       </div>
 
       {stats.length > 0 && (
@@ -335,11 +347,11 @@ function Hero({
       {top3.length > 0 && (
         <section style={{ marginTop: "clamp(34px, 5vw, 52px)" }}>
           <p className="mm-home-eyebrow">מובילות כרגע</p>
-          <h2 className="mm-home-h2">שכונות מובילות למשפחות</h2>
+          <h2 className="mm-home-h2">שכונות מובילות למשפחות ב{cityShort}</h2>
           <p style={{ margin: "6px 0 16px", fontSize: 13, color: "var(--grey-500)" }}>
             לפי פרופיל משפחתי טיפוסי — בנו פרופיל משלכם לדירוג אישי.
           </p>
-          <TopMatchGrid top={top3} />
+          <TopMatchGrid top={top3} mapHref={mapHref} />
         </section>
       )}
     </>
@@ -355,6 +367,8 @@ function Dashboard({
   favListings,
   market,
   data,
+  mapHref,
+  city,
 }: {
   personaName: string;
   ranked: RankedNeighborhood[];
@@ -362,7 +376,10 @@ function Dashboard({
   favListings: string[];
   market: { medianM2: number; avgDelta: number };
   data: ConciergeData;
+  mapHref: string;
+  city: City;
 }) {
+  const cityShort = city.searchName ?? city.name_he;
   const top3 = ranked.slice(0, 3);
   const nbById = new Map(data.neighborhoods.map((n) => [n.id, n]));
   const savedNbNames = favNeighborhoods.map((id) => nbById.get(id)?.he).filter(Boolean) as string[];
@@ -375,12 +392,12 @@ function Dashboard({
           שלום, <span className="hl">{personaName}</span>
         </h1>
         <p className="mm-home-sub" style={{ marginTop: 8 }}>
-          אלו השכונות שהכי מתאימות לפרופיל שלכם היום.
+          אלו השכונות ב{cityShort} שהכי מתאימות לפרופיל שלכם היום.
         </p>
       </section>
 
       <div className="mm-home-rise mm-home-rise-2">
-        <TopMatchGrid top={top3} />
+        <TopMatchGrid top={top3} mapHref={mapHref} />
       </div>
 
       <section
@@ -405,13 +422,19 @@ function Dashboard({
             תמונת שוק
           </div>
           <div style={{ fontSize: 13, color: "var(--grey-700)", marginTop: 6, lineHeight: 1.6 }}>
-            מחיר חציוני למ״ר: <strong style={{ fontFamily: "var(--font-inter, Inter)" }}>₪{market.medianM2.toLocaleString("he-IL")}</strong>
-            <br />
-            שינוי שנתי ממוצע: <strong style={{ fontFamily: "var(--font-inter, Inter)" }}>{market.avgDelta >= 0 ? "+" : ""}{market.avgDelta.toFixed(1)}%</strong>
+            {market.medianM2 > 0 ? (
+              <>
+                מחיר חציוני למ״ר: <strong style={{ fontFamily: "var(--font-inter, Inter)" }}>₪{market.medianM2.toLocaleString("he-IL")}</strong>
+                <br />
+                שינוי שנתי ממוצע: <strong style={{ fontFamily: "var(--font-inter, Inter)" }}>{market.avgDelta >= 0 ? "+" : ""}{market.avgDelta.toFixed(1)}%</strong>
+              </>
+            ) : (
+              <>מחירי העסקאות ב{cityShort} עוד בדרך. בינתיים הדירוג מבוסס על בתי ספר, ירוק, שקט ובטיחות.</>
+            )}
           </div>
         </div>
 
-        <a href="/map/modiin" className="mm-home-card mm-home-cardlink">
+        <a href={mapHref} className="mm-home-card mm-home-cardlink">
           <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 800, color: "var(--grey-900)" }}>
             <MMIcon name="sparkle" size={16} color="var(--pumpkin-orange)" />
             מומחה השכונה
@@ -425,11 +448,11 @@ function Dashboard({
       <section className="mm-home-rise mm-home-rise-4" style={{ marginTop: 28 }}>
         <p className="mm-home-eyebrow">ערים</p>
         <h2 className="mm-home-h2" style={{ marginBottom: 4 }}>לחקור עיר אחרת</h2>
-        <CityPicker variant="compact" />
+        <CityPicker variant="compact" currentSlug={city.slug} />
       </section>
 
       <a
-        href="/map/modiin"
+        href={mapHref}
         className="mm-btn mm-btn-accent mm-home-rise mm-home-rise-4"
         style={{ textDecoration: "none", marginTop: 24, display: "inline-flex", padding: "12px 22px", fontSize: 15, borderRadius: 12 }}
       >
@@ -442,11 +465,11 @@ function Dashboard({
 
 /* ================= shared pieces ================= */
 
-function TopMatchGrid({ top }: { top: RankedNeighborhood[] }) {
+function TopMatchGrid({ top, mapHref }: { top: RankedNeighborhood[]; mapHref: string }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
       {top.map((n, i) => (
-        <a key={n.id} href={`/map/modiin?n=${n.id}`} className="mm-home-card mm-home-cardlink" style={{ padding: 18 }}>
+        <a key={n.id} href={`${mapHref}?n=${n.id}`} className="mm-home-card mm-home-cardlink" style={{ padding: 18 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, minWidth: 0 }}>
               <span

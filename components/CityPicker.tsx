@@ -13,19 +13,35 @@ import { CITIES } from "@/lib/cities";
  * `variant="hero"` is the full picker (eyebrow + heading + search); "compact"
  * drops the heading for use on the returning-visitor dashboard.
  */
-export function CityPicker({ variant = "hero" }: { variant?: "hero" | "compact" }) {
+/** Cards shown on a phone before "show all" (the full grid is 10+ tall cards). */
+const MOBILE_PREVIEW = 4;
+
+export function CityPicker({
+  variant = "hero",
+  currentSlug,
+}: {
+  variant?: "hero" | "compact";
+  /** The visitor's current city — listed first. */
+  currentSlug?: string;
+}) {
   const [q, setQ] = useState("");
+  const [showAll, setShowAll] = useState(false);
+  const liveCount = CITIES.filter((c) => c.status === "live").length;
 
   const matches = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    if (!needle) return CITIES;
-    return CITIES.filter(
+    const ordered = currentSlug
+      ? [...CITIES].sort((a, b) => Number(b.slug === currentSlug) - Number(a.slug === currentSlug))
+      : CITIES;
+    if (!needle) return ordered;
+    return ordered.filter(
       (c) =>
         c.name_he.includes(needle) ||
         c.name_en.toLowerCase().includes(needle) ||
         c.slug.includes(needle),
     );
-  }, [q]);
+  }, [q, currentSlug]);
+  const collapsed = !showAll && !q.trim() && matches.length > MOBILE_PREVIEW;
 
   return (
     <section aria-label="בחירת עיר" style={{ marginTop: variant === "hero" ? "clamp(28px, 4vw, 44px)" : 8 }}>
@@ -34,7 +50,7 @@ export function CityPicker({ variant = "hero" }: { variant?: "hero" | "compact" 
           <p className="mm-home-eyebrow">כל הארץ</p>
           <h2 className="mm-home-h2">באיזו עיר מחפשים?</h2>
           <p style={{ margin: "6px 0 16px", fontSize: 13, color: "var(--grey-500)" }}>
-            מתחילים במודיעין ואור יהודה — ערים נוספות בדרך.
+            {liveCount} ערים עם נתוני אמת, ועוד בדרך.
           </p>
         </>
       )}
@@ -43,7 +59,7 @@ export function CityPicker({ variant = "hero" }: { variant?: "hero" | "compact" 
         className="mm-input"
         style={{ width: "100%", maxWidth: 420, height: 44, marginBottom: 16 }}
       >
-        <MMIcon name="search" size={16} color="#84888E" />
+        <MMIcon name="search" size={16} color="var(--hn-text-3)" />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -52,7 +68,10 @@ export function CityPicker({ variant = "hero" }: { variant?: "hero" | "compact" 
         />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12 }}>
+      <div
+        className={`mm-city-grid${collapsed ? " is-collapsed" : ""}`}
+        style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12 }}
+      >
         {matches.map((c) => {
           const isLive = c.status === "live";
           const body = (
@@ -71,7 +90,7 @@ export function CityPicker({ variant = "hero" }: { variant?: "hero" | "compact" 
                       placeItems: "center",
                     }}
                   >
-                    <MMIcon name="pin" size={19} color={isLive ? "#fff" : "#84888E"} />
+                    <MMIcon name="pin" size={19} color={isLive ? "var(--hn-on-primary)" : "var(--hn-text-3)"} />
                   </span>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontWeight: 800, fontSize: 17, color: "var(--grey-900)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -131,6 +150,17 @@ export function CityPicker({ variant = "hero" }: { variant?: "hero" | "compact" 
           </div>
         )}
       </div>
+      {collapsed && (
+        <button
+          type="button"
+          onClick={() => setShowAll(true)}
+          className="mm-btn mm-btn-secondary mm-city-more"
+          style={{ width: "100%", height: 44, marginTop: 12 }}
+        >
+          כל {matches.length} הערים
+          <MMIcon name="chevron-down" size={15} />
+        </button>
+      )}
     </section>
   );
 }

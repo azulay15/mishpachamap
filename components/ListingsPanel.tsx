@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MMIcon } from "@/lib/icons";
 import { ScoreChip } from "./ScoreChip";
 import { MatchBadge } from "./MatchBadge";
+import { ShareButton } from "./ShareButton";
 import { PropertyDetailSheet } from "./PropertyDetailSheet";
 import { LeadGenModal, type LeadKind } from "./LeadGenModal";
 import { ElectionsPanel, type NeighborhoodElection } from "./ElectionsPanel";
@@ -107,9 +108,11 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
               </div>
             )}
           </div>
-          <button className="mm-btn mm-btn-ghost mm-btn-sm" aria-label="פעולות נוספות">
-            <MMIcon name="more" size={16} />
-          </button>
+          <ShareButton
+            path={`/map/${city.slug}?n=${selected.id}`}
+            title={`${selected.he}, ${city.searchName ?? city.name_he}`}
+            text={`${selected.he} ב${city.searchName ?? city.name_he}: ציון התאמה ${selected.matchScore}/100 בהנחלה`}
+          />
         </div>
         {selected.summary && (
           <p style={{ margin: 0, fontSize: 13, color: "var(--grey-700)", lineHeight: "18px" }}>
@@ -117,6 +120,17 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           </p>
         )}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: 4 }}>
+          {selected.avgListing <= 0 && selected.avgPrice <= 0 ? (
+            // No price data for this neighborhood (new cities): say so once
+            // instead of a dash next to a "no recent data" label.
+            <div style={{ gridColumn: "span 2" }}>
+              <Stat
+                label="מחירי עסקאות"
+                value={<span style={{ color: "var(--grey-500)", fontSize: 12, fontWeight: 600 }}>יתווספו בקרוב</span>}
+              />
+            </div>
+          ) : (
+          <>
           <Stat label="חציון" value={selected.avgListing > 0 ? NISshort(selected.avgListing) : "—"} />
           <Stat
             label='מחיר/מ"ר'
@@ -135,6 +149,8 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
               )
             }
           />
+          </>
+          )}
           <Stat
             label="GreenScore"
             value={<span style={{ color: "var(--green-positive)" }}>{selected.greenScore}</span>}
@@ -143,10 +159,51 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
         <NeighborhoodArnonaLine neighborhoodId={selected.id} />
       </header>
 
-      <div className="mm-scroll" style={{ overflow: "auto", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 18 }}>
+      <div className="mm-scroll" style={{ overflow: "auto", padding: "0 16px 14px", display: "flex", flexDirection: "column", gap: 18 }}>
+        {/* Jump links — the panel is a long scroll (people, listings, schools,
+            elections); these stay pinned at the top of it. */}
+        <nav
+          aria-label="קפיצה לחלק בפרטי השכונה"
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 2,
+            background: "#fff",
+            display: "flex",
+            gap: 6,
+            padding: "10px 0 8px",
+            marginBottom: -8,
+            overflowX: "auto",
+            scrollbarWidth: "none",
+          }}
+        >
+          {[
+            (selected.demographics || selected.safety) && { id: "people", label: "מי גר כאן" },
+            { id: "listings", label: "נכסים" },
+            { id: "schools", label: "בתי ספר" },
+            election && election.results.length > 0 && { id: "elections", label: "הצבעה" },
+          ]
+            .filter((x): x is { id: string; label: string } => Boolean(x))
+            .map((j) => (
+              <button
+                key={j.id}
+                type="button"
+                className="mm-chip"
+                style={{ height: 26, fontSize: 11, padding: "0 10px", flex: "none" }}
+                onClick={(e) =>
+                  e.currentTarget
+                    .closest(".mm-scroll")
+                    ?.querySelector(`[data-section="${j.id}"]`)
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                }
+              >
+                {j.label}
+              </button>
+            ))}
+        </nav>
         <WhoLivesHere demographics={selected.demographics ?? null} safety={selected.safety ?? null} cityName={city.searchName ?? city.name_he} />
 
-        <Section title="נכסים פעילים">
+        <Section title="נכסים פעילים" id="listings">
           {listings.length === 0 ? (
             <Empty>אין כרגע נכסים פעילים בשכונה זו.</Empty>
           ) : (
@@ -164,7 +221,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           {(city.country ?? "IL") === "IL" && <NeighborhoodExternalSearch neighborhoodHe={selected.he} city={city} />}
         </Section>
 
-        <Section title="בתי ספר במרחק הליכה">
+        <Section title="בתי ספר במרחק הליכה" id="schools">
           {schools.length === 0 ? (
             <Empty>אין נתוני בתי ספר עדיין.</Empty>
           ) : (
@@ -173,7 +230,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
         </Section>
 
         {election && election.results.length > 0 && (
-          <Section title="תוצאות הצבעה (כנסת אחרונה)">
+          <Section title="תוצאות הצבעה (כנסת אחרונה)" id="elections">
             <ElectionsPanel election={election} />
           </Section>
         )}
@@ -297,9 +354,10 @@ function NeighborhoodExternalSearch({ neighborhoodHe, city }: { neighborhoodHe: 
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, id, children }: { title: string; id?: string; children: React.ReactNode }) {
   return (
-    <div>
+    // scroll-margin keeps the heading clear of the pinned jump links.
+    <div data-section={id} style={{ scrollMarginTop: 48 }}>
       <div className="mm-eyebrow" style={{ marginBottom: 8 }}>
         {title}
       </div>
@@ -418,7 +476,7 @@ function WhoLivesHere({ demographics: d, safety: s, cityName }: { demographics: 
     </div>
   );
   return (
-    <Section title="מי גר כאן">
+    <Section title="מי גר כאן" id="people">
       {d ? (
         <>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
@@ -549,7 +607,7 @@ function SchoolRowCard({ school }: { school: SchoolRow }) {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
         {school.walkMinutes != null && (
           <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11.5, fontWeight: 800, color: "var(--grey-700)", whiteSpace: "nowrap" }}>
-            <MMIcon name="directions" size={13} color="#84888E" />
+            <MMIcon name="directions" size={13} color="var(--hn-text-3)" />
             {school.walkMinutes} דק׳
           </span>
         )}
@@ -577,7 +635,7 @@ function SchoolRowCard({ school }: { school: SchoolRow }) {
 function Inline({ icon, text }: { icon: string; text: string }) {
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-      <MMIcon name={icon} size={12} color="#84888E" />
+      <MMIcon name={icon} size={12} color="var(--hn-text-3)" />
       {text}
     </span>
   );

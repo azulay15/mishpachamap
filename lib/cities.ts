@@ -290,8 +290,52 @@ const petahtikva: City = {
   },
 };
 
+/** Haifa — 40 neighborhoods (106 CBS stat areas, 18 discarded). */
+const haifa: City = {
+  id: "haifa",
+  slug: "haifa",
+  name_he: "חיפה",
+  name_en: "Haifa",
+  semel: 4000,
+  center: [35.0179, 32.8025],
+  zoom: 12,
+  status: "live",
+  tagline_he: "40 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.haifa.geo.json",
+    demographics: "haifa.demographics.json",
+    crime: "haifa.crime.json",
+    schools: "haifa.schools.json",
+    transit: "haifa.transit.json",
+    environment: "haifa.environment.json",
+    prices: "haifa.prices.json",
+  },
+};
+
+/** Jerusalem — 66 neighborhoods (243 CBS stat areas, 25 discarded). Largest city in the app. */
+const jerusalem: City = {
+  id: "jerusalem",
+  slug: "jerusalem",
+  name_he: "ירושלים",
+  name_en: "Jerusalem",
+  semel: 3000,
+  center: [35.2092, 31.8001],
+  zoom: 11.4,
+  status: "live",
+  tagline_he: "66 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.jerusalem.geo.json",
+    demographics: "jerusalem.demographics.json",
+    crime: "jerusalem.crime.json",
+    schools: "jerusalem.schools.json",
+    transit: "jerusalem.transit.json",
+    environment: "jerusalem.environment.json",
+    prices: "jerusalem.prices.json",
+  },
+};
+
 /** All cities, in display order. */
-export const CITIES: City[] = [modiin, oryehuda, rishon, kefarsava, raanana, herzliya, netanya, petahtikva, nyc];
+export const CITIES: City[] = [modiin, oryehuda, rishon, kefarsava, raanana, herzliya, netanya, petahtikva, haifa, jerusalem, nyc];
 
 /** The city shown when no city is specified (legacy `/map` deep links). */
 export const DEFAULT_CITY_ID = "modiin";

@@ -29,6 +29,9 @@ type Props = {
   /** Toggle this card's membership in the comparison set. */
   onToggleCompare?: () => void;
   variant?: "list" | "wide";
+  /** Short card for the mobile bottom carousel: no summary, one row of the
+   *  stats that actually have a value, no min-height. */
+  compact?: boolean;
 };
 
 export function NeighborhoodCard({
@@ -39,6 +42,7 @@ export function NeighborhoodCard({
   inCompare,
   onToggleCompare,
   variant = "list",
+  compact = false,
 }: Props) {
   const { hasNeighborhood, toggleNeighborhood } = useFavorites();
   const isFav = hasNeighborhood(n.id);
@@ -61,13 +65,14 @@ export function NeighborhoodCard({
       aria-label={onClick ? `שכונת ${n.he}, ציון התאמה ${n.matchScore} מתוך 100` : undefined}
       style={{
         ...cardStyle,
+        ...(compact ? { minHeight: 0, padding: 12 } : {}),
         ...(selected ? selectedStyle : {}),
         ...(variant === "wide"
           ? { display: "grid", gridTemplateColumns: "1fr auto", gap: 16 }
           : {}),
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, minHeight: 0, flex: 1 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: compact ? 8 : 12, minHeight: 0, flex: 1 }}>
         {/* Header: heart + (optional compare toggle) + name + family + match-score ring */}
         <header style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 10, alignItems: "start" }}>
           <div style={{ display: "flex", gap: 4, flex: "none" }}>
@@ -162,7 +167,7 @@ export function NeighborhoodCard({
         </header>
 
         {/* Summary — clamped to 2 lines. Card has its own min-height so all cards line up. */}
-        {n.summary && (
+        {n.summary && !compact && (
           <p
             style={{
               margin: 0,
@@ -183,6 +188,9 @@ export function NeighborhoodCard({
 
         {/* Stats grid — 2×2 by default (works at 260-340px card widths),
              expands to 4-across on wide variants. */}
+        {compact ? (
+          <CompactStats n={n} />
+        ) : (
         <div
           className="mm-card-stats"
           style={{
@@ -205,6 +213,7 @@ export function NeighborhoodCard({
             border
           />
         </div>
+        )}
       </div>
 
       {variant === "wide" && (
@@ -213,6 +222,33 @@ export function NeighborhoodCard({
         </div>
       )}
     </article>
+  );
+}
+
+/** One row of stats for the compact card. Missing values are dropped rather
+ *  than shown as a row of dashes (new cities have no price data yet). */
+function CompactStats({ n }: { n: NeighborhoodCardData }) {
+  const stats: { value: React.ReactNode; label: string; color?: string }[] = [];
+  if (n.avgListing > 0) stats.push({ value: NISshort(n.avgListing), label: "חציון" });
+  // Three columns is what fits a phone card without truncating; per-m² price
+  // only steps in when there's no median to show.
+  else if (n.avgPrice > 0) stats.push({ value: `₪${(n.avgPrice / 1000).toFixed(1)}K`, label: 'למ"ר' });
+  if (n.schoolScore > 0) stats.push({ value: n.schoolScore, label: "בתי ספר" });
+  stats.push({ value: n.greenScore, label: "GreenScore", color: "var(--green-positive)" });
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: `repeat(${stats.length}, minmax(0, 1fr))`,
+        paddingTop: 8,
+        borderTop: "1px solid var(--grey-15)",
+        marginTop: "auto",
+      }}
+    >
+      {stats.map((s, i) => (
+        <Stat key={s.label} value={s.value} label={s.label} valueColor={s.color} border={i > 0} />
+      ))}
+    </div>
   );
 }
 

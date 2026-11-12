@@ -29,7 +29,9 @@ import { CITIES } from "./cities";
 function ckanUrl(semel: number): string {
   return (
     "https://data.gov.il/api/3/action/datastore_search" +
-    "?resource_id=9a9e085f-3bc8-41df-b15f-be0daaf99e30&limit=100" +
+    // 1000, not 100: Jerusalem alone has ~195 stat-area rows, and a silent
+    // truncation would drop real census coverage (guarded below too).
+    "?resource_id=9a9e085f-3bc8-41df-b15f-be0daaf99e30&limit=1000" +
     `&filters={"LocalityCode":"${semel}"}`
   );
 }
@@ -80,8 +82,11 @@ async function main() {
   console.log(`→ fetching CBS 2022 census for ${city.id} (LocalityCode=${city.semelYishuv})…`);
   const res = await fetch(ckanUrl(city.semelYishuv), { headers: { "User-Agent": "MishpachaMap/0.1", Accept: "application/json" } });
   if (!res.ok) throw new Error(`CKAN: ${res.status} ${res.statusText}`);
-  const json = (await res.json()) as { success: boolean; result?: { records: CensusRow[] } };
+  const json = (await res.json()) as { success: boolean; result?: { records: CensusRow[]; total?: number } };
   if (!json.success || !json.result) throw new Error("CKAN returned success=false");
+  if (json.result.total != null && json.result.total > json.result.records.length) {
+    throw new Error(`CKAN truncated the census: got ${json.result.records.length} of ${json.result.total} rows — raise the limit`);
+  }
 
   // Key census rows by StatArea code (skip the empty city-aggregate row).
   const byArea = new Map<number, CensusRow>();

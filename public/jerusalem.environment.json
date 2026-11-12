@@ -1,0 +1,273 @@
+{
+  "meta": {
+    "source": "OpenStreetMap green land-use + noise sources (Overpass)",
+    "city": "jerusalem",
+    "generated_from": "public/neighborhoods.jerusalem.geo.json"
+  },
+  "neighborhoods": {
+    "jlm-ein-kerem": {
+      "green_score": 100,
+      "quiet_score": 32
+    },
+    "jlm-givat-masua": {
+      "green_score": 100,
+      "quiet_score": 85
+    },
+    "jlm-har-homa": {
+      "green_score": 100,
+      "quiet_score": 68
+    },
+    "jlm-ramot-rachel": {
+      "green_score": 100,
+      "quiet_score": 62
+    },
+    "jlm-jabel-mukaber": {
+      "green_score": 100,
+      "quiet_score": 98
+    },
+    "jlm-holyland": {
+      "green_score": 98,
+      "quiet_score": 39
+    },
+    "jlm-pisgat-zeev": {
+      "green_score": 87,
+      "quiet_score": 66
+    },
+    "jlm-east-talpiot": {
+      "green_score": 80,
+      "quiet_score": 98
+    },
+    "jlm-beit-safafa": {
+      "green_score": 80,
+      "quiet_score": 36
+    },
+    "jlm-talbiyeh": {
+      "green_score": 79,
+      "quiet_score": 48
+    },
+    "jlm-french-hill": {
+      "green_score": 78,
+      "quiet_score": 44
+    },
+    "jlm-a-tur": {
+      "green_score": 77,
+      "quiet_score": 41
+    },
+    "jlm-sheikh-jarrah": {
+      "green_score": 74,
+      "quiet_score": 70
+    },
+    "jlm-silwan": {
+      "green_score": 74,
+      "quiet_score": 37
+    },
+    "jlm-sur-baher": {
+      "green_score": 72,
+      "quiet_score": 91
+    },
+    "jlm-maalot-dafna": {
+      "green_score": 71,
+      "quiet_score": 36
+    },
+    "jlm-abu-tor": {
+      "green_score": 71,
+      "quiet_score": 51
+    },
+    "jlm-gilo": {
+      "green_score": 67,
+      "quiet_score": 78
+    },
+    "jlm-muslim-quarter": {
+      "green_score": 67,
+      "quiet_score": 55
+    },
+    "jlm-ramot": {
+      "green_score": 65,
+      "quiet_score": 31
+    },
+    "jlm-ramat-shlomo": {
+      "green_score": 61,
+      "quiet_score": 55
+    },
+    "jlm-kiryat-menachem": {
+      "green_score": 60,
+      "quiet_score": 72
+    },
+    "jlm-armenian-quarter": {
+      "green_score": 60,
+      "quiet_score": 39
+    },
+    "jlm-kiryat-sanz": {
+      "green_score": 59,
+      "quiet_score": 54
+    },
+    "jlm-har-nof": {
+      "green_score": 59,
+      "quiet_score": 42
+    },
+    "jlm-givat-mordechai": {
+      "green_score": 58,
+      "quiet_score": 46
+    },
+    "jlm-ramat-eshkol": {
+      "green_score": 57,
+      "quiet_score": 55
+    },
+    "jlm-shuafat": {
+      "green_score": 57,
+      "quiet_score": 54
+    },
+    "jlm-sanhedria": {
+      "green_score": 54,
+      "quiet_score": 52
+    },
+    "jlm-nayot": {
+      "green_score": 53,
+      "quiet_score": 66
+    },
+    "jlm-beit-hanina": {
+      "green_score": 52,
+      "quiet_score": 55
+    },
+    "jlm-kiryat-hayovel": {
+      "green_score": 51,
+      "quiet_score": 75
+    },
+    "jlm-neve-yaakov": {
+      "green_score": 50,
+      "quiet_score": 69
+    },
+    "jlm-arnona": {
+      "green_score": 50,
+      "quiet_score": 44
+    },
+    "jlm-jewish-quarter": {
+      "green_score": 49,
+      "quiet_score": 54
+    },
+    "jlm-mekor-haim": {
+      "green_score": 48,
+      "quiet_score": 33
+    },
+    "jlm-ramat-sharett": {
+      "green_score": 46,
+      "quiet_score": 68
+    },
+    "jlm-beit-hakerem": {
+      "green_score": 45,
+      "quiet_score": 46
+    },
+    "jlm-ras-al-amud": {
+      "green_score": 45,
+      "quiet_score": 76
+    },
+    "jlm-german-colony": {
+      "green_score": 43,
+      "quiet_score": 61
+    },
+    "jlm-christian-quarter": {
+      "green_score": 42,
+      "quiet_score": 40
+    },
+    "jlm-talpiot": {
+      "green_score": 41,
+      "quiet_score": 46
+    },
+    "jlm-bab-a-zahra": {
+      "green_score": 41,
+      "quiet_score": 45
+    },
+    "jlm-givat-shaul": {
+      "green_score": 40,
+      "quiet_score": 38
+    },
+    "jlm-bayit-vegan": {
+      "green_score": 36,
+      "quiet_score": 49
+    },
+    "jlm-musrara": {
+      "green_score": 35,
+      "quiet_score": 34
+    },
+    "jlm-katamonim": {
+      "green_score": 34,
+      "quiet_score": 60
+    },
+    "jlm-tel-arza": {
+      "green_score": 32,
+      "quiet_score": 49
+    },
+    "jlm-rassco": {
+      "green_score": 31,
+      "quiet_score": 71
+    },
+    "jlm-city-center": {
+      "green_score": 31,
+      "quiet_score": 62
+    },
+    "jlm-issawiya": {
+      "green_score": 31,
+      "quiet_score": 56
+    },
+    "jlm-romema": {
+      "green_score": 30,
+      "quiet_score": 50
+    },
+    "jlm-malha": {
+      "green_score": 29,
+      "quiet_score": 38
+    },
+    "jlm-old-katamon": {
+      "green_score": 29,
+      "quiet_score": 74
+    },
+    "jlm-kiryat-moshe": {
+      "green_score": 26,
+      "quiet_score": 42
+    },
+    "jlm-baka": {
+      "green_score": 25,
+      "quiet_score": 48
+    },
+    "jlm-mekor-baruch": {
+      "green_score": 20,
+      "quiet_score": 63
+    },
+    "jlm-beit-israel": {
+      "green_score": 16,
+      "quiet_score": 46
+    },
+    "jlm-nachlaot": {
+      "green_score": 14,
+      "quiet_score": 57
+    },
+    "jlm-bukharim": {
+      "green_score": 13,
+      "quiet_score": 60
+    },
+    "jlm-rehavia": {
+      "green_score": 13,
+      "quiet_score": 95
+    },
+    "jlm-kerem-avraham": {
+      "green_score": 5,
+      "quiet_score": 77
+    },
+    "jlm-mea-shearim": {
+      "green_score": 5,
+      "quiet_score": 50
+    },
+    "jlm-geula": {
+      "green_score": 4,
+      "quiet_score": 71
+    },
+    "jlm-kafr-aqab": {
+      "green_score": 3,
+      "quiet_score": 98
+    },
+    "jlm-anata-shuafat-camp": {
+      "green_score": 0,
+      "quiet_score": 64
+    }
+  }
+}

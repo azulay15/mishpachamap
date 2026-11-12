@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
 @import "../styles/mishpachamap.css";
+/* הנחלה tokens + legacy aliases — must stay after the two files above. */
+@import "../styles/hanachala.css";
 
 /* Mapbox GL CSS — required for the map to render correctly. */
 @import "mapbox-gl/dist/mapbox-gl.css";

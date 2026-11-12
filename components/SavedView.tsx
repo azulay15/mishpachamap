@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { MMHeader } from "./MMHeader";
+import { MobileTabBar } from "./MobileTabBar";
 import { MMIcon } from "@/lib/icons";
 import { useFavorites } from "@/lib/useFavorites";
 import { NISshort } from "@/lib/format";
@@ -42,9 +43,9 @@ export function SavedView({ neighborhoods, listings }: Props) {
   );
 
   return (
-    <div className="mm-shell" style={{ minHeight: "100vh" }}>
+    <div className="mm-shell" style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
       <MMHeader activeNav="" />
-      <main style={{ maxWidth: 880, margin: "0 auto", padding: "32px 24px 64px" }}>
+      <main style={{ flex: 1, width: "100%", maxWidth: 880, margin: "0 auto", padding: "clamp(20px, 5vw, 32px) clamp(16px, 5vw, 24px) 64px" }}>
         <header style={{ marginBottom: 24, display: "flex", alignItems: "baseline", gap: 12 }}>
           <h2 style={{ margin: 0 }}>שמורים</h2>
           <span style={{ fontSize: 14, color: "var(--grey-500)" }}>
@@ -150,14 +151,14 @@ export function SavedView({ neighborhoods, listings }: Props) {
                   <div style={{ fontSize: 13, color: "var(--grey-700)", marginBottom: 6 }}>{l.address}</div>
                   <div style={{ display: "flex", gap: 10, fontSize: 11, color: "var(--grey-500)" }}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                      <MMIcon name="bed" size={12} color="#84888E" /> {l.rooms} חד׳
+                      <MMIcon name="bed" size={12} color="var(--hn-text-3)" /> {l.rooms} חד׳
                     </span>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                      <MMIcon name="ruler" size={12} color="#84888E" /> {l.sqm} מ"ר
+                      <MMIcon name="ruler" size={12} color="var(--hn-text-3)" /> {l.sqm} מ"ר
                     </span>
                     {l.garden_sqm != null && (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                        <MMIcon name="garden" size={12} color="#84888E" /> {l.garden_sqm} גינה
+                        <MMIcon name="garden" size={12} color="var(--hn-text-3)" /> {l.garden_sqm} גינה
                       </span>
                     )}
                   </div>
@@ -167,6 +168,7 @@ export function SavedView({ neighborhoods, listings }: Props) {
           </section>
         )}
       </main>
+      <MobileTabBar active="saved" />
     </div>
   );
 }
