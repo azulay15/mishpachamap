@@ -24,17 +24,31 @@ export type IndexNeighborhood = {
   schools: number | null;
   /** Safety score 0–100 (higher = safer). */
   safety: number | null;
+  /** Quiet score 0–100 (distance from major roads / rail / industry). */
+  quiet: number | null;
+  /** % of residents aged 0–19 — how much of a "families with kids" place it is. */
+  kids: number | null;
 };
+
+/** The measures a family can choose to compare on. Price is always compared. */
+export const METRICS = {
+  schools: { label: "בתי ספר", unit: "נק׳ מיצ״ב", tolerance: 12, per: 4, cap: 8, noise: 3 },
+  green: { label: "ירוק ופארקים", unit: "נק׳", tolerance: 10, per: 6, cap: 6, noise: 2 },
+  safety: { label: "בטיחות", unit: "נק׳", tolerance: 10, per: 8, cap: 5, noise: 2 },
+  quiet: { label: "שקט", unit: "נק׳", tolerance: 10, per: 8, cap: 5, noise: 2 },
+  kids: { label: "משפחות עם ילדים", unit: "נק׳ אחוז", tolerance: 4, per: 1.5, cap: 5, noise: 1 },
+} as const;
+export type MetricId = keyof typeof METRICS;
+export const METRIC_IDS = Object.keys(METRICS) as MetricId[];
+export const DEFAULT_METRICS: MetricId[] = ["schools", "green", "safety"];
 
 export type Alternative = {
   nb: IndexNeighborhood;
   price: number;
   /** Home price minus this one — always positive. */
   saving: number;
-  /** Candidate minus home; null when either side has no data. */
-  schoolsDelta: number | null;
-  greenDelta: number | null;
-  safetyDelta: number | null;
+  /** Candidate minus home, per measure; null when either side has no data. */
+  deltas: Record<MetricId, number | null>;
   /** Minutes to the workplace; null until drive times are known. */
   minutes: number | null;
   /** True when `minutes` is a straight-line estimate, not a routed time. */
@@ -73,7 +87,16 @@ const delta = (a: number | null, b: number | null) => (a != null && b != null ? 
  */
 export function findCandidates(
   index: IndexNeighborhood[],
-  q: { home: IndexNeighborhood | null; homePrice: number; deal: Deal; rooms: RoomKey; work: [number, number]; maxMinutes: number },
+  q: {
+    home: IndexNeighborhood | null;
+    homePrice: number;
+    deal: Deal;
+    rooms: RoomKey;
+    work: [number, number];
+    maxMinutes: number;
+    /** The measures the family cares about. Defaults to schools, green, safety. */
+    metrics?: MetricId[];
+  },
 ): Alternative[] {
   const reach = reachKm(q.maxMinutes);
   const out: Alternative[] = [];
@@ -89,46 +112,45 @@ export function findCandidates(
       nb,
       price,
       saving,
-      schoolsDelta: delta(nb.schools, q.home?.schools ?? null),
-      greenDelta: delta(nb.green, q.home?.green ?? null),
-      safetyDelta: delta(nb.safety, q.home?.safety ?? null),
+      deltas: Object.fromEntries(METRIC_IDS.map((m) => [m, delta(nb[m], q.home?.[m] ?? null)])) as Record<MetricId, number | null>,
       minutes: estimateMinutes(km),
       minutesEstimated: true,
     });
   }
-  return out.sort(byWorth(q.homePrice));
+  return out.sort(byWorth(q.homePrice, q.metrics));
 }
 
 /**
- * How good an alternative is. The saving leads; better schools / green / safety
- * add to it and worse ones subtract — so a slightly smaller saving with better
- * schools beats a big saving somewhere clearly worse. A longer commute costs.
+ * How good an alternative is, judged ONLY on the measures the family chose.
+ * The saving leads; a chosen measure that is better adds to it and a worse one
+ * subtracts — so a slightly smaller saving with better schools beats a big
+ * saving somewhere clearly worse. A longer commute costs.
  */
-export function quality(a: Alternative, homePrice: number): number {
+export function quality(a: Alternative, homePrice: number, metrics: MetricId[] = DEFAULT_METRICS): number {
   const savingPct = (a.saving / homePrice) * 100; // 10% saving → 10
-  const schools = a.schoolsDelta == null ? 0 : clamp(a.schoolsDelta / 4, -8, 8); // Meitzav points
-  const green = a.greenDelta == null ? 0 : clamp(a.greenDelta / 6, -6, 6);
-  const safety = a.safetyDelta == null ? 0 : clamp(a.safetyDelta / 8, -5, 5);
-  const commute = a.minutes == null ? 0 : a.minutes * 0.25;
-  return Math.min(savingPct, 35) + schools + green + safety - commute;
+  let score = Math.min(savingPct, 35);
+  for (const m of metrics) {
+    const d = a.deltas[m];
+    if (d != null) score += clamp(d / METRICS[m].per, -METRICS[m].cap, METRICS[m].cap);
+  }
+  return score - (a.minutes == null ? 0 : a.minutes * 0.25);
 }
 
-/** How many of schools / green / safety are CLEARLY worse than home. Small
- *  gaps are noise (Meitzav averages over a handful of schools), so each has a
+/** How many of the chosen measures are CLEARLY worse than home. Small gaps are
+ *  noise (Meitzav averages over a handful of schools), so each has a
  *  tolerance. Unknown counts as not worse. */
-export function worseCount(a: Alternative): number {
-  return (
-    (a.schoolsDelta != null && a.schoolsDelta < -12 ? 1 : 0) +
-    (a.greenDelta != null && a.greenDelta < -10 ? 1 : 0) +
-    (a.safetyDelta != null && a.safetyDelta < -10 ? 1 : 0)
-  );
+export function worseCount(a: Alternative, metrics: MetricId[] = DEFAULT_METRICS): number {
+  return metrics.filter((m) => {
+    const d = a.deltas[m];
+    return d != null && d < -METRICS[m].tolerance;
+  }).length;
 }
 
 /** Order: places that give nothing up come first; within that, best quality.
  *  "Pay less for the same or better" is the promise — a bigger saving somewhere
  *  clearly worse only shows when nothing better exists. */
-export const byWorth = (homePrice: number) => (a: Alternative, b: Alternative) =>
-  worseCount(a) - worseCount(b) || quality(b, homePrice) - quality(a, homePrice);
+export const byWorth = (homePrice: number, metrics: MetricId[] = DEFAULT_METRICS) => (a: Alternative, b: Alternative) =>
+  worseCount(a, metrics) - worseCount(b, metrics) || quality(b, homePrice, metrics) - quality(a, homePrice, metrics);
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -138,13 +160,13 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v
  */
 export function pickAlternatives(
   cands: Alternative[],
-  q: { homePrice: number; maxMinutes: number; count?: number; perCity?: number },
+  q: { homePrice: number; maxMinutes: number; count?: number; perCity?: number; metrics?: MetricId[] },
 ): Alternative[] {
   const count = q.count ?? 3;
   const perCity = q.perCity ?? 2;
   const ranked = cands
     .filter((c) => c.minutes == null || c.minutes <= q.maxMinutes)
-    .sort(byWorth(q.homePrice));
+    .sort(byWorth(q.homePrice, q.metrics));
   const out: Alternative[] = [];
   const cityCount = new Map<string, number>();
   for (const c of ranked) {

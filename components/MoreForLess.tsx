@@ -5,6 +5,7 @@ import { MMHeader } from "./MMHeader";
 import { MobileTabBar } from "./MobileTabBar";
 import { MMIcon } from "@/lib/icons";
 import { usePersona } from "@/lib/usePersona";
+import { DEFAULT_METRICS, METRICS, METRIC_IDS, type MetricId } from "@/lib/alternatives";
 import { marketPrice, priceLabel, ROOM_LABEL, type Deal, type RoomKey, type SizePrices } from "@/lib/market";
 
 export type HomeOption = { id: string; he: string; cityId: string; cityHe: string; rent: SizePrices; buy: SizePrices };
@@ -18,17 +19,15 @@ type Result = {
   cityHe: string;
   price: number;
   saving: number;
-  schools: number | null;
-  schoolsDelta: number | null;
-  green: number | null;
-  greenDelta: number | null;
-  safety: number | null;
-  safetyDelta: number | null;
+  values: Record<MetricId, number | null>;
+  deltas: Record<MetricId, number | null>;
   minutes: number | null;
 };
 type Response = {
   home: { he: string; cityHe: string; sourcePrice: number | null; minutes: number | null } | null;
   estimated: boolean;
+  /** The measures this answer was ranked on. */
+  metrics: MetricId[];
   considered: number;
   results: Result[];
 };
@@ -48,6 +47,7 @@ const HUBS: Place[] = [
 ];
 
 const MINUTES = [20, 30, 45];
+const METRIC_ICON: Record<MetricId, string> = { schools: "school", green: "tree", safety: "info", quiet: "leaf", kids: "kid" };
 const STORE_KEY = "mishpachamap.moreforless.v1";
 const OTHER = "__other__";
 
@@ -58,9 +58,19 @@ export function MoreForLess({ options, mapboxToken }: { options: HomeOption[]; m
   const [cityId, setCityId] = useState<string>("");
   const [homeId, setHomeId] = useState<string>("");
   const [price, setPrice] = useState<string>("");
-  const [priceTouched, setPriceTouched] = useState(false);
+  const [priceTouched, setPriceTouchedState] = useState(false);
+  // Mirrored in a ref so the auto-fill effect below sees a value restored
+  // earlier in the same effect pass (state would still read "untouched").
+  const touchedRef = useRef(false);
+  const setPriceTouched = (v: boolean) => {
+    touchedRef.current = v;
+    setPriceTouchedState(v);
+  };
   const [work, setWork] = useState<Place | null>(null);
   const [maxMinutes, setMaxMinutes] = useState(30);
+  const [metrics, setMetrics] = useState<MetricId[]>(DEFAULT_METRICS);
+  const toggleMetric = (m: MetricId) =>
+    setMetrics((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : METRIC_IDS.filter((x) => x === m || prev.includes(x))));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<Response | null>(null);
@@ -89,7 +99,7 @@ export function MoreForLess({ options, mapboxToken }: { options: HomeOption[]; m
     try {
       const raw = window.localStorage.getItem(STORE_KEY);
       if (!raw) return;
-      const s = JSON.parse(raw) as Partial<{ cityId: string; homeId: string; price: string; work: Place; maxMinutes: number; deal: Deal; rooms: RoomKey }>;
+      const s = JSON.parse(raw) as Partial<{ cityId: string; homeId: string; price: string; work: Place; maxMinutes: number; deal: Deal; rooms: RoomKey; metrics: MetricId[] }>;
       if (s.deal) setDeal(s.deal);
       if (s.rooms) setRooms(s.rooms);
       if (s.cityId) setCityId(s.cityId);
@@ -100,14 +110,16 @@ export function MoreForLess({ options, mapboxToken }: { options: HomeOption[]; m
       }
       if (s.work) setWork(s.work);
       if (s.maxMinutes) setMaxMinutes(s.maxMinutes);
+      if (Array.isArray(s.metrics)) setMetrics(METRIC_IDS.filter((m) => s.metrics!.includes(m)));
     } catch {
       /* first visit, or storage unavailable */
     }
   }, []);
 
   // Until they type their own number, show the typical price for their choice.
+  // (Only a typed number is saved between visits; the average is re-derived.)
   useEffect(() => {
-    if (!priceTouched) setPrice(known != null ? String(known) : "");
+    if (!touchedRef.current) setPrice(known != null ? String(known) : "");
   }, [known, priceTouched]);
 
   const priceNum = Number(price.replace(/[^\d]/g, ""));
@@ -119,7 +131,7 @@ export function MoreForLess({ options, mapboxToken }: { options: HomeOption[]; m
     setLoading(true);
     setError(null);
     try {
-      window.localStorage.setItem(STORE_KEY, JSON.stringify({ cityId, homeId, price, work, maxMinutes, deal, rooms }));
+      window.localStorage.setItem(STORE_KEY, JSON.stringify({ cityId, homeId, price: priceTouched ? price : "", work, maxMinutes, deal, rooms, metrics }));
     } catch {
       /* not essential */
     }
@@ -135,6 +147,7 @@ export function MoreForLess({ options, mapboxToken }: { options: HomeOption[]; m
           price: priceNum,
           work: { lng: work.lng, lat: work.lat },
           maxMinutes,
+          metrics,
         }),
       });
       if (!res.ok) throw new Error(String(res.status));
@@ -291,6 +304,30 @@ export function MoreForLess({ options, mapboxToken }: { options: HomeOption[]; m
             </div>
           </div>
 
+          <div className="mm-mfl-field">
+            <span className="mm-mfl-label">מה חשוב לכם בהשוואה</span>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }} role="group" aria-label="מדדים להשוואה">
+              {METRIC_IDS.map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  aria-pressed={metrics.includes(m)}
+                  className={`mm-chip ${metrics.includes(m) ? "mm-chip-on" : ""}`}
+                  style={{ height: 36, padding: "0 12px", fontSize: 13 }}
+                  onClick={() => toggleMetric(m)}
+                >
+                  <MMIcon name={METRIC_ICON[m]} size={14} />
+                  {METRICS[m].label}
+                </button>
+              ))}
+            </div>
+            <span className="mm-mfl-hint">
+              {metrics.length === 0
+                ? "לא בחרתם מדד: נדרג רק לפי החיסכון וזמן הנסיעה."
+                : "נעדיף שכונות שלא נופלות מהבית שלכם במדדים שבחרתם, ונראה רק אותם בתוצאות."}
+            </span>
+          </div>
+
           <button type="submit" className="mm-btn mm-btn-primary mm-btn-lg" disabled={!ready || loading} style={{ alignSelf: "flex-start" }}>
             {loading ? "מחשבים…" : "הראו לנו איפה"}
           </button>
@@ -364,9 +401,17 @@ function Results({
               {per}
             </div>
             <ul className="mm-mfl-deltas">
-              <Delta icon="school" label="בתי ספר" delta={r.schoolsDelta} unit="נק׳ מיצ״ב" value={r.schools} noise={3} />
-              <Delta icon="tree" label="ירוק" delta={r.greenDelta} unit="נק׳" value={r.green} noise={2} />
-              <Delta icon="info" label="בטיחות" delta={r.safetyDelta} unit="נק׳" value={r.safety} noise={2} />
+              {data.metrics.map((m) => (
+                <Delta
+                  key={m}
+                  icon={METRIC_ICON[m]}
+                  label={METRICS[m].label}
+                  delta={r.deltas[m]}
+                  unit={METRICS[m].unit}
+                  value={r.values[m]}
+                  noise={METRICS[m].noise}
+                />
+              ))}
               {r.minutes != null && (
                 <li>
                   <MMIcon name="car" size={14} color="var(--grey-500)" />
@@ -390,8 +435,9 @@ function Results({
         ))}
       </div>
       <p className="mm-mfl-foot">
-        המחירים הם ממוצע 12 החודשים האחרונים לשכונה, לפי אתר הנדל״ן הממשלתי, ולא מחיר של דירה מסוימת. ציון בתי הספר הוא ממוצע המיצ״ב של בתי הספר
-        במרחק הליכה.{" "}
+        המחירים הם ממוצע 12 החודשים האחרונים לשכונה, לפי אתר הנדל״ן הממשלתי, ולא מחיר של דירה מסוימת.{" "}
+        {data.metrics.includes("schools") && "ציון בתי הספר הוא ממוצע המיצ״ב של בתי הספר במרחק הליכה. "}
+        {data.metrics.includes("kids") && "״משפחות עם ילדים״ הוא שיעור בני 0 עד 19 בשכונה לפי מפקד האוכלוסין. "}
         {data.estimated
           ? "זמני הנסיעה הם הערכה לפי מרחק."
           : "זמני הנסיעה הם ברכב, בלי עומסי תנועה, ובשעות הבוקר הם ארוכים יותר."}{" "}

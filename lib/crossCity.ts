@@ -8,7 +8,7 @@
  */
 import { liveCities } from "@/lib/cities";
 import { centroidOf, loadNeighborhoodFeatures } from "@/lib/geoData";
-import { loadEnvironment, loadMarket, loadSafety, loadSchools } from "@/lib/staticData";
+import { loadDemographics, loadEnvironment, loadMarket, loadSafety, loadSchools } from "@/lib/staticData";
 import { haversineKm, type IndexNeighborhood } from "@/lib/alternatives";
 
 /** Schools this close to the neighborhood centre count as "its" schools. */
@@ -26,6 +26,7 @@ export function crossCityIndex(): IndexNeighborhood[] {
     const market = loadMarket(city).neighborhoods;
     const env = loadEnvironment(city);
     const safety = loadSafety(city);
+    const demo = loadDemographics(city);
     const scored = loadSchools(city).filter((s) => s.meitzav_score != null && s.lon != null && s.lat != null);
     for (const f of features) {
       const id = f.properties.id;
@@ -46,6 +47,8 @@ export function crossCityIndex(): IndexNeighborhood[] {
           ? Math.round(near.reduce((sum, s) => sum + (s.meitzav_score as number), 0) / near.length)
           : null,
         safety: safety[id]?.safety_score ?? null,
+        quiet: env[id]?.quiet_score ?? null,
+        kids: demo[id]?.pct_age_0_19 ?? null,
       });
     }
   }

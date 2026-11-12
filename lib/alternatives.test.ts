@@ -3,7 +3,7 @@ import { estimateMinutes, findCandidates, haversineKm, pickAlternatives, type In
 
 const nb = (id: string, cityId: string, lng: number, lat: number, rent4: number, extra: Partial<IndexNeighborhood> = {}): IndexNeighborhood => ({
   id, he: id, cityId, citySlug: cityId, cityHe: cityId, center: [lng, lat],
-  rent: { "4": rent4 }, buy: {}, green: 50, schools: 560, safety: 60, ...extra,
+  rent: { "4": rent4 }, buy: {}, green: 50, schools: 560, safety: 60, quiet: 50, kids: 30, ...extra,
 });
 
 const WORK: [number, number] = [34.79, 32.07];
@@ -42,8 +42,8 @@ describe("more for less", () => {
   it("reports what is gained or lost against home", () => {
     const c = findCandidates(index, q).find((x) => x.nb.id === "cheap-better")!;
     expect(c.saving).toBe(1500);
-    expect(c.schoolsDelta).toBe(30);
-    expect(c.greenDelta).toBe(20);
+    expect(c.deltas.schools).toBe(30);
+    expect(c.deltas.green).toBe(20);
   });
 
   it("prefers a smaller saving with better schools over a bigger one somewhere clearly worse", () => {
@@ -64,8 +64,20 @@ describe("more for less", () => {
     expect(picks.filter((p) => p.nb.cityId === "b").length).toBeLessThanOrEqual(2);
   });
 
+  it("judges only the measures the family chose", () => {
+    // With schools / green / safety switched off, the much cheaper place that is
+    // worse on all three is no longer held back.
+    const metrics = ["quiet" as const];
+    const picks = pickAlternatives(findCandidates(index, { ...q, metrics }), { homePrice: 7800, maxMinutes: 60, metrics });
+    expect(picks[0].nb.id).toBe("cheap-worse");
+    // And a place that is clearly noisier drops behind once quiet is what matters.
+    const noisy = index.map((n) => (n.id === "cheap-worse" ? { ...n, quiet: 5 } : n));
+    const picks2 = pickAlternatives(findCandidates(noisy, { ...q, metrics }), { homePrice: 7800, maxMinutes: 60, metrics, count: 9, perCity: 9 });
+    expect(picks2[picks2.length - 1].nb.id).toBe("cheap-worse");
+  });
+
   it("has no deltas when home is not a neighborhood we cover", () => {
     const c = findCandidates(index, { ...q, home: null })[0];
-    expect(c.schoolsDelta).toBeNull();
+    expect(c.deltas.schools).toBeNull();
   });
 });

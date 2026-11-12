@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rateLimit, rateLimitResponse } from "@/lib/rateLimit";
 import { crossCityIndex } from "@/lib/crossCity";
-import { estimateMinutes, findCandidates, haversineKm, pickAlternatives, type Alternative } from "@/lib/alternatives";
+import { DEFAULT_METRICS, METRIC_IDS, estimateMinutes, findCandidates, haversineKm, pickAlternatives, type Alternative, type MetricId } from "@/lib/alternatives";
 import { marketPrice, type Deal, type RoomKey } from "@/lib/market";
 
 export const runtime = "nodejs";
@@ -16,6 +16,8 @@ type Payload = {
   price: number;
   work: { lng: number; lat: number };
   maxMinutes: number;
+  /** The measures to compare on (schools, green, safety, quiet, kids). */
+  metrics?: string[];
 };
 
 /** Mapbox Matrix (driving) takes at most 25 coordinates per request. */
@@ -70,10 +72,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "missing price or workplace" }, { status: 400 });
   }
   const work: [number, number] = [lng, lat];
+  // An explicit empty list means "price and commute only".
+  const metrics: MetricId[] = Array.isArray(body.metrics)
+    ? METRIC_IDS.filter((m) => body.metrics!.includes(m))
+    : DEFAULT_METRICS;
 
   const index = crossCityIndex();
   const home = index.find((n) => n.id === body.homeId && n.cityId === body.homeCityId) ?? null;
-  const cands = findCandidates(index, { home, homePrice: price, deal, rooms, work, maxMinutes });
+  const cands = findCandidates(index, { home, homePrice: price, deal, rooms, work, maxMinutes, metrics });
 
   // Route the strongest candidates (+ home, for "your commute today").
   const routed = cands.slice(0, MATRIX_MAX - 1 - (home ? 1 : 0));
@@ -87,7 +93,7 @@ export async function POST(req: NextRequest) {
     pool = routed.map((c, i) => ({ ...c, minutes: minutes[i], minutesEstimated: false })).filter((c) => c.minutes != null);
     if (home) homeMinutes = minutes[routed.length] ?? homeMinutes;
   }
-  const picks = pickAlternatives(pool, { homePrice: price, maxMinutes });
+  const picks = pickAlternatives(pool, { homePrice: price, maxMinutes, metrics });
 
   return NextResponse.json({
     home: home
@@ -96,13 +102,12 @@ export async function POST(req: NextRequest) {
           he: home.he,
           cityHe: home.cityHe,
           sourcePrice: marketPrice(home, deal, rooms),
-          schools: home.schools,
-          green: home.green,
-          safety: home.safety,
+          values: Object.fromEntries(METRIC_IDS.map((m) => [m, home[m]])),
           minutes: homeMinutes,
         }
       : null,
     estimated,
+    metrics,
     considered: cands.length,
     results: picks.map((a) => ({
       id: a.nb.id,
@@ -111,12 +116,8 @@ export async function POST(req: NextRequest) {
       cityHe: a.nb.cityHe,
       price: a.price,
       saving: a.saving,
-      schools: a.nb.schools,
-      schoolsDelta: a.schoolsDelta,
-      green: a.nb.green,
-      greenDelta: a.greenDelta,
-      safety: a.nb.safety,
-      safetyDelta: a.safetyDelta,
+      values: Object.fromEntries(METRIC_IDS.map((m) => [m, a.nb[m]])),
+      deltas: a.deltas,
       minutes: a.minutes,
     })),
   });
