@@ -169,203 +169,197 @@ export function MoreForLess({ options, mapboxToken }: { options: HomeOption[]; m
   }
 
   const per = deal === "rent" ? " לחודש" : "";
-  const [workOpen, setWorkOpen] = useState(false);
-  const missing = [cityId === "" && "עיר", !(priceNum > 0) && "כמה אתם משלמים", !work && "מקום עבודה"].filter(Boolean) as string[];
+  const [workEditing, setWorkEditing] = useState(false);
+  const missing = [cityId === "" && "עיר", !(priceNum > 0) && "סכום", !work && "מקום עבודה"].filter(Boolean) as string[];
 
   return (
     <div className="mm-shell" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--hn-bg)" }}>
       <MMHeader activeNav="יותר בפחות" />
       <main className="mm-mfl">
         <header className="mm-mfl-hero">
-          <p className="mm-home-eyebrow">יותר בפחות</p>
-          <h1 className="mm-home-h1">
-            אותה דירה, <span className="hl">פחות כסף</span>.
-          </h1>
-          <p className="mm-home-sub" style={{ marginTop: 12 }}>
-            השלימו את המשפט, ונחפש בכל הערים שכונות שבהן משפחה כמוכם משלמת פחות, קרוב לעבודה.
-          </p>
+          <h1>איפה נשלם פחות על אותה דירה?</h1>
+          <p>ספרו איפה אתם גרים ואיפה אתם עובדים. נשווה מול כל השכונות ב-19 ערים.</p>
         </header>
 
         <form onSubmit={submit} className="mm-mfl-panel">
-          {/* The form is one sentence the family completes. */}
-          <p className="mm-mfl-story">
-            אנחנו{" "}
-            <Tok>
-              <select
-                aria-label="שוכרים או קונים"
-                value={deal}
-                onChange={(e) => {
-                  setDeal(e.target.value as Deal);
-                  setPriceTouched(false);
-                }}
-              >
-                <option value="rent">שוכרים</option>
-                <option value="buy">קונים</option>
-              </select>
-            </Tok>{" "}
-            דירת{" "}
-            <Tok>
-              <select
-                aria-label="גודל דירה"
-                value={rooms}
-                onChange={(e) => {
-                  setRooms(e.target.value as RoomKey);
-                  setPriceTouched(false);
-                }}
-              >
-                <option value="3">3 חדרים</option>
-                <option value="4">4 חדרים</option>
-                <option value="5">5 חדרים</option>
-              </select>
-            </Tok>{" "}
-            <Tok empty={cityId === ""} before="ב" after={cityId !== "" && cityId !== OTHER ? "," : undefined}>
-              <select
-                aria-label="העיר שלנו היום"
-                value={cityId}
-                onChange={(e) => {
-                  setCityId(e.target.value);
-                  setHomeId("");
-                  setPriceTouched(false);
-                }}
-              >
-                <option value="">בחרו עיר</option>
-                {cities.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.he}
-                  </option>
-                ))}
-                <option value={OTHER}>עיר אחרת</option>
-              </select>
-            </Tok>
-            {cityId !== "" && cityId !== OTHER && (
-              <>
-                {" "}
-                בשכונת{" "}
-                <Tok empty={homeId === ""}>
-                  <select
-                    aria-label="השכונה שלנו היום"
-                    value={homeId}
+          <section className="mm-mfl-sec">
+            <h2>הבית שלכם היום</h2>
+            <div className="mm-sw" role="radiogroup" aria-label="שוכרים או קונים">
+              {(["rent", "buy"] as Deal[]).map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  role="radio"
+                  aria-checked={deal === d}
+                  onClick={() => {
+                    setDeal(d);
+                    setPriceTouched(false);
+                  }}
+                >
+                  {d === "rent" ? "שוכרים" : "קונים"}
+                </button>
+              ))}
+            </div>
+
+            <div className="mm-mfl-two">
+              <label className="mm-fld">
+                <span>עיר</span>
+                <select
+                  value={cityId}
+                  onChange={(e) => {
+                    setCityId(e.target.value);
+                    setHomeId("");
+                    setPriceTouched(false);
+                  }}
+                >
+                  <option value="">בחרו עיר</option>
+                  {cities.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.he}
+                    </option>
+                  ))}
+                  <option value={OTHER}>עיר אחרת</option>
+                </select>
+              </label>
+              <label className="mm-fld">
+                <span>שכונה</span>
+                <select
+                  value={homeId}
+                  disabled={!cityId || cityId === OTHER}
+                  onChange={(e) => {
+                    setHomeId(e.target.value);
+                    setPriceTouched(false);
+                  }}
+                >
+                  <option value="">{cityId === OTHER ? "לא נדרש" : "בחרו שכונה"}</option>
+                  {hoods.map((h) => (
+                    <option key={h.id} value={h.id}>
+                      {h.he}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="mm-mfl-two">
+              <div className="mm-fld">
+                <span id="mm-mfl-rooms">חדרים</span>
+                <div className="mm-sw" role="radiogroup" aria-labelledby="mm-mfl-rooms">
+                  {(["3", "4", "5"] as RoomKey[]).map((k) => (
+                    <button
+                      key={k}
+                      type="button"
+                      role="radio"
+                      aria-checked={rooms === k}
+                      onClick={() => {
+                        setRooms(k);
+                        setPriceTouched(false);
+                      }}
+                    >
+                      {k}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <label className="mm-fld">
+                <span>{deal === "rent" ? "שכר דירה לחודש" : "מחיר הדירה"}</span>
+                <div className="mm-fld-money">
+                  <input
+                    inputMode="numeric"
+                    aria-describedby="mm-mfl-pricehint"
+                    value={price ? Number(price.replace(/[^\d]/g, "")).toLocaleString("en-US") : ""}
+                    placeholder={deal === "rent" ? "7,800" : "3,200,000"}
                     onChange={(e) => {
-                      setHomeId(e.target.value);
-                      setPriceTouched(false);
+                      setPrice(e.target.value.replace(/[^\d]/g, ""));
+                      setPriceTouched(true);
                     }}
-                  >
-                    <option value="">בחרו שכונה</option>
-                    {hoods.map((h) => (
-                      <option key={h.id} value={h.id}>
-                        {h.he}
-                      </option>
-                    ))}
-                  </select>
-                </Tok>
-              </>
-            )}
-{" "}
-            {deal === "rent" ? "ומשלמים" : "במחיר של"}{" "}
-            <Tok empty={!(priceNum > 0)} after={deal === "rent" ? undefined : "."}>
-              <span aria-hidden>₪</span>
-              <input
-                inputMode="numeric"
-                aria-label={deal === "rent" ? "שכר הדירה שלנו בשקלים לחודש" : "מחיר הדירה בשקלים"}
-                aria-describedby="mm-mfl-pricehint"
-                value={price ? Number(price.replace(/[^\d]/g, "")).toLocaleString("en-US") : ""}
-                placeholder={deal === "rent" ? "7,800" : "3,200,000"}
-                size={deal === "rent" ? 6 : 9}
-                onChange={(e) => {
-                  setPrice(e.target.value.replace(/[^\d]/g, ""));
-                  setPriceTouched(true);
+                  />
+                  <b aria-hidden>₪</b>
+                </div>
+              </label>
+            </div>
+            <p id="mm-mfl-pricehint" className="mm-mfl-hint">
+              {known != null
+                ? priceTouched && priceNum !== known
+                  ? `הממוצע בשכונה לגודל הזה: ${priceLabel(known, deal)}${per}.`
+                  : "מילאנו את הממוצע בשכונה. אפשר לתקן לסכום שלכם."
+                : home
+                  ? "אין לנו ממוצע לגודל הזה בשכונה, אז הקלידו את הסכום."
+                  : "בחרו שכונה ונמלא את הממוצע שלה."}
+            </p>
+          </section>
+
+          <section className="mm-mfl-sec">
+            <h2>העבודה</h2>
+            {work && !workEditing ? (
+              <div className="mm-fld">
+                <span>מקום העבודה</span>
+                <div className="mm-fld-picked">
+                  <MMIcon name="pin" size={16} />
+                  <strong>{work.label}</strong>
+                  <button type="button" onClick={() => setWorkEditing(true)}>
+                    שינוי
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <WorkPicker
+                token={mapboxToken}
+                onPick={(p) => {
+                  setWork(p);
+                  setWorkEditing(false);
                 }}
               />
-            </Tok>
-            {deal === "rent" ? " לחודש." : ""} אנחנו עובדים{" "}
-            <span className="mm-tok-wrap">
-              ב
-              <button
-              type="button"
-              className={`mm-tok mm-tok-btn ${work ? "" : "is-empty"}`}
-              aria-expanded={workOpen || !work}
-              onClick={() => setWorkOpen((v) => !v)}
-            >
-              <MMIcon name="pin" size={15} />
-              {work ? work.label : "בחרו מקום עבודה"}
-              </button>
-            </span>{" "}
-            ומוכנים לנסוע עד{" "}
-            <Tok after=".">
-              <select aria-label="זמן נסיעה מרבי" value={maxMinutes} onChange={(e) => setMaxMinutes(Number(e.target.value))}>
+            )}
+            <div className="mm-fld">
+              <span id="mm-mfl-min">זמן נסיעה מרבי ברכב</span>
+              <div className="mm-sw" role="radiogroup" aria-labelledby="mm-mfl-min">
                 {MINUTES.map((m) => (
-                  <option key={m} value={m}>
-                    {m} דקות
-                  </option>
+                  <button key={m} type="button" role="radio" aria-checked={maxMinutes === m} onClick={() => setMaxMinutes(m)}>
+                    {m} דק׳
+                  </button>
                 ))}
-              </select>
-            </Tok>
-          </p>
+              </div>
+            </div>
+          </section>
 
-          <p id="mm-mfl-pricehint" className="mm-mfl-hint">
-            {known != null
-              ? priceTouched && priceNum !== known
-                ? `הממוצע בשכונה שלכם לגודל הזה: ${priceLabel(known, deal)}${per}.`
-                : "מילאנו את הממוצע בשכונה שלכם. אם אתם משלמים סכום אחר, תקנו אותו."
-              : home
-                ? "אין לנו ממוצע לגודל הזה בשכונה שלכם, אז הקלידו את הסכום."
-                : "בחרו שכונה ונמלא את הממוצע, או הקלידו כמה אתם משלמים."}
-          </p>
-
-          {(workOpen || !work) && (
-            <WorkPicker
-              token={mapboxToken}
-              onPick={(p) => {
-                setWork(p);
-                setWorkOpen(false);
-              }}
-            />
-          )}
-
-          <fieldset className="mm-mfl-metrics">
-            <legend>מה חשוב לכם בשכונה החדשה?</legend>
-            <div className="mm-mfl-tiles">
+          <section className="mm-mfl-sec">
+            <h2>מה חשוב לכם</h2>
+            <div className="mm-mfl-opts" role="group" aria-label="מדדים להשוואה">
               {METRIC_IDS.map((m) => {
                 const on = metrics.includes(m);
                 return (
-                  <button key={m} type="button" aria-pressed={on} className={`mm-mfl-tile ${on ? "is-on" : ""}`} onClick={() => toggleMetric(m)}>
-                    <span className="mm-mfl-tile-icon">
-                      <MMIcon name={on ? "check" : METRIC_ICON[m]} size={16} />
-                    </span>
-                    <span className="mm-mfl-tile-text">
-                      <strong>{METRICS[m].label}</strong>
+                  <button key={m} type="button" role="switch" aria-checked={on} className="mm-opt" onClick={() => toggleMetric(m)}>
+                    <MMIcon name={METRIC_ICON[m]} size={18} />
+                    <span>
+                      {METRICS[m].label}
                       <small>{METRIC_NOTE[m]}</small>
                     </span>
+                    <i aria-hidden />
                   </button>
                 );
               })}
             </div>
-            <p className="mm-mfl-hint">
-              {metrics.length === 0
-                ? "לא בחרתם כלום, אז נדרג רק לפי החיסכון וזמן הנסיעה."
-                : "נעדיף שכונות שלא נופלות מהבית שלכם במה שבחרתם."}
-            </p>
-          </fieldset>
+          </section>
 
           <div className="mm-mfl-submit">
             <button type="submit" className="mm-mfl-cta" disabled={!ready || loading}>
-              {loading ? "מחשבים…" : "הראו לנו איפה"}
-              {!loading && <MMIcon name="back" size={18} />}
+              {loading ? "מחשבים…" : "חפשו שכונות"}
             </button>
-            {missing.length > 0 && <span className="mm-mfl-hint">נשאר להשלים: {missing.join(", ")}.</span>}
+            {missing.length > 0 && <p className="mm-mfl-hint">נשאר למלא: {missing.join(", ")}.</p>}
             {error && (
-              <span role="alert" className="mm-mfl-hint" style={{ color: "var(--hn-negative)" }}>
+              <p role="alert" className="mm-mfl-hint" style={{ color: "var(--hn-negative)" }}>
                 {error}
-              </span>
+              </p>
             )}
           </div>
         </form>
 
         <div ref={resultsRef} style={{ scrollMarginTop: 16 }} aria-live="polite">
           {loading && !data && (
-            <div className="mm-mfl-cards" aria-hidden>
+            <div className="mm-mfl-list" aria-hidden>
               {[0, 1, 2].map((i) => (
-                <div key={i} className="mm-mfl-card mm-mfl-skel" />
+                <div key={i} className="mm-mfl-res mm-mfl-skel" />
               ))}
             </div>
           )}
@@ -374,29 +368,6 @@ export function MoreForLess({ options, mapboxToken }: { options: HomeOption[]; m
       </main>
       <MobileTabBar />
     </div>
-  );
-}
-
-/** One fill-in-the-blank slot in the sentence. */
-function Tok({
-  children,
-  empty = false,
-  before,
-  after,
-}: {
-  children: React.ReactNode;
-  empty?: boolean;
-  /** Text glued to the slot so a line never breaks between them (the Hebrew
-   *  prefix "ב", a trailing comma or full stop). */
-  before?: string;
-  after?: string;
-}) {
-  return (
-    <span className="mm-tok-wrap">
-      {before}
-      <span className={`mm-tok ${empty ? "is-empty" : ""}`}>{children}</span>
-      {after}
-    </span>
   );
 }
 
@@ -409,127 +380,121 @@ function Results({
 }) {
   const { deal } = asked;
   const per = deal === "rent" ? " לחודש" : "";
-  const where = data.home ? `ב${data.home.he}, ${data.home.cityHe}` : "היום";
   const size = ROOM_LABEL[asked.rooms];
   const n = data.results.length;
+  const today = [
+    data.home ? `${data.home.he}, ${data.home.cityHe}` : null,
+    `${priceLabel(asked.price, deal)}${per}`,
+    data.home?.minutes != null ? `${data.home.minutes} דק׳ לעבודה` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   if (n === 0) {
     return (
-      <section className="mm-mfl-banner is-empty">
-        <p className="mm-mfl-banner-eyebrow">התשובה</p>
+      <section className="mm-mfl-results">
         <h2>לא מצאנו שכונה זולה יותר בטווח הזה</h2>
-        <p>
-          בתוך {asked.maxMinutes} דקות נסיעה מ{asked.work.label} אין אצלנו שכונה שבה {size} עולים פחות מ-{priceLabel(asked.price, deal)}
+        <p className="mm-mfl-today">
+          עד {asked.maxMinutes} דקות מ{asked.work.label} אין אצלנו שכונה שבה {size} עולים פחות מ-{priceLabel(asked.price, deal)}
           {per}. נסו זמן נסיעה ארוך יותר או גודל דירה אחר.
         </p>
       </section>
     );
   }
-  const best = Math.max(...data.results.map((r) => r.saving));
   return (
-    <section>
-      <div className="mm-mfl-banner">
-        <p className="mm-mfl-banner-eyebrow">התשובה</p>
-        <h2>
-          אתם משלמים <strong>{priceLabel(asked.price, deal)}</strong>
-          {per} על {size} {where}. מצאנו {n === 1 ? "שכונה אחת" : `${n} שכונות`} שבהן משפחה כמוכם משלמת עד{" "}
-          <strong>{priceLabel(best, deal)} פחות</strong>
-          {per}, במרחק של עד {asked.maxMinutes} דקות מ{asked.work.label}.
-        </h2>
-        {data.home?.minutes != null && <p>מהבית שלכם היום: כ-{data.home.minutes} דקות נסיעה לעבודה.</p>}
-      </div>
+    <section className="mm-mfl-results">
+      <h2>{n === 1 ? "שכונה אחת שבה תשלמו פחות" : `${n} שכונות שבהן תשלמו פחות`}</h2>
+      <p className="mm-mfl-today">היום: {today}</p>
 
-      <div className="mm-mfl-cards">
-        {data.results.map((r, i) => (
-          <a key={`${r.citySlug}-${r.id}`} href={`/map/${r.citySlug}?n=${r.id}`} className="mm-mfl-card">
-            <div className="mm-mfl-card-head">
-              <span className="mm-mfl-rank">{i + 1}</span>
+      <div className="mm-mfl-list">
+        {data.results.map((r) => (
+          <a key={`${r.citySlug}-${r.id}`} href={`/map/${r.citySlug}?n=${r.id}`} className="mm-mfl-res">
+            <div className="mm-mfl-res-top">
               <div style={{ minWidth: 0 }}>
-                <div className="mm-mfl-card-city">{r.cityHe}</div>
                 <h3>{r.he}</h3>
+                <div className="mm-mfl-res-city">{r.cityHe}</div>
+              </div>
+              <div className="mm-mfl-res-save">
+                <strong dir="ltr">−{priceLabel(r.saving, deal)}</strong>
+                <span>{deal === "rent" ? `לחודש · ${priceLabel(r.saving * 12, deal)} בשנה` : "פחות"}</span>
               </div>
             </div>
 
-            <div className="mm-mfl-save">
-              <div className="mm-mfl-save-num">
-                {priceLabel(r.saving, deal)}
-                <span> פחות{per}</span>
-              </div>
-              <div className="mm-mfl-save-sub">
-                {deal === "rent" && <>{priceLabel(r.saving * 12, deal)} בשנה · </>}
-                {size} כאן {priceLabel(r.price, deal)}
-              </div>
-            </div>
-
-            <ul className="mm-mfl-rows">
-              {data.metrics.map((m) => (
-                <MetricRow key={m} metric={m} delta={r.deltas[m]} value={r.values[m]} />
-              ))}
+            <dl className="mm-mfl-stats">
+              <Stat label={`${size}${per}`} value={priceLabel(r.price, deal)} />
               {r.minutes != null && (
-                <li>
-                  <MMIcon name="car" size={15} />
-                  <span>
-                    {data.estimated ? "כ-" : ""}
-                    {r.minutes} דק׳ לעבודה
-                  </span>
-                  {data.home?.minutes != null &&
-                    (Math.abs(r.minutes - data.home.minutes) <= 1 ? (
-                      <em className="mm-pill">כמו היום</em>
-                    ) : (
-                      <em className={`mm-pill ${r.minutes < data.home.minutes ? "is-up" : "is-down"}`}>
-                        {Math.abs(r.minutes - data.home.minutes)} דק׳ {r.minutes < data.home.minutes ? "פחות" : "יותר"}
-                      </em>
-                    ))}
-                </li>
+                <Stat
+                  label="נסיעה לעבודה"
+                  value={`${data.estimated ? "כ-" : ""}${r.minutes} דק׳`}
+                  delta={data.home?.minutes != null ? r.minutes - data.home.minutes : null}
+                  noise={1}
+                  lowerIsBetter
+                />
               )}
-            </ul>
+              {data.metrics.map((m) => (
+                <Stat
+                  key={m}
+                  label={METRICS[m].label}
+                  value={r.values[m] != null ? `${r.values[m]}${m === "kids" ? "%" : ""}` : "אין נתון"}
+                  muted={r.values[m] == null}
+                  delta={r.deltas[m]}
+                  noise={METRICS[m].noise}
+                />
+              ))}
+            </dl>
 
-            <span className="mm-mfl-open">
-              לשכונה במפה <MMIcon name="back" size={15} />
+            <span className="mm-mfl-res-link">
+              לשכונה במפה <MMIcon name="back" size={14} />
             </span>
           </a>
         ))}
       </div>
 
       <p className="mm-mfl-foot">
-        המחירים הם ממוצע 12 החודשים האחרונים לשכונה, לפי אתר הנדל״ן הממשלתי, ולא מחיר של דירה מסוימת.{" "}
-        {data.metrics.includes("schools") && "ציון בתי הספר הוא ממוצע המיצ״ב של בתי הספר במרחק הליכה. "}
-        {data.metrics.includes("kids") && "״משפחות עם ילדים״ הוא שיעור בני 0 עד 19 בשכונה לפי מפקד האוכלוסין. "}
-        {data.estimated ? "זמני הנסיעה הם הערכה לפי מרחק." : "זמני הנסיעה הם ברכב, בלי עומסי תנועה, ובשעות הבוקר הם ארוכים יותר."} בדקנו{" "}
-        {data.considered} שכונות זולות יותר בטווח.
+        המספר הצבעוני ליד כל נתון הוא ההפרש מהשכונה שלכם. המחירים הם ממוצע 12 החודשים האחרונים לשכונה (אתר הנדל״ן הממשלתי), ולא מחיר של דירה
+        מסוימת. {data.metrics.includes("schools") && "בתי ספר: ממוצע המיצ״ב של בתי הספר במרחק הליכה. "}
+        {data.metrics.includes("kids") && "משפחות עם ילדים: שיעור בני 0 עד 19 לפי מפקד האוכלוסין. "}
+        {data.estimated ? "זמני הנסיעה הם הערכה לפי מרחק." : "זמני הנסיעה הם ברכב בלי עומסי תנועה."} נבדקו {data.considered} שכונות.
       </p>
     </section>
   );
 }
 
-/** One "what you gain or give up" row: label on one side, a coloured pill on
- *  the other. Says so plainly when there's nothing to compare. */
-function MetricRow({ metric, delta, value }: { metric: MetricId; delta: number | null; value: number | null }) {
-  const def = METRICS[metric];
-  const suffix = metric === "kids" ? "%" : "";
-  let pill: React.ReactNode;
-  if (delta == null) {
-    pill = <em className="mm-pill is-none">{value != null ? "אין השוואה" : "אין נתון"}</em>;
-  } else if (Math.abs(delta) <= def.noise) {
-    pill = <em className="mm-pill">כמו אצלכם</em>;
-  } else {
-    pill = (
-      <em className={`mm-pill ${delta > 0 ? "is-up" : "is-down"}`} title={`${Math.abs(delta)} ${def.unit} ${delta > 0 ? "יותר" : "פחות"}`}>
-        <span dir="ltr">
-          {delta > 0 ? "+" : "−"}
-          {Math.abs(delta)}
-          {suffix}
-        </span>{" "}
-        {delta > 0 ? "יותר" : "פחות"}
-      </em>
-    );
-  }
+/** One figure in a result card, with its difference from the family's home. */
+function Stat({
+  label,
+  value,
+  delta = null,
+  noise = 0,
+  lowerIsBetter = false,
+  suffix = "",
+  muted = false,
+}: {
+  label: string;
+  value: string;
+  delta?: number | null;
+  /** A gap this small is within the data's noise — not shown as a difference. */
+  noise?: number;
+  lowerIsBetter?: boolean;
+  suffix?: string;
+  muted?: boolean;
+}) {
+  const show = delta != null && Math.abs(delta) > noise;
+  const good = show && (lowerIsBetter ? delta! < 0 : delta! > 0);
   return (
-    <li>
-      <MMIcon name={METRIC_ICON[metric]} size={15} />
-      <span>{def.label}</span>
-      {pill}
-    </li>
+    <div>
+      <dt>{label}</dt>
+      <dd className={muted ? "is-muted" : undefined}>
+        {value}
+        {show && (
+          <em className={good ? "is-up" : "is-down"} dir="ltr">
+            {delta! > 0 ? "+" : "−"}
+            {Math.abs(delta!)}
+            {suffix}
+          </em>
+        )}
+      </dd>
+    </div>
   );
 }
 
@@ -577,21 +542,15 @@ function WorkPicker({ onPick, token }: { onPick: (p: Place) => void; token: stri
   }, [q, token]);
 
   return (
-    <div className="mm-mfl-work">
-      <div className="mm-mfl-work-title">איפה אתם עובדים?</div>
-      <div className="mm-input" style={{ height: 46 }}>
-        <MMIcon name="search" size={16} color="var(--hn-text-3)" />
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="כתובת, רחוב או שם של מקום"
-          aria-label="חיפוש מקום עבודה"
-          style={{ fontSize: 16 }}
-        />
+    <div className="mm-fld">
+      <label htmlFor="mm-mfl-work">מקום העבודה</label>
+      <div className="mm-fld-search">
+        <MMIcon name="search" size={16} />
+        <input id="mm-mfl-work" value={q} onChange={(e) => setQ(e.target.value)} placeholder="כתובת או שם של מקום" autoComplete="off" />
       </div>
       {(hits.length > 0 || busy) && (
         <ul className="mm-mfl-hits">
-          {busy && hits.length === 0 && <li style={{ padding: "8px 10px", color: "var(--hn-text-3)" }}>מחפשים…</li>}
+          {busy && hits.length === 0 && <li className="is-busy">מחפשים…</li>}
           {hits.map((h) => (
             <li key={`${h.lng},${h.lat}`}>
               <button type="button" onClick={() => onPick(h)}>
@@ -601,10 +560,9 @@ function WorkPicker({ onPick, token }: { onPick: (p: Place) => void; token: stri
           ))}
         </ul>
       )}
-      <div className="mm-mfl-hubs">
-        <span>או אזור תעסוקה מוכר:</span>
+      <div className="mm-mfl-hubs" role="group" aria-label="אזורי תעסוקה נפוצים">
         {HUBS.map((h) => (
-          <button key={h.label} type="button" className="mm-chip" style={{ height: 32, fontSize: 12 }} onClick={() => onPick(h)}>
+          <button key={h.label} type="button" onClick={() => onPick(h)}>
             {h.label}
           </button>
         ))}
