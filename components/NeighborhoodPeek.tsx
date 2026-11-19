@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import { MMIcon } from "@/lib/icons";
 import { MatchBadge } from "./MatchBadge";
 import { useFavorites } from "@/lib/useFavorites";
-import { NISshort } from "@/lib/format";
 import type { MatchBreakdownRow } from "@/lib/match";
 
 type Props = {
@@ -13,7 +12,8 @@ type Props = {
   family: string | null;
   matchScore: number;
   greenScore: number;
-  avgListing: number;
+  /** e.g. "שכירות 4 חד׳ ₪7,800" — the price under the active filter. */
+  priceText?: string | null;
   /** Persona-aware breakdown; the three strongest rows are shown. */
   breakdown: MatchBreakdownRow[];
   onExpand: () => void;
@@ -32,7 +32,7 @@ export function NeighborhoodPeek({
   family,
   matchScore,
   greenScore,
-  avgListing,
+  priceText,
   breakdown,
   onExpand,
   onClose,
@@ -104,7 +104,7 @@ export function NeighborhoodPeek({
               <MatchBadge score={matchScore} onClick={onExplainMatch} />
             </div>
             <div style={{ marginTop: 2, fontSize: 12, color: "var(--grey-500)" }}>
-              {[family, avgListing > 0 ? `חציון ${NISshort(avgListing)}` : null, `GreenScore ${greenScore}`]
+              {[family, priceText, `GreenScore ${greenScore}`]
                 .filter(Boolean)
                 .join(" · ")}
             </div>

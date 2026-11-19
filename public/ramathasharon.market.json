@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "ramathasharon",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 6600,
+      "4": 8500,
+      "5": 10900,
+      "all": 8900
+    },
+    "buy": {
+      "3": 3055000,
+      "4": 3810000,
+      "5": 4664000,
+      "all": 3578000
+    },
+    "rent_change_pct": 2.3,
+    "yield_pct": 2.98
+  },
+  "neighborhoods": {
+    "rhs-neve-gan": {
+      "rent": {
+        "all": 11750
+      },
+      "buy": {},
+      "rent_change_pct": -0.4,
+      "yield_pct": null,
+      "sources": [
+        "נווה גן"
+      ]
+    },
+    "rhs-golan": {
+      "rent": {
+        "3": 6500,
+        "4": 7230,
+        "5": 10500,
+        "all": 7950
+      },
+      "buy": {},
+      "rent_change_pct": -4.2,
+      "yield_pct": null,
+      "sources": [
+        "גולן"
+      ]
+    },
+    "rhs-neve-rom": {
+      "rent": {
+        "all": 15750
+      },
+      "buy": {},
+      "rent_change_pct": -1.6,
+      "yield_pct": null,
+      "sources": [
+        "נווה רום"
+      ]
+    },
+    "rhs-hadar": {
+      "rent": {
+        "3": 6650,
+        "4": 8430,
+        "5": 10900,
+        "all": 8200
+      },
+      "buy": {
+        "3": 3665000,
+        "4": 3927000,
+        "5": 4631000,
+        "all": 4379000
+      },
+      "rent_change_pct": -2.1,
+      "yield_pct": 2.25,
+      "sources": [
+        "הדר"
+      ]
+    },
+    "rhs-neve-rassco": {
+      "rent": {
+        "4": 8900,
+        "5": 12900,
+        "all": 10250
+      },
+      "buy": {},
+      "rent_change_pct": -14.6,
+      "yield_pct": null,
+      "sources": [
+        "נווה רסקו"
+      ]
+    },
+    "rhs-neve-magen": {
+      "rent": {
+        "3": 5350,
+        "4": 7750,
+        "all": 8850
+      },
+      "buy": {},
+      "rent_change_pct": 18,
+      "yield_pct": null,
+      "sources": [
+        "נווה מגן"
+      ]
+    },
+    "rhs-morasha": {
+      "rent": {
+        "3": 6500,
+        "4": 8150,
+        "5": 9380,
+        "all": 8100
+      },
+      "buy": {
+        "4": 3560000,
+        "5": 3849000,
+        "all": 3668000
+      },
+      "rent_change_pct": 3.2,
+      "yield_pct": 2.65,
+      "sources": [
+        "מורשה"
+      ]
+    },
+    "rhs-alon": {
+      "rent": {
+        "3": 7000,
+        "4": 9300,
+        "5": 10800,
+        "all": 9500
+      },
+      "buy": {
+        "all": 4815000
+      },
+      "rent_change_pct": 0.5,
+      "yield_pct": 2.37,
+      "sources": [
+        "אלון"
+      ]
+    },
+    "rhs-kiryat-yearim": {
+      "rent": {
+        "3": 6530,
+        "4": 7600,
+        "5": 8750,
+        "all": 9200
+      },
+      "buy": {},
+      "rent_change_pct": 22.7,
+      "yield_pct": null,
+      "sources": [
+        "קרית יערים"
+      ]
+    }
+  }
+}

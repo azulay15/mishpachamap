@@ -1,0 +1,620 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "haifa",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 3300,
+      "4": 4450,
+      "5": 5730,
+      "all": 3200
+    },
+    "buy": {
+      "3": 1149000,
+      "4": 1533000,
+      "5": 2798000,
+      "all": 1414000
+    },
+    "rent_change_pct": -0.9,
+    "yield_pct": 2.71
+  },
+  "neighborhoods": {
+    "hfa-kiryat-shmuel": {
+      "rent": {
+        "3": 2600,
+        "4": 3830,
+        "all": 2650
+      },
+      "buy": {
+        "4": 1703000,
+        "all": 998000
+      },
+      "rent_change_pct": -13.1,
+      "yield_pct": 3.19,
+      "sources": [
+        "קריית שמואל"
+      ]
+    },
+    "hfa-kiryat-haim-west": {
+      "rent": {
+        "3": 2830,
+        "4": 4150,
+        "all": 2750
+      },
+      "buy": {
+        "3": 1282000,
+        "all": 1238000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 2.67,
+      "sources": [
+        "קרית חיים מערבית"
+      ]
+    },
+    "hfa-kiryat-haim-east": {
+      "rent": {
+        "3": 3280,
+        "4": 4200,
+        "5": 5200,
+        "all": 3500
+      },
+      "buy": {
+        "3": 1282000,
+        "4": 1501000,
+        "5": 1843000,
+        "all": 1440000
+      },
+      "rent_change_pct": -2.8,
+      "yield_pct": 2.92,
+      "sources": [
+        "קרית חיים מזרחית"
+      ]
+    },
+    "hfa-downtown": {
+      "rent": {
+        "3": 3200,
+        "4": 4650,
+        "all": 2820
+      },
+      "buy": {
+        "all": 1179000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 3.46,
+      "sources": [
+        "העיר התחתית",
+        "העיר התחתית",
+        "העיר התחתית"
+      ]
+    },
+    "hfa-wadi-nisnas": {
+      "rent": {
+        "3": 3350,
+        "all": 3150
+      },
+      "buy": {
+        "all": 611000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 6.19,
+      "sources": [
+        "ואדי ניסנאס"
+      ]
+    },
+    "hfa-german-colony": {
+      "rent": {
+        "3": 3500,
+        "all": 3450
+      },
+      "buy": {
+        "all": 1276000
+      },
+      "rent_change_pct": 6.2,
+      "yield_pct": 3.25,
+      "sources": [
+        "המושבה הגרמנית"
+      ]
+    },
+    "hfa-kiryat-eliezer": {
+      "rent": {
+        "3": 3350,
+        "4": 4290,
+        "all": 3280
+      },
+      "buy": {
+        "3": 1196000,
+        "all": 1237000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 3.19,
+      "sources": [
+        "קריית אליעזר",
+        "קריית אליהו"
+      ]
+    },
+    "hfa-bat-galim": {
+      "rent": {
+        "3": 3500,
+        "4": 4800,
+        "all": 3380
+      },
+      "buy": {
+        "4": 2854000,
+        "all": 2139000
+      },
+      "rent_change_pct": -4.9,
+      "yield_pct": 1.89,
+      "sources": [
+        "בת גלים"
+      ]
+    },
+    "hfa-kiryat-sprinzak": {
+      "rent": {
+        "3": 3300,
+        "4": 4330,
+        "all": 3250
+      },
+      "buy": {
+        "3": 1222000,
+        "4": 1512000,
+        "all": 1289000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 3.07,
+      "sources": [
+        "עין הים",
+        "קריית שפרינצק"
+      ]
+    },
+    "hfa-shaar-haaliya": {
+      "rent": {
+        "3": 3500,
+        "4": 4150,
+        "all": 3500
+      },
+      "buy": {
+        "all": 1618000
+      },
+      "rent_change_pct": 2.9,
+      "yield_pct": 2.6,
+      "sources": [
+        "שער העלייה"
+      ]
+    },
+    "hfa-neve-david": {
+      "rent": {
+        "3": 3200,
+        "4": 4950,
+        "5": 7200,
+        "all": 4180
+      },
+      "buy": {
+        "4": 2462000,
+        "5": 2702000,
+        "all": 2484000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2,
+      "sources": [
+        "נווה דוד",
+        "רמת הנשיא/רמת חביב"
+      ]
+    },
+    "hfa-neot-peres": {
+      "rent": {
+        "4": 6400,
+        "5": 6750,
+        "all": 5700
+      },
+      "buy": {
+        "4": 2415000,
+        "all": 2462000
+      },
+      "rent_change_pct": -14.9,
+      "yield_pct": 2.78,
+      "sources": [
+        "מרכז תעשיות מדע",
+        "בבנייה"
+      ]
+    },
+    "hfa-carmelia": {
+      "rent": {
+        "3": 4250,
+        "4": 5050,
+        "5": 5850,
+        "all": 5200
+      },
+      "buy": {
+        "5": 3777000,
+        "all": 2535000
+      },
+      "rent_change_pct": 4.5,
+      "yield_pct": 2.46,
+      "sources": [
+        "כרמליה"
+      ]
+    },
+    "hfa-vardia": {
+      "rent": {
+        "3": 3880,
+        "4": 4500,
+        "5": 5950,
+        "all": 4600
+      },
+      "buy": {
+        "4": 2223000,
+        "5": 3071000,
+        "all": 2346000
+      },
+      "rent_change_pct": -6.1,
+      "yield_pct": 2.35,
+      "sources": [
+        "ורדיה"
+      ]
+    },
+    "hfa-merkaz-hacarmel": {
+      "rent": {
+        "3": 3930,
+        "4": 4550,
+        "5": 6300,
+        "all": 4000
+      },
+      "buy": {
+        "3": 1679000,
+        "4": 2805000,
+        "5": 3716000,
+        "all": 2299000
+      },
+      "rent_change_pct": -2.4,
+      "yield_pct": 2.09,
+      "sources": [
+        "מרכז הכרמל"
+      ]
+    },
+    "hfa-carmel-west": {
+      "rent": {
+        "3": 3850,
+        "4": 4550,
+        "5": 5500,
+        "all": 4130
+      },
+      "buy": {
+        "4": 2051000,
+        "5": 3106000,
+        "all": 2075000
+      },
+      "rent_change_pct": 3.1,
+      "yield_pct": 2.39,
+      "sources": [
+        "כרמל מערבי"
+      ]
+    },
+    "hfa-kababir": {
+      "rent": {
+        "3": 4150,
+        "all": 3300
+      },
+      "buy": {
+        "all": 2569000
+      },
+      "rent_change_pct": -13.2,
+      "yield_pct": 1.54,
+      "sources": [
+        "כבביר"
+      ]
+    },
+    "hfa-ramat-shaul": {
+      "rent": {
+        "3": 3550,
+        "4": 4150,
+        "all": 3600
+      },
+      "buy": {
+        "all": 1573000
+      },
+      "rent_change_pct": -5.3,
+      "yield_pct": 2.75,
+      "sources": [
+        "רמת שאול"
+      ]
+    },
+    "hfa-french-carmel": {
+      "rent": {
+        "3": 3300,
+        "4": 4900,
+        "all": 3650
+      },
+      "buy": {
+        "all": 1535000
+      },
+      "rent_change_pct": -6.4,
+      "yield_pct": 2.85,
+      "sources": [
+        "כרמל צרפתי"
+      ]
+    },
+    "hfa-ramat-hatishbi": {
+      "rent": {
+        "3": 3730,
+        "4": 4700,
+        "5": 5200,
+        "all": 4050
+      },
+      "buy": {
+        "3": 1863000,
+        "4": 2158000,
+        "all": 1986000
+      },
+      "rent_change_pct": -4.7,
+      "yield_pct": 2.45,
+      "sources": [
+        "רמת התשבי"
+      ]
+    },
+    "hfa-abbas": {
+      "rent": {
+        "3": 3150,
+        "4": 3900,
+        "5": 4500,
+        "all": 2800
+      },
+      "buy": {
+        "3": 1046000,
+        "4": 1548000,
+        "all": 907000
+      },
+      "rent_change_pct": 3.7,
+      "yield_pct": 3.7,
+      "sources": [
+        "הדר"
+      ]
+    },
+    "hfa-hadar-elyon": null,
+    "hfa-hadar-merkaz": null,
+    "hfa-geula": null,
+    "hfa-ramat-vizhnitz": {
+      "rent": {
+        "3": 3300,
+        "all": 3300
+      },
+      "buy": {},
+      "rent_change_pct": 3.1,
+      "yield_pct": null,
+      "sources": [
+        "רמת ויזניץ"
+      ]
+    },
+    "hfa-halisa": null,
+    "hfa-neve-paz": {
+      "rent": {
+        "3": 2900,
+        "4": 3350,
+        "all": 2380
+      },
+      "buy": {
+        "3": 1003000,
+        "all": 933000
+      },
+      "rent_change_pct": -2.9,
+      "yield_pct": 3.05,
+      "sources": [
+        "נווה פז"
+      ]
+    },
+    "hfa-neve-yosef": {
+      "rent": {
+        "3": 3000,
+        "4": 2800,
+        "all": 2700
+      },
+      "buy": {
+        "all": 1123000
+      },
+      "rent_change_pct": 3.9,
+      "yield_pct": 2.89,
+      "sources": [
+        "נוה יוסף"
+      ]
+    },
+    "hfa-neve-shaanan": {
+      "rent": {
+        "3": 3500,
+        "4": 4200,
+        "5": 5200,
+        "all": 3500
+      },
+      "buy": {
+        "3": 1314000,
+        "4": 1563000,
+        "all": 1393000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 3.02,
+      "sources": [
+        "נווה שאנן"
+      ]
+    },
+    "hfa-yizreelia": {
+      "rent": {
+        "3": 3430,
+        "4": 4430,
+        "all": 3450
+      },
+      "buy": {
+        "3": 1076000,
+        "all": 1095000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 3.78,
+      "sources": [
+        "יזרעאליה"
+      ]
+    },
+    "hfa-ziv": {
+      "rent": {
+        "3": 3850,
+        "4": 4800,
+        "5": 4180,
+        "all": 3050
+      },
+      "buy": {
+        "all": 1483000
+      },
+      "rent_change_pct": -12.2,
+      "yield_pct": 2.47,
+      "sources": [
+        "זיו"
+      ]
+    },
+    "hfa-ramat-alon": {
+      "rent": {
+        "3": 4200,
+        "4": 4800,
+        "all": 4550
+      },
+      "buy": {
+        "4": 1787000,
+        "all": 1809000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 3.02,
+      "sources": [
+        "רמת אלון"
+      ]
+    },
+    "hfa-ramot-remez": {
+      "rent": {
+        "3": 3250,
+        "4": 4500,
+        "5": 5550,
+        "all": 3150
+      },
+      "buy": {
+        "3": 1251000,
+        "all": 1322000
+      },
+      "rent_change_pct": -3.1,
+      "yield_pct": 2.86,
+      "sources": [
+        "רמות רמז"
+      ]
+    },
+    "hfa-ramat-sapir": {
+      "rent": {
+        "3": 3850,
+        "4": 4530,
+        "all": 4900
+      },
+      "buy": {
+        "4": 1573000,
+        "all": 1419000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 3.85,
+      "sources": [
+        "רמת ספיר",
+        "רמת חן"
+      ]
+    },
+    "hfa-romema": {
+      "rent": {
+        "3": 3800,
+        "4": 4580,
+        "5": 5250,
+        "all": 4350
+      },
+      "buy": {
+        "all": 1893000
+      },
+      "rent_change_pct": 4.8,
+      "yield_pct": 2.76,
+      "sources": [
+        "רוממה"
+      ]
+    },
+    "hfa-ahuza": {
+      "rent": {
+        "3": 3680,
+        "4": 4380,
+        "5": 6200,
+        "all": 4050
+      },
+      "buy": {
+        "3": 2210000,
+        "4": 2485000,
+        "5": 3618000,
+        "all": 2565000
+      },
+      "rent_change_pct": 1.3,
+      "yield_pct": 1.89,
+      "sources": [
+        "אחוזה"
+      ]
+    },
+    "hfa-ramat-begin": {
+      "rent": {
+        "3": 3900,
+        "4": 4630,
+        "5": 5860,
+        "all": 5190
+      },
+      "buy": {
+        "4": 2151000,
+        "all": 2146000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2.91,
+      "sources": [
+        "רמת בגין",
+        "רמת אשכול"
+      ]
+    },
+    "hfa-ramat-golda": {
+      "rent": {
+        "4": 5750,
+        "5": 6150,
+        "all": 5790
+      },
+      "buy": {
+        "all": 2170000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2.94,
+      "sources": [
+        "רמת גולדה",
+        "רמת אלמוגי"
+      ]
+    },
+    "hfa-savyonei-hacarmel": {
+      "rent": {
+        "4": 5550,
+        "5": 6100,
+        "all": 5350
+      },
+      "buy": {
+        "4": 2049000,
+        "all": 2029000
+      },
+      "rent_change_pct": 7,
+      "yield_pct": 3.16,
+      "sources": [
+        "סביוני הכרמל"
+      ]
+    },
+    "hfa-hod-hacarmel": {
+      "rent": {
+        "3": 4200,
+        "all": 4200
+      },
+      "buy": {},
+      "rent_change_pct": -6.7,
+      "yield_pct": null,
+      "sources": [
+        "הוד הכרמל-דניה"
+      ]
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "oryehuda",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 4850,
+      "4": 6200,
+      "5": 7500,
+      "all": 5650
+    },
+    "buy": {
+      "3": 1951000,
+      "4": 2453000,
+      "5": 3163000,
+      "all": 2599000
+    },
+    "rent_change_pct": 9.2,
+    "yield_pct": 2.61
+  },
+  "neighborhoods": {
+    "ramat-pinkas": {
+      "rent": {
+        "all": 7650
+      },
+      "buy": {},
+      "rent_change_pct": 16.8,
+      "yield_pct": null,
+      "sources": [
+        "רמת פנקס"
+      ]
+    },
+    "neve-savyon": {
+      "rent": {
+        "3": 5950,
+        "4": 7100,
+        "5": 7900,
+        "all": 7000
+      },
+      "buy": {
+        "all": 2493000
+      },
+      "rent_change_pct": 9.4,
+      "yield_pct": 3.37,
+      "sources": [
+        "נווה סביון"
+      ]
+    },
+    "shchunat-haacademaim": null,
+    "beit-bapark": null,
+    "neve-rabin": {
+      "rent": {
+        "4": 7400,
+        "5": 7750,
+        "all": 7500
+      },
+      "buy": {
+        "4": 2743000,
+        "5": 3111000,
+        "all": 2739000
+      },
+      "rent_change_pct": 11.1,
+      "yield_pct": 3.29,
+      "sources": [
+        "נווה רבין"
+      ]
+    },
+    "kiryat-giora": {
+      "rent": {
+        "3": 4800,
+        "4": 6250,
+        "5": 7630,
+        "all": 6000
+      },
+      "buy": {
+        "all": 2500000
+      },
+      "rent_change_pct": 23.7,
+      "yield_pct": 2.88,
+      "sources": [
+        "קרית גיורא"
+      ]
+    },
+    "sakia": {
+      "rent": {
+        "3": 5130,
+        "4": 6200,
+        "5": 7280,
+        "all": 5300
+      },
+      "buy": {
+        "all": 2627000
+      },
+      "rent_change_pct": -1.8,
+      "yield_pct": 2.42,
+      "sources": [
+        "אזור תעשיה ספיר",
+        "שיכון ממשלתי"
+      ]
+    },
+    "shchunot-dromiyot": {
+      "rent": {
+        "3": 4390,
+        "4": 5090,
+        "all": 4470
+      },
+      "buy": {},
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "אזור תעשיה יהלום",
+        "שפרינצק",
+        "עמידר"
+      ]
+    }
+  }
+}

@@ -1,6 +1,5 @@
 "use client";
 
-import { MMIcon } from "@/lib/icons";
 import { scoreColor } from "@/lib/match";
 
 type Props = {
@@ -45,14 +44,12 @@ export function MatchBadge({ score, onClick }: Props) {
         title="לחצו לפירוט ההתאמה"
         style={{ ...baseStyle, cursor: "pointer" }}
       >
-        <MMIcon name="sparkle" size={12} color={color} />
         {score}/100 התאמה
       </button>
     );
   }
   return (
     <div style={baseStyle}>
-      <MMIcon name="sparkle" size={12} color={color} />
       {score}/100 התאמה
     </div>
   );

@@ -8,7 +8,7 @@ import {
   Search, X, ChevronDown, ChevronLeft, ChevronRight, Check, Plus, Minus,
   Filter, Layers, Map, MapPin, Heart, Star, Share2, Settings, User, Users,
   School, Baby, Trees, Leaf, ShoppingCart, Bus, UsersRound, Tag, Home,
-  GitCompare, Send, Sparkles, Zap, Info, List, Grid, Calendar, TrendingUp,
+  GitCompare, Send, MessageCircle, Zap, Info, List, Grid, Calendar, TrendingUp,
   Ruler, Bed, Sprout, Car, ArrowLeft, ExternalLink, Globe, Menu, MoreHorizontal,
   Bell, Shield, WheatOff, GripVertical, Navigation, ScrollText,
 } from "lucide-react";
@@ -46,7 +46,8 @@ const MAP: Record<string, LucideIcon> = {
   home: Home,
   compare: GitCompare,
   send: Send,
-  sparkle: Sparkles,
+  // The neighborhood expert (chat). Named "sparkle" in the original handoff.
+  sparkle: MessageCircle,
   zap: Zap,
   info: Info,
   list: List,

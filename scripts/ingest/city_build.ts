@@ -17,6 +17,8 @@ const STEPS: Array<{ name: string; script: string; required?: boolean; slow?: bo
   { name: "schools", script: "schools_moe" },
   { name: "prices", script: "prices", slow: true }, // Govmap — minutes for a big city
   { name: "safety", script: "crime" },
+  { name: "rent + prices by size", script: "market" }, // nadlan.gov.il
+  { name: "places", script: "pois" }, // OSM parks / playgrounds / groceries
 ];
 
 function main() {

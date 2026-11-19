@@ -11,6 +11,7 @@ import { useFavorites } from "@/lib/useFavorites";
 import { breakdownFor, totalScore } from "@/lib/match";
 import type { ConciergeData } from "./ConciergeScreen";
 import type { City } from "@/lib/cities";
+import { marketPrice, priceLabel } from "@/lib/market";
 
 const PERSONA_KEY = "mishpachamap.persona.v1";
 
@@ -200,7 +201,6 @@ function CityMap({ ranked, cityName }: { ranked: RankedNeighborhood[]; cityName:
       </svg>
       {p1 && (
         <div className="mm-home-float" style={{ left: p1.left, top: p1.top, transform: "translate(-50%, -120%)" }} dir="rtl">
-          <MMIcon name="sparkle" size={12} color="var(--pumpkin-orange)" />
           {p1.label} · {p1.score}
         </div>
       )}
@@ -298,7 +298,6 @@ function Hero({
               className="mm-btn mm-btn-accent"
               style={{ textDecoration: "none", padding: "12px 22px", fontSize: 15, borderRadius: 12 }}
             >
-              <MMIcon name="sparkle" size={16} color="#fff" />
               בנו את פרופיל המשפחה
             </a>
             <a
@@ -308,6 +307,14 @@ function Hero({
             >
               <MMIcon name="map" size={16} />
               ישר למפה
+            </a>
+            <a
+              href="/more"
+              className="mm-btn mm-btn-secondary"
+              style={{ textDecoration: "none", color: "var(--grey-900)", padding: "12px 20px", fontSize: 15, borderRadius: 12 }}
+            >
+              <MMIcon name="trend-up" size={16} />
+              איפה נשלם פחות?
             </a>
           </div>
         </div>
@@ -379,6 +386,9 @@ function Dashboard({
   mapHref: string;
   city: City;
 }) {
+  // City-wide price of a 4-room home (official by-size figures).
+  const cityRent4 = marketPrice(data.cityMarket, "rent", "4");
+  const cityBuy4 = marketPrice(data.cityMarket, "buy", "4");
   const cityShort = city.searchName ?? city.name_he;
   const top3 = ranked.slice(0, 3);
   const nbById = new Map(data.neighborhoods.map((n) => [n.id, n]));
@@ -428,11 +438,38 @@ function Dashboard({
                 <br />
                 שינוי שנתי ממוצע: <strong style={{ fontFamily: "var(--font-inter, Inter)" }}>{market.avgDelta >= 0 ? "+" : ""}{market.avgDelta.toFixed(1)}%</strong>
               </>
-            ) : (
+            ) : cityRent4 != null || cityBuy4 != null ? null : (
               <>מחירי העסקאות ב{cityShort} עוד בדרך. בינתיים הדירוג מבוסס על בתי ספר, ירוק, שקט ובטיחות.</>
+            )}
+            {(cityRent4 != null || cityBuy4 != null) && (
+              <>
+                {market.medianM2 > 0 && <br />}
+                דירת 4 חדרים ב{cityShort}:{" "}
+                {cityRent4 != null && (
+                  <>
+                    שכירות <strong style={{ fontFamily: "var(--font-inter, Inter)" }}>{priceLabel(cityRent4, "rent")}</strong> לחודש
+                  </>
+                )}
+                {cityRent4 != null && cityBuy4 != null && " · "}
+                {cityBuy4 != null && (
+                  <>
+                    קנייה <strong style={{ fontFamily: "var(--font-inter, Inter)" }}>{priceLabel(cityBuy4, "buy")}</strong>
+                  </>
+                )}
+              </>
             )}
           </div>
         </div>
+
+        <a href="/more" className="mm-home-card mm-home-cardlink">
+          <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 800, color: "var(--grey-900)" }}>
+            <MMIcon name="home" size={16} color="var(--hn-primary)" />
+            יותר בפחות
+          </div>
+          <div style={{ fontSize: 13, color: "var(--grey-700)", marginTop: 6, lineHeight: 1.5 }}>
+            ספרו כמה אתם משלמים היום ואיפה אתם עובדים, ונמצא שכונות שבהן משפחה כמוכם משלמת פחות.
+          </div>
+        </a>
 
         <a href={mapHref} className="mm-home-card mm-home-cardlink">
           <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 800, color: "var(--grey-900)" }}>

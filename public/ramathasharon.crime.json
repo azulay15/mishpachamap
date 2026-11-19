@@ -1,0 +1,137 @@
+{
+  "meta": {
+    "source": "Israel Police 2024",
+    "resource": "5fc13c50-b6f3-4712-b831-a75e0f91a17e",
+    "locality": 2650
+  },
+  "neighborhoods": {
+    "rhs-neve-gan": {
+      "name_he": "נווה גן",
+      "cases_2024_total": 62,
+      "cases_2024_person": 8,
+      "cases_2024_property": 27,
+      "per_1000_residents": 15.2,
+      "safety_score": 76,
+      "safety_rank": 3,
+      "safety_rank_of": 7,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          26500036
+        ]
+      }
+    },
+    "rhs-golan": {
+      "name_he": "גולן",
+      "cases_2024_total": 110,
+      "cases_2024_person": 22,
+      "cases_2024_property": 57,
+      "per_1000_residents": 36.2,
+      "safety_score": 42,
+      "safety_rank": 5,
+      "safety_rank_of": 7,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          26500032
+        ]
+      }
+    },
+    "rhs-neve-rom": {
+      "name_he": "נווה רום",
+      "cases_2024_total": 130,
+      "cases_2024_person": 9,
+      "cases_2024_property": 77,
+      "per_1000_residents": 58,
+      "safety_score": 40,
+      "safety_rank": 7,
+      "safety_rank_of": 7,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          26500033
+        ]
+      }
+    },
+    "rhs-hadar": null,
+    "rhs-neve-rassco": {
+      "name_he": "נווה רסקו",
+      "cases_2024_total": 136,
+      "cases_2024_person": 15,
+      "cases_2024_property": 78,
+      "per_1000_residents": 47.7,
+      "safety_score": 40,
+      "safety_rank": 6,
+      "safety_rank_of": 7,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          26500014
+        ]
+      }
+    },
+    "rhs-neve-magen": null,
+    "rhs-morasha": {
+      "name_he": "מורשה",
+      "cases_2024_total": 138,
+      "cases_2024_person": 18,
+      "cases_2024_property": 60,
+      "per_1000_residents": 11.8,
+      "safety_score": 81,
+      "safety_rank": 1,
+      "safety_rank_of": 7,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          26500013
+        ]
+      }
+    },
+    "rhs-alon": {
+      "name_he": "אלון",
+      "cases_2024_total": 67,
+      "cases_2024_person": 6,
+      "cases_2024_property": 31,
+      "per_1000_residents": 11.9,
+      "safety_score": 81,
+      "safety_rank": 2,
+      "safety_rank_of": 7,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          26500024
+        ]
+      }
+    },
+    "rhs-kiryat-yearim": {
+      "name_he": "קריית יערים",
+      "cases_2024_total": 137,
+      "cases_2024_person": 9,
+      "cases_2024_property": 95,
+      "per_1000_residents": 29.2,
+      "safety_score": 53,
+      "safety_rank": 4,
+      "safety_rank_of": 7,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          26500031
+        ]
+      }
+    }
+  }
+}

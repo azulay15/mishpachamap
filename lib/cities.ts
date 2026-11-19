@@ -39,6 +39,12 @@ export type CityFiles = {
   /** Govmap sale-price metrics per neighborhood. Optional — absent → the app
    *  falls back to the DB metrics (Modi'in's legacy path). */
   prices?: string;
+  /** Rent + sale prices by apartment size per neighborhood (nadlan.gov.il,
+   *  from scripts/ingest/market.ts). Optional — absent → no by-size figures. */
+  market?: string;
+  /** Parks, playgrounds, grocery shops, preschools and community places from
+   *  OpenStreetMap (scripts/ingest/pois.ts). Optional. */
+  pois?: string;
 };
 
 export type City = {
@@ -91,6 +97,8 @@ const modiin: City = {
     transit: "transit.modiin.json",
     environment: "modiin.environment.json",
     prices: "modiin.prices.json",
+    market: "modiin.market.json",
+    pois: "modiin.pois.json",
   },
 };
 
@@ -118,6 +126,8 @@ const oryehuda: City = {
     transit: "oryehuda.transit.json",
     environment: "oryehuda.environment.json",
     prices: "oryehuda.prices.json",
+    market: "oryehuda.market.json",
+    pois: "oryehuda.pois.json",
   },
 };
 
@@ -144,6 +154,8 @@ const rishon: City = {
     transit: "rishon.transit.json",
     environment: "rishon.environment.json",
     prices: "rishon.prices.json",
+    market: "rishon.market.json",
+    pois: "rishon.pois.json",
   },
 };
 
@@ -167,6 +179,8 @@ const kefarsava: City = {
     transit: "kefarsava.transit.json",
     environment: "kefarsava.environment.json",
     prices: "kefarsava.prices.json",
+    market: "kefarsava.market.json",
+    pois: "kefarsava.pois.json",
   },
 };
 
@@ -221,6 +235,8 @@ const raanana: City = {
     transit: "raanana.transit.json",
     environment: "raanana.environment.json",
     prices: "raanana.prices.json",
+    market: "raanana.market.json",
+    pois: "raanana.pois.json",
   },
 };
 
@@ -243,6 +259,8 @@ const herzliya: City = {
     transit: "herzliya.transit.json",
     environment: "herzliya.environment.json",
     prices: "herzliya.prices.json",
+    market: "herzliya.market.json",
+    pois: "herzliya.pois.json",
   },
 };
 
@@ -265,6 +283,8 @@ const netanya: City = {
     transit: "netanya.transit.json",
     environment: "netanya.environment.json",
     prices: "netanya.prices.json",
+    market: "netanya.market.json",
+    pois: "netanya.pois.json",
   },
 };
 
@@ -287,6 +307,8 @@ const petahtikva: City = {
     transit: "petahtikva.transit.json",
     environment: "petahtikva.environment.json",
     prices: "petahtikva.prices.json",
+    market: "petahtikva.market.json",
+    pois: "petahtikva.pois.json",
   },
 };
 
@@ -309,6 +331,8 @@ const haifa: City = {
     transit: "haifa.transit.json",
     environment: "haifa.environment.json",
     prices: "haifa.prices.json",
+    market: "haifa.market.json",
+    pois: "haifa.pois.json",
   },
 };
 
@@ -331,11 +355,248 @@ const jerusalem: City = {
     transit: "jerusalem.transit.json",
     environment: "jerusalem.environment.json",
     prices: "jerusalem.prices.json",
+    market: "jerusalem.market.json",
+    pois: "jerusalem.pois.json",
+  },
+};
+
+
+/** Ramat Gan — 26 neighborhoods. Anchors from the official real-estate site's list;
+ *  prices come from its by-size figures (no Govmap prices file). */
+const ramatgan: City = {
+  id: "ramatgan",
+  slug: "ramat-gan",
+  name_he: "רמת גן",
+  name_en: "Ramat Gan",
+  semel: 8600,
+  center: [34.8261, 32.0698],
+  zoom: 13.1,
+  status: "live",
+  tagline_he: "26 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.ramatgan.geo.json",
+    demographics: "ramatgan.demographics.json",
+    crime: "ramatgan.crime.json",
+    schools: "ramatgan.schools.json",
+    transit: "ramatgan.transit.json",
+    environment: "ramatgan.environment.json",
+    prices: "ramatgan.prices.json", // not built yet (Govmap refuses automated requests)
+    market: "ramatgan.market.json",
+    pois: "ramatgan.pois.json",
+  },
+};
+
+
+/** Givatayim — 11 neighborhoods. Anchors from the official real-estate site's list;
+ *  prices come from its by-size figures (no Govmap prices file). */
+const givatayim: City = {
+  id: "givatayim",
+  slug: "givatayim",
+  name_he: "גבעתיים",
+  name_en: "Givatayim",
+  semel: 6300,
+  center: [34.8094, 32.0702],
+  zoom: 13.6,
+  status: "live",
+  tagline_he: "11 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.givatayim.geo.json",
+    demographics: "givatayim.demographics.json",
+    crime: "givatayim.crime.json",
+    schools: "givatayim.schools.json",
+    transit: "givatayim.transit.json",
+    environment: "givatayim.environment.json",
+    prices: "givatayim.prices.json", // not built yet (Govmap refuses automated requests)
+    market: "givatayim.market.json",
+    pois: "givatayim.pois.json",
+  },
+};
+
+
+/** Holon — 21 neighborhoods. Anchors from the official real-estate site's list;
+ *  prices come from its by-size figures (no Govmap prices file). */
+const holon: City = {
+  id: "holon",
+  slug: "holon",
+  name_he: "חולון",
+  name_en: "Holon",
+  semel: 6600,
+  center: [34.7836, 32.0143],
+  zoom: 13.5,
+  status: "live",
+  tagline_he: "21 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.holon.geo.json",
+    demographics: "holon.demographics.json",
+    crime: "holon.crime.json",
+    schools: "holon.schools.json",
+    transit: "holon.transit.json",
+    environment: "holon.environment.json",
+    prices: "holon.prices.json", // not built yet (Govmap refuses automated requests)
+    market: "holon.market.json",
+    pois: "holon.pois.json",
+  },
+};
+
+
+/** Bat Yam — 8 neighborhoods. Anchors from the official real-estate site's list;
+ *  prices come from its by-size figures (no Govmap prices file). */
+const batyam: City = {
+  id: "batyam",
+  slug: "bat-yam",
+  name_he: "בת ים",
+  name_en: "Bat Yam",
+  semel: 6200,
+  center: [34.7490, 32.0155],
+  zoom: 13.6,
+  status: "live",
+  tagline_he: "8 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.batyam.geo.json",
+    demographics: "batyam.demographics.json",
+    crime: "batyam.crime.json",
+    schools: "batyam.schools.json",
+    transit: "batyam.transit.json",
+    environment: "batyam.environment.json",
+    prices: "batyam.prices.json", // not built yet (Govmap refuses automated requests)
+    market: "batyam.market.json",
+    pois: "batyam.pois.json",
+  },
+};
+
+
+/** Be'er Sheva — 17 neighborhoods. Anchors from the official real-estate site's list;
+ *  prices come from its by-size figures (no Govmap prices file). */
+const beersheva: City = {
+  id: "beersheva",
+  slug: "beer-sheva",
+  name_he: "באר שבע",
+  name_en: "Be'er Sheva",
+  semel: 9000,
+  center: [34.7871, 31.2504],
+  zoom: 12.7,
+  status: "live",
+  tagline_he: "17 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.beersheva.geo.json",
+    demographics: "beersheva.demographics.json",
+    crime: "beersheva.crime.json",
+    schools: "beersheva.schools.json",
+    transit: "beersheva.transit.json",
+    environment: "beersheva.environment.json",
+    prices: "beersheva.prices.json", // not built yet (Govmap refuses automated requests)
+    market: "beersheva.market.json",
+    pois: "beersheva.pois.json",
+  },
+};
+
+
+/** Tel Aviv-Yafo — 61 neighborhoods. Anchors from the official real-estate site's list;
+ *  prices come from its by-size figures (no Govmap prices file). */
+const telaviv: City = {
+  id: "telaviv",
+  slug: "tel-aviv",
+  name_he: "תל אביב-יפו",
+  name_en: "Tel Aviv-Yafo",
+  semel: 5000,
+  center: [34.7941, 32.0790],
+  zoom: 12.3,
+  status: "live",
+  tagline_he: "61 שכונות · נתוני אמת",
+  searchName: "תל אביב",
+  files: {
+    geo: "neighborhoods.telaviv.geo.json",
+    demographics: "telaviv.demographics.json",
+    crime: "telaviv.crime.json",
+    schools: "telaviv.schools.json",
+    transit: "telaviv.transit.json",
+    environment: "telaviv.environment.json",
+    prices: "telaviv.prices.json", // not built yet (Govmap refuses automated requests)
+    market: "telaviv.market.json",
+    pois: "telaviv.pois.json",
+  },
+};
+
+
+/** Ramat HaSharon — 9 neighborhoods. Anchors from the official real-estate site's list;
+ *  prices come from its by-size figures (no Govmap prices file). */
+const ramathasharon: City = {
+  id: "ramathasharon",
+  slug: "ramat-hasharon",
+  name_he: "רמת השרון",
+  name_en: "Ramat HaSharon",
+  semel: 2650,
+  center: [34.8385, 32.1387],
+  zoom: 13.5,
+  status: "live",
+  tagline_he: "9 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.ramathasharon.geo.json",
+    demographics: "ramathasharon.demographics.json",
+    crime: "ramathasharon.crime.json",
+    schools: "ramathasharon.schools.json",
+    transit: "ramathasharon.transit.json",
+    environment: "ramathasharon.environment.json",
+    prices: "ramathasharon.prices.json", // not built yet (Govmap refuses automated requests)
+    market: "ramathasharon.market.json",
+    pois: "ramathasharon.pois.json",
+  },
+};
+
+
+/** Hod HaSharon — 9 neighborhoods. Anchors from the official real-estate site's list;
+ *  prices come from its by-size figures (no Govmap prices file). */
+const hodhasharon: City = {
+  id: "hodhasharon",
+  slug: "hod-hasharon",
+  name_he: "הוד השרון",
+  name_en: "Hod HaSharon",
+  semel: 9700,
+  center: [34.8985, 32.1498],
+  zoom: 13.4,
+  status: "live",
+  tagline_he: "9 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.hodhasharon.geo.json",
+    demographics: "hodhasharon.demographics.json",
+    crime: "hodhasharon.crime.json",
+    schools: "hodhasharon.schools.json",
+    transit: "hodhasharon.transit.json",
+    environment: "hodhasharon.environment.json",
+    prices: "hodhasharon.prices.json", // not built yet (Govmap refuses automated requests)
+    market: "hodhasharon.market.json",
+    pois: "hodhasharon.pois.json",
+  },
+};
+
+
+/** Rehovot — 27 neighborhoods. Anchors from the official real-estate site's list;
+ *  prices come from its by-size figures (no Govmap prices file). */
+const rehovot: City = {
+  id: "rehovot",
+  slug: "rehovot",
+  name_he: "רחובות",
+  name_en: "Rehovot",
+  semel: 8400,
+  center: [34.8020, 31.8930],
+  zoom: 13.2,
+  status: "live",
+  tagline_he: "27 שכונות · נתוני אמת",
+  files: {
+    geo: "neighborhoods.rehovot.geo.json",
+    demographics: "rehovot.demographics.json",
+    crime: "rehovot.crime.json",
+    schools: "rehovot.schools.json",
+    transit: "rehovot.transit.json",
+    environment: "rehovot.environment.json",
+    prices: "rehovot.prices.json", // not built yet (Govmap refuses automated requests)
+    market: "rehovot.market.json",
+    pois: "rehovot.pois.json",
   },
 };
 
 /** All cities, in display order. */
-export const CITIES: City[] = [modiin, oryehuda, rishon, kefarsava, raanana, herzliya, netanya, petahtikva, haifa, jerusalem, nyc];
+export const CITIES: City[] = [modiin, oryehuda, rishon, kefarsava, raanana, herzliya, netanya, petahtikva, haifa, jerusalem, ramatgan, givatayim, holon, batyam, beersheva, telaviv, ramathasharon, hodhasharon, rehovot, nyc];
 
 /** The city shown when no city is specified (legacy `/map` deep links). */
 export const DEFAULT_CITY_ID = "modiin";

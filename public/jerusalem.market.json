@@ -1,0 +1,800 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "jerusalem",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 5400,
+      "4": 7200,
+      "5": 9150,
+      "all": 5700
+    },
+    "buy": {
+      "3": 2561000,
+      "4": 3170000,
+      "5": 4229000,
+      "all": 2826000
+    },
+    "rent_change_pct": -2.1,
+    "yield_pct": 2.42
+  },
+  "neighborhoods": {
+    "jlm-neve-yaakov": {
+      "rent": {
+        "3": 4950,
+        "4": 6000,
+        "all": 4900
+      },
+      "buy": {
+        "3": 2110000,
+        "4": 2609000,
+        "5": 3182000,
+        "all": 2301000
+      },
+      "rent_change_pct": 8.9,
+      "yield_pct": 2.56,
+      "sources": [
+        "נווה יעקב"
+      ]
+    },
+    "jlm-pisgat-zeev": {
+      "rent": {
+        "3": 5100,
+        "4": 6250,
+        "5": 7500,
+        "all": 5500
+      },
+      "buy": {
+        "3": 1882000,
+        "4": 1729000,
+        "5": 2881000,
+        "all": 2034000
+      },
+      "rent_change_pct": 6.8,
+      "yield_pct": 3.25,
+      "sources": [
+        "פסגת זאב"
+      ]
+    },
+    "jlm-ramot": {
+      "rent": {
+        "3": 6000,
+        "4": 7830,
+        "5": 8600,
+        "all": 6500
+      },
+      "buy": {
+        "3": 2515000,
+        "4": 3234000,
+        "5": 4146000,
+        "all": 3099000
+      },
+      "rent_change_pct": -3.7,
+      "yield_pct": 2.52,
+      "sources": [
+        "רמות"
+      ]
+    },
+    "jlm-tel-arza": null,
+    "jlm-sanhedria": null,
+    "jlm-ramat-eshkol": {
+      "rent": {
+        "3": 6350,
+        "4": 10000,
+        "all": 6630
+      },
+      "buy": {
+        "all": 3667000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2.17,
+      "sources": [
+        "רמת אשכול",
+        "גבעת המבתר"
+      ]
+    },
+    "jlm-maalot-dafna": {
+      "rent": {
+        "all": 6930
+      },
+      "buy": {
+        "3": 3500000
+      },
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "מעלות דפנה",
+        "שמואל הנביא",
+        "ארזי הבירה"
+      ]
+    },
+    "jlm-french-hill": {
+      "rent": {
+        "3": 5800,
+        "4": 6400,
+        "5": 9300,
+        "all": 6200
+      },
+      "buy": {
+        "3": 2394000,
+        "4": 2866000,
+        "all": 2641000
+      },
+      "rent_change_pct": 5.1,
+      "yield_pct": 2.82,
+      "sources": [
+        "הגבעה הצרפתית - גבע"
+      ]
+    },
+    "jlm-ramat-shlomo": {
+      "rent": {
+        "4": 7500,
+        "5": 8850,
+        "all": 8850
+      },
+      "buy": {
+        "4": 3248000,
+        "5": 3742000,
+        "all": 3390000
+      },
+      "rent_change_pct": 12.7,
+      "yield_pct": 3.13,
+      "sources": [
+        "רמת שלמה"
+      ]
+    },
+    "jlm-bukharim": null,
+    "jlm-kerem-avraham": {
+      "rent": {},
+      "buy": {
+        "all": 2401000
+      },
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "כרם אברהם"
+      ]
+    },
+    "jlm-geula": {
+      "rent": {
+        "all": 6500
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "זכרון משה",
+        "גאולה"
+      ]
+    },
+    "jlm-beit-israel": null,
+    "jlm-mea-shearim": {
+      "rent": {},
+      "buy": {
+        "all": 2110000
+      },
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "מאה שערים"
+      ]
+    },
+    "jlm-mekor-baruch": {
+      "rent": {
+        "3": 6000,
+        "all": 5700
+      },
+      "buy": {
+        "5": 8799000,
+        "all": 3613000
+      },
+      "rent_change_pct": 1.8,
+      "yield_pct": 1.89,
+      "sources": [
+        "מקור ברוך"
+      ]
+    },
+    "jlm-kiryat-sanz": {
+      "rent": {},
+      "buy": {
+        "all": 4512000
+      },
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "אזור תעשיה הר החוצב",
+        "קרית בעלז"
+      ]
+    },
+    "jlm-romema": {
+      "rent": {
+        "all": 5450
+      },
+      "buy": {
+        "3": 2828000,
+        "all": 3289000
+      },
+      "rent_change_pct": -4.4,
+      "yield_pct": 1.99,
+      "sources": [
+        "רוממה"
+      ]
+    },
+    "jlm-beit-hakerem": {
+      "rent": {
+        "3": 5830,
+        "4": 8000,
+        "5": 11250,
+        "all": 6350
+      },
+      "buy": {
+        "3": 2974000,
+        "4": 4141000,
+        "5": 5088000,
+        "all": 3714000
+      },
+      "rent_change_pct": -3,
+      "yield_pct": 2.05,
+      "sources": [
+        "בית הכרם"
+      ]
+    },
+    "jlm-nayot": {
+      "rent": {
+        "3": 6550,
+        "4": 7050,
+        "all": 7250
+      },
+      "buy": {},
+      "rent_change_pct": -3.3,
+      "yield_pct": null,
+      "sources": [
+        "ניות"
+      ]
+    },
+    "jlm-kiryat-moshe": {
+      "rent": {
+        "3": 6100,
+        "4": 8000,
+        "5": 9580,
+        "all": 6300
+      },
+      "buy": {
+        "all": 3422000
+      },
+      "rent_change_pct": 1.6,
+      "yield_pct": 2.21,
+      "sources": [
+        "קרית משה"
+      ]
+    },
+    "jlm-ein-kerem": {
+      "rent": {
+        "3": 6730,
+        "4": 8550,
+        "all": 7430
+      },
+      "buy": {},
+      "rent_change_pct": 1,
+      "yield_pct": null,
+      "sources": [
+        "עין כרם",
+        "עין כרם"
+      ]
+    },
+    "jlm-kiryat-hayovel": {
+      "rent": {
+        "3": 4850,
+        "4": 6750,
+        "5": 8000,
+        "all": 4880
+      },
+      "buy": {
+        "3": 2539000,
+        "4": 3515000,
+        "5": 4364000,
+        "all": 2842000
+      },
+      "rent_change_pct": 6,
+      "yield_pct": 2.06,
+      "sources": [
+        "קרית היובל"
+      ]
+    },
+    "jlm-kiryat-menachem": {
+      "rent": {
+        "3": 4530,
+        "4": 6650,
+        "all": 4800
+      },
+      "buy": {
+        "4": 2911000,
+        "all": 2322000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2.51,
+      "sources": [
+        "קרית מנחם",
+        "עיר גנים א"
+      ]
+    },
+    "jlm-malha": {
+      "rent": {
+        "3": 6100,
+        "4": 8530,
+        "all": 7700
+      },
+      "buy": {
+        "all": 3202000
+      },
+      "rent_change_pct": 6.9,
+      "yield_pct": 2.89,
+      "sources": [
+        "מנחת-מלחה"
+      ]
+    },
+    "jlm-givat-masua": {
+      "rent": {
+        "3": 5890,
+        "4": 7250,
+        "all": 7500
+      },
+      "buy": {
+        "all": 2431000
+      },
+      "rent_change_pct": 4.2,
+      "yield_pct": 3.7,
+      "sources": [
+        "גבעת משואה"
+      ]
+    },
+    "jlm-katamonim": {
+      "rent": {
+        "3": 5170,
+        "4": 7000,
+        "5": 8850,
+        "all": 5850
+      },
+      "buy": {
+        "3": 2718000,
+        "4": 4105000,
+        "5": 5662000,
+        "all": 3299000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 1.98,
+      "sources": [
+        "קטמונים",
+        "פת"
+      ]
+    },
+    "jlm-givat-mordechai": {
+      "rent": {
+        "3": 5150,
+        "4": 6880,
+        "all": 5200
+      },
+      "buy": {
+        "all": 2806000
+      },
+      "rent_change_pct": 1,
+      "yield_pct": 2.22,
+      "sources": [
+        "גבעת מרדכי"
+      ]
+    },
+    "jlm-rassco": {
+      "rent": {
+        "3": 6300,
+        "4": 8290,
+        "5": 9880,
+        "all": 6830
+      },
+      "buy": {
+        "3": 3335000,
+        "all": 3156000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2.68,
+      "sources": [
+        "גבעת הורדים-רסקו",
+        "קרית שמואל"
+      ]
+    },
+    "jlm-old-katamon": {
+      "rent": {
+        "3": 6100,
+        "4": 7500,
+        "5": 9800,
+        "all": 6050
+      },
+      "buy": {
+        "all": 2716000
+      },
+      "rent_change_pct": 0.8,
+      "yield_pct": 2.67,
+      "sources": [
+        "קטמון הישנה"
+      ]
+    },
+    "jlm-german-colony": {
+      "rent": {
+        "3": 6400,
+        "4": 7990,
+        "all": 6200
+      },
+      "buy": {},
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "עמק רפאים-המושבה הג",
+        "המושבה היוונית"
+      ]
+    },
+    "jlm-talbiyeh": {
+      "rent": {
+        "3": 6450,
+        "4": 8780,
+        "5": 10500,
+        "all": 6500
+      },
+      "buy": {
+        "all": 3964000
+      },
+      "rent_change_pct": -13.3,
+      "yield_pct": 1.97,
+      "sources": [
+        "ימין משה",
+        "ממילא",
+        "טלביה-קוממויות",
+        "הר ציון"
+      ]
+    },
+    "jlm-baka": {
+      "rent": {
+        "3": 5900,
+        "4": 7530,
+        "all": 6000
+      },
+      "buy": {
+        "3": 2923000,
+        "5": 7981000,
+        "all": 3375000
+      },
+      "rent_change_pct": -6.2,
+      "yield_pct": null,
+      "sources": [
+        "גאולים-בקעה"
+      ]
+    },
+    "jlm-abu-tor": {
+      "rent": {
+        "3": 6350,
+        "4": 8400,
+        "5": 9250,
+        "all": 6030
+      },
+      "buy": {},
+      "rent_change_pct": -14.5,
+      "yield_pct": null,
+      "sources": [
+        "גבעת חנניה - אבו תור"
+      ]
+    },
+    "jlm-talpiot": {
+      "rent": {
+        "3": 5600,
+        "4": 7100,
+        "5": 10150,
+        "all": 6550
+      },
+      "buy": {
+        "3": 2995000,
+        "4": 3793000,
+        "all": 3156000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2.52,
+      "sources": [
+        "תלפיות",
+        "תלפיות"
+      ]
+    },
+    "jlm-musrara": {
+      "rent": {
+        "all": 6980
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "מורשה-מוסררה"
+      ]
+    },
+    "jlm-city-center": {
+      "rent": {
+        "3": 5800,
+        "4": 7500,
+        "5": 11250,
+        "all": 5150
+      },
+      "buy": {
+        "3": 2751000,
+        "all": 2227000
+      },
+      "rent_change_pct": -5.5,
+      "yield_pct": 2.78,
+      "sources": [
+        "מרכז העיר"
+      ]
+    },
+    "jlm-nachlaot": {
+      "rent": {
+        "3": 6180,
+        "4": 8000,
+        "all": 5000
+      },
+      "buy": {
+        "all": 2370000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2.53,
+      "sources": [
+        "מחנה יהודה",
+        "נחלאות"
+      ]
+    },
+    "jlm-rehavia": {
+      "rent": {
+        "3": 6430,
+        "4": 7500,
+        "all": 6450
+      },
+      "buy": {
+        "3": 3853000,
+        "all": 3791000
+      },
+      "rent_change_pct": -7.9,
+      "yield_pct": 2.04,
+      "sources": [
+        "רחביה"
+      ]
+    },
+    "jlm-givat-shaul": {
+      "rent": {
+        "3": 6500,
+        "4": 8000,
+        "5": 8000,
+        "all": 6600
+      },
+      "buy": {
+        "all": 3172000
+      },
+      "rent_change_pct": 7.3,
+      "yield_pct": 2.5,
+      "sources": [
+        "גבעת שאול"
+      ]
+    },
+    "jlm-har-nof": {
+      "rent": {
+        "3": 5840,
+        "4": 7740,
+        "5": 10000,
+        "all": 7200
+      },
+      "buy": {
+        "4": 3237000,
+        "all": 3312000
+      },
+      "rent_change_pct": 7.9,
+      "yield_pct": 2.61,
+      "sources": [
+        "הר נוף"
+      ]
+    },
+    "jlm-har-homa": {
+      "rent": {
+        "3": 6100,
+        "4": 7350,
+        "5": 8500,
+        "all": 7280
+      },
+      "buy": {
+        "3": 2202000,
+        "4": 2597000,
+        "5": 3350000,
+        "all": 2550000
+      },
+      "rent_change_pct": 7.8,
+      "yield_pct": 3.42,
+      "sources": [
+        "חומת שמואל-הר חומה"
+      ]
+    },
+    "jlm-bayit-vegan": {
+      "rent": {
+        "3": 6300,
+        "4": 8300,
+        "5": 10200,
+        "all": 6400
+      },
+      "buy": {
+        "3": 2711000,
+        "4": 4065000,
+        "all": 2782000
+      },
+      "rent_change_pct": 8.5,
+      "yield_pct": 2.76,
+      "sources": [
+        "בית וגן"
+      ]
+    },
+    "jlm-ramat-sharett": {
+      "rent": {
+        "3": 5900,
+        "4": 7380,
+        "5": 8950,
+        "all": 6800
+      },
+      "buy": {
+        "3": 2398000,
+        "4": 3654000,
+        "all": 3269000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2.31,
+      "sources": [
+        "רמת שרת",
+        "רמת דניה"
+      ]
+    },
+    "jlm-holyland": {
+      "rent": {
+        "3": 6600,
+        "4": 7780,
+        "all": 8000
+      },
+      "buy": {
+        "all": 3938000
+      },
+      "rent_change_pct": 1.1,
+      "yield_pct": 2.44,
+      "sources": [
+        "הולילנד"
+      ]
+    },
+    "jlm-arnona": {
+      "rent": {
+        "3": 6650,
+        "4": 8350,
+        "5": 9250,
+        "all": 7500
+      },
+      "buy": {},
+      "rent_change_pct": -2,
+      "yield_pct": null,
+      "sources": [
+        "ארנונה"
+      ]
+    },
+    "jlm-ramot-rachel": {
+      "rent": {
+        "3": 6600,
+        "4": 8400,
+        "all": 7500
+      },
+      "buy": {},
+      "rent_change_pct": -1.3,
+      "yield_pct": null,
+      "sources": [
+        "רמות רחל-ארנונה החד"
+      ]
+    },
+    "jlm-mekor-haim": {
+      "rent": {
+        "3": 5900,
+        "4": 8200,
+        "all": 7200
+      },
+      "buy": {
+        "all": 4015000
+      },
+      "rent_change_pct": 10.8,
+      "yield_pct": 2.15,
+      "sources": [
+        "מקור חיים"
+      ]
+    },
+    "jlm-east-talpiot": {
+      "rent": {
+        "3": 5000,
+        "4": 6000,
+        "5": 7730,
+        "all": 5150
+      },
+      "buy": {
+        "3": 1839000,
+        "4": 2216000,
+        "all": 1935000
+      },
+      "rent_change_pct": 8.9,
+      "yield_pct": 3.19,
+      "sources": [
+        "תלפיות מזרח"
+      ]
+    },
+    "jlm-gilo": {
+      "rent": {
+        "3": 4900,
+        "4": 6100,
+        "5": 7900,
+        "all": 5280
+      },
+      "buy": {
+        "3": 1921000,
+        "4": 2421000,
+        "5": 3337000,
+        "all": 2081000
+      },
+      "rent_change_pct": 8.8,
+      "yield_pct": 3.04,
+      "sources": [
+        "גילה"
+      ]
+    },
+    "jlm-kafr-aqab": null,
+    "jlm-beit-hanina": {
+      "rent": {},
+      "buy": {
+        "all": 1357000
+      },
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "בית חנינא"
+      ]
+    },
+    "jlm-anata-shuafat-camp": null,
+    "jlm-shuafat": null,
+    "jlm-issawiya": null,
+    "jlm-a-tur": null,
+    "jlm-sheikh-jarrah": null,
+    "jlm-bab-a-zahra": null,
+    "jlm-muslim-quarter": null,
+    "jlm-jewish-quarter": null,
+    "jlm-armenian-quarter": null,
+    "jlm-christian-quarter": null,
+    "jlm-silwan": null,
+    "jlm-ras-al-amud": null,
+    "jlm-jabel-mukaber": {
+      "rent": {
+        "all": 6350
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "ערב א סוואחרה",
+        "ג'בל מוקאבר"
+      ]
+    },
+    "jlm-sur-baher": {
+      "rent": {
+        "all": 7700
+      },
+      "buy": {},
+      "rent_change_pct": -5.1,
+      "yield_pct": null,
+      "sources": [
+        "אום טובא",
+        "אום ליסון",
+        "צור באהר"
+      ]
+    },
+    "jlm-beit-safafa": null
+  }
+}

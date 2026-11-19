@@ -1,4 +1,5 @@
 import type { Persona } from "./persona";
+import { priceForSizes, roomKeysForRange, type Market } from "./market";
 
 export type MatchBreakdownRow = {
   label: string;
@@ -10,6 +11,8 @@ export type NeighborhoodFacts = {
   id: string;
   /** Avg listing price in NIS, from `neighborhood_metrics.avg_listing_price`. */
   avgListing: number | null;
+  /** Rent + sale prices by apartment size (nadlan.gov.il). Null/absent = none. */
+  market?: Market | null;
   /** % of recent listings with a garden (0-1). */
   gardenAvailability: number;
   /** Meters to nearest Meitzav-scored school inside the polygon (null if no school data). */
@@ -52,14 +55,36 @@ function distanceScore(meters: number | null, perfectMeters: number, awfulMeters
   return 1 - (meters - perfectMeters) / (awfulMeters - perfectMeters);
 }
 
-/** Score a budget fit: 1.0 inside the band, linear falloff outside. */
-function budgetScore(avgListing: number | null, persona: Persona): number {
-  if (avgListing == null || avgListing <= 0) return 0.5;
-  const { min, max } = persona.budget;
-  if (avgListing >= min && avgListing <= max) return 1;
-  const slack = (max - min) * 0.3;
-  if (avgListing < min) return Math.max(0, 1 - (min - avgListing) / slack);
-  return Math.max(0, 1 - (avgListing - max) / slack);
+/**
+ * The price the budget is judged against: what a home of the family's size
+ * costs here. Renting → monthly rent for their room count. Buying → the sale
+ * price for their room count, else the neighborhood's overall sale price.
+ */
+export function budgetPrice(facts: NeighborhoodFacts, persona: Persona): number | null {
+  const keys = roomKeysForRange(persona.rooms.min, persona.rooms.max);
+  if (persona.deal === "rent") return priceForSizes(facts.market, "rent", keys);
+  return (
+    priceForSizes(facts.market, "buy", keys, false) ??
+    (facts.avgListing != null && facts.avgListing > 0 ? facts.avgListing : null) ??
+    priceForSizes(facts.market, "buy", [])
+  );
+}
+
+/**
+ * Score a budget fit: 1.0 inside the band. Above it the score falls off fast
+ * (the family can't afford it). Below it the falloff is gentle and stops at
+ * 0.6 — a cheaper neighborhood is affordable, just not what they are aiming
+ * for — so it always ranks above "no price data" (0.5) and "too expensive".
+ */
+function budgetScore(facts: NeighborhoodFacts, persona: Persona): number {
+  const price = budgetPrice(facts, persona);
+  if (price == null || price <= 0) return 0.5;
+  const { min, max } = persona.deal === "rent" ? persona.rentBudget : persona.budget;
+  if (price >= min && price <= max) return 1;
+  // Slack never collapses to zero for a narrow band.
+  const slack = Math.max((max - min) * 0.3, max * 0.08);
+  if (price < min) return Math.max(0.6, 1 - ((min - price) / min) * 0.8);
+  return Math.max(0, 1 - (price - max) / slack);
 }
 
 /** Score a feature against the neighborhood facts. Returns 0..1. */
@@ -101,7 +126,7 @@ export function breakdownFor(facts: NeighborhoodFacts, persona: Persona): MatchB
   const niceSet = new Set(persona.nice.filter((n) => !mustSet.has(n)));
 
   const components: Array<{ label: string; weight: number; rawScore: number }> = [
-    { label: "תקציב", weight: BUDGET_WEIGHT, rawScore: budgetScore(facts.avgListing, persona) },
+    { label: "תקציב", weight: BUDGET_WEIGHT, rawScore: budgetScore(facts, persona) },
   ];
 
   for (const f of mustSet) {

@@ -1,5 +1,8 @@
 "use client";
 
+import { PricesBySize } from "./PricesBySize";
+import type { Market } from "@/lib/market";
+import { usePersona } from "@/lib/usePersona";
 import { useState } from "react";
 import { MMIcon } from "@/lib/icons";
 import { ScoreChip } from "./ScoreChip";
@@ -53,6 +56,11 @@ export type Selected = {
   avgPrice: number;
   avgPriceDelta: number;
   avgListing: number;
+  /** Rent + sale prices by apartment size; null = none for this neighborhood. */
+  market?: Market | null;
+  /** City-wide figures + the source's update stamp, for the by-size table. */
+  cityMarket?: Market | null;
+  marketVersion?: string | null;
   greenScore: number;
   schoolScore: number;
   demographics?: Demographics | null;
@@ -74,12 +82,13 @@ type Props = {
 export function ListingsPanel({ selected, listings, schools, election, onExplainMatch, city = defaultCity() }: Props) {
   const [openListing, setOpenListing] = useState<ListingRow | null>(null);
   const [leadOpen, setLeadOpen] = useState<LeadKind | null>(null);
+  const persona = usePersona();
 
   if (!selected) {
     return (
       <aside style={asideStyle}>
         <div style={{ padding: 24, color: "var(--grey-500)", fontSize: 13 }}>
-          בחרו שכונה במפה כדי לראות נכסים פעילים, בתי ספר במרחק הליכה ופרטי התאמה.
+          בחרו שכונה במפה כדי לראות מחירים, בתי ספר במרחק הליכה ופרטי התאמה.
         </div>
       </aside>
     );
@@ -131,7 +140,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
             </div>
           ) : (
           <>
-          <Stat label="חציון" value={selected.avgListing > 0 ? NISshort(selected.avgListing) : "—"} />
+          <Stat label="מחיר דירה" value={selected.avgListing > 0 ? NISshort(selected.avgListing) : "—"} />
           <Stat
             label='מחיר/מ"ר'
             value={
@@ -170,6 +179,10 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
             zIndex: 2,
             background: "#fff",
             display: "flex",
+            // The panel is a flex column that scrolls. A flex child with its own
+            // overflow may shrink below its content, which squashed this bar to
+            // a sliver and cut the chips off — so it must not shrink.
+            flex: "none",
             gap: 6,
             padding: "10px 0 8px",
             marginBottom: -8,
@@ -178,8 +191,9 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           }}
         >
           {[
+            (selected.market || selected.cityMarket) && { id: "prices", label: "מחירים" },
             (selected.demographics || selected.safety) && { id: "people", label: "מי גר כאן" },
-            { id: "listings", label: "נכסים" },
+            { id: "listings", label: "דירות" },
             { id: "schools", label: "בתי ספר" },
             election && election.results.length > 0 && { id: "elections", label: "הצבעה" },
           ]
@@ -201,11 +215,28 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
               </button>
             ))}
         </nav>
+        {(selected.market || selected.cityMarket) && (
+          <Section title="מחירים לפי גודל דירה" id="prices">
+            <PricesBySize
+              market={selected.market ?? null}
+              cityMarket={selected.cityMarket ?? null}
+              cityName={city.searchName ?? city.name_he}
+              version={selected.marketVersion}
+              deal={persona.deal}
+            />
+          </Section>
+        )}
         <WhoLivesHere demographics={selected.demographics ?? null} safety={selected.safety ?? null} cityName={city.searchName ?? city.name_he} />
 
-        <Section title="נכסים פעילים" id="listings">
+        <Section title={listings.length === 0 ? "דירות בשכונה" : "נכסים פעילים"} id="listings">
           {listings.length === 0 ? (
-            <Empty>אין כרגע נכסים פעילים בשכונה זו.</Empty>
+            // We hold no listings of our own; say so and send people to the
+            // sites that do, searched for this neighborhood.
+            <Empty>
+              {(city.country ?? "IL") === "IL"
+                ? "אנחנו לא מציגים מודעות משלנו. אפשר לראות מה מוצע עכשיו בשכונה באתרי הנדל״ן:"
+                : "אין אצלנו מודעות לשכונה הזו."}
+            </Empty>
           ) : (
             listings.slice(0, 3).map((l) => (
             <ListingRowCard
@@ -250,7 +281,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           className="mm-btn mm-btn-accent"
           onClick={() => setLeadOpen("mortgage")}
         >
-          <MMIcon name="zap" size={14} color="#fff" /> קבלו אישור עקרוני למשכנתא
+          קבלו אישור עקרוני למשכנתא
         </button>
         <button
           type="button"

@@ -20,9 +20,9 @@ const STEPS = ["המשפחה", "תקציב וחדרים", "מה חשוב לכם"
 
 /** Budget slider range (₪). Values outside it (typed on desktop) still work —
  *  the slider just pins to its end. */
-const BUDGET_MIN = 500_000;
-const BUDGET_MAX = 12_000_000;
-const BUDGET_STEP = 100_000;
+const BUY_RANGE = { min: 500_000, max: 12_000_000, step: 100_000 };
+/** Monthly rent slider range (₪). */
+const RENT_RANGE = { min: 2_000, max: 20_000, step: 250 };
 
 export function OnboardingForm() {
   const router = useRouter();
@@ -32,6 +32,13 @@ export function OnboardingForm() {
   const lastStep = STEPS.length - 1;
   /** Desktop shows every section; phones show only the current step. */
   const show = (i: number) => !isMobile || step === i;
+
+  // The budget field edits whichever band matches buy / rent.
+  const renting = persona.deal === "rent";
+  const band = renting ? persona.rentBudget : persona.budget;
+  const range = renting ? RENT_RANGE : BUY_RANGE;
+  const setBand = (next: { min: number; max: number }) =>
+    setPersona({ ...persona, [renting ? "rentBudget" : "budget"]: next });
 
   // Read existing persona (if any) on mount so the form starts populated.
   useEffect(() => {
@@ -200,7 +207,31 @@ export function OnboardingForm() {
           </>)}
 
           {show(1) && (<>
-          <Field label={`תקציב: ${NISshort(persona.budget.min)} – ${NISshort(persona.budget.max)}`}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--grey-700)" }}>מחפשים</span>
+            <div className="mm-seg mm-seg-lg" role="radiogroup" aria-label="קנייה או שכירות">
+              {(["buy", "rent"] as const).map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  role="radio"
+                  aria-checked={persona.deal === d}
+                  className={persona.deal === d ? "is-on" : ""}
+                  onClick={() => setPersona({ ...persona, deal: d })}
+                >
+                  {d === "buy" ? "לקנות" : "לשכור"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <Field
+            label={
+              renting
+                ? `שכר דירה חודשי: ${NIS(band.min)} – ${NIS(band.max)}`
+                : `תקציב: ${NISshort(band.min)} – ${NISshort(band.max)}`
+            }
+          >
             {isMobile ? (
               // Phones: two sliders (typing seven-digit numbers on a phone
               // keyboard is the slow part of this form). Each one pushes the
@@ -208,31 +239,23 @@ export function OnboardingForm() {
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <BudgetSlider
                   label="מינימום"
-                  value={persona.budget.min}
-                  onChange={(v) =>
-                    setPersona({ ...persona, budget: { min: v, max: Math.max(v, persona.budget.max) } })
-                  }
+                  value={band.min}
+                  range={range}
+                  format={renting ? NIS : NISshort}
+                  onChange={(v) => setBand({ min: v, max: Math.max(v, band.max) })}
                 />
                 <BudgetSlider
                   label="מקסימום"
-                  value={persona.budget.max}
-                  onChange={(v) =>
-                    setPersona({ ...persona, budget: { min: Math.min(v, persona.budget.min), max: v } })
-                  }
+                  value={band.max}
+                  range={range}
+                  format={renting ? NIS : NISshort}
+                  onChange={(v) => setBand({ min: Math.min(v, band.min), max: v })}
                 />
               </div>
             ) : (
             <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 12 }}>
-              <NumericField
-                label="מינימום"
-                value={persona.budget.min}
-                onChange={(v) => setPersona({ ...persona, budget: { ...persona.budget, min: v } })}
-              />
-              <NumericField
-                label="מקסימום"
-                value={persona.budget.max}
-                onChange={(v) => setPersona({ ...persona, budget: { ...persona.budget, max: v } })}
-              />
+              <NumericField label="מינימום" value={band.min} onChange={(v) => setBand({ ...band, min: v })} />
+              <NumericField label="מקסימום" value={band.max} onChange={(v) => setBand({ ...band, max: v })} />
             </div>
             )}
           </Field>
@@ -319,7 +342,7 @@ export function OnboardingForm() {
           {(!isMobile || step === lastStep) && (
           <div style={{ marginTop: 8, fontSize: 12, color: "var(--grey-500)" }}>
             הפרופיל נשמר בדפדפן בלבד (localStorage). אין שמירה בענן עדיין.
-            תקציב: {NIS(persona.budget.min)} עד {NIS(persona.budget.max)}.
+            {renting ? "שכר דירה חודשי" : "תקציב"}: {NIS(band.min)} עד {NIS(band.max)}.
           </div>
           )}
         </form>
@@ -332,10 +355,14 @@ export function OnboardingForm() {
 function BudgetSlider({
   label,
   value,
+  range,
+  format,
   onChange,
 }: {
   label: string;
   value: number;
+  range: { min: number; max: number; step: number };
+  format: (n: number) => string;
   onChange: (n: number) => void;
 }) {
   return (
@@ -343,18 +370,18 @@ function BudgetSlider({
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
         <span style={{ fontSize: 12, color: "var(--grey-500)" }}>{label}</span>
         <span style={{ fontSize: 17, fontWeight: 800, fontFamily: "var(--font-inter, Inter)", fontVariantNumeric: "tabular-nums" }}>
-          {NISshort(value)}
+          {format(value)}
         </span>
       </div>
       <input
         type="range"
-        min={BUDGET_MIN}
-        max={BUDGET_MAX}
-        step={BUDGET_STEP}
-        value={Math.min(BUDGET_MAX, Math.max(BUDGET_MIN, value))}
+        min={range.min}
+        max={range.max}
+        step={range.step}
+        value={Math.min(range.max, Math.max(range.min, value))}
         onChange={(e) => onChange(Number(e.target.value))}
         aria-label={`תקציב ${label}`}
-        aria-valuetext={NISshort(value)}
+        aria-valuetext={format(value)}
         style={{ width: "100%", height: 32, accentColor: "var(--hn-primary)", direction: "ltr" }}
       />
     </div>

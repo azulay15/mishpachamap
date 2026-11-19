@@ -11,6 +11,7 @@ const NAV: Array<{ label: string; href: string }> = [
   { label: "בית", href: "/" },
   { label: "מפה", href: "/map" },
   { label: "שכונות", href: "/map?view=list" },
+  { label: "יותר בפחות", href: "/more" },
   { label: "מומחה השכונה", href: "/map?view=ai" },
 ];
 

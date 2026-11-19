@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "source": "Israel Police 2024",
+    "resource": "5fc13c50-b6f3-4712-b831-a75e0f91a17e",
+    "locality": 9000
+  },
+  "neighborhoods": {
+    "bs-ramot": null,
+    "bs-alef": null,
+    "bs-bet": null,
+    "bs-gimel": null,
+    "bs-dalet": null,
+    "bs-hey": null,
+    "bs-vav": null,
+    "bs-tet": null,
+    "bs-yud-alef": null,
+    "bs-neve-menachem": {
+      "name_he": "נווה מנחם (נחל עשן)",
+      "cases_2024_total": 441,
+      "cases_2024_person": 111,
+      "cases_2024_property": 101,
+      "per_1000_residents": 21,
+      "safety_score": 66,
+      "safety_rank": 1,
+      "safety_rank_of": 6,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          90000234,
+          90000312,
+          90000313
+        ]
+      }
+    },
+    "bs-nahal-beka": {
+      "name_he": "נחל בקע",
+      "cases_2024_total": 77,
+      "cases_2024_person": 15,
+      "cases_2024_property": 22,
+      "per_1000_residents": 36.2,
+      "safety_score": 42,
+      "safety_rank": 6,
+      "safety_rank_of": 6,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          90000614
+        ]
+      }
+    },
+    "bs-neve-noy": {
+      "name_he": "נווה נוי",
+      "cases_2024_total": 247,
+      "cases_2024_person": 63,
+      "cases_2024_property": 64,
+      "per_1000_residents": 30.3,
+      "safety_score": 51,
+      "safety_rank": 3,
+      "safety_rank_of": 6,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          90000613
+        ]
+      }
+    },
+    "bs-old-city": null,
+    "bs-neot-lon": {
+      "name_he": "נאות לון",
+      "cases_2024_total": 171,
+      "cases_2024_person": 40,
+      "cases_2024_property": 50,
+      "per_1000_residents": 33.6,
+      "safety_score": 46,
+      "safety_rank": 4,
+      "safety_rank_of": 6,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          90000421
+        ]
+      }
+    },
+    "bs-neve-zeev": {
+      "name_he": "נווה זאב",
+      "cases_2024_total": 748,
+      "cases_2024_person": 180,
+      "cases_2024_property": 233,
+      "per_1000_residents": 34.4,
+      "safety_score": 45,
+      "safety_rank": 5,
+      "safety_rank_of": 6,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          90000411,
+          90000413,
+          90000414,
+          90000415
+        ]
+      }
+    },
+    "bs-merkaz-ezrahi": null,
+    "bs-ramot-harechess": {
+      "name_he": "רמות הרכס",
+      "cases_2024_total": 522,
+      "cases_2024_person": 106,
+      "cases_2024_property": 191,
+      "per_1000_residents": 23.5,
+      "safety_score": 62,
+      "safety_rank": 2,
+      "safety_rank_of": 6,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          90000641,
+          90000642,
+          90000643,
+          90000644
+        ]
+      }
+    }
+  }
+}

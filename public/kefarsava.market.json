@@ -1,0 +1,231 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "kefarsava",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 5200,
+      "4": 6700,
+      "5": 8000,
+      "all": 6500
+    },
+    "buy": {
+      "3": 1951000,
+      "4": 2754000,
+      "5": 3721000,
+      "all": 2383000
+    },
+    "rent_change_pct": 0,
+    "yield_pct": 3.27
+  },
+  "neighborhoods": {
+    "kaplan": {
+      "rent": {
+        "all": 5850
+      },
+      "buy": {},
+      "rent_change_pct": 1.7,
+      "yield_pct": null,
+      "sources": [
+        "קפלן"
+      ]
+    },
+    "yoseftal": {
+      "rent": {
+        "3": 4550,
+        "all": 4350
+      },
+      "buy": {},
+      "rent_change_pct": 7.4,
+      "yield_pct": null,
+      "sources": [
+        "יוספטל"
+      ]
+    },
+    "ks-tzeira": {
+      "rent": {
+        "4": 7400
+      },
+      "buy": {
+        "all": 3375000
+      },
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "כפר סבא הצעירה"
+      ]
+    },
+    "tzafon": {
+      "rent": {
+        "all": 7580
+      },
+      "buy": {},
+      "rent_change_pct": 15.7,
+      "yield_pct": null,
+      "sources": [
+        "צפון"
+      ]
+    },
+    "hadarim": {
+      "rent": {
+        "4": 7250,
+        "all": 6750
+      },
+      "buy": {
+        "all": 2713000
+      },
+      "rent_change_pct": -5.6,
+      "yield_pct": 2.99,
+      "sources": [
+        "הדרים"
+      ]
+    },
+    "hapark": {
+      "rent": {
+        "all": 12500
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "הפארק"
+      ]
+    },
+    "merkaz": {
+      "rent": {
+        "4": 6500,
+        "5": 7030,
+        "all": 6700
+      },
+      "buy": {
+        "all": 2742000
+      },
+      "rent_change_pct": 3.1,
+      "yield_pct": 2.93,
+      "sources": [
+        "קרית ספיר"
+      ]
+    },
+    "eliezer": null,
+    "shikunei-mizrahi": {
+      "rent": {
+        "4": 7050,
+        "all": 6600
+      },
+      "buy": {},
+      "rent_change_pct": -12,
+      "yield_pct": null,
+      "sources": [
+        "שיכוני מזרחי"
+      ]
+    },
+    "sirkin": null,
+    "maoz": {
+      "rent": {
+        "4": 6550,
+        "all": 6550
+      },
+      "buy": {},
+      "rent_change_pct": -2.2,
+      "yield_pct": null,
+      "sources": [
+        "מעוז"
+      ]
+    },
+    "shikun-aliya": {
+      "rent": {
+        "3": 6240,
+        "4": 7450,
+        "5": 9350,
+        "all": 7180
+      },
+      "buy": {
+        "4": 3419000,
+        "all": 3431000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 3.09,
+      "sources": [
+        "הירוקה כ\"ס 80",
+        "עלייה",
+        "שבזי"
+      ]
+    },
+    "ks-yeruka": {
+      "rent": {
+        "5": 8750,
+        "all": 8900
+      },
+      "buy": {
+        "all": 4238000
+      },
+      "rent_change_pct": 1.4,
+      "yield_pct": 2.52,
+      "sources": [
+        "הזמר העברי"
+      ]
+    },
+    "haprachim": {
+      "rent": {
+        "4": 6800,
+        "all": 6850
+      },
+      "buy": {
+        "all": 2347000
+      },
+      "rent_change_pct": 2.2,
+      "yield_pct": 3.5,
+      "sources": [
+        "הפרחים"
+      ]
+    },
+    "rishonim": {
+      "rent": {
+        "3": 5480,
+        "4": 6530,
+        "all": 6400
+      },
+      "buy": {
+        "4": 2396000,
+        "all": 1950000
+      },
+      "rent_change_pct": 20.2,
+      "yield_pct": 3.94,
+      "sources": [
+        "ראשונים"
+      ]
+    },
+    "hapoalim": {
+      "rent": {
+        "4": 6850,
+        "5": 7700,
+        "all": 6870
+      },
+      "buy": {
+        "all": 2889000
+      },
+      "rent_change_pct": null,
+      "yield_pct": 2.97,
+      "sources": [
+        "פועלים ד",
+        "ארלוזורוב"
+      ]
+    },
+    "nordau": {
+      "rent": {
+        "3": 4730,
+        "all": 4750
+      },
+      "buy": {},
+      "rent_change_pct": 2.2,
+      "yield_pct": null,
+      "sources": [
+        "תקומה"
+      ]
+    },
+    "geulim": null
+  }
+}

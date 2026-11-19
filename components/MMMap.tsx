@@ -22,6 +22,8 @@ export type NeighborhoodFeatureProps = {
    *  `elections` map layer). Null when the neighborhood has no results yet. */
   leading_party_color?: string | null;
   leading_party_he?: string | null;
+  /** Ruled out by the price filter — drawn in a neutral tone. */
+  dim?: boolean;
 };
 
 export type POIFeatureProps = {
@@ -241,13 +243,13 @@ export function MMMap({
             ["linear"],
             ["zoom"],
             11,
-            0.72,
+            0.6,
             13,
-            0.62,
+            0.46,
             15,
-            0.45,
+            0.3,
             17,
-            0.28,
+            0.18,
           ],
         },
       });
@@ -478,13 +480,13 @@ export function MMMap({
         ["linear"],
         ["zoom"],
         11,
-        0.72,
+        0.6,
         13,
-        0.62,
+        0.46,
         15,
-        0.45,
+        0.3,
         17,
-        0.28,
+        0.18,
       ]);
     }
   }, [activeLayers]);

@@ -322,6 +322,8 @@ const core = (s: string) =>
     .replace(/\s+/g, " ")
     .replace(/^ה/, "")
     .trim();
+/** Consonant skeleton: no quotes/geresh, no vowel letters (י / ו). */
+const skeleton = (s: string) => s.replace(/["'׳״`]/g, "").replace(/[יו]/g, "").replace(/\s+/g, " ").trim();
 const isNonResidential = (name: string) => /תעשי|מסחר|לוגיסטי|מב"?ת|מב''ת/.test(name);
 
 type Row = Record<string, unknown>;
@@ -352,6 +354,19 @@ async function main() {
       if (nb.coreName.length < 3) continue;
       if ((cn.includes(nb.coreName) || nb.coreName.includes(cn)) && nb.coreName.length > len) {
         best = nb.id; len = nb.coreName.length;
+      }
+    }
+    if (best) return best;
+    // Second pass: spelling variants. The police file and our names differ in
+    // quotes and in vowel letters (שיינקין/שינקין, ארלוזורוב/ארלוזרוב,
+    // רמב''ם/רמב״ם, קרית/קריית) — compare consonant skeletons instead.
+    const sk = skeleton(cn);
+    if (sk.length < 3) return null;
+    for (const nb of nbs) {
+      const nsk = skeleton(nb.coreName);
+      if (nsk.length < 3) continue;
+      if ((sk.includes(nsk) || nsk.includes(sk)) && nsk.length > len) {
+        best = nb.id; len = nsk.length;
       }
     }
     return best;

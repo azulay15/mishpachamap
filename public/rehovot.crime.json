@@ -1,0 +1,430 @@
+{
+  "meta": {
+    "source": "Israel Police 2024",
+    "resource": "5fc13c50-b6f3-4712-b831-a75e0f91a17e",
+    "locality": 8400
+  },
+  "neighborhoods": {
+    "rhv-rehovot-hatzeira": null,
+    "rhv-kiryat-moshe": {
+      "name_he": "קריית משה",
+      "cases_2024_total": 270,
+      "cases_2024_person": 55,
+      "cases_2024_property": 109,
+      "per_1000_residents": 49.4,
+      "safety_score": 40,
+      "safety_rank": 23,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000432
+        ]
+      }
+    },
+    "rhv-sela": {
+      "name_he": "סלע",
+      "cases_2024_total": 266,
+      "cases_2024_person": 45,
+      "cases_2024_property": 97,
+      "per_1000_residents": 32.8,
+      "safety_score": 48,
+      "safety_rank": 16,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000431
+        ]
+      }
+    },
+    "rhv-rehovot-haholandit": {
+      "name_he": "רחובות ההולנדית",
+      "cases_2024_total": 113,
+      "cases_2024_person": 24,
+      "cases_2024_property": 40,
+      "per_1000_residents": 15.1,
+      "safety_score": 76,
+      "safety_rank": 5,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000424
+        ]
+      }
+    },
+    "rhv-ibn-gabirol": {
+      "name_he": "אבן גבירול",
+      "cases_2024_total": 177,
+      "cases_2024_person": 46,
+      "cases_2024_property": 55,
+      "per_1000_residents": 29.8,
+      "safety_score": 52,
+      "safety_rank": 13,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000425
+        ]
+      }
+    },
+    "rhv-neve-amit": {
+      "name_he": "נווה עמית",
+      "cases_2024_total": 37,
+      "cases_2024_person": 13,
+      "cases_2024_property": 16,
+      "per_1000_residents": 32.7,
+      "safety_score": 48,
+      "safety_rank": 15,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000422
+        ]
+      }
+    },
+    "rhv-neve-yehuda": {
+      "name_he": "נווה יהודה",
+      "cases_2024_total": 72,
+      "cases_2024_person": 12,
+      "cases_2024_property": 37,
+      "per_1000_residents": 20.4,
+      "safety_score": 67,
+      "safety_rank": 9,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000421
+        ]
+      }
+    },
+    "rhv-marmorek": {
+      "name_he": "מרמורק",
+      "cases_2024_total": 200,
+      "cases_2024_person": 48,
+      "cases_2024_property": 69,
+      "per_1000_residents": 36,
+      "safety_score": 42,
+      "safety_rank": 18,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000322
+        ]
+      }
+    },
+    "rhv-havatzelet": null,
+    "rhv-rehovot-hahadasha": {
+      "name_he": "רחובות החדשה",
+      "cases_2024_total": 129,
+      "cases_2024_person": 21,
+      "cases_2024_property": 45,
+      "per_1000_residents": 16.7,
+      "safety_score": 73,
+      "safety_rank": 7,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000312
+        ]
+      }
+    },
+    "rhv-oshiot": {
+      "name_he": "אושיות",
+      "cases_2024_total": 415,
+      "cases_2024_person": 99,
+      "cases_2024_property": 121,
+      "per_1000_residents": 37.5,
+      "safety_score": 40,
+      "safety_rank": 19,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000222
+        ]
+      }
+    },
+    "rhv-kiryat-hahagana": {
+      "name_he": "קריית ההגנה",
+      "cases_2024_total": 30,
+      "cases_2024_person": 7,
+      "cases_2024_property": 10,
+      "per_1000_residents": 12.6,
+      "safety_score": 80,
+      "safety_rank": 2,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000221
+        ]
+      }
+    },
+    "rhv-hayovel": {
+      "name_he": "היובל",
+      "cases_2024_total": 183,
+      "cases_2024_person": 31,
+      "cases_2024_property": 83,
+      "per_1000_residents": 24.5,
+      "safety_score": 61,
+      "safety_rank": 10,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000213,
+          84000214
+        ]
+      }
+    },
+    "rhv-kiryat-david": {
+      "name_he": "קריית דוד",
+      "cases_2024_total": 65,
+      "cases_2024_person": 7,
+      "cases_2024_property": 33,
+      "per_1000_residents": 16.6,
+      "safety_score": 73,
+      "safety_rank": 6,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000211
+        ]
+      }
+    },
+    "rhv-denya": {
+      "name_he": "דניה",
+      "cases_2024_total": 73,
+      "cases_2024_person": 18,
+      "cases_2024_property": 27,
+      "per_1000_residents": 9.3,
+      "safety_score": 85,
+      "safety_rank": 1,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000212
+        ]
+      }
+    },
+    "rhv-shaarayim": {
+      "name_he": "שעריים",
+      "cases_2024_total": 440,
+      "cases_2024_person": 111,
+      "cases_2024_property": 155,
+      "per_1000_residents": 43.6,
+      "safety_score": 40,
+      "safety_rank": 21,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000231,
+          84000232,
+          84000321
+        ]
+      }
+    },
+    "rhv-merkaz-hair": null,
+    "rhv-neve-alon": {
+      "name_he": "נווה אלון",
+      "cases_2024_total": 128,
+      "cases_2024_person": 33,
+      "cases_2024_property": 38,
+      "per_1000_residents": 13.4,
+      "safety_score": 79,
+      "safety_rank": 3,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000413
+        ]
+      }
+    },
+    "rhv-binyamin-nordau": {
+      "name_he": "בנימין ונורדאו",
+      "cases_2024_total": 211,
+      "cases_2024_person": 48,
+      "cases_2024_property": 87,
+      "per_1000_residents": 37.9,
+      "safety_score": 40,
+      "safety_rank": 20,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000117
+        ]
+      }
+    },
+    "rhv-weisburg-shkolnik": {
+      "name_he": "וייסבורג ושקולניק",
+      "cases_2024_total": 141,
+      "cases_2024_person": 25,
+      "cases_2024_property": 66,
+      "per_1000_residents": 33.3,
+      "safety_score": 47,
+      "safety_rank": 17,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000121
+        ]
+      }
+    },
+    "rhv-avnei-chen": {
+      "name_he": "אבני חן",
+      "cases_2024_total": 94,
+      "cases_2024_person": 12,
+      "cases_2024_property": 46,
+      "per_1000_residents": 26.3,
+      "safety_score": 58,
+      "safety_rank": 11,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000124
+        ]
+      }
+    },
+    "rhv-azorei-weizmann": {
+      "name_he": "אזורי ויצמן",
+      "cases_2024_total": 109,
+      "cases_2024_person": 26,
+      "cases_2024_property": 46,
+      "per_1000_residents": 29,
+      "safety_score": 54,
+      "safety_rank": 12,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000123
+        ]
+      }
+    },
+    "rhv-hehalutz-haavoda": {
+      "name_he": "החלוץ והעבודה",
+      "cases_2024_total": 137,
+      "cases_2024_person": 20,
+      "cases_2024_property": 62,
+      "per_1000_residents": 32.6,
+      "safety_score": 48,
+      "safety_rank": 14,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000116
+        ]
+      }
+    },
+    "rhv-miller-meltzer": {
+      "name_he": "מילר ומלצר",
+      "cases_2024_total": 63,
+      "cases_2024_person": 9,
+      "cases_2024_property": 37,
+      "per_1000_residents": 14.4,
+      "safety_score": 77,
+      "safety_rank": 4,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000122
+        ]
+      }
+    },
+    "rhv-eisenberg-aharoni": {
+      "name_he": "אייזנברג ואהרוני",
+      "cases_2024_total": 145,
+      "cases_2024_person": 14,
+      "cases_2024_property": 34,
+      "per_1000_residents": 44.6,
+      "safety_score": 40,
+      "safety_rank": 22,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000115
+        ]
+      }
+    },
+    "rhv-yahad": {
+      "name_he": "יחד",
+      "cases_2024_total": 75,
+      "cases_2024_person": 2,
+      "cases_2024_property": 44,
+      "per_1000_residents": 16.7,
+      "safety_score": 73,
+      "safety_rank": 8,
+      "safety_rank_of": 23,
+      "source": {
+        "provider": "Israel Police crime_records_data (data.gov.il 5fc13c50)",
+        "period": "2024",
+        "note": "reported cases; residential safety approx; commercial areas excluded; name-matched to the police area scheme",
+        "police_areas": [
+          84000114
+        ]
+      }
+    },
+    "rhv-rehovot-hamada": null
+  }
+}

@@ -1,0 +1,983 @@
+{
+  "meta": {
+    "source": "nadlan.gov.il — rent and sale prices by room count",
+    "city": "telaviv",
+    "source_version": "20-08-2026",
+    "as_of": "2026-11-12"
+  },
+  "city": {
+    "rent": {
+      "3": 8230,
+      "4": 9950,
+      "5": 13380,
+      "all": 8000
+    },
+    "buy": {
+      "3": 3825000,
+      "4": 5071000,
+      "5": 7019000,
+      "all": 3531000
+    },
+    "rent_change_pct": 1.3,
+    "yield_pct": 2.72
+  },
+  "neighborhoods": {
+    "tlv-ramat-aviv-gimel": {
+      "rent": {
+        "3": 7850,
+        "4": 10100,
+        "5": 12880,
+        "all": 10250
+      },
+      "buy": {
+        "all": 4046000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 3.04,
+      "sources": [
+        "רמת אביב ג"
+      ]
+    },
+    "tlv-kochav-hatzafon": {
+      "rent": {
+        "3": 11000,
+        "5": 18000,
+        "all": 13250
+      },
+      "buy": {},
+      "rent_change_pct": -4.3,
+      "yield_pct": null,
+      "sources": [
+        "כוכב הצפון"
+      ]
+    },
+    "tlv-neve-avivim": {
+      "rent": {
+        "3": 7750,
+        "4": 10250,
+        "5": 13500,
+        "all": 9600
+      },
+      "buy": {
+        "4": 5108000,
+        "5": 6365000,
+        "all": 4963000
+      },
+      "rent_change_pct": -2.5,
+      "yield_pct": 2.32,
+      "sources": [
+        "נווה אביבים וסביבת"
+      ]
+    },
+    "tlv-ramat-aviv": {
+      "rent": {
+        "3": 7200,
+        "4": 9600,
+        "5": 11050,
+        "all": 6880
+      },
+      "buy": {
+        "3": 4507000,
+        "all": 4400000
+      },
+      "rent_change_pct": -1.1,
+      "yield_pct": 1.88,
+      "sources": [
+        "רמת אביב"
+      ]
+    },
+    "tlv-nofei-yam": {
+      "rent": {
+        "4": 12250,
+        "5": 15000,
+        "all": 12980
+      },
+      "buy": {
+        "all": 5175000
+      },
+      "rent_change_pct": 6.8,
+      "yield_pct": 3.01,
+      "sources": [
+        "נופי ים"
+      ]
+    },
+    "tlv-tochnit-lamed": {
+      "rent": {
+        "3": 8900,
+        "4": 11000,
+        "5": 13650,
+        "all": 11750
+      },
+      "buy": {
+        "3": 5480000,
+        "4": 8426000,
+        "all": 6006000
+      },
+      "rent_change_pct": 5.1,
+      "yield_pct": 2.35,
+      "sources": [
+        "תכנית ל"
+      ]
+    },
+    "tlv-bavli": {
+      "rent": {
+        "3": 8850,
+        "4": 10250,
+        "all": 9100
+      },
+      "buy": {
+        "3": 4674000,
+        "4": 6549000,
+        "5": 8656000,
+        "all": 6032000
+      },
+      "rent_change_pct": 2.8,
+      "yield_pct": 1.81,
+      "sources": [
+        "בבלי"
+      ]
+    },
+    "tlv-hamishtala": {
+      "rent": {
+        "3": 8330,
+        "4": 11680,
+        "5": 14630,
+        "all": 9860
+      },
+      "buy": {
+        "all": 3440000
+      },
+      "rent_change_pct": -1.4,
+      "yield_pct": 3.44,
+      "sources": [
+        "המשתלה"
+      ]
+    },
+    "tlv-ganei-tzahala": {
+      "rent": {
+        "3": 7400,
+        "4": 9250,
+        "5": 12380,
+        "all": 10500
+      },
+      "buy": {
+        "all": 5055000
+      },
+      "rent_change_pct": 5,
+      "yield_pct": 2.49,
+      "sources": [
+        "גני צהלה"
+      ]
+    },
+    "tlv-tzahala": {
+      "rent": {
+        "4": 8250,
+        "all": 11750
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "צהלה"
+      ]
+    },
+    "tlv-tel-baruch": {
+      "rent": {
+        "all": 15950
+      },
+      "buy": {},
+      "rent_change_pct": 28.6,
+      "yield_pct": null,
+      "sources": [
+        "תל ברוך"
+      ]
+    },
+    "tlv-neot-afeka-bet": {
+      "rent": {
+        "3": 7550,
+        "4": 8550,
+        "all": 8930
+      },
+      "buy": {
+        "4": 4082000,
+        "5": 6135000,
+        "all": 4004000
+      },
+      "rent_change_pct": 3.8,
+      "yield_pct": 2.67,
+      "sources": [
+        "נאות אפקה ב"
+      ]
+    },
+    "tlv-revivim": {
+      "rent": {
+        "3": 8200,
+        "5": 14150,
+        "all": 10500
+      },
+      "buy": {
+        "all": 3408000
+      },
+      "rent_change_pct": -2.8,
+      "yield_pct": 3.7,
+      "sources": [
+        "רביבים"
+      ]
+    },
+    "tlv-neot-afeka-alef": {
+      "rent": {
+        "3": 8350,
+        "4": 9700,
+        "5": 13720,
+        "all": 9250
+      },
+      "buy": {
+        "4": 4722000,
+        "5": 5655000,
+        "all": 4864000
+      },
+      "rent_change_pct": 5.1,
+      "yield_pct": 2.28,
+      "sources": [
+        "נאות אפקה א"
+      ]
+    },
+    "tlv-tel-baruch-north": {
+      "rent": {
+        "3": 9550,
+        "4": 10250,
+        "all": 10000
+      },
+      "buy": {},
+      "rent_change_pct": 1,
+      "yield_pct": null,
+      "sources": [
+        "תל ברוך צפון"
+      ]
+    },
+    "tlv-new-north-north": {
+      "rent": {
+        "3": 9400,
+        "4": 10950,
+        "5": 18000,
+        "all": 8800
+      },
+      "buy": {
+        "3": 4429000,
+        "4": 6043000,
+        "5": 7704000,
+        "all": 4494000
+      },
+      "rent_change_pct": 14.7,
+      "yield_pct": 2.35,
+      "sources": [
+        "הצפון החדש החלק הצפ"
+      ]
+    },
+    "tlv-old-north-north": {
+      "rent": {
+        "3": 9000,
+        "4": 11000,
+        "all": 8000
+      },
+      "buy": {
+        "3": 4558000,
+        "4": 6542000,
+        "all": 4124000
+      },
+      "rent_change_pct": 1.9,
+      "yield_pct": 2.33,
+      "sources": [
+        "נמל תל-אביב",
+        "הצפון הישן-החלק הצפ"
+      ]
+    },
+    "tlv-park-tzameret": {
+      "rent": {
+        "3": 11700,
+        "4": 12780,
+        "all": 11750
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "צמרות איילון"
+      ]
+    },
+    "tlv-kikar-hamedina": {
+      "rent": {
+        "3": 9000,
+        "4": 11550,
+        "5": 15500,
+        "all": 9800
+      },
+      "buy": {
+        "3": 4655000,
+        "4": 6638000,
+        "5": 8456000,
+        "all": 4930000
+      },
+      "rent_change_pct": 6,
+      "yield_pct": 2.39,
+      "sources": [
+        "הצפון החדש סביבת כי"
+      ]
+    },
+    "tlv-old-north-south": {
+      "rent": {
+        "3": 9300,
+        "4": 9750,
+        "5": 12500,
+        "all": 8650
+      },
+      "buy": {
+        "3": 4089000,
+        "4": 5406000,
+        "all": 3856000
+      },
+      "rent_change_pct": 5.5,
+      "yield_pct": 2.69,
+      "sources": [
+        "הצפון הישן החלק הדר"
+      ]
+    },
+    "tlv-new-north-south": {
+      "rent": {
+        "3": 8950,
+        "4": 11150,
+        "5": 16130,
+        "all": 8780
+      },
+      "buy": {
+        "3": 4798000,
+        "4": 6993000,
+        "all": 5317000
+      },
+      "rent_change_pct": 2.6,
+      "yield_pct": 1.98,
+      "sources": [
+        "הצפון החדש החלק הדר"
+      ]
+    },
+    "tlv-lev-hair": {
+      "rent": {
+        "3": 9300,
+        "4": 11650,
+        "5": 14250,
+        "all": 8950
+      },
+      "buy": {
+        "3": 4640000,
+        "4": 6468000,
+        "all": 4319000
+      },
+      "rent_change_pct": -1.1,
+      "yield_pct": 2.49,
+      "sources": [
+        "לב העיר"
+      ]
+    },
+    "tlv-kerem-hateimanim": {
+      "rent": {
+        "3": 9900,
+        "4": 12630,
+        "5": 25000,
+        "all": 8250
+      },
+      "buy": {
+        "4": 9955000,
+        "all": 4683000
+      },
+      "rent_change_pct": -6.8,
+      "yield_pct": null,
+      "sources": [
+        "כרם התימנים"
+      ]
+    },
+    "tlv-montefiore": {
+      "rent": {
+        "3": 9350,
+        "4": 11350,
+        "5": 13250,
+        "all": 9250
+      },
+      "buy": {
+        "3": 4040000,
+        "all": 2781000
+      },
+      "rent_change_pct": 8.2,
+      "yield_pct": 3.99,
+      "sources": [
+        "מונטיפיורי"
+      ]
+    },
+    "tlv-ganei-sarona": {
+      "rent": {
+        "3": 9950,
+        "4": 11650,
+        "5": 16500,
+        "all": 10750
+      },
+      "buy": {
+        "4": 5291000,
+        "all": 5056000
+      },
+      "rent_change_pct": -1.8,
+      "yield_pct": 2.55,
+      "sources": [
+        "גני שרונה"
+      ]
+    },
+    "tlv-neve-shaanan": {
+      "rent": {
+        "3": 6250,
+        "4": 8480,
+        "5": 6830,
+        "all": 5990
+      },
+      "buy": {
+        "all": 2796000
+      },
+      "rent_change_pct": 0.7,
+      "yield_pct": 2.57,
+      "sources": [
+        "נווה שאנן"
+      ]
+    },
+    "tlv-florentin": {
+      "rent": {
+        "3": 7880,
+        "4": 9500,
+        "5": 9300,
+        "all": 7000
+      },
+      "buy": {
+        "3": 4315000,
+        "all": 3093000
+      },
+      "rent_change_pct": 3.7,
+      "yield_pct": 2.72,
+      "sources": [
+        "פלורנטין"
+      ]
+    },
+    "tlv-shapira": {
+      "rent": {
+        "3": 5850,
+        "4": 7750,
+        "5": 8350,
+        "all": 5600
+      },
+      "buy": {
+        "all": 2044000
+      },
+      "rent_change_pct": -1.7,
+      "yield_pct": 3.29,
+      "sources": [
+        "שפירא"
+      ]
+    },
+    "tlv-kiryat-shalom": {
+      "rent": {
+        "3": 5900,
+        "4": 7850,
+        "5": 9250,
+        "all": 6300
+      },
+      "buy": {
+        "4": 3706000,
+        "all": 3721000
+      },
+      "rent_change_pct": -7.3,
+      "yield_pct": 2.03,
+      "sources": [
+        "קרית שלום"
+      ]
+    },
+    "tlv-old-jaffa": {
+      "rent": {
+        "3": 11350,
+        "all": 9580
+      },
+      "buy": {},
+      "rent_change_pct": 4.6,
+      "yield_pct": null,
+      "sources": [
+        "יפו העתיקה"
+      ]
+    },
+    "tlv-nahalat-yitzhak": {
+      "rent": {
+        "3": 7750,
+        "4": 9950,
+        "5": 13250,
+        "all": 8450
+      },
+      "buy": {
+        "3": 3861000,
+        "4": 4346000,
+        "5": 6106000,
+        "all": 3766000
+      },
+      "rent_change_pct": 12.7,
+      "yield_pct": 2.69,
+      "sources": [
+        "נחלת יצחק"
+      ]
+    },
+    "tlv-bitzaron": {
+      "rent": {
+        "3": 6850,
+        "4": 10580,
+        "5": 10500,
+        "all": 8150
+      },
+      "buy": {
+        "3": 3900000,
+        "4": 5279000,
+        "all": 3960000
+      },
+      "rent_change_pct": 8.3,
+      "yield_pct": 2.47,
+      "sources": [
+        "ביצרון"
+      ]
+    },
+    "tlv-tel-haim": {
+      "rent": {
+        "3": 6100,
+        "5": 12750,
+        "all": 5850
+      },
+      "buy": {
+        "all": 3591000
+      },
+      "rent_change_pct": 4,
+      "yield_pct": null,
+      "sources": [
+        "תל חיים"
+      ]
+    },
+    "tlv-yad-eliyahu": {
+      "rent": {
+        "3": 6800,
+        "4": 8500,
+        "5": 7900,
+        "all": 7200
+      },
+      "buy": {
+        "3": 3122000,
+        "4": 3775000,
+        "all": 2984000
+      },
+      "rent_change_pct": 20,
+      "yield_pct": 2.9,
+      "sources": [
+        "יד אליהו"
+      ]
+    },
+    "tlv-ramat-hatayasim": {
+      "rent": {
+        "3": 5350,
+        "all": 5300
+      },
+      "buy": {},
+      "rent_change_pct": -3.6,
+      "yield_pct": null,
+      "sources": [
+        "רמת הטייסים"
+      ]
+    },
+    "tlv-orot": {
+      "rent": {
+        "all": 7650
+      },
+      "buy": {},
+      "rent_change_pct": 0,
+      "yield_pct": null,
+      "sources": [
+        "אורות"
+      ]
+    },
+    "tlv-hatikva": {
+      "rent": {
+        "3": 5400,
+        "4": 6830,
+        "5": 7000,
+        "all": 4900
+      },
+      "buy": {
+        "all": 1241000
+      },
+      "rent_change_pct": 12.6,
+      "yield_pct": 4.74,
+      "sources": [
+        "התקווה"
+      ]
+    },
+    "tlv-neve-chen": {
+      "rent": {
+        "3": 5450,
+        "4": 6800,
+        "5": 7450,
+        "all": 5700
+      },
+      "buy": {
+        "3": 2113000,
+        "4": 3487000,
+        "all": 3450000
+      },
+      "rent_change_pct": 1.8,
+      "yield_pct": 1.98,
+      "sources": [
+        "נוה חן"
+      ]
+    },
+    "tlv-kfar-shalem-east": {
+      "rent": {
+        "3": 4950,
+        "4": 6100,
+        "all": 5050
+      },
+      "buy": {
+        "all": 1985000
+      },
+      "rent_change_pct": -4.7,
+      "yield_pct": 3.05,
+      "sources": [
+        "כפר שלם מזרח נווה א"
+      ]
+    },
+    "tlv-kfar-shalem-west": {
+      "rent": {
+        "3": 5550,
+        "4": 6450,
+        "all": 5550
+      },
+      "buy": {},
+      "rent_change_pct": -0.9,
+      "yield_pct": null,
+      "sources": [
+        "כפר שלם מערב נווה ב"
+      ]
+    },
+    "tlv-neve-kfir": {
+      "rent": {
+        "3": 5450,
+        "4": 7360,
+        "5": 8250,
+        "all": 5350
+      },
+      "buy": {},
+      "rent_change_pct": -14.4,
+      "yield_pct": null,
+      "sources": [
+        "כפיר"
+      ]
+    },
+    "tlv-nir-aviv": {
+      "rent": {
+        "3": 5350,
+        "4": 6650,
+        "all": 5450
+      },
+      "buy": {},
+      "rent_change_pct": 3.8,
+      "yield_pct": null,
+      "sources": [
+        "ניר אביב"
+      ]
+    },
+    "tlv-haargazim": {
+      "rent": {
+        "3": 6550,
+        "4": 8300,
+        "5": 8250,
+        "all": 5750
+      },
+      "buy": {
+        "all": 2777000
+      },
+      "rent_change_pct": 0,
+      "yield_pct": 2.48,
+      "sources": [
+        "הארגזים"
+      ]
+    },
+    "tlv-livne-yedidya": {
+      "rent": {
+        "3": 5150,
+        "4": 6650,
+        "5": 6900,
+        "all": 5400
+      },
+      "buy": {},
+      "rent_change_pct": 4.9,
+      "yield_pct": null,
+      "sources": [
+        "ליבנה ידידיה"
+      ]
+    },
+    "tlv-ramat-hahayal": {
+      "rent": {
+        "3": 6250,
+        "4": 12250,
+        "5": 16450,
+        "all": 8780
+      },
+      "buy": {},
+      "rent_change_pct": 6.4,
+      "yield_pct": null,
+      "sources": [
+        "רמת החייל"
+      ]
+    },
+    "tlv-yafo-dalet": {
+      "rent": {
+        "3": 4800,
+        "4": 5300,
+        "all": 4650
+      },
+      "buy": {
+        "3": 2049000,
+        "all": 2044000
+      },
+      "rent_change_pct": 3.2,
+      "yield_pct": 2.73,
+      "sources": [
+        "יפו ד (גבעת התמרים"
+      ]
+    },
+    "tlv-neve-dan": {
+      "rent": {
+        "4": 9800,
+        "5": 11000,
+        "all": 12250
+      },
+      "buy": {},
+      "rent_change_pct": 16.7,
+      "yield_pct": null,
+      "sources": [
+        "נווה דן"
+      ]
+    },
+    "tlv-hadar-yosef": {
+      "rent": {
+        "3": 7080,
+        "4": 9710,
+        "5": 11000,
+        "all": 8450
+      },
+      "buy": {
+        "3": 3387000,
+        "4": 4806000,
+        "5": 5043000,
+        "all": 3799000
+      },
+      "rent_change_pct": 25.2,
+      "yield_pct": 2.67,
+      "sources": [
+        "הדר יוסף"
+      ]
+    },
+    "tlv-maoz-aviv": {
+      "rent": {
+        "3": 5800,
+        "4": 11300
+      },
+      "buy": {},
+      "rent_change_pct": null,
+      "yield_pct": null,
+      "sources": [
+        "מעוז אביב"
+      ]
+    },
+    "tlv-neve-tzedek": {
+      "rent": {
+        "3": 11250,
+        "4": 13330,
+        "5": 21750,
+        "all": 9600
+      },
+      "buy": {
+        "all": 4348000
+      },
+      "rent_change_pct": -1.5,
+      "yield_pct": 2.65,
+      "sources": [
+        "נווה צדק"
+      ]
+    },
+    "tlv-north-jaffa": {
+      "rent": {
+        "3": 9300,
+        "4": 10700,
+        "5": 10500,
+        "all": 8100
+      },
+      "buy": {
+        "3": 3316000,
+        "all": 3109000
+      },
+      "rent_change_pct": 0.6,
+      "yield_pct": 3.13,
+      "sources": [
+        "צפון יפו"
+      ]
+    },
+    "tlv-dakar": {
+      "rent": {
+        "3": 5500,
+        "4": 8880,
+        "5": 13750,
+        "all": 6000
+      },
+      "buy": {
+        "3": 2547000,
+        "4": 3557000,
+        "all": 1718000
+      },
+      "rent_change_pct": 7.1,
+      "yield_pct": 4.19,
+      "sources": [
+        "דקר"
+      ]
+    },
+    "tlv-afeka": {
+      "rent": {
+        "3": 6750,
+        "5": 11850,
+        "all": 9750
+      },
+      "buy": {},
+      "rent_change_pct": -13.3,
+      "yield_pct": null,
+      "sources": [
+        "אפקה"
+      ]
+    },
+    "tlv-givat-herzl": {
+      "rent": {
+        "3": 7550,
+        "4": 11250,
+        "all": 7300
+      },
+      "buy": {
+        "3": 3477000,
+        "4": 4373000,
+        "all": 4315000
+      },
+      "rent_change_pct": 3.6,
+      "yield_pct": 2.03,
+      "sources": [
+        "גבעת הרצל"
+      ]
+    },
+    "tlv-neve-sharett": {
+      "rent": {
+        "3": 5800,
+        "4": 8730,
+        "5": 10000,
+        "all": 6450
+      },
+      "buy": {
+        "all": 3761000
+      },
+      "rent_change_pct": 25.9,
+      "yield_pct": 2.06,
+      "sources": [
+        "נווה שרת"
+      ]
+    },
+    "tlv-tel-kabir": {
+      "rent": {
+        "3": 5150,
+        "4": 6250,
+        "5": 9850,
+        "all": 5300
+      },
+      "buy": {
+        "3": 1887000,
+        "all": 2052000
+      },
+      "rent_change_pct": 3.9,
+      "yield_pct": 3.1,
+      "sources": [
+        "אזור תעסוקה צומת חו",
+        "תל כביר/נווה עופר/י"
+      ]
+    },
+    "tlv-yafo-gimel": {
+      "rent": {
+        "3": 5580,
+        "4": 6850,
+        "all": 5500
+      },
+      "buy": {
+        "all": 2132000
+      },
+      "rent_change_pct": 11.1,
+      "yield_pct": 3.1,
+      "sources": [
+        "יפו ג ונווה גולן"
+      ]
+    },
+    "tlv-ajami": {
+      "rent": {
+        "3": 9150,
+        "4": 11500,
+        "5": 14000,
+        "all": 10000
+      },
+      "buy": {},
+      "rent_change_pct": 21.6,
+      "yield_pct": null,
+      "sources": [
+        "עג'מי וגבעת עליה"
+      ]
+    },
+    "tlv-tzahalon": {
+      "rent": {
+        "3": 7000,
+        "4": 8750,
+        "all": 7450
+      },
+      "buy": {
+        "3": 3267000,
+        "all": 2830000
+      },
+      "rent_change_pct": 12.9,
+      "yield_pct": 3.16,
+      "sources": [
+        "צהלון ושיכוני חיסכ"
+      ]
+    },
+    "tlv-ramat-aviv-hahadasha": {
+      "rent": {
+        "4": 11500,
+        "all": 12000
+      },
+      "buy": {},
+      "rent_change_pct": 9.1,
+      "yield_pct": null,
+      "sources": [
+        "רמת אביב החדשה"
+      ]
+    },
+    "tlv-azorei-chen": {
+      "rent": {
+        "3": 9750,
+        "4": 11000,
+        "5": 15000,
+        "all": 11830
+      },
+      "buy": {},
+      "rent_change_pct": 7.5,
+      "yield_pct": null,
+      "sources": [
+        "אזורי חן"
+      ]
+    }
+  }
+}
