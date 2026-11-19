@@ -201,7 +201,6 @@ function CityMap({ ranked, cityName }: { ranked: RankedNeighborhood[]; cityName:
       </svg>
       {p1 && (
         <div className="mm-home-float" style={{ left: p1.left, top: p1.top, transform: "translate(-50%, -120%)" }} dir="rtl">
-          <MMIcon name="sparkle" size={12} color="var(--pumpkin-orange)" />
           {p1.label} · {p1.score}
         </div>
       )}
@@ -299,7 +298,6 @@ function Hero({
               className="mm-btn mm-btn-accent"
               style={{ textDecoration: "none", padding: "12px 22px", fontSize: 15, borderRadius: 12 }}
             >
-              <MMIcon name="sparkle" size={16} color="#fff" />
               בנו את פרופיל המשפחה
             </a>
             <a

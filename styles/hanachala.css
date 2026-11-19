@@ -1,6 +1,12 @@
 /* ============================================================================
    הנחלה — design tokens · direction "נבט" (family sprout)
 
+   Palette: ink on paper. Surfaces and text are neutral; near-black carries
+   actions and selected states. Green is the BRAND and the DATA colour only —
+   the logo, the match score, the map ramp and "better" figures — so it means
+   something wherever it appears. (The --hn-green-50/100/200 names are kept
+   for old references but now hold neutral greys.)
+
    Two parts:
    1. Semantic tokens (--hn-*). This is the API. New and refactored code uses
       only these, never a raw hex and never a primitive like --grey-500.
@@ -19,46 +25,46 @@
   --hn-green-700: #19663A;
   --hn-green-600: #1F7A45; /* logo leaf */
   --hn-green-400: #4AA16A;
-  --hn-green-200: #BADFC3;
-  --hn-green-100: #DDEFE2;
-  --hn-green-50:  #EDF3EE;
+  --hn-green-200: #D4D4D8;
+  --hn-green-100: #E9E9EB;
+  --hn-green-50:  #F4F4F5;
   --hn-orange-600: #D45610;
   --hn-orange-500: #EF6A1B; /* logo bud */
   --hn-orange-100: #FDE9DC;
 
   /* ---------- surfaces ---------- */
-  --hn-bg:          #F6F8F5;
+  --hn-bg:          #FAFAFA;
   --hn-surface:     #FFFFFF;
-  --hn-surface-2:   #EDF3EE;
-  --hn-surface-3:   #E3ECE5;
-  --hn-border:      #DAE4DC;
-  --hn-border-strong: #C3D1C6;
+  --hn-surface-2:   #F4F4F5;
+  --hn-surface-3:   #E9E9EB;
+  --hn-border:      #E4E4E7;
+  --hn-border-strong: #D1D1D6;
 
   /* ---------- text (all ≥4.5:1 on --hn-surface) ---------- */
-  --hn-text:          #14231A; /* 16.3:1 */
-  --hn-text-2:        #4A5A50; /*  7.3:1 */
-  --hn-text-3:        #637267; /*  5.1:1 — replaces --grey-500 (#84888E, 3.6:1) */
-  --hn-text-disabled: #A3AFA6;
+  --hn-text:          #18181B; /* 16.3:1 */
+  --hn-text-2:        #52525B; /*  7.3:1 */
+  --hn-text-3:        #71717A; /*  5.1:1 — replaces --grey-500 (#84888E, 3.6:1) */
+  --hn-text-disabled: #A1A1AA;
 
   /* ---------- actions ---------- */
-  --hn-primary:       #1F7A45; /* 5.4:1 with white */
-  --hn-primary-hover: #19663A;
+  --hn-primary:       #18181B; /* 5.4:1 with white */
+  --hn-primary-hover: #3F3F46;
   --hn-on-primary:    #FFFFFF;
-  --hn-accent:        #EF6A1B; /* selection + highlights only, never body text */
-  --hn-accent-hover:  #D45610;
-  --hn-on-accent:     #1A1208;
-  --hn-link:          #19663A;
-  --hn-focus:         #1F7A45;
-  --hn-chip-on:       #DDEFE2;
-  --hn-on-chip-on:    #14532D;
+  --hn-accent:        #18181B; /* selection + highlights only, never body text */
+  --hn-accent-hover:  #3F3F46;
+  --hn-on-accent:     #FFFFFF;
+  --hn-link:          #18181B;
+  --hn-focus:         #18181B;
+  --hn-chip-on:       #18181B;
+  --hn-on-chip-on:    #FFFFFF;
 
   /* ---------- status ---------- */
-  --hn-positive:    #1F7A45;
-  --hn-positive-bg: #E3F1E6;
+  --hn-positive:    #177A42;
+  --hn-positive-bg: #EEF7F1;
   --hn-warning:     #9A5D00;
   --hn-warning-bg:  #FBF0DD;
   --hn-negative:    #C2362B;
-  --hn-negative-bg: #FCEDEB;
+  --hn-negative-bg: #FDF1F0;
 
   /* ---------- trust labels (source + as-of date on every number) ---------- */
   --hn-trust-verified: var(--hn-positive);
@@ -66,32 +72,32 @@
   --hn-trust-missing:  var(--hn-text-3);
 
   /* ---------- map ---------- */
-  --hn-map-land:     #E9EFE8;
+  --hn-map-land:     #F3F3F1;
   --hn-map-edge:     #FFFFFF;
   --hn-map-selected: var(--hn-accent);
   --hn-map-veto:     var(--hn-negative);
-  --hn-map-dim: #D9DEDA; /* neighborhoods ruled out by the price filter */
-  --hn-score-1: #E3F1E6; /* match score ramp, low → high */
-  --hn-score-2: #BADFC3;
-  --hn-score-3: #85C496;
-  --hn-score-4: #4AA16A;
+  --hn-map-dim: #E4E4E7; /* neighborhoods ruled out by the price filter */
+  --hn-score-1: #EFEFF0; /* match score ramp, low → high */
+  --hn-score-2: #DCE9DF;
+  --hn-score-3: #AED3B9;
+  --hn-score-4: #62AE7E;
   --hn-score-5: #1F7A45;
-  --hn-map-landuse:      #E1E9DF;
-  --hn-map-park:         #CFE3C8;
-  --hn-map-park-edge:    #A9CBA0;
-  --hn-map-building:     #DCE4DB;
-  --hn-map-water:        #C3DDE6;
+  --hn-map-landuse:      #EDEDEA;
+  --hn-map-park:         #DCEAD6;
+  --hn-map-park-edge:    #BCD6B3;
+  --hn-map-building:     #E6E6E3;
+  --hn-map-water:        #CFE2EA;
   --hn-map-road:         #FFFFFF;
-  --hn-map-road-case:    #CCD7CD;
-  --hn-map-highway:      #F3D2A6;
-  --hn-map-highway-case: #DDB27C;
-  --hn-map-label:        #4A5A50;
-  --hn-map-hover:        #14231A;
+  --hn-map-road-case:    #DADAD6;
+  --hn-map-highway:      #F6E3C5;
+  --hn-map-highway-case: #E3C79C;
+  --hn-map-label:        #52525B;
+  --hn-map-hover:        #18181B;
 
   /* ---------- POI categories (map dots, legends, popups) ----------
      Picked to read on the green match ramp. Transit is a quiet slate on
      purpose: there are hundreds of stops and they shouldn't shout. */
-  --hn-poi-price:      #14231A;
+  --hn-poi-price:      #18181B;
   --hn-poi-school:     #2B5FA8;
   --hn-poi-preschool:  #5B93D6;
   --hn-poi-park:       #2E7D4F;
@@ -107,19 +113,19 @@
   --hn-logo-bud:  #EF6A1B;
 
   /* ---------- shape ---------- */
-  --hn-radius-sm:      8px;
-  --hn-radius-control: 12px;
-  --hn-radius-card:    16px;
-  --hn-radius-sheet:   20px;
+  --hn-radius-sm:      6px;
+  --hn-radius-control: 8px;
+  --hn-radius-card:    12px;
+  --hn-radius-sheet:   16px;
   --hn-radius-pill:    9999px;
-  --hn-shadow-1: 0 1px 2px rgba(20, 35, 26, 0.06);
-  --hn-shadow-2: 0 1px 2px rgba(20, 35, 26, 0.06), 0 8px 24px rgba(20, 35, 26, 0.08);
-  --hn-shadow-3: 0 16px 40px rgba(20, 35, 26, 0.14);
+  --hn-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --hn-shadow-2: 0 1px 2px rgba(0, 0, 0, 0.04), 0 6px 16px rgba(0, 0, 0, 0.06);
+  --hn-shadow-3: 0 12px 32px rgba(0, 0, 0, 0.12);
 
   /* ---------- type (fonts loaded by next/font in app/layout.tsx) ---------- */
-  --hn-font-display: var(--font-rubik, "Rubik"), var(--font-heebo, "Heebo"), "Arial Hebrew", sans-serif;
+  --hn-font-display: var(--font-heebo, "Heebo"), "Arial Hebrew", -apple-system, "Segoe UI", Arial, sans-serif;
   --hn-font-body:    var(--font-heebo, "Heebo"), "Arial Hebrew", -apple-system, "Segoe UI", Arial, sans-serif;
-  --hn-font-num:     var(--font-rubik, "Rubik"), var(--font-heebo, "Heebo"), sans-serif;
+  --hn-font-num:     var(--font-heebo, "Heebo"), -apple-system, "Segoe UI", Arial, sans-serif;
 }
 
 /* Dark palette — defined, NOT wired yet. Turning it on needs the remaining
@@ -181,9 +187,9 @@
   --grey-100: var(--hn-text-disabled);
   --grey-500: var(--hn-text-3);
   --grey-700: var(--hn-text-2);
-  --grey-800: #2B3B31;
+  --grey-800: #27272A;
   --grey-900: var(--hn-text);
-  --grey-950: #0B140E;
+  --grey-950: #09090B;
 
   --pumpkin-orange:       var(--hn-primary);
   --pumpkin-orange-hover: var(--hn-primary-hover);
@@ -209,7 +215,7 @@
   --icon-brand:   var(--hn-primary);
 
   --radius-normal: var(--hn-radius-sm);
-  --radius-medium: 10px;
+  --radius-medium: var(--hn-radius-control);
   --radius-big:    var(--hn-radius-control);
   --radius-huge:   var(--hn-radius-card);
 
@@ -221,7 +227,7 @@
   /* Fonts: Heebo for text, Rubik for numbers and headings. --font-inter is
      still referenced ~40 times for numbers; it now resolves to Rubik
      (Inter is no longer loaded). */
-  --font-inter: var(--font-rubik, "Rubik");
+  --font-inter: var(--hn-font-num);
   --font-sans:  var(--hn-font-body);
   --font-heb:   var(--hn-font-body);
 }

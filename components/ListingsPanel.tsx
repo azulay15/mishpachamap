@@ -271,7 +271,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           className="mm-btn mm-btn-accent"
           onClick={() => setLeadOpen("mortgage")}
         >
-          <MMIcon name="zap" size={14} color="#fff" /> קבלו אישור עקרוני למשכנתא
+          קבלו אישור עקרוני למשכנתא
         </button>
         <button
           type="button"

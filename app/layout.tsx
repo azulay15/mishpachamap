@@ -4,7 +4,8 @@ import "./globals.css";
 
 const heebo = Heebo({
   subsets: ["hebrew", "latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  // No 800/900: the many legacy `fontWeight: 800` then render as 700 — calmer.
+  weight: ["400", "500", "600", "700"],
   variable: "--font-heebo",
   display: "swap",
 });

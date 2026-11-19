@@ -74,7 +74,7 @@ export function WelcomeCard() {
           flex: "none",
         }}
       >
-        <MMIcon name="sparkle" size={18} color="#fff" />
+        <MMIcon name="users" size={18} color="#fff" />
       </div>
       <div style={{ minWidth: 0 }}>
         <strong style={{ display: "block", fontSize: 14, marginBottom: 4 }}>

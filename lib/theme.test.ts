@@ -26,7 +26,7 @@ describe("theme tokens", () => {
   });
 
   it("token() returns the fallback outside the browser", () => {
-    expect(token("--hn-accent")).toBe("#EF6A1B");
+    expect(token("--hn-accent")).toBe("#18181B");
   });
 
   it("scoreStep buckets match scores for the map ramp", () => {

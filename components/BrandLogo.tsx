@@ -47,7 +47,7 @@ export function BrandLogo({
         display: "inline-flex",
         alignItems: "center",
         gap: 8,
-        fontFamily: "var(--hn-font-display)",
+        fontFamily: 'var(--font-rubik, "Rubik"), var(--hn-font-display)',
         fontWeight: 700,
         lineHeight: 1,
         color: "var(--hn-text)",

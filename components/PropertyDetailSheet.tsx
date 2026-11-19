@@ -257,7 +257,7 @@ export function PropertyDetailSheet({ listing, neighborhoodHe, neighborhoodId, l
             className="mm-btn mm-btn-accent"
             onClick={() => setLeadOpen("mortgage")}
           >
-            <MMIcon name="zap" size={14} color="#fff" /> קבלו אישור עקרוני
+            קבלו אישור עקרוני
           </button>
           <button
             type="button"

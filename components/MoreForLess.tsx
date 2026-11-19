@@ -10,7 +10,14 @@ import { marketPrice, priceLabel, ROOM_LABEL, type Deal, type RoomKey, type Size
 
 export type HomeOption = { id: string; he: string; cityId: string; cityHe: string; rent: SizePrices; buy: SizePrices };
 
-type Place = { label: string; lng: number; lat: number };
+type Place = {
+  /** What the family sees once picked — always includes the city. */
+  label: string;
+  lng: number;
+  lat: number;
+  /** Search results only: the city / area line shown under the name. */
+  where?: string;
+};
 
 type Result = {
   id: string;
@@ -47,7 +54,7 @@ const HUBS: Place[] = [
 ];
 
 const MINUTES = [20, 30, 45];
-const METRIC_ICON: Record<MetricId, string> = { schools: "school", green: "tree", safety: "info", quiet: "leaf", kids: "kid" };
+const METRIC_ICON: Record<MetricId, string> = { schools: "school", green: "tree", safety: "shield", quiet: "leaf", kids: "kid" };
 const METRIC_NOTE: Record<MetricId, string> = {
   schools: "ציוני מיצ״ב",
   green: "פארקים וצמחייה",
@@ -520,14 +527,29 @@ function WorkPicker({ onPick, token }: { onPick: (p: Place) => void; token: stri
         const res = await fetch(url, { signal: ctrl.signal });
         if (!res.ok) throw new Error(String(res.status));
         const json = (await res.json()) as {
-          features?: Array<{ geometry: { coordinates: [number, number] }; properties: { full_address?: string; name?: string } }>;
+          features?: Array<{
+            geometry: { coordinates: [number, number] };
+            properties: {
+              full_address?: string;
+              name?: string;
+              place_formatted?: string;
+              context?: { place?: { name?: string }; locality?: { name?: string } };
+            };
+          }>;
         };
         setHits(
-          (json.features ?? []).map((f) => ({
-            label: f.properties.name ?? f.properties.full_address ?? term,
-            lng: f.geometry.coordinates[0],
-            lat: f.geometry.coordinates[1],
-          })),
+          (json.features ?? []).map((f) => {
+            const pr = f.properties;
+            const name = pr.name ?? pr.full_address ?? term;
+            // The street alone ("השלושה 2") exists in many cities — always carry the city.
+            const city = pr.context?.place?.name ?? pr.context?.locality?.name ?? pr.place_formatted?.split(",")[0]?.trim() ?? "";
+            return {
+              label: city && !name.includes(city) ? `${name}, ${city}` : name,
+              where: pr.place_formatted ?? city,
+              lng: f.geometry.coordinates[0],
+              lat: f.geometry.coordinates[1],
+            };
+          }),
         );
       } catch {
         setHits([]);
@@ -553,8 +575,9 @@ function WorkPicker({ onPick, token }: { onPick: (p: Place) => void; token: stri
           {busy && hits.length === 0 && <li className="is-busy">מחפשים…</li>}
           {hits.map((h) => (
             <li key={`${h.lng},${h.lat}`}>
-              <button type="button" onClick={() => onPick(h)}>
-                {h.label}
+              <button type="button" onClick={() => onPick({ label: h.label, lng: h.lng, lat: h.lat })}>
+                <strong>{h.label.split(", ")[0]}</strong>
+                {h.where && <small>{h.where}</small>}
               </button>
             </li>
           ))}
