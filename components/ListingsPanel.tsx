@@ -179,6 +179,10 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
             zIndex: 2,
             background: "#fff",
             display: "flex",
+            // The panel is a flex column that scrolls. A flex child with its own
+            // overflow may shrink below its content, which squashed this bar to
+            // a sliver and cut the chips off — so it must not shrink.
+            flex: "none",
             gap: 6,
             padding: "10px 0 8px",
             marginBottom: -8,
