@@ -88,7 +88,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
     return (
       <aside style={asideStyle}>
         <div style={{ padding: 24, color: "var(--grey-500)", fontSize: 13 }}>
-          בחרו שכונה במפה כדי לראות נכסים פעילים, בתי ספר במרחק הליכה ופרטי התאמה.
+          בחרו שכונה במפה כדי לראות מחירים, בתי ספר במרחק הליכה ופרטי התאמה.
         </div>
       </aside>
     );
@@ -193,7 +193,7 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
           {[
             (selected.market || selected.cityMarket) && { id: "prices", label: "מחירים" },
             (selected.demographics || selected.safety) && { id: "people", label: "מי גר כאן" },
-            { id: "listings", label: "נכסים" },
+            { id: "listings", label: "דירות" },
             { id: "schools", label: "בתי ספר" },
             election && election.results.length > 0 && { id: "elections", label: "הצבעה" },
           ]
@@ -228,9 +228,15 @@ export function ListingsPanel({ selected, listings, schools, election, onExplain
         )}
         <WhoLivesHere demographics={selected.demographics ?? null} safety={selected.safety ?? null} cityName={city.searchName ?? city.name_he} />
 
-        <Section title="נכסים פעילים" id="listings">
+        <Section title={listings.length === 0 ? "דירות בשכונה" : "נכסים פעילים"} id="listings">
           {listings.length === 0 ? (
-            <Empty>אין כרגע נכסים פעילים בשכונה זו.</Empty>
+            // We hold no listings of our own; say so and send people to the
+            // sites that do, searched for this neighborhood.
+            <Empty>
+              {(city.country ?? "IL") === "IL"
+                ? "אנחנו לא מציגים מודעות משלנו. אפשר לראות מה מוצע עכשיו בשכונה באתרי הנדל״ן:"
+                : "אין אצלנו מודעות לשכונה הזו."}
+            </Empty>
           ) : (
             listings.slice(0, 3).map((l) => (
             <ListingRowCard

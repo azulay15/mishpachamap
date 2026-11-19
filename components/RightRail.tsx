@@ -45,7 +45,7 @@ export function RightRail({ selected, listings, schools, election, mode, onModeC
       >
         <RailTab
           icon="home"
-          label="נכסים פעילים"
+          label="פרטי השכונה"
           active={mode === "listings"}
           onClick={() => onModeChange("listings")}
         />

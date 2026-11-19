@@ -101,7 +101,9 @@ export async function fetchConciergeData(
     sb.from("neighborhood_metrics").select("*").in("neighborhood", ids),
     // POIs have no city column — scope by the city's bbox (filtered in JS below).
     sb.from("pois_geojson").select("id, type, name_he, point, meta"),
-    sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market").in("neighborhood", ids),
+    sb.from("listings").select("id, neighborhood, address, price_nis, price_per_m2, rooms, sqm, garden_sqm, status_he, days_on_market").in("neighborhood", ids)
+      // Generated sample listings (seed_listings.ts) are never shown as real ones.
+      .or("source.is.null,source.neq.synthetic-v1"),
     // elections + parties are global reference tables (not per-neighborhood).
     sb.from("elections").select("id, name_he, date").order("date", { ascending: false }),
     sb.from("parties").select("id, name_he, color"),
@@ -482,7 +484,9 @@ function nearestSchoolMeters(from: [number, number], schools: StaticSchool[]): n
 }
 
 function gardenShare(listings: { garden_sqm: number | null }[]): number {
-  if (listings.length === 0) return 0.3;
+  // No real listings → we don't know; "unknown" scores as the middle, like
+  // every other feature with no data.
+  if (listings.length === 0) return 0.5;
   const withGarden = listings.filter((l) => l.garden_sqm != null && l.garden_sqm > 0).length;
   return withGarden / listings.length;
 }

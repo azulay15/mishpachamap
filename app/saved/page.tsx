@@ -21,7 +21,7 @@ export default async function SavedPage() {
     const sb = serverSupabase(cookieStore);
     const [{ data: nbs }, { data: lst }] = await Promise.all([
       sb.from("neighborhoods").select("id, name_he, family_label, summary_he"),
-      sb.from("listings").select("id, neighborhood, address, price_nis, rooms, sqm, garden_sqm, status_he"),
+      sb.from("listings").select("id, neighborhood, address, price_nis, rooms, sqm, garden_sqm, status_he").or("source.is.null,source.neq.synthetic-v1"),
     ]);
     neighborhoods = (nbs ?? []).map((n) => ({
       id: n.id as string,
